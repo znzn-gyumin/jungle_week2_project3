@@ -20,7 +20,7 @@
 | [reference/TILE_BRIEF.md](./reference/TILE_BRIEF.md) | **타일셋·타일맵 한 벌** — 3종 + 7개 + 조명 오버레이 | **파생** |
 | [reference/NEXT_TILE.md](./reference/NEXT_TILE.md) | **타일 트랙 작업 지시서** — 세션이 읽고 바로 시작 | **작업 중** |
 | [reference/TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) | 타일 구현 인수인계 — 산출물·생성기 사용법 | **구현** |
-| [reference/WORLD_PROMPTS.md](./reference/WORLD_PROMPTS.md) | **배경·UI 한 벌** — 배경 8장 + 로그인 화면 + 사진 시간대 변환 | **파생** |
+| [reference/WORLD_PROMPTS.md](./reference/WORLD_PROMPTS.md) | **배경·UI 한 벌** — 배경 9장 + 로그인 화면 + 사진 시간대 변환 | **파생** |
 | [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 | **확정** |
 | [reference/jungLover_logo.png](./reference/jungLover_logo.png) | 타이틀 로고 | **확정** |
 | `../src/script/*.vns` | 실제 대사 | **2단계에서 작성** |
@@ -89,9 +89,9 @@
 | 8 | **CHARACTERS** 캐릭터 | 6인 시트 · 조 관계 · 조연 | ✅ |
 | 9 | **WB 6·7** 용어·모티프 | 은어, 반복 장치 배치 | ✅ |
 | 10 | **WB 8~11** 톤·사운드·UI | 팔레트, BGM, 대사창 | ✅ |
-| 11 | **GD 6** 에셋 목록 | CG 직접 제공 반영, 배경 8장 확정 | ✅ |
+| 11 | **GD 6** 에셋 목록 | CG 직접 제공 반영, 배경 9장 확정 | ✅ |
 | 12 | **GD 7** 분량 예산 | 90씬 / 1,980줄 | ✅ |
-| 12+ | **GD 6** 에셋 확정 | CG 66장(표정 6종·반신) · 도트 288컷(16컷/종) · 배경 8장 | ✅ |
+| 12+ | **GD 6** 에셋 확정 | CG 66장(표정 6종·반신) · 도트 288컷(16컷/종) · 배경 9장 | ✅ |
 | 13 | **SO 0~8 골격** | 씬 자리·ID·선택지 위치·집필 절차 | ✅ |
 | 14 | **TECH_DESIGN** | 스택·DSL·상태·인증·방명록·배포 | ✅ |
 | 15 | **로그인·클라우드 세이브** | Google 로그인 필수, Firestore 3슬롯 | ✅ |
@@ -151,7 +151,7 @@ grep -rn "옛이름" docs/ src/ --include="*.md" --include="*.vns"
 |---|---|---|
 | **히로인 CG · 도트** | 외형은 확정([프로필](./reference/character/heroine_girl_profile.png)). 도트는 [SPRITE_SPEC](./reference/character/SPRITE_SPEC.md), CG는 [ART_BRIEF](./reference/character/ART_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
 | **타일셋 · 타일맵** | [TILE_BRIEF](./reference/TILE_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
-| **배경** | ①②③ 확보([backgrounds/](./reference/backgrounds/)). **④ 버스 사진 · ⑤⑥⑦ 일러스트 3장** 남음 | 2단계 전 |
+| **배경** | **9장 전부 확보** ([backgrounds/](./reference/backgrounds/) 8장 + `campus/jungle_stage.jpg`) | ✅ |
 | **Firebase 프로젝트 생성** | 로그인·세이브·방명록 전부. 구현 순서 2번이라 **가장 먼저** ([TECH_DESIGN 7](./TECH_DESIGN.md#7-구현-순서)) | 구현 착수 시 |
 
 **해결됨**: **프로젝트명·로고** · **히로인 6인 프로필 확정** · 실명 사용 · 캠프 주최 단체명 · 메신저 UI 구현 · **히로인 6인 이름·나이·전공** · **주인공 컴퓨터공학과 22세** · 6인 병행 제작 · 연적 구도 없음 · **6인 독립 설계(묶음 라벨 없음)** · 테마 컬러 6색 · 외출 선호 6인분 · **Google 로그인 필수(게스트 없음)** · **방명록 = 화이트보드, 인게임 날짜 해금** · **참가자 명찰(캠퍼스 안 상시 착용)** · **도트 복장 캐릭터당 1벌** · **평상복 하의·신발 6인분** · **D7 외출복 6벌**

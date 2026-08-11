@@ -23,7 +23,7 @@
 >
 > **프로필은 그대로 쓰는 게 아니라 기준입니다** — **외형과 의상**만 가져옵니다.
 >
-> **이 문서에 없는 것** — 타일셋 3종 · 도트 타일맵 7개 · 일러스트 배경 8장 · 로그인 화면. 캐릭터가 아니라서 여기 없고, 사양은 [GAME_DESIGN 6-3](../../GAME_DESIGN.md#6-3-맵과-배경)에 있습니다.
+> **이 문서에 없는 것** — 타일셋 3종 · 도트 타일맵 7개 · 일러스트 배경 9장 · 로그인 화면. 캐릭터가 아니라서 여기 없고, 사양은 [GAME_DESIGN 6-3](../../GAME_DESIGN.md#6-3-맵과-배경)에 있습니다.
 
 ---
 
@@ -239,7 +239,7 @@ sprite_{id}.png
 
 | | 5년 후 | 복장 | 배경 |
 |---|---|---|---|
-| **김민아** 27 | 같은 회사 다른 팀. 여전히 코드 리뷰로 싸우고 퇴근은 같이 함 | 검은 니트에 카디건 · 머리는 어깨에서 느슨하게 · 사원증. **여전히 검정인데 후드가 아님** | 오피스 |
+| **김민아** 27 | 같은 회사 다른 팀. 여전히 코드 리뷰로 싸우고 퇴근은 같이 함 | 검은 니트에 카디건 · 머리는 어깨에서 느슨하게 · 사원증. **여전히 검정인데 후드가 아님** | **와인바 테라스 (밤)** |
 | **김민규** 27 | 이제 제때 자고 제때 먹음 | 회색 셔츠 · **앞머리를 정리해 이마가 보이고 다크서클이 없음.** 살도 조금 붙음 | 오피스 |
 | **이승민** 29 | 늦게 시작한 사람의 첫 출근날 아침 | **새것 티가 나는 정장.** 넥타이가 삐뚤고 소매가 김 | 오피스 |
 | **장윤호** 25 | **자기가 만든 걸 자기 이름으로 냄** | 흰 셔츠 · 가디건 없음 · **강아지 뱃지가 사원증 스트랩에** | 오피스 |
@@ -685,7 +685,7 @@ very low key lighting, high contrast, most of the frame barely readable shadow
 
 | | 배경 | 추가할 문장 |
 |---|---|---|
-| **김민아** 27 | 오피스 | `same company different team, still arguing over code reviews, leaving work together` |
+| **김민아** 27 | **와인바 테라스 (밤)** | `same company different team, still arguing over code reviews, leaving work together` |
 | **김민규** 27 | 오피스 | `sleeping and eating properly now, healthier, calm` |
 | **이승민** 29 | 오피스 | `first day at a new job, someone else looking after him this time` |
 | **장윤호** 25 | 오피스 | `presenting his own work under his own name, finally` |
