@@ -5,52 +5,70 @@
 | **파일명** | `cg_yunjung_still_garden.png` |
 | **캔버스** | 1920 × 1080 가로 · 불투명 |
 | **색조** | 심야(먹빛 남색) → **여명(보라→파랑)** |
-| **배경 레퍼런스** | `connect_garden.jpg` — **구조만** 가져옵니다. 조명·색조·시간대는 새로 깝니다 |
-| **인물 참조** | **장윤정 평상복 몸통 확정본** |
-| **선행 조건** | 해당 인물 평상복 몸통 확정 |
+| **배경 레퍼런스** | `connect_garden.jpg` — **구조만** 가져옵니다 |
+| **인물 참조** | **장윤정 반신 CG 평상복 `기본` 칸** |
+| **선행 조건** | 해당 인물 반신 CG 확정 |
 
 > **루트 최대 명장면**이고 게임에서 **유일하게 해가 뜨는 씬**입니다. 빈 의자가 처음으로 채워지는 그림입니다.
 
-> 광원은 **발밑 조명과 건물 창 불빛뿐**입니다. 그 외에는 두지 마세요.
-
 > **복장은 평상복 + 명찰이 맞습니다.** D7 외출복은 낮에 캠퍼스를 벗어날 때의 차림이고, 이 컷은 그 전날 밤에서 이어지는 **D7 새벽 2시, 캠퍼스 안**입니다.
 
-> 13절 배경 프롬프트에서 `empty`를 뺐습니다 — 인물이 앉아 있는 컷이라 "빈 의자"와 모순됩니다.
+## 넣는 법
 
-> **10절 스타일 접미사를 그대로 붙이지 않았습니다.** `bust crop` · `plain flat background` · `calm neutral expression`은 배경을 그려야 하는 스틸과 충돌합니다. 화풍 부분만 남겼습니다.
+**참조 이미지 두 장을 첨부합니다.**
 
-> 배경이 잘 안 나오면 [`WORLD_PROMPTS.md` 6~9절](../../../WORLD_PROMPTS.md)로 먼저 **심야·여명 배경 이미지를 뽑아 참조로 함께 넣으세요**(13절 지시).
+1. 배경 — `connect_garden.jpg`
+2. 인물 — **장윤정 반신 CG 평상복 `기본` 칸**
+
+인물 참조로 `refs/ref_*.png` 를 쓰지 마세요. 정본 얼굴은 이미 만든 **반신 CG** 입니다.
+원본 크롭을 넣으면 대화 중 CG 와 명장면 스틸이 다른 사람이 됩니다.
+`refs/ref_*.png` 는 세로(0.729)라 **가로 스틸에 넣으면 비율까지 끌려갑니다.**
 
 ## 프롬프트
 
-```text
-outdoor wooden deck terrace at dawn, low stone planter walls, white wire chairs
-and olive green chairs and tables, young slender trees, white curtain-wall buildings
-with orange perforated panels above, piloti columns with an open passage underneath,
-sky a soft gradient from deep violet at the top to pale blue at the horizon,
-ground and structures still in silhouette, no city lights anywhere, humid summer dawn air,
-holding out one side of her headphones toward the viewer, suddenly quiet, no trace of her usual cheerfulness,
-korean webtoon illustration style, semi-realistic anime, soft cel shading,
-clean lineart, warm muted palette,
-hair rendered in exactly the stated color, the palette does not tint it
-```
-
-## 부정 프롬프트
+> 부정 프롬프트 칸이 따로 있는 도구라면 구분선 아래를 거기에 옮기세요.
+> **그냥 이어붙이면 피하려던 것이 그려집니다.**
 
 ```text
-photorealistic, 3d render, extra fingers, deformed hands,
-watermark, signature, text, oversaturated, lens flare,
-city lights, street lamps, neon signs, distant town lights,
-bright daylight, overexposed, evenly lit, orange sunrise,
-multiple characters, crowd
+첫 번째 이미지에서 **공간 구조만** 가져오세요 — 창문·기둥·데크 라인·가구 배열.
+조명과 색조는 쓰지 말고 새로 깔아주세요.
+두 번째 이미지의 인물을 그대로 유지해 주세요 — 얼굴, 머리, 옷, 명찰.
+
+가로 16:9 와이드 구도, 1920 x 1080.
+
+새벽의 야외 우드데크 테라스, 낮은 돌 화단 벽,
+흰 와이어 의자와 올리브그린 의자·테이블, 가늘고 어린 나무들,
+위쪽에 주황 타공 패널이 붙은 흰 커튼월 건물,
+아래가 뚫린 필로티 기둥과 그 밑을 지나는 통로,
+하늘은 위쪽 짙은 보라에서 지평선 옅은 파랑으로 이어지는 부드러운 그라데이션,
+지면과 구조물은 아직 실루엣, 도시 불빛은 어디에도 없음, 습한 여름 새벽 공기.
+
+광원은 발밑 조명과 건물 창 불빛뿐입니다. 그 외 광원은 두지 마세요.
+
+인물은 21세 한국 여성, 갈색 머리를 높게 묶음,
+크고 둥근 처진 강아지 같은 눈, 동그란 볼,
+몸보다 훨씬 큰 노란 오버사이즈 후드, 목에 걸친 헤드폰,
+목에 검은 랜야드 — 줄이 가슴에 보이고 작은 흰 명찰이 명치에 놓임.
+
+헤드폰 한쪽을 보는 사람 쪽으로 내밀고 있음, 갑자기 조용해짐, 평소의 밝음이 전혀 없음.
+
+한국 웹툰 일러스트 화풍, 세미리얼 애니메이션풍, 부드러운 셀 셰이딩,
+깔끔한 선화, 따뜻하고 채도 낮은 팔레트.
+
+── 아래는 절대 넣지 마세요 ──
+사진 같은 실사, 3D 렌더, 손가락 개수 이상, 뭉개진 손,
+워터마크, 서명, 글자, 과채도, 렌즈 플레어,
+도시 불빛, 가로등, 네온사인, 멀리 보이는 시가지 불빛,
+밝은 대낮, 노출 과다, 균일한 조명, 주황빛 일출,
+여러 명, 군중.
 ```
 
 ## 받고 나서 확인할 것
 
-- [ ] **여명이 보라→파랑인가** (주황 일출이면 다시)
+- [ ] **여명이 보라→파랑인가** — 주황 일출이면 다시
 - [ ] 원경에 **도시 불빛이 없는가**
 - [ ] 지면과 구조물이 아직 실루엣인가
 - [ ] 데크 라인·기둥·나무 실루엣이 살아 있는가
 - [ ] 평상복 + 명찰인가
-- [ ] 인물이 몸통 확정본과 같은 사람인가
+- [ ] 인물이 반신 CG와 같은 사람인가
 - [ ] 1920 × 1080 가로, 불투명인가

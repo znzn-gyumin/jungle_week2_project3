@@ -5,40 +5,60 @@
 | **파일명** | `cg_seungmin_still_climax.png` |
 | **캔버스** | 1920 × 1080 가로 · 불투명 |
 | **색조** | 심야(먹빛 남색 · 점광원만) |
-| **배경 레퍼런스** | `classroom_1.jpg` · `classroom_2.jpg` — **구조만** 가져옵니다. 조명·색조·시간대는 새로 깝니다 |
-| **인물 참조** | **이승민 평상복 몸통 확정본** |
-| **선행 조건** | 해당 인물 평상복 몸통 확정 |
+| **배경 레퍼런스** | `classroom_1.jpg` — **구조만** 가져옵니다 |
+| **인물 참조** | **이승민 반신 CG 평상복 `기본` 칸** |
+| **선행 조건** | 해당 인물 반신 CG 확정 |
 
-> **히로인의 서브플롯이 해결되는 지점**입니다. 각자 자기 방식으로 무너지고 주인공이 그걸 목격합니다.
+> **히로인의 서브플롯이 무너지는 지점**입니다. 각자 자기 방식으로 무너지고 주인공이 그걸 목격합니다.
 
-> 배치만 지키면 됩니다 — **화이트보드가 앞, 맞은편이 통창.** 새벽 2시엔 키보드 소리만 남습니다.
+> 배치만 지키면 됩니다 — **화이트보드가 앞, 맞은편이 통창.**
 
 > **기본값은 "얼굴이 거의 안 보이는 어둠"**입니다. 낮 사진의 밝기를 그대로 두면 이 게임의 정서가 통째로 사라집니다.
 
-> **10절 스타일 접미사를 그대로 붙이지 않았습니다.** `bust crop` · `plain flat background` · `calm neutral expression`은 배경을 그려야 하는 스틸과 충돌합니다. 화풍 부분만 남겼습니다.
+## 넣는 법
 
-> 배경이 잘 안 나오면 [`WORLD_PROMPTS.md` 6~9절](../../../WORLD_PROMPTS.md)로 먼저 **심야·여명 배경 이미지를 뽑아 참조로 함께 넣으세요**(13절 지시).
+**참조 이미지 두 장을 첨부합니다.**
+
+1. 배경 — `classroom_1.jpg`
+2. 인물 — **이승민 반신 CG 평상복 `기본` 칸**
+
+인물 참조로 `refs/ref_*.png` 를 쓰지 마세요. 정본 얼굴은 이미 만든 **반신 CG** 입니다.
+원본 크롭을 넣으면 대화 중 CG 와 명장면 스틸이 다른 사람이 됩니다.
+`refs/ref_*.png` 는 세로(0.729)라 **가로 스틸에 넣으면 비율까지 끌려갑니다.**
 
 ## 프롬프트
 
-```text
-long seminar room at 2am, almost all ceiling lights off, only two or three computer
-monitors glowing, glass whiteboards faintly catching light on the left wall,
-floor-to-ceiling windows completely black on the right, deep ink-blue darkness,
-very low key lighting, high contrast, most of the frame barely readable shadow,
-collapsed at the desk, the cheerfulness finally dropped,
-korean webtoon illustration style, semi-realistic anime, soft cel shading,
-clean lineart, warm muted palette,
-hair rendered in exactly the stated color, the palette does not tint it
-```
-
-## 부정 프롬프트
+> 부정 프롬프트 칸이 따로 있는 도구라면 구분선 아래를 거기에 옮기세요.
+> **그냥 이어붙이면 피하려던 것이 그려집니다.**
 
 ```text
-photorealistic, 3d render, extra fingers, deformed hands,
-watermark, signature, text, oversaturated, lens flare,
-city lights, street lamps, neon signs, distant town lights,
-bright daylight, overexposed, evenly lit, orange sunrise
+첫 번째 이미지에서 **공간 구조만** 가져오세요 — 창문·기둥·데크 라인·가구 배열.
+조명과 색조는 쓰지 말고 새로 깔아주세요.
+두 번째 이미지의 인물을 그대로 유지해 주세요 — 얼굴, 머리, 옷, 명찰.
+
+가로 16:9 와이드 구도, 1920 x 1080.
+
+새벽 2시의 긴 세미나실, 천장 조명은 거의 다 꺼져 있고
+모니터 두세 대만 빛남, 왼쪽 벽의 유리 화이트보드가 희미하게 빛을 받음,
+오른쪽 통창은 완전히 검음, 깊은 먹빛 남색 어둠,
+매우 낮은 키 조명, 높은 대비, 화면 대부분이 거의 읽히지 않는 그림자.
+
+광원은 모니터 두세 대뿐입니다. 그 외 광원은 두지 마세요.
+
+인물은 24세 한국 남성, 크고 넓은 어깨의 큰 체격, 짧게 친 머리, 크고 밝은 눈,
+흰 티 위에 초록 바시티 재킷,
+목에 검은 랜야드 — 줄이 가슴에 보이고 작은 흰 명찰이 명치에 놓임.
+
+책상에 쓰러짐, 쾌활함이 마침내 벗겨짐.
+
+한국 웹툰 일러스트 화풍, 세미리얼 애니메이션풍, 부드러운 셀 셰이딩,
+깔끔한 선화, 따뜻하고 채도 낮은 팔레트.
+
+── 아래는 절대 넣지 마세요 ──
+사진 같은 실사, 3D 렌더, 손가락 개수 이상, 뭉개진 손,
+워터마크, 서명, 글자, 과채도, 렌즈 플레어,
+도시 불빛, 가로등, 네온사인, 멀리 보이는 시가지 불빛,
+밝은 대낮, 노출 과다, 균일한 조명, 주황빛 일출
 ```
 
 ## 받고 나서 확인할 것
@@ -47,5 +67,5 @@ bright daylight, overexposed, evenly lit, orange sunrise
 - [ ] 창밖이 완전히 검은가
 - [ ] 광원이 모니터 두세 대뿐인가
 - [ ] 평상복 + 명찰인가
-- [ ] 인물이 몸통 확정본과 같은 사람인가
+- [ ] 인물이 반신 CG와 같은 사람인가
 - [ ] 1920 × 1080 가로, 불투명인가

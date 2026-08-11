@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
-"""ART_BRIEF.md -> 18개 생성 요청 프롬프트 팩.
-
-ART_BRIEF 8절이 계산한 요청 중 스틸 18 을
-각각 '복사해서 바로 붙여넣는' 파일 한 개로 펼칩니다.
+"""ART_BRIEF.md -> 스틸 CG 18장 한글 프롬프트 팩.
 
     python tools/gen_prompts.py
 
-출력: docs/reference/character/prompts/
+출력  docs/reference/character/prompts/04_still/T01~T18.md
+
+값은 전부 이 파일 상단 표에 모여 있다. 생성된 .md 를 손으로 고치지 말고
+여기를 고치고 다시 돌린다.
+
+프롬프트를 한글로 쓰는 이유
+  넣는 사람이 한국어로 판단해야 "여명이 보라->파랑인가" 같은 검수가 된다.
+  영어로 두면 프롬프트와 체크리스트가 다른 언어라 대조가 안 된다.
+
+부정 프롬프트를 본문 안에 구분선으로 끊는 이유
+  도구에 부정 칸이 따로 없으면 그냥 이어붙는데, 그러면 "도시 불빛, 가로등"
+  이 그려달라는 지시로 읽힌다. 정확히 피하려던 것이 나온다.
 """
-
 from __future__ import annotations
-
-import textwrap
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -19,425 +24,194 @@ OUT = ROOT / "docs" / "reference" / "character" / "prompts"
 
 
 def block(s: str) -> str:
-    """들여쓰기를 없애고 앞뒤 공백을 정리합니다."""
-    return textwrap.dedent(s).strip()
+    return "\n".join(l.strip() for l in s.strip().split("\n"))
 
 
 # ─────────────────────────────────────────────────────────────
-# 공통 조각 — ART_BRIEF 10절을 카테고리별로 분해한 것
-#
-# 10절은 스타일 접미사를 "모든 인물 프롬프트 뒤에 붙입니다"라고 했지만,
-# 그 접미사에는 화풍(korean webtoon...)과 구도(bust crop, plain flat background,
-# calm neutral expression)가 섞여 있습니다. 구도 쪽은 표정 시트/도트/스틸에
-# 붙이면 각 항목의 요구와 정면으로 충돌합니다. 그래서 둘로 쪼갭니다.
+# 공통 조각
 # ─────────────────────────────────────────────────────────────
 
-CORE_STYLE = block("""
-    korean webtoon illustration style, semi-realistic anime, soft cel shading,
-    clean lineart, warm muted palette,
-    hair rendered in exactly the stated color, the palette does not tint it
-""")
-
-BUST_FRAMING = block("""
-    tight bust portrait, head and shoulders shot, cropped at the sternum,
-    the bottom edge of the frame sits just below the collarbone,
-    face large and clearly readable, head and shoulders fill the frame,
-    subject centered horizontally with equal empty margin on the left and right,
-    a small empty gap above the head, hair not touching the top edge,
-    facing viewer straight on, shoulders level and symmetrical,
-    relaxed neutral posture, arms lowered naturally, calm neutral expression,
-    flat solid chroma key green background, one uniform color, no gradient
+STYLE = block("""
+    한국 웹툰 일러스트 화풍, 세미리얼 애니메이션풍, 부드러운 셀 셰이딩,
+    깔끔한 선화, 따뜻하고 채도 낮은 팔레트.
 """)
 
 NEG_BASE = block("""
-    photorealistic, 3d render, extra fingers, deformed hands,
-    watermark, signature, text, oversaturated, lens flare
+    사진 같은 실사, 3D 렌더, 손가락 개수 이상, 뭉개진 손,
+    워터마크, 서명, 글자, 과채도, 렌즈 플레어,
 """)
 
-NEG_BODY = NEG_BASE + ",\n" + block("""
-    cropped head, hair cropped at the top edge, head touching the top edge,
-    upper body, cowboy shot, full body, waist, hips, midriff, legs, feet,
-    off center subject, subject pushed to one side, uneven side margins,
-    multiple characters, busy background,
-    gradient background, textured background, shadow cast on the background, vignette,
-    color spill on hair edges, rim light, tinted skin,
-    dramatic pose, arms crossed, raised hands, hands near the face,
-    strong emotion, laughing, crying, angry face
+# 캠퍼스 주변에 아무것도 없다. 도시 불빛이 들어오면 "아무도 없는 새벽"이 깨진다.
+NEG_DARK = block("""
+    도시 불빛, 가로등, 네온사인, 멀리 보이는 시가지 불빛,
+    밝은 대낮, 노출 과다, 균일한 조명, 주황빛 일출,
 """)
 
-NEG_NO_BADGE = "lanyard, id card, name tag, badge on chest"
-
-# 표정 시트: 10절 부정에서 감정 차단 토큰을 뺐습니다.
-# 이 시트가 만들어야 하는 게 바로 laughing / crying / angry face입니다.
-NEG_FACE = NEG_BASE + ",\n" + block("""
-    different people, inconsistent face, varying head size,
-    body, shoulders, hands, arms,
-    labels, borders between cells, grid lines, busy background,
-    gradient background, color spill on hair edges, rim light
-""")
-
-# 도트: 화풍 토큰을 일절 넣지 않습니다. 웹툰 화풍을 붙이면 픽셀이 깨집니다.
-
-# 스틸 ①②(심야·여명): full body / legs / feet / busy background / strong emotion 을 뺐습니다.
-# 스틸은 전신과 배경이 나오고, 감정이 이 컷의 목적입니다.
-# 대신 4절 후처리 체크리스트("도시 불빛 없는가", "충분히 어두운가", "여명이 보라→파랑인가")를
-# 부정 프롬프트로 옮겼습니다.
-NEG_STILL = NEG_BASE + ",\n" + block("""
-    city lights, street lamps, neon signs, distant town lights,
-    bright daylight, overexposed, evenly lit, orange sunrise,
-    multiple characters, crowd
-""")
-
-# 클라이맥스는 조원들이 함께 있는 장면이 있습니다(승희 "조가 자기를 빼놓고 결정",
-# 민규 "아무도 눈치 못 챔"). multiple characters / crowd 를 빼야 합니다.
-NEG_CLIMAX = NEG_BASE + ",\n" + block("""
-    city lights, street lamps, neon signs, distant town lights,
-    bright daylight, overexposed, evenly lit, orange sunrise
-""")
-
-# 스틸 ③(엔딩)은 낮·실내이고 5년 뒤입니다.
-# NEG_STILL 의 어둠 관련 토큰(bright daylight, evenly lit, city lights ...)을
-# 그대로 쓰면 "late afternoon light / spot lighting" 과 정면으로 충돌합니다.
-# 차단 대상은 **캠프 명찰**이지 사원증이 아닙니다.
-# 민아는 5년 후 "사원증 랜야드"를 걸고, 윤호는 "강아지 뱃지가 사원증 스트랩에" 달립니다.
-# 앞서 쓰던 `lanyard, id card` 통짜 차단은 그 둘을 지워버립니다.
-NEG_ENDING = NEG_BASE + ",\n" + block("""
-    black campus lanyard, J logo badge, student id card,
-    student clothes, school hoodie, oversized hoodie, campus, classroom, dormitory,
-    teenage look, night scene, darkness
+# 엔딩은 낮·실내이고 5년 뒤다. 어둠 토큰을 쓰면 "늦은 오후 빛"과 충돌한다.
+# 차단 대상은 캠프 명찰이지 사원증이 아니다 — 민아는 사원증 랜야드를 걸고
+# 윤호는 강아지 뱃지가 사원증 스트랩에 달린다.
+NEG_ENDING_EXTRA = block("""
+    검은 캠프 명찰, J 로고 뱃지, 학생증,
+    학생 옷, 학교 후드, 오버사이즈 후드, 캠퍼스, 강의실, 기숙사,
+    10대 같은 인상, 밤 장면, 어둠,
 """)
 
 
 # ─────────────────────────────────────────────────────────────
 # 히로인 6인
-# casual/outing 프롬프트는 ART_BRIEF 11절 원문입니다.
-# sprite_bottom 은 0절 '복장의 근거' 표에서 옮겼습니다.
+#   casual  평상복 외형 — ①② 스틸에 그대로 들어간다
+#   garden  ① D7 새벽 커넥트가든의 순간
+#   climax  ② D9 교육장 403 심야의 순간
+#   ending  ③ 5년 후의 상황 · ending_wear 그때의 복장
 # ─────────────────────────────────────────────────────────────
 
 HEROINES = [
     dict(
-        id="minah", kr="김민아", theme="#3A9B96",
+        id="minah", kr="김민아",
         casual=block("""
-            22 year old korean woman, long straight black hair tied high in a ponytail,
-            sharp upturned cat-like eyes with clear pupils, slim face, thin lips,
-            slender build, black zip-up hoodie over a white tee,
-            black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
+            22세 한국 여성, 검은 긴 생머리를 높게 묶음,
+            올라간 고양이 같은 눈매에 또렷한 눈동자, 갸름한 얼굴, 얇은 입술, 마른 체형,
+            흰 티 위에 검은 후드집업,
+            목에 검은 랜야드 — 줄이 가슴에 보이고 작은 흰 명찰이 명치에 놓임
         """),
-        outing=block("""
-            same woman, hair completely down for the first time, long straight black hair
-            loose over the shoulders, black slip dress with a thin white shirt worn open over it,
-            no lanyard, no id card
+        garden="데크에 앉아 편의점 삼각김밥을 들고 말없이 천천히 먹는 중, 지쳐 있음, 묶은 머리가 흘러내림",
+        climax="쓰러질 지경인데 인정하지 않음, 괜찮다고 우김, 모니터 빛이 얼굴에 닿음",
+        ending_age=27, ending_bg="office",
+        ending="같은 회사 다른 팀, 여전히 코드 리뷰로 다투고 퇴근은 같이 함",
+        ending_wear=block("""
+            카디건 안에 검은 니트, 어깨 길이로 느슨하게 푼 머리,
+            랜야드에 사원증
         """),
-        outing_note="**핵심은 머리를 푼 것**입니다. 옷보다 그게 먼저 보여야 합니다.",
-        face_extra="expression barely changes but the eyes carry everything",
-        face_note="표정 근육은 거의 안 움직이고 **눈만** 움직입니다. 여섯 셀의 입 모양 차이를 최소로.",
-        sprite_top="long straight black hair tied high in a ponytail, black zip-up hoodie over a white tee",
-        sprite_bottom="black track pants, black running shoes worn with the heels crushed down",
-        garden="sitting on the deck holding a convenience store rice triangle, "
-               "eating slowly and silently, exhausted, hair coming loose",
-        climax="about to collapse but refusing to admit it, insisting she is fine, "
-               "monitor light on her face",
-        ending_bg="office", ending_age=27,
-        ending="same company different team, still arguing over code reviews, leaving work together",
-        ending_wear="black knit top under a cardigan, hair loose at shoulder length, "
-                    "an employee ID card on a lanyard",
-        ending_note="**여전히 검정인데 후드가 아닙니다.** 색은 안 바뀌고 형태만 바뀝니다. "
-                    "머리는 캠프 때 높게 묶던 것이 어깨에서 느슨하게 풀립니다.",
+        ending_note="**여전히 검정인데 후드가 아닙니다.** 색은 안 바뀌고 형태만 바뀝니다.",
         ending_badge=True,
     ),
     dict(
-        id="seunghee", kr="이승희", theme="#B5806F",
+        id="seunghee", kr="이승희",
         casual=block("""
-            23 year old korean woman, long wavy brown hair, large round doe-like eyes,
-            long eyelashes, slim neck and narrow shoulders, beige knit sweater with the
-            sleeves pulled down over her hands,
-            black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
+            23세 한국 여성, 갈색 긴 웨이브 머리,
+            크고 둥근 사슴 같은 눈, 긴 속눈썹, 가는 목과 좁은 어깨,
+            소매로 손을 덮은 베이지 니트,
+            목에 검은 랜야드 — 줄이 가슴에 보이고 작은 흰 명찰이 명치에 놓임
         """),
-        outing=block("""
-            same woman, light sky blue shirt dress, sleeves rolled up
-            revealing her wrists and forearms, small crossbody bag strap across the shoulder,
-            no lanyard, no id card
+        garden="스케치북을 뺏기듯 내밀고 있음, 부끄러워함, 펼쳐진 페이지엔 사람들의 뒷모습만 그려져 있음",
+        climax="조 결정에서 빠짐, 그때도 말을 못 함, 조금 떨어져 서 있음",
+        ending_age=28, ending_bg="gallery",
+        ending="이제 먼저 연락하는 사람이 됨, 자기 전시 작품 옆에 서 있음",
+        ending_wear=block("""
+            아이보리 반팔 셔츠, 팔뚝이 완전히 드러남,
+            5년 전과 같은 긴 웨이브 머리
         """),
-        outing_note="**소매를 걷어 손목이 보이는 것**이 이 장의 전부입니다. "
-                    "평상복에서 손이 소매에 감춰져 있어야 대비가 삽니다.",
-        face_extra="very subtle, smallest range of all",
-        face_note="여섯 중 진폭이 **가장 작습니다.** 놀람 셀조차 크게 벌어지지 않습니다.",
-        sprite_top="long wavy brown hair, beige knit sweater with sleeves over the hands",
-        sprite_bottom="ivory long skirt down to the ankles, white canvas shoes with neatly tied laces",
-        garden="holding out a sketchbook as if it was taken from her, embarrassed, "
-               "pages showing only the backs of people",
-        climax="left out of the group decision, still unable to speak, standing slightly apart",
-        ending_bg="gallery", ending_age=28,
-        ending="now the one who reaches out first, standing by her own exhibited work",
-        ending_wear="ivory short-sleeve shirt, forearms fully bare, "
-                    "long wavy hair unchanged from five years ago",
-        ending_note="**감출 소매가 없는 옷을 골랐습니다.** 캠프 때 소매로 손을 감싸던 사람이고, "
-                    "D7에 한 번 걷었던 게 5년 뒤엔 기본값입니다 — **소매 길이가 5년을 말합니다.** "
-                    "머리는 유일하게 안 바뀝니다.",
+        ending_note="**감출 소매가 없는 옷을 골랐습니다.** 캠프 때 소매로 손을 감싸던 사람입니다.",
         ending_badge=False,
     ),
     dict(
-        id="yunjung", kr="장윤정", theme="#E0A230",
+        id="yunjung", kr="장윤정",
         casual=block("""
-            21 year old korean woman, brown hair tied high, big round downturned puppy-like eyes,
-            round cheeks, oversized bright yellow hoodie much too large for her,
-            headphones resting around her neck,
-            black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
+            21세 한국 여성, 갈색 머리를 높게 묶음,
+            크고 둥근 처진 강아지 같은 눈, 동그란 볼,
+            몸보다 훨씬 큰 노란 오버사이즈 후드, 목에 걸친 헤드폰,
+            목에 검은 랜야드 — 줄이 가슴에 보이고 작은 흰 명찰이 명치에 놓임
         """),
-        outing=block("""
-            same woman, cream sleeveless top, shoulders and arms now bare after the oversized
-            hoodie is gone, hair clip, several bracelets on one wrist,
-            headphones still resting around her neck, no lanyard, no id card
+        garden="헤드폰 한쪽을 보는 사람 쪽으로 내밀고 있음, 갑자기 조용해짐, 평소의 밝음이 전혀 없음",
+        climax="\"2학년이 뭘 아냐\"는 말을 방금 들음, 말하다 얼어붙음",
+        ending_age=26, ending_bg="gallery",
+        ending="졸업작품이 출시된 게임이 됨, 그걸 보여주는 중",
+        ending_wear=block("""
+            여전히 노란색인데 오버사이즈 후드가 아니라 몸에 맞는 재킷,
+            헤드폰은 여전히 목에 걸려 있음
         """),
-        outing_note="**헤드폰은 양쪽 다 유지**합니다. 이 인물의 모티프라 사라지면 안 됩니다.",
-        face_extra="neutral cell should be unsmiling",
-        face_note="기본 셀이 밝으면 **작업 모드와의 낙차가 죽습니다.** 기본은 웃지 않습니다.",
-        sprite_top="brown hair tied high, oversized bright yellow hoodie, headphones around the neck",
-        sprite_bottom="black short pants almost hidden under the hoodie, "
-                      "white high-top sneakers with yellow laces, ankle socks",
-        garden="holding out one side of her headphones toward the viewer, suddenly quiet, "
-               "no trace of her usual cheerfulness",
-        climax="just told that a second-year would not understand, frozen mid-sentence",
-        ending_bg="gallery", ending_age=26,
-        ending="her graduation project became a released game, showing it",
-        ending_wear="still yellow but a well-fitted jacket instead of an oversized hoodie, "
-                    "headphones still resting around her neck",
-        ending_note="**노란색은 유지하고 실루엣만 바뀝니다.** 헐렁하던 후드가 몸에 맞는 재킷이 됩니다. "
-                    "**헤드폰은 그대로** — 자기 게임을 낸 사람이 됐는데 작업 도구는 안 바뀌었습니다.",
+        ending_note="**노란색은 유지하고 실루엣만 바뀝니다.** 헐렁하던 후드가 몸에 맞는 재킷이 됩니다.",
         ending_badge=False,
     ),
     dict(
-        id="mingyu", kr="김민규", theme="#4E6288",
+        id="mingyu", kr="김민규",
         casual=block("""
-            22 year old korean man, long front bangs covering half of his face,
-            narrow sharp eyes, angular jaw, very thin build, faint dark circles,
-            black hoodie with the hood down,
-            black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
+            22세 한국 남성, 얼굴 절반을 덮는 긴 앞머리,
+            가늘고 날카로운 눈, 각진 턱, 매우 마른 체형, 옅은 다크서클,
+            후드를 내린 검은 후드,
+            목에 검은 랜야드 — 줄이 가슴에 보이고 작은 흰 명찰이 명치에 놓임
         """),
-        outing=block("""
-            same man, bangs swept back so both eyes are fully visible for the first time,
-            black overshirt open over a white tee, a silver ring on one hand,
-            no lanyard, no id card
+        garden="가만히 앉아 아무것도 아닌 곳을 바라봄, 표정이 비어 있음, 옆에 얼음이 다 녹아버린 아이스 아메리카노",
+        climax="화면 속 결과물은 완벽한데 표정은 완전히 비어 있음, 아무도 눈치채지 못함",
+        ending_age=27, ending_bg="office",
+        ending="이제 제때 자고 제때 먹음, 건강해짐, 차분함",
+        ending_wear=block("""
+            회색 셔츠, 앞머리를 넘겨 이마가 완전히 보임,
+            눈 밑 다크서클 없음, 살이 조금 붙은 얼굴, 건강한 피부
         """),
-        outing_note="**눈이 드러나는 것**이 핵심입니다. 평상복에서 앞머리가 확실히 얼굴을 가려야 합니다.",
-        face_extra="avoids eye contact even when smiling",
-        face_note="**시선을 안 주는 게 기본 표정**입니다. 웃는 셀에서도 눈이 화면 밖을 봅니다.",
-        sprite_top="long front bangs covering half of his face, black hoodie with the hood down",
-        sprite_bottom="black wide-leg pants with the hems dragging on the floor, "
-                      "black high-top sneakers with the laces undone",
-        garden="sitting still, staring at nothing, empty expression, "
-               "iced americano melted to water beside him",
-        climax="perfect work on the screen, completely hollow expression, nobody noticing",
-        ending_bg="office", ending_age=27,
-        ending="sleeping and eating properly now, healthier, calm",
-        ending_wear="grey shirt, bangs swept back so the forehead is fully visible, "
-                    "no dark circles under the eyes, slightly fuller face, healthy skin",
-        ending_note="**옷보다 얼굴에서 먼저 보여야 합니다.** 다크서클이 없어지고 살이 조금 붙었습니다. "
-                    "앞머리로 얼굴을 가리던 사람이 이마를 드러냅니다.",
+        ending_note="**옷보다 얼굴에서 먼저 보여야 합니다.** 다크서클이 없어지고 살이 조금 붙었습니다.",
         ending_badge=False,
     ),
     dict(
-        id="seungmin", kr="이승민", theme="#5F8F42",
+        id="seungmin", kr="이승민",
         casual=block("""
-            24 year old korean man, tall with broad shoulders and a large frame,
-            short cropped hair, big bright eyes,
-            green varsity jacket over a white tee,
-            black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
+            24세 한국 남성, 크고 넓은 어깨의 큰 체격, 짧게 친 머리, 크고 밝은 눈,
+            흰 티 위에 초록 바시티 재킷,
+            목에 검은 랜야드 — 줄이 가슴에 보이고 작은 흰 명찰이 명치에 놓임
         """),
-        outing=block("""
-            same man, no varsity jacket, linen shirt with the top button undone,
-            wristwatch, a cap, no lanyard, no id card
+        garden="방금 울고 난 직후, 웃으려다 실패함, 어깨가 내려가 있음",
+        climax="책상에 쓰러짐, 쾌활함이 마침내 벗겨짐",
+        ending_age=29, ending_bg="office",
+        ending="새 직장 첫 출근날, 이번엔 누군가 그를 챙겨줌",
+        ending_wear=block("""
+            아직 새것 티가 나는 정장, 넥타이가 살짝 삐뚤고 소매가 조금 김,
+            자기 색이 어디에도 없음
         """),
-        outing_note="**재킷을 벗은 것**이 핵심입니다. 바시티 재킷이 만들던 어깨 실루엣이 없어져야 합니다.",
-        face_extra="big open smile showing gums in the happy cell",
-        face_note="**웃을 때 잇몸이 보이는 게 이 캐릭터의 전부**입니다. 기쁨 셀에서 크고 시원하게.",
-        sprite_top="short cropped hair, broad shoulders, green varsity jacket over a white tee",
-        sprite_bottom="light blue straight denim jeans, white high-top basketball shoes in good condition",
-        garden="just finished crying, trying to smile and failing, shoulders down",
-        climax="collapsed at the desk, the cheerfulness finally dropped",
-        ending_bg="office", ending_age=29,
-        ending="first day at a new job, someone else looking after him this time",
-        ending_wear="a brand new suit that still looks new, tie slightly crooked, "
-                    "sleeves a little too long, no signature color anywhere",
         ending_note="**여섯 중 유일하게 자기 색이 없습니다.** 다섯은 캠프 때 색을 유지하는데 "
-                    "승민만 새 정장이라 초록이 사라집니다 — **제일 늦게 시작한 사람의 표시**입니다. "
-                    "넥타이가 삐뚤고 소매가 긴 것도 그래서입니다.",
+                    "승민만 새 정장이라 잃습니다 — 제일 늦게 시작한 사람의 표시입니다.",
         ending_badge=False,
     ),
     dict(
-        id="yunho", kr="장윤호", theme="#C9A170",
+        id="yunho", kr="장윤호",
         casual=block("""
-            20 year old korean man, round gentle eyes, soft facial lines, mild youthful face,
-            cream cardigan over a white tee with a small dog-shaped pin on the chest,
-            black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
+            20세 한국 남성, 둥글고 순한 눈, 부드러운 얼굴선, 어려 보이는 인상,
+            흰 티 위에 크림 가디건, 가슴에 작은 강아지 모양 뱃지,
+            목에 검은 랜야드 — 줄이 가슴에 보이고 작은 흰 명찰이 명치에 놓임
         """),
-        outing=block("""
-            same man, navy striped short-sleeve shirt, canvas tote bag strap over the shoulder
-            with the small dog pin moved onto it,
-            carefully coordinated outfit that looks a little too planned,
-            no lanyard, no id card
+        garden="다들 보내고 데크에 혼자 남음, 고개를 숙이고 있음, 대답을 못 하는 상태",
+        climax="뭘 하고 싶냐는 질문에 대답하지 못하고 시선을 피함",
+        ending_age=25, ending_bg="office",
+        ending="드디어 자기 이름으로 자기 작업을 발표함",
+        ending_wear=block("""
+            흰 셔츠, 가디건 없음,
+            사원증 스트랩에 작은 강아지 모양 뱃지
         """),
-        outing_note="**전날 밤에 고른 티가 나야** 합니다. 너무 신경 쓴 게 보여서 오히려 귀여운 쪽.",
-        face_extra="gentle, narrower range than yunjung",
-        face_note="같은 강아지상인데 **윤정보다 덜 움직입니다.** 진폭을 좁게.",
-        sprite_top="cream cardigan over a white tee with a small dog pin on the chest",
-        sprite_bottom="beige chino pants with the hems folded once, "
-                      "white canvas sneakers with neatly tied laces",
-        garden="alone on the deck after seeing everyone off, looking down, unable to answer",
-        climax="asked what he wants and unable to answer, looking away",
-        ending_bg="office", ending_age=25,
-        ending="presenting his own work under his own name, finally",
-        ending_wear="white shirt, no cardigan, "
-                    "a small dog-shaped pin clipped onto his employee ID strap",
-        ending_note="**뱃지가 세 번째 자리로 옮겨갑니다** — 가슴(평상복) → 토트백(D7) → "
-                    "**사원증 스트랩**(5년 후). 크림 가디건이 사라지고 흰 셔츠만 남습니다.",
+        ending_note="**뱃지가 세 번째 자리로 옮겨갑니다** — 가슴(평상복) → 토트백(D7) → 사원증 스트랩.",
         ending_badge=True,
     ),
 ]
 
 
 # ─────────────────────────────────────────────────────────────
-# 참조 이미지가 없는 도트 12종
-#
-# given  = CHARACTERS.md / GAME_DESIGN.md / ART_BRIEF.md 가 실제로 못박은 것
-# blank  = 문서 어디에도 없는 것 (= 새로 정하면 신규 설정)
-# draft  = 이 스크립트가 제안하는 값. 확정 아님. 반드시 검토하세요.
+# 배경
 # ─────────────────────────────────────────────────────────────
-
-DOT_ONLY = [
-    dict(
-        id="doyun", kr="이도윤", who="남 22 · 컴퓨터공학 3학년 · 주인공",
-        wear="short messy hair, grey zip-up hoodie, black pants, white sneakers, "
-             "entirely desaturated greyscale outfit",
-        note="**무채색이 이 사람의 자리입니다** — 여섯 중 누구와 서 있어도 배경이 됩니다. "
-             "학번도 실력도 가운데. 1인칭이라 CG는 없고 도트만 필요합니다.",
-        gap="머리 색, 후드 안에 입은 상의, 체형",
-    ),
-    dict(
-        id="doa", kr="이도아", who="여 22 · 컴퓨터공학 3학년 · 주인공 여자판",
-        wear="shoulder-length hair tied back in one, grey zip-up hoodie, black pants, "
-             "white sneakers, entirely desaturated greyscale outfit",
-        note="도윤과 **복장은 완전히 같고 머리만 다릅니다.** 무채색인 이유도 같습니다.",
-        gap="머리 색, 후드 안에 입은 상의, 체형",
-    ),
-    dict(
-        id="jio", kr="한지오", who="남 22 · 컴퓨터공학 3학년 · 절친 겸 룸메이트 · 4조",
-        wear="messy tousled hair, coral short-sleeve t-shirt, shorts, slippers, "
-             "bare arms, no outer layer of any kind",
-        note="**겉옷이 없는 유일한 인물입니다.** 히로인 여섯은 냉방 때문에 겉옷을 하나씩 "
-             "걸치는데 절친만 반팔입니다 — 같은 방을 쓰는 사이라 격식이 제일 없습니다. "
-             "**팔이 드러나는 게 이 인물의 표식**이라 소매를 만들지 마세요.",
-        gap="머리 색, 반바지 색, 슬리퍼 색",
-    ),
-    dict(
-        id="jia", kr="한지아", who="여 22 · 한지오 여자판",
-        wear="hair in a loose messy bun, coral short-sleeve t-shirt, shorts, slippers, "
-             "bare arms, no outer layer of any kind",
-        note="지오와 **복장은 완전히 같고 머리만 다릅니다.** 겉옷 없음·팔 드러남도 그대로.",
-        gap="머리 색, 반바지 색, 슬리퍼 색",
-    ),
-    dict(
-        id="myeongjinhyeok", kr="명진혁", who="남 32 · 담당 코치 · 컴공 석사 후 스타트업 3년",
-        wear="black shirt with the sleeves rolled up to the elbows, black slacks, "
-             "black leather dress shoes, entirely monochrome from head to toe",
-        note="**혼자 셔츠와 구두입니다.** 학생들 사이에서 유일한 어른 옷이고, 그게 "
-             "열 살 차이를 48px에서 읽히게 하는 유일한 수단입니다.",
-        badge="a staff lanyard in a different color from the participants' black one",
-        badge_kr="**운영진용 다른 색 랜야드** — 참가자의 검은 랜야드와 구분됩니다",
-        gap="머리(길이·색 전부), 랜야드의 구체적 색",
-    ),
-    dict(
-        id="jomin", kr="조민", who="21 · 중성적 · 게임소프트웨어 2학년 · 경쟁 조(4조)",
-        wear="dark grey hoodie worn up over the head, black pants, "
-             "androgynous silhouette that does not read as either gender, "
-             "face always shadowed under the hood",
-        note="**후드를 쓴 유일한 인물**이고 얼굴이 늘 그늘입니다. 성별이 안 읽히는 게 "
-             "설계라 실루엣에서 어깨선·허리선을 만들지 마세요.",
-        gap="머리(후드에 가려짐, 대체 묘사 없음), 신발",
-    ),
-    dict(
-        id="taeyun", kr="강태윤", who="남 23 · 컴퓨터공학 4학년 · 경쟁 조(4조) 대표",
-        wear="white shirt under a navy knit vest, beige chino pants, white sneakers, "
-             "the neatest outfit in the room",
-        note="**여섯 조 통틀어 가장 단정합니다.** 승민이 \"갖춰 입은 학생\"이면 이쪽은 "
-             "**이미 취업한 사람처럼** 보입니다 — 그게 위협감의 정체입니다. "
-             "악역이 아니라 한 발 빠른 사람으로 그리세요.",
-        gap="머리(길이·색 전부)",
-    ),
-    dict(
-        id="taeyeon", kr="강태연", who="여 23 · 강태윤 여자판",
-        wear="white blouse under a navy knit vest, beige slacks, white sneakers, "
-             "the neatest outfit in the room",
-        note="태윤과 같은 조합이고 **셔츠가 블라우스, 치노가 슬랙스**로만 바뀝니다.",
-        gap="머리(길이·색 전부)",
-    ),
-    dict(
-        id="yeosanim", kr="여사님", who="여 50대 · B1 카페테리아",
-        wear="pink apron over a comfortable loose long-sleeve shirt, white food-service cap",
-        note="**유일한 앞치마와 모자**입니다. B1에서만 보입니다.",
-        gap="머리(위생모에 가려짐), 하의, 신발, 셔츠 색",
-    ),
-    dict(
-        id="mob_a", kr="공용 A", who="무명 동기 17명용 공용 스프라이트",
-        wear="generic background student, short-sleeve tee and shorts, "
-             "hair as a simple flat mass, no facial detail at all",
-        note="**티셔츠 색만 갈아 끼웁니다.** 교체용 색은 이름 있는 인물이 쓰지 않는 "
-             "**회갈 · 연보라 · 올리브 · 남색 · 벽돌** 중에서 고르세요. "
-             "얼굴 디테일을 넣지 마세요 — 배경 인원이라 눈에 띄면 안 됩니다.",
-        gap="신발, 하의 색, 머리 색, 성별",
-    ),
-    dict(
-        id="mob_b", kr="공용 B", who="무명 동기 17명용 공용 스프라이트",
-        wear="generic background student, zip-up hoodie and long pants, "
-             "hair as a simple flat mass, no facial detail at all",
-        note="**후드 색만 갈아 끼웁니다.** 교체용 색은 "
-             "**회갈 · 연보라 · 올리브 · 남색 · 벽돌** 중에서. 얼굴 디테일 없음.",
-        gap="신발, 하의 색, 머리 색, 성별",
-    ),
-    dict(
-        id="mob_c", kr="공용 C", who="무명 동기 17명용 공용 스프라이트",
-        wear="generic background student, button shirt and blue jeans, "
-             "hair as a simple flat mass, no facial detail at all",
-        note="**셔츠 색만 갈아 끼웁니다.** 교체용 색은 "
-             "**회갈 · 연보라 · 올리브 · 남색 · 벽돌** 중에서. 얼굴 디테일 없음.",
-        gap="신발, 머리 색, 성별",
-    ),
-]
-
-
-
-FACE_BASE = block("""
-    character expression sheet, same character repeated in a 3 by 2 grid,
-    six head-and-neck portraits of the same person, identical face and hair in every cell,
-    same head angle and same scale in every cell, only the expression differs,
-    row 1 left to right: neutral calm / bright genuine smile / blushing with eyes averted,
-    row 2 left to right: downcast sad / wide-eyed surprise / furrowed angry,
-    korean webtoon illustration style, semi-realistic anime, soft cel shading,
-    clean lineart, flat solid chroma key green background, one uniform color,
-    no body, no hands, no text labels
-""")
 
 BG_GARDEN = block("""
-    outdoor wooden deck terrace at dawn, low stone planter walls, white wire chairs
-    and olive green chairs and tables, young slender trees, white curtain-wall buildings
-    with orange perforated panels above, piloti columns with an open passage underneath,
-    sky a soft gradient from deep violet at the top to pale blue at the horizon,
-    ground and structures still in silhouette, no city lights anywhere, humid summer dawn air
+    새벽의 야외 우드데크 테라스, 낮은 돌 화단 벽,
+    흰 와이어 의자와 올리브그린 의자·테이블, 가늘고 어린 나무들,
+    위쪽에 주황 타공 패널이 붙은 흰 커튼월 건물,
+    아래가 뚫린 필로티 기둥과 그 밑을 지나는 통로,
+    하늘은 위쪽 짙은 보라에서 지평선 옅은 파랑으로 이어지는 부드러운 그라데이션,
+    지면과 구조물은 아직 실루엣, 도시 불빛은 어디에도 없음, 습한 여름 새벽 공기.
 """)
 
 BG_CLIMAX = block("""
-    long seminar room at 2am, almost all ceiling lights off, only two or three computer
-    monitors glowing, glass whiteboards faintly catching light on the left wall,
-    floor-to-ceiling windows completely black on the right, deep ink-blue darkness,
-    very low key lighting, high contrast, most of the frame barely readable shadow
+    새벽 2시의 긴 세미나실, 천장 조명은 거의 다 꺼져 있고
+    모니터 두세 대만 빛남, 왼쪽 벽의 유리 화이트보드가 희미하게 빛을 받음,
+    오른쪽 통창은 완전히 검음, 깊은 먹빛 남색 어둠,
+    매우 낮은 키 조명, 높은 대비, 화면 대부분이 거의 읽히지 않는 그림자.
 """)
 
 BG_ENDING = {
-    "office": "modern open-plan office interior, late afternoon light, calm",
-    "gallery": "gallery exhibition space, white walls, spot lighting, quiet",
+    "office": "현대적인 개방형 사무실 실내, 늦은 오후의 빛, 차분한 공기.",
+    "gallery": "갤러리 전시 공간, 흰 벽, 스팟 조명, 조용한 공기.",
 }
 BG_ENDING_KR = {"office": "오피스", "gallery": "전시장"}
 
+
+# ─────────────────────────────────────────────────────────────
+# 조립
+# ─────────────────────────────────────────────────────────────
 
 def write(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -445,114 +219,152 @@ def write(path: Path, text: str) -> None:
 
 
 def card(rows: list[tuple[str, str]]) -> str:
-    out = ["| | |", "|---|---|"]
-    out += [f"| **{k}** | {v} |" for k, v in rows]
-    return "\n".join(out)
+    return "\n".join(["| | |", "|---|---|"] + [f"| **{k}** | {v} |" for k, v in rows])
 
 
-def prompt_file(title: str, meta: list[tuple[str, str]], positive: str,
-                negative: str, notes: str, checks: list[str]) -> str:
-    parts = [f"# {title}", "", card(meta), ""]
-    if notes:
-        parts += [notes, ""]
-    parts += ["## 프롬프트", "", "```text", positive, "```", "",
-              "## 부정 프롬프트", "", "```text", negative, "```", "",
-              "## 받고 나서 확인할 것", ""]
-    parts += [f"- [ ] {c}" for c in checks]
-    return "\n".join(parts)
+def prompt_file(title, meta, attach, prompt, negative, notes, checks) -> str:
+    p = [f"# {title}", "", card(meta), "", notes, "",
+         "## 넣는 법", "", attach, "",
+         "## 프롬프트", "",
+         "> 부정 프롬프트 칸이 따로 있는 도구라면 구분선 아래를 거기에 옮기세요.",
+         "> **그냥 이어붙이면 피하려던 것이 그려집니다.**", "",
+         "```text", prompt, "",
+         "── 아래는 절대 넣지 마세요 ──", negative, "```", "",
+         "## 받고 나서 확인할 것", ""]
+    p += [f"- [ ] {c}" for c in checks]
+    return "\n".join(p)
+
+
+ATTACH_CAMPUS = block("""
+    **참조 이미지 두 장을 첨부합니다.**
+
+    1. 배경 — `{bg}`
+    2. 인물 — **{kr} 반신 CG 평상복 `기본` 칸**
+
+    인물 참조로 `refs/ref_*.png` 를 쓰지 마세요. 정본 얼굴은 이미 만든 **반신 CG** 입니다.
+    원본 크롭을 넣으면 대화 중 CG 와 명장면 스틸이 다른 사람이 됩니다.
+    `refs/ref_*.png` 는 세로(0.729)라 **가로 스틸에 넣으면 비율까지 끌려갑니다.**
+""")
 
 
 def main() -> int:
     made: list[str] = []
 
-    # ── 04 스틸 18장 ────────────────────────────────────────
     scenes = [
-        ("garden", "① D7 새벽 커넥트가든 → 여명", BG_GARDEN,
-         "심야(먹빛 남색) → **여명(보라→파랑)**",
-         "`connect_garden.jpg`",
-         "> **루트 최대 명장면**이고 게임에서 **유일하게 해가 뜨는 씬**입니다. "
-         "빈 의자가 처음으로 채워지는 그림입니다.\n\n"
-         "> 광원은 **발밑 조명과 건물 창 불빛뿐**입니다. 그 외에는 두지 마세요.\n\n"
-         "> **복장은 평상복 + 명찰이 맞습니다.** D7 외출복은 낮에 캠퍼스를 벗어날 때의 차림이고, "
-         "이 컷은 그 전날 밤에서 이어지는 **D7 새벽 2시, 캠퍼스 안**입니다.\n\n"
-         "> 13절 배경 프롬프트에서 `empty`를 뺐습니다 — 인물이 앉아 있는 컷이라 "
-         "\"빈 의자\"와 모순됩니다.",
-         ["**여명이 보라→파랑인가** (주황 일출이면 다시)",
-          "원경에 **도시 불빛이 없는가**",
-          "지면과 구조물이 아직 실루엣인가",
-          "데크 라인·기둥·나무 실루엣이 살아 있는가",
-          "평상복 + 명찰인가"], NEG_STILL),
-        ("climax", "② D9 클라이맥스 — 교육장 403 심야", BG_CLIMAX,
-         "심야(먹빛 남색 · 점광원만)",
-         "`classroom_1.jpg` · `classroom_2.jpg`",
-         "> **히로인의 서브플롯이 해결되는 지점**입니다. 각자 자기 방식으로 무너지고 "
-         "주인공이 그걸 목격합니다.\n\n"
-         "> 배치만 지키면 됩니다 — **화이트보드가 앞, 맞은편이 통창.** "
-         "새벽 2시엔 키보드 소리만 남습니다.\n\n"
-         "> **기본값은 \"얼굴이 거의 안 보이는 어둠\"**입니다. "
-         "낮 사진의 밝기를 그대로 두면 이 게임의 정서가 통째로 사라집니다.",
-         ["**심야가 충분히 어두운가** — 한눈에 다 읽히면 아직 밝습니다",
-          "창밖이 완전히 검은가",
-          "광원이 모니터 두세 대뿐인가",
-          "평상복 + 명찰인가"], NEG_CLIMAX),
+        dict(
+            key="garden", num="①",
+            title="① D7 새벽 커넥트가든 → 여명",
+            bg=BG_GARDEN, bg_ref="connect_garden.jpg",
+            tone="심야(먹빛 남색) → **여명(보라→파랑)**",
+            light="광원은 발밑 조명과 건물 창 불빛뿐입니다. 그 외 광원은 두지 마세요.",
+            neg=NEG_BASE + "\n" + NEG_DARK + "\n여러 명, 군중.",
+            notes="> **루트 최대 명장면**이고 게임에서 **유일하게 해가 뜨는 씬**입니다. "
+                  "빈 의자가 처음으로 채워지는 그림입니다.\n\n"
+                  "> **복장은 평상복 + 명찰이 맞습니다.** D7 외출복은 낮에 캠퍼스를 벗어날 때의 "
+                  "차림이고, 이 컷은 그 전날 밤에서 이어지는 **D7 새벽 2시, 캠퍼스 안**입니다.",
+            checks=["**여명이 보라→파랑인가** — 주황 일출이면 다시",
+                    "원경에 **도시 불빛이 없는가**",
+                    "지면과 구조물이 아직 실루엣인가",
+                    "데크 라인·기둥·나무 실루엣이 살아 있는가",
+                    "평상복 + 명찰인가"],
+        ),
+        dict(
+            key="climax", num="②",
+            title="② D9 클라이맥스 — 교육장 403 심야",
+            bg=BG_CLIMAX, bg_ref="classroom_1.jpg",
+            tone="심야(먹빛 남색 · 점광원만)",
+            light="광원은 모니터 두세 대뿐입니다. 그 외 광원은 두지 마세요.",
+            neg=NEG_BASE + "\n" + NEG_DARK.rstrip(","),
+            notes="> **히로인의 서브플롯이 무너지는 지점**입니다. 각자 자기 방식으로 무너지고 "
+                  "주인공이 그걸 목격합니다.\n\n"
+                  "> 배치만 지키면 됩니다 — **화이트보드가 앞, 맞은편이 통창.**\n\n"
+                  "> **기본값은 \"얼굴이 거의 안 보이는 어둠\"**입니다. 낮 사진의 밝기를 "
+                  "그대로 두면 이 게임의 정서가 통째로 사라집니다.",
+            checks=["**심야가 충분히 어두운가** — 한눈에 다 읽히면 아직 밝습니다",
+                    "창밖이 완전히 검은가",
+                    "광원이 모니터 두세 대뿐인가",
+                    "평상복 + 명찰인가"],
+        ),
     ]
 
     idx = 1
-    for key, scene_title, bg, tone, ref, note, checks, neg in scenes:
+    for sc in scenes:
         for h in HEROINES:
-            write(OUT / "04_still" / f"T{idx:02d}_{h['id']}_{key}.md", prompt_file(
-                f"T{idx:02d} · {h['kr']} 스틸 {scene_title}",
-                [("파일명", f"`cg_{h['id']}_still_{key}.png`"),
+            aux = ("\n\n    보조 참고로 `community_lounge_1.jpg` 도 함께 넣으세요 — "
+                   "4F 라운지에서 시작해 가든으로 내려오는 씬입니다."
+                   if sc["key"] == "garden" and h["id"] in ("seunghee", "seungmin") else "")
+            attach = ATTACH_CAMPUS.format(bg=sc["bg_ref"], kr=h["kr"]) + aux
+            prompt = "\n\n".join([
+                block(f"""
+                    첫 번째 이미지에서 **공간 구조만** 가져오세요 — 창문·기둥·데크 라인·가구 배열.
+                    조명과 색조는 쓰지 말고 새로 깔아주세요.
+                    두 번째 이미지의 인물을 그대로 유지해 주세요 — 얼굴, 머리, 옷, 명찰.
+                """),
+                "가로 16:9 와이드 구도, 1920 x 1080.",
+                sc["bg"],
+                sc["light"],
+                "인물은 " + h["casual"] + ".",
+                h[sc["key"]] + ".",
+                STYLE,
+            ])
+            write(OUT / "04_still" / f"T{idx:02d}_{h['id']}_{sc['key']}.md", prompt_file(
+                f"T{idx:02d} · {h['kr']} 스틸 {sc['title']}",
+                [("파일명", f"`cg_{h['id']}_still_{sc['key']}.png`"),
                  ("캔버스", "1920 × 1080 가로 · 불투명"),
-                 ("색조", tone),
-                 ("배경 레퍼런스", f"{ref} — **구조만** 가져옵니다. 조명·색조·시간대는 새로 깝니다"
-                  + ("<br>보조: `community_lounge_1.jpg` — 4F 라운지에서 시작해 가든으로 내려오는 씬입니다"
-                     if key == "garden" and h["id"] in ("seunghee", "seungmin") else "")),
-                 ("인물 참조", f"**{h['kr']} 평상복 몸통 확정본**"),
-                 ("선행 조건", "해당 인물 평상복 몸통 확정")],
-                bg + ",\n" + h[key] + ",\n" + CORE_STYLE,
-                neg,
-                note + "\n\n"
-                "> **10절 스타일 접미사를 그대로 붙이지 않았습니다.** "
-                "`bust crop` · `plain flat background` · `calm neutral expression`은 "
-                "배경을 그려야 하는 스틸과 충돌합니다. 화풍 부분만 남겼습니다.\n\n"
-                "> 배경이 잘 안 나오면 [`WORLD_PROMPTS.md` 6~9절](../../../WORLD_PROMPTS.md)로 "
-                "먼저 **심야·여명 배경 이미지를 뽑아 참조로 함께 넣으세요**(13절 지시).",
-                checks + ["인물이 몸통 확정본과 같은 사람인가",
-                          "1920 × 1080 가로, 불투명인가"]))
-            made.append(f"04_still/T{idx:02d}_{h['id']}_{key}.md")
+                 ("색조", sc["tone"]),
+                 ("배경 레퍼런스", f"`{sc['bg_ref']}` — **구조만** 가져옵니다"),
+                 ("인물 참조", f"**{h['kr']} 반신 CG 평상복 `기본` 칸**"),
+                 ("선행 조건", "해당 인물 반신 CG 확정")],
+                attach, prompt, sc["neg"], sc["notes"],
+                sc["checks"] + ["인물이 반신 CG와 같은 사람인가",
+                                "1920 × 1080 가로, 불투명인가"]))
+            made.append(f"04_still/T{idx:02d}_{h['id']}_{sc['key']}.md")
             idx += 1
 
+    # ── ③ 엔딩 ──────────────────────────────────────────────
     for h in HEROINES:
         bgk = h["ending_bg"]
+        attach = block(f"""
+            **참조 이미지 한 장만 첨부합니다.**
+
+            1. 인물 — **{h['kr']} 반신 CG 평상복 `기본` 칸** — **얼굴만** 가져옵니다
+
+            배경 레퍼런스는 없습니다. 캠퍼스가 아니라서 캠퍼스 사진을 넣으면 안 됩니다.
+            이미 만드신 `backgrounds/5years_*.png` 를 배경 참조로 함께 넣으셔도 됩니다.
+
+            **복장은 참조에서 가져오지 마세요.** 5년이 지나 전부 다릅니다.
+        """)
+        prompt = "\n\n".join([
+            block("""
+                첨부한 이미지에서 **얼굴만** 가져오세요 — 같은 사람으로 보여야 합니다.
+                **옷과 머리는 아래 설명을 따르세요.** 참조의 복장은 쓰지 마세요.
+            """),
+            "가로 16:9 와이드 구도, 1920 x 1080.",
+            BG_ENDING[bgk],
+            f"{h['ending_age']}세, " + h["ending"] + ".",
+            h["ending_wear"] + ".",
+            STYLE,
+        ])
         write(OUT / "04_still" / f"T{idx:02d}_{h['id']}_ending.md", prompt_file(
             f"T{idx:02d} · {h['kr']} 스틸 ③ 엔딩 — 5년 후 ({h['ending_age']}세)",
             [("파일명", f"`cg_{h['id']}_still_ending.png`"),
              ("캔버스", "1920 × 1080 가로 · 불투명"),
-             ("배경", BG_ENDING_KR[bgk] + " — 캠퍼스가 아닙니다. 배경 레퍼런스 없음"),
-             ("인물 참조", f"**{h['kr']} 평상복 몸통 확정본 — 얼굴만**"),
-             ("선행 조건", "해당 인물 평상복 몸통 확정"),
+             ("배경", BG_ENDING_KR[bgk] + " — 캠퍼스가 아닙니다"),
+             ("인물 참조", f"**{h['kr']} 반신 CG — 얼굴만**"),
+             ("선행 조건", "해당 인물 반신 CG 확정"),
              ("명찰", "**사원증** — 캠프 명찰(검은 랜야드 + `J` 카드)은 없습니다"
-                      if h["ending_badge"] else "없음 — 캠프 명찰도 사원증도 지정 없음")],
-            BG_ENDING[bgk] + ",\n"
-            + f"{h['ending_age']} year old, " + h["ending"] + ",\n"
-            + h["ending_wear"] + ",\n" + CORE_STYLE,
-            NEG_ENDING,
-            "> " + h["ending_note"] + "\n\n"
-            "> \"커리어의 완성\"이 아니라 **학생이던 우리가 사회인이 된 첫 구간**의 온도로 갑니다. "
-            "얼굴만 참조로 물리고 복장은 위 확정값을 쓰세요.\n\n"
-            + ("> **이 인물은 사원증이 있습니다.** 부정 프롬프트가 차단하는 건 "
-               "캠프 명찰(검은 랜야드 + `J` 카드)뿐이라 사원증은 살아 있어야 합니다.\n\n"
-               if h["ending_badge"] else "")
-            + "> 하의·신발은 문서에 지정이 없습니다. 상의 톤에 맞춰 무난하게 두세요 — "
-              "**엔딩 6장이 서로 통일감이 있어야 합니다.**",
-            ["복장이 확정값 그대로인가",
-             "**학생 때와 옷·머리가 다른가**",
-             "캠프 명찰(검은 랜야드 + `J` 카드)이 없는가",
-             ("**사원증이 있는가**" if h["ending_badge"] else "사원증을 임의로 넣지 않았는가"),
-             "나이대가 20대 중후반으로 읽히는가",
-             "인물이 몸통 확정본과 같은 사람인가",
-             "여섯 장의 엔딩이 서로 톤이 맞는가 (전부 뽑은 뒤 나란히 확인)",
+                      if h["ending_badge"] else "없음")],
+            attach, prompt, NEG_BASE + "\n" + NEG_ENDING_EXTRA.rstrip(","),
+            h["ending_note"] + "\n\n"
+            "> **엔딩에서 랜야드를 통짜로 막으면 안 됩니다.** 차단 대상은 **캠프 명찰**이지 "
+            "사원증이 아닙니다 — 민아는 사원증 랜야드를 걸고 윤호는 강아지 뱃지가 "
+            "사원증 스트랩에 달립니다.\n\n"
+            "> **어둠 토큰을 쓰지 않습니다.** 엔딩은 낮·실내라 `밝은 대낮`을 부정하면 "
+            "`늦은 오후의 빛`과 정면 충돌합니다.",
+            ["**캠프 명찰이 없는가** — 검은 랜야드 + `J` 카드",
+             "학생이 아니라 **사회인으로 보이는가**",
+             f"배경이 {BG_ENDING_KR[bgk]}인가",
+             "인물이 반신 CG와 같은 사람인가",
              "1920 × 1080 가로, 불투명인가"]))
         made.append(f"04_still/T{idx:02d}_{h['id']}_ending.md")
         idx += 1
