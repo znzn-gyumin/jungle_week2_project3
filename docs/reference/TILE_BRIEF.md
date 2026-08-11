@@ -2,7 +2,7 @@
 
 > **이 문서만 보고 작업할 수 있게 쓴 것입니다.** 다른 기획 문서를 안 읽어도 됩니다.
 >
-> 함께 볼 것 — 캐릭터 규격 [`SPRITE_SPEC.md`](./character/SPRITE_SPEC.md) · 공간 근거 [`campus/`](./campus/) 사진 17장 · 캠퍼스 안내도 [`Jungle_Campus.png`](./Jungle_Campus.png)
+> 함께 볼 것 — 캐릭터 규격 [`SPRITE_SPEC.md`](./character/SPRITE_SPEC.md) · 공간 근거 [`campus/`](../../assets/bg/campus/) 사진 17장 · 캠퍼스 안내도 [`Jungle_Campus.png`](./Jungle_Campus.png)
 >
 > **파생 문서입니다.** 설정이 바뀌면 [GAME_DESIGN 6-3](../GAME_DESIGN.md#6-3-맵과-배경) · [WORLD_BIBLE 4절](../WORLD_BIBLE.md#4-공간)을 고치고 여기를 다시 뽑습니다.
 
@@ -118,7 +118,7 @@ limited palette, clean 1px dark outlines, retro jrpg style, tile grid layout,
 
 ### M5 커넥트가든 — 빼면 안 되는 둘
 
-**이 게임 최대 명장면의 무대**라 두 가지가 반드시 있어야 합니다. 원본은 [`campus/connect_garden.jpg`](./campus/connect_garden.jpg).
+**이 게임 최대 명장면의 무대**라 두 가지가 반드시 있어야 합니다. 원본은 [`campus/connect_garden.jpg`](../../assets/bg/campus/outdoor/connect_garden.jpg).
 
 **① 야외 테이블과 의자**
 

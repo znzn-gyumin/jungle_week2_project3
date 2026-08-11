@@ -13,7 +13,7 @@
 | [SCENARIO_OUTLINE.md](./SCENARIO_OUTLINE.md) | **어떤 순서로** — 90씬 구성, 6인 병행 집필 절차 | 확정 |
 | [TECH_DESIGN.md](./TECH_DESIGN.md) | **어떻게 구현하는가** — 스택, DSL, 상태, **인증·저장·방명록**, 배포 | 확정 |
 | [reference/Jungle_Campus.png](./reference/Jungle_Campus.png) | 공간 설정의 1차 자료 (안내도) | — |
-| [reference/campus/](./reference/campus/README.md) | 배경 원본 사진 17장 | — |
+| [reference/campus/](../assets/bg/campus/README.md) | 배경 원본 사진 17장 | — |
 | [reference/character/](./reference/character/README.md) | **히로인 6인 확정 프로필** — 외형·의상의 기준 | **확정** |
 | [reference/character/ART_BRIEF.md](./reference/character/ART_BRIEF.md) | **캐릭터 이미지 한 벌** — CG 66장 + 도트 288컷 | **파생** |
 | [reference/character/SPRITE_SPEC.md](./reference/character/SPRITE_SPEC.md) | **도트 스프라이트 설계도** — 18종 288컷, 규격·시트·외형 | **파생** |

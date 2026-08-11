@@ -99,11 +99,11 @@
 **파일명**
 
 ```
-assets/cg/      cg_{id}_{casual|outing}_{normal|happy|shy|sad|surprise|angry}.png
-                cg_{id}_still_{garden|climax|ending}.png
-assets/sprite/  sprite_{id}.png          걷기 4방향 x 4프레임 시트 192 x 256
-                face_{id}_{expr}.png     도트 감정 아바타 48 x 64 (히로인만)
-assets/bg/      bg_{name}.png
+assets/cg/portrait/   {id}_{casual|outing}_{normal|happy|shy|sad|surprise|angry}.png
+assets/cg/still/      {id}_{garden|climax|ending}.png
+assets/sprite/walk/   {id}.png          걷기 4방향 x 4프레임 시트 192 x 256
+assets/sprite/face/   {id}_{expr}.png   도트 감정 아바타 48 x 64 (히로인만)
+assets/bg/{outing|epilogue|campus}/
 ```
 
 **몸통과 표정이 한 장이라 `body` · `face` 로 나뉘지 않습니다.** 옷과 표정이 곧 파일명입니다.
@@ -200,7 +200,7 @@ assets/bg/      bg_{name}.png
 
 ### ① D7 새벽 커넥트가든 → 여명
 
-**배경 레퍼런스:** [`connect_garden.jpg`](../campus/connect_garden.jpg) — 카페 앞 우드데크. 야외 테이블과 의자, 뒤로 필로티 아래가 뚫려 보임
+**배경 레퍼런스:** [`connect_garden.jpg`](../../../assets/bg/campus/outdoor/connect_garden.jpg) — 카페 앞 우드데크. 야외 테이블과 의자, 뒤로 필로티 아래가 뚫려 보임
 **색조:** 심야(먹빛 남색) → **여명(보라→파랑)**
 
 **루트 최대 명장면**이고 **게임에서 유일하게 해가 뜨는 씬**입니다. 저녁에 소나기가 그친 뒤 새벽 2시에 앉아, 하늘이 밝아질 때까지 있습니다. 낮에는 아무도 눈여겨보지 않고 통과하는 공간이 새벽 두 시에 완전히 다른 장소가 됩니다.
@@ -216,11 +216,11 @@ assets/bg/      bg_{name}.png
 | **장윤정** | 마감 끝나고도 애교를 부리다 갑자기 뚝 그침. **헤드폰 한쪽을 내민다** |
 | **장윤호** | 조원들 다 챙겨 보내고 마지막에 혼자 남음. **"저는… 잘 모르겠어요, 뭐가 하고 싶은지."** |
 
-> 승희와 승민은 4F 라운지에서 시작해 가든으로 내려오는 씬입니다. 보조 참고: [`community_lounge_1.jpg`](../campus/community_lounge_1.jpg)
+> 승희와 승민은 4F 라운지에서 시작해 가든으로 내려오는 씬입니다. 보조 참고: [`community_lounge_1.jpg`](../../../assets/bg/campus/indoor/community_lounge_1.jpg)
 
 ### ② D9 클라이맥스 — 교육장 403 심야
 
-**배경 레퍼런스:** [`classroom_1.jpg`](../campus/classroom_1.jpg) · [`classroom_2.jpg`](../campus/classroom_2.jpg)
+**배경 레퍼런스:** [`classroom_1.jpg`](../../../assets/bg/campus/indoor/classroom_1.jpg) · [`classroom_2.jpg`](../../../assets/bg/campus/indoor/classroom_2.jpg)
 **색조:** 심야(먹빛 남색 · 점광원만). 새벽 2시엔 키보드 소리만 남습니다
 
 **히로인의 서브플롯이 해결되는 지점**입니다. 각자 자기 방식으로 무너지고 주인공이 그걸 목격합니다.

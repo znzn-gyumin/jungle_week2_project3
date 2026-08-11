@@ -63,14 +63,14 @@ def build_cg() -> str:
         out.append(f"<section class='cg'><h2>반신 CG — {ok}</h2><div class='grid'>")
         for i in IDS:
             for e, ek in EXPR:
-                n = f"cg_{i}_{outfit}_{e}.png"
-                out.append(cell(f"{REL}/cg/{n}", f"{KR[i]} · {ek}", n))
+                n = f"{i}_{outfit}_{e}.png"
+                out.append(cell(f"{REL}/cg/portrait/{n}", f"{KR[i]} · {ek}", n))
         out.append("</div></section>")
     out.append("<section class='still'><h2>스틸 CG — 18장</h2><div class='grid'>")
     for s, sk in SCENE:
         for i in IDS:
-            n = f"cg_{i}_still_{s}.png"
-            out.append(cell(f"{REL}/cg/{n}", f"{KR[i]} · {sk}", n))
+            n = f"{i}_{s}.png"
+            out.append(cell(f"{REL}/cg/still/{n}", f"{KR[i]} · {sk}", n))
     out.append("</div></section>")
     return "".join(out)
 
@@ -80,14 +80,14 @@ def build_sprite() -> str:
            "행은 아래·왼쪽·오른쪽·위, 열은 정지·걷기1·2·3입니다.</p>",
            "<section class='sheet'><h2>걷기 시트 — 18종</h2><div class='grid'>"]
     for i in IDS + DOT_ONLY:
-        n = f"sprite_{i}.png"
-        out.append(cell(f"{REL}/sprite/{n}", KR[i], n))
+        n = f"{i}.png"
+        out.append(cell(f"{REL}/sprite/walk/{n}", KR[i], n))
     out.append("</div></section>")
     out.append("<section class='sheet face'><h2>도트 감정 아바타 — 36컷 (히로인만)</h2><div class='grid'>")
     for i in IDS:
         for e, ek in EXPR:
-            n = f"face_{i}_{e}.png"
-            out.append(cell(f"{REL}/sprite/{n}", f"{KR[i]} · {ek}", n))
+            n = f"{i}_{e}.png"
+            out.append(cell(f"{REL}/sprite/face/{n}", f"{KR[i]} · {ek}", n))
     out.append("</div></section>")
     return "".join(out)
 
