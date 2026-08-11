@@ -1,16 +1,19 @@
-# 생성 요청 프롬프트 팩 — 36건
+# 생성 요청 프롬프트 팩 — 18건
 
-파일 하나가 요청 하나입니다. 열고 프롬프트 블록 두 개를 복사해 쓰면 됩니다.
+**스틸 CG 18장**을 위한 것입니다. 파일 하나가 요청 하나이고, 열고 프롬프트 블록 두 개를 복사해 쓰면 됩니다.
 
 | 폴더 | 내용 | 개수 |
 |---|---|---|
-| `03_sprite/` | 도트 시트 — 종당 16컷 한 장 | 18 |
-| `04_still/` | 스틸 — 인물당 가든·클라이맥스·엔딩 | 18 |
-| | | **36** |
+| `04_still/` | 스틸 — 인물당 가든·클라이맥스·엔딩 | **18** |
 
 각 파일에 들어 있는 것: **참조 이미지 지정 · 선행 조건 · 프롬프트 · 부정 프롬프트 · 받고 나서 확인할 것.**
 
-> **반신 CG는 여기 없습니다.** 몸통과 표정을 합쳐 한 장으로 그리는 방식이라 [`ART_BRIEF.md`](../ART_BRIEF.md)를 그 구조로 다시 쓴 뒤 생성합니다. 데모는 [`cg_demo.png`](../cg_demo.png)입니다 — 화남엔 팔짱, 부끄럼엔 손이 올라옵니다. **몸이 표정을 따라가는 게 이 방식의 이유입니다.**
+**여기 없는 나머지 둘은 방식이 달라서 없습니다.**
+
+| | 어디에 | 왜 |
+|---|---|---|
+| **도트 스프라이트** 18종 | [`SPRITE_SPEC.md`](../SPRITE_SPEC.md) | 손으로 그리므로 프롬프트가 아니라 **설계도**가 필요합니다 |
+| **반신 CG** | [`ART_BRIEF.md`](../ART_BRIEF.md) | 몸통과 표정을 합쳐 한 장으로 그립니다. **표정마다 몸이 따라갑니다** — 화남엔 팔짱, 부끄럼엔 손이 올라옵니다 |
 
 ---
 
@@ -18,66 +21,50 @@
 
 | 무엇 | 정본 | 브리프 |
 |---|---|---|
-| **도트 12종의 머리·복장·색** | [CHARACTERS 1절 · 4절](../../../CHARACTERS.md#4-조연-5명-성별-고정) | [ART_BRIEF 5절](../ART_BRIEF.md#참조-이미지가-없는-12종) |
 | **5년 후 복장 6인분** | [CHARACTERS 2절](../../../CHARACTERS.md#2-히로인-6인)의 `5년 후` 행 | [ART_BRIEF 13절 ③](../ART_BRIEF.md#13-스틸-프롬프트--18장) |
 
-**36건 전부 지금 돌릴 수 있습니다.**
+**18건 전부 지금 돌릴 수 있습니다.** 다만 순서가 있습니다.
 
 ---
 
 ## 순서
 
-```
-① S01  김민아 도트 시트        ← 48px로 줄여 pixel_demo.png와 비교
-   ─────────────────────────  여기가 갈림길입니다
-② S02~S06    나머지 5인 도트
-③ S07~S18    참조 없는 12종 도트
-④ T01~T18    스틸 18장          ← 가든부터
-```
-
-**참조 이미지가 어떻게 물리는지**가 순서의 이유입니다.
+**스틸은 반신 CG가 확정된 뒤에 뽑습니다.** 얼굴이 먼저 고정돼야 열여덟 장이 같은 사람이 됩니다.
 
 ```
-refs/ref_{id}.png ─┬─→ 도트 시트(히로인 6) ─→ 도트 12종
-                   └─→ 반신 CG ─→ 스틸 ①②③
+반신 CG 확정  →  T01~T06  가든      ← 여기부터
+                 T07~T12  클라이맥스
+                 T13~T18  엔딩
 ```
 
-`refs/` 크롭이 직접 들어가는 건 **히로인 도트 6장**뿐입니다. 나머지는 전부 *확정된 결과물*을 물립니다 — 그래야 얼굴이 한 번만 정해지고 끝까지 유지됩니다.
+```
+refs/ref_{id}.png ──→ 반신 CG ──→ 스틸 ①②③
+```
 
-> **스틸은 반신 CG가 확정된 뒤에 뽑습니다.** 얼굴이 먼저 고정돼야 열여덟 장이 같은 사람이 됩니다.
+`refs/` 크롭이 스틸에 직접 들어가는 일은 없습니다. 전부 *확정된 반신 CG*를 물립니다 — 그래야 얼굴이 한 번만 정해지고 끝까지 유지됩니다.
 
 ---
 
-## 스타일 접미사를 카테고리별로 쪼갠 이유
+## 스타일 접미사에서 구도를 뺀 이유
 
-[10절](../ART_BRIEF.md#10-공통-프롬프트-조각)의 스타일 접미사는 **화풍과 구도가 섞여 있습니다.** 그대로 붙이면 도트와 스틸이 망가집니다.
+[10절](../ART_BRIEF.md#10-공통-프롬프트-조각)의 스타일 접미사는 **화풍과 구도가 섞여 있습니다.** 스틸에 그대로 붙이면 망가집니다.
 
 ```text
-korean webtoon illustration style, semi-realistic anime, soft cel shading,   ← 화풍
-clean lineart, warm muted palette,                                           ← 화풍
-hair rendered in exactly the stated color, ...                               ← 화풍
-tight bust portrait, head and shoulders shot, cropped at the sternum,        ← 구도
-the bottom edge of the frame sits just below the collarbone, ...             ← 구도
-subject centered horizontally ... a small empty gap above the head, ...      ← 구도
-flat solid chroma key green background, one uniform color, no gradient       ← 구도
+korean webtoon illustration style, semi-realistic anime, soft cel shading,   ← 화풍 ✅
+clean lineart, warm muted palette,                                           ← 화풍 ✅
+hair rendered in exactly the stated color, ...                               ← 화풍 ✅
+tight bust portrait, head and shoulders shot, cropped at the sternum,        ← 구도 ❌
+subject centered horizontally ... a small empty gap above the head, ...      ← 구도 ❌
+flat solid chroma key green background, one uniform color, no gradient       ← 구도 ❌
 ```
 
-| 카테고리 | 화풍 | 구도 | 이유 |
-|---|:---:|:---:|---|
-| **도트 시트** | ❌ | ❌ | 웹툰 화풍을 붙이면 픽셀이 깨집니다. 14절은 "**의상·머리 부분만** 가져다 붙입니다" |
-| **스틸** | ✅ | ❌ | 배경을 그려야 하는데 `chroma key green background`가 막습니다. 감정이 목적인데 `calm neutral expression`이 막습니다 |
+**배경을 그려야 하는데 `chroma key green background`가 막고, 감정이 목적인데 `calm neutral expression`이 막습니다.** 화풍만 남기고 구도는 뺐습니다.
 
-부정 프롬프트도 같은 이유로 나눴습니다.
+부정 프롬프트도 컷마다 다릅니다.
 
-- **스틸 ①②** — `cropped head, full body, legs, feet, busy background`와 포즈·감정 차단 토큰을 **전부 뺐습니다.** 배경과 전신이 나오고, 감정이 이 컷의 목적입니다 — 승민 ①은 아예 "울던 걸 들킨 직후"입니다. 대신 [16절 후처리 체크리스트](../ART_BRIEF.md#16-생성-결과-후처리-체크리스트)를 부정 프롬프트로 옮겼습니다 — `city lights, bright daylight, orange sunrise`
-- **스틸 ②(클라이맥스)만** — `multiple characters, crowd`도 뺐습니다. 승희는 "조가 자기를 빼놓고 결정", 민규는 "아무도 눈치 못 챔" — **조원이 화면에 있어야** 성립하는 컷입니다. ①가든은 1:1이라 그대로 둡니다
-- **스틸 ③(엔딩)** — ①②의 어둠 토큰을 **쓰지 않습니다.** 엔딩은 낮·실내라 `bright daylight`를 부정하면 `late afternoon light`와 정면 충돌합니다
-
----
-
-## 배경은 초록 크로마키입니다
-
-흰 배경을 쓰면 **흰 티셔츠와 아이보리 스커트가 같이 뚫립니다.** 승희 스프라이트는 픽셀의 14.8%가 밝기 235 이상입니다. 여섯 중 초록 계열 의상이 없어서 `00b140`이 안전합니다.
+- **①가든 · ②클라이맥스** — `cropped head, full body, legs, feet, busy background`와 포즈·감정 차단 토큰을 **전부 뺐습니다.** 배경과 전신이 나오고, 감정이 이 컷의 목적입니다 — 승민 ①은 아예 "울던 걸 들킨 직후"입니다. 대신 [16절 후처리 체크리스트](../ART_BRIEF.md#16-생성-결과-후처리-체크리스트)를 부정 프롬프트로 옮겼습니다 — `city lights, bright daylight, orange sunrise`
+- **②클라이맥스만** — `multiple characters, crowd`도 뺐습니다. 승희는 "조가 자기를 빼놓고 결정", 민규는 "아무도 눈치 못 챔" — **조원이 화면에 있어야** 성립하는 컷입니다. ①가든은 1:1이라 그대로 둡니다
+- **③엔딩** — ①②의 어둠 토큰을 **쓰지 않습니다.** 엔딩은 낮·실내라 `bright daylight`를 부정하면 `late afternoon light`와 정면 충돌합니다. 차단 대상은 **캠프 명찰**이지 사원증이 아닙니다 — 민아는 5년 후 사원증 랜야드를 걸고, 윤호는 강아지 뱃지가 사원증 스트랩에 달립니다
 
 ---
 
@@ -85,30 +72,24 @@ flat solid chroma key green background, one uniform color, no gradient       ←
 
 **출력이 첨부한 참조 이미지의 가로세로비를 그대로 따라갑니다.** `ref_minah.png`가 0.729였고 결과가 0.728로 나왔습니다. 넣기 전에 참조가 목표 비율인지 확인하세요 — 프롬프트로 캔버스를 지정하는 것보다 이쪽이 확실합니다.
 
+스틸은 **1920 × 1080 가로(1.778)**입니다.
+
 ---
 
-## 스틸에서 놓치기 쉬운 것
+## 놓치기 쉬운 것
 
 - **승희·승민의 가든 씬은 4F 라운지에서 시작합니다.** 보조 참고 `community_lounge_1.jpg` — `T02`·`T05`에만 넣었습니다
 - **배경이 잘 안 나오면 [`WORLD_PROMPTS.md` 6~9절](../../WORLD_PROMPTS.md)로 심야·여명 배경을 먼저 뽑아 참조로 함께 넣으세요.** 13절 지시인데 놓치기 쉽습니다
-
----
-
-## 자르기
-
-시트를 손으로 자르지 마세요. [`tools/cut_sheet.py`](../../../../tools/cut_sheet.py)가 격자로 잘라 이름까지 붙입니다. **각 시트 파일에 실행할 명령줄이 그대로 적혀 있습니다.**
-
-- **`--trim`과 `--resize`를 같이 쓰지 마세요.** 스크립트는 `dekey → trim → resize` 순으로 도는데, 셀마다 잘리는 크기가 달라진 뒤 전부 같은 크기로 맞춰지면 **셀마다 배율이 달라져 걷기 애니메이션이 떨립니다.** 도트는 `--resize`만 쓰세요
-- **최근접 이웃 축소는 원본이 이미 격자에 맞는 선명한 픽셀아트일 때만 깨끗합니다.** 생성 결과가 안티에일리어싱된 상태면 축소에서 외곽선이 지저분해집니다. **정수배로 뽑아 정수배로 줄이세요** — 그래야 블록 경계가 안 어긋납니다
+- **①가든은 게임에서 유일하게 해가 뜨는 씬**입니다. 여명은 **보라→파랑**이고 주황 일출이 아닙니다
 
 ---
 
 ## 다시 만들기
 
-`ART_BRIEF.md`를 고쳤으면 [`tools/gen_prompts.py`](../../../../tools/gen_prompts.py)의 값을 맞춰 고치고 다시 돌리세요. 프롬프트 원문·하의/신발·스틸 한 줄이 전부 그 스크립트 상단의 `HEROINES` / `DOT_ONLY` 표에 모여 있습니다.
+`ART_BRIEF.md`를 고쳤으면 [`tools/gen_prompts.py`](../../../../tools/gen_prompts.py)의 값을 맞춰 고치고 다시 돌리세요. 인물 데이터와 스틸 한 줄이 전부 그 스크립트 상단의 `HEROINES` 표에 모여 있습니다.
 
 ```bash
 python tools/gen_prompts.py
 ```
 
-> `prompts/` 아래 36개 파일은 **전부 이 스크립트가 덮어씁니다.** 손으로 고치지 말고 스크립트를 고치세요.
+> `prompts/` 아래 18개 파일은 **전부 이 스크립트가 덮어씁니다.** 손으로 고치지 말고 스크립트를 고치세요.

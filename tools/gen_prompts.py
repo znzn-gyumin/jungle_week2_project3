@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""ART_BRIEF.md -> 36개 생성 요청 프롬프트 팩.
+"""ART_BRIEF.md -> 18개 생성 요청 프롬프트 팩.
 
-ART_BRIEF 8절이 계산한 요청 중 도트 시트 18 + 스틸 18 을
+ART_BRIEF 8절이 계산한 요청 중 스틸 18 을
 각각 '복사해서 바로 붙여넣는' 파일 한 개로 펼칩니다.
 
     python tools/gen_prompts.py
@@ -77,12 +77,6 @@ NEG_FACE = NEG_BASE + ",\n" + block("""
 """)
 
 # 도트: 화풍 토큰을 일절 넣지 않습니다. 웹툰 화풍을 붙이면 픽셀이 깨집니다.
-NEG_SPRITE = block("""
-    anti-aliasing, blurry, gradient shading, realistic proportions, tall body,
-    different characters, inconsistent colors, text, labels, grid lines, drop shadow,
-    photorealistic, 3d render, watermark, signature,
-    gradient background, color spill on outlines
-""")
 
 # 스틸 ①②(심야·여명): full body / legs / feet / busy background / strong emotion 을 뺐습니다.
 # 스틸은 전신과 배경이 나오고, 감정이 이 컷의 목적입니다.
@@ -411,15 +405,6 @@ DOT_ONLY = [
 ]
 
 
-SPRITE_BASE = block("""
-    pixel art character sprite sheet, 4 by 4 grid, same character in every cell,
-    chibi proportions with a large head, about 2.5 heads tall, crisp 1px dark outline,
-    limited palette of 10 colors, flat shading, no anti-aliasing,
-    row 1 facing toward the viewer, row 2 facing left, row 3 facing right, row 4 facing away,
-    column 1 standing still, columns 2 to 4 walk cycle frames,
-    flat solid chroma key green background, one uniform color,
-    no text, no labels, no grid lines
-""")
 
 FACE_BASE = block("""
     character expression sheet, same character repeated in a 3 by 2 grid,
@@ -479,77 +464,6 @@ def prompt_file(title: str, meta: list[tuple[str, str]], positive: str,
 
 def main() -> int:
     made: list[str] = []
-
-    # ── 03 도트 시트 18장 ───────────────────────────────────
-    cut_cmd = ("--cols 4 --rows 4 --resize 48x48 --dekey 00b140 --tol 40 --names "
-               "down_idle,down_w1,down_w2,down_w3,left_idle,left_w1,left_w2,left_w3,"
-               "right_idle,right_w1,right_w2,right_w3,up_idle,up_w1,up_w2,up_w3")
-
-    for i, h in enumerate(HEROINES, start=1):
-        first = h["id"] == "minah"
-        write(OUT / "03_sprite" / f"S{i:02d}_{h['id']}_sprite.md", prompt_file(
-            f"S{i:02d} · {h['kr']} 도트 시트 (16컷)",
-            [("파일명", f"`sprite_{h['id']}.png`"),
-             ("시트", "1024 × 1024 정사각 · 4열 × 4행 = 16셀"),
-             ("컷", "48 × 48px · 행 아래→왼쪽→오른쪽→위 · 열 정지·걷기1·2·3"),
-             ("참조 이미지", f"`../../refs/ref_{h['id']}.png` + `../../pixel_demo.png`"),
-             ("선행 조건", "없음" if first else "S01 확정 (화풍 기준)"),
-             ("자르기", f"`python tools/cut_sheet.py sheet_{h['id']}_sprite.png "
-                        f"out/{h['id']} {cut_cmd}`")],
-            SPRITE_BASE + ",\n" + h["sprite_top"] + ",\n" + h["sprite_bottom"] + ",\n"
-            + "a black lanyard with a small bright ID card on the chest",
-            NEG_SPRITE,
-            ("> **이 한 장이 프로젝트 전체의 화풍을 정합니다.** 나머지 17종과 타일셋이 여기서 파생됩니다. "
-             "48px로 줄여 `pixel_demo.png`와 나란히 놓고 비교한 뒤 확정하세요.\n\n"
-             if first else
-             "> **S01(김민아)을 참조로 물리세요.** 화풍·등신·색 수가 거기에 맞아야 합니다.\n\n")
-            + "> **하의와 신발이 보입니다.** CG 반신에서는 안 나오던 부분이라 여기서 처음 드러납니다.\n\n"
-            + "> `pixel_demo.png`는 **화풍만** 가져옵니다 — 그 안의 인물을 쓰는 게 아닙니다.",
-            ["**2~2.5등신**인가 (`pixel_demo.png`와 나란히 놓고 비교)",
-             "16컷이 **같은 인물·같은 팔레트**인가",
-             "행이 아래→왼쪽→오른쪽→위, 열이 정지·걷기1·2·3 순인가",
-             "48px로 줄인 뒤 **외곽선이 뭉개지지 않았는가**",
-             "걷기 3컷을 순환시켜 **다리가 자연스럽게 움직이는가**",
-             "**명찰이 전 컷에 있는가** (가슴에 밝은 2×3px + 목에서 내려오는 1px 검은 줄)",
-             "하의·신발이 설정대로인가"]))
-        made.append(f"03_sprite/S{i:02d}_{h['id']}_sprite.md")
-
-    for j, d in enumerate(DOT_ONLY, start=7):
-        badge = d.get("badge", "a black lanyard with a small bright ID card on the chest")
-        write(OUT / "03_sprite" / f"S{j:02d}_{d['id']}_sprite.md", prompt_file(
-            f"S{j:02d} · {d['kr']} 도트 시트 (16컷)",
-            [("파일명", f"`sprite_{d['id']}.png`"),
-             ("인물", d["who"]),
-             ("시트", "1024 × 1024 정사각 · 4열 × 4행 = 16셀"),
-             ("컷", "48 × 48px · 행 아래→왼쪽→오른쪽→위 · 열 정지·걷기1·2·3"),
-             ("참조 이미지", "**S01(김민아) 도트 시트 확정본** — 화풍 기준"),
-             ("선행 조건", "S01 확정"),
-             ("명찰", d.get("badge_kr", "검은 랜야드 + 밝은 ID 카드 — **전 컷 착용**")),
-             ("자르기", f"`python tools/cut_sheet.py sheet_{d['id']}_sprite.png "
-                        f"out/{d['id']} {cut_cmd}`")],
-            SPRITE_BASE + ",\n" + d["wear"] + ",\n" + badge,
-            NEG_SPRITE,
-            "> " + d["note"] + "\n\n"
-            "> **S01(김민아)을 참조로 물리세요.** 화풍·등신·색 수가 거기에 맞아야 합니다. "
-            "참조 CG가 없는 인물이라 화풍 판단의 근거가 S01뿐입니다.\n\n"
-            f"> 문서에 아직 없는 것 — {d['gap']}. 48px에서 거의 안 보이는 항목들이라 "
-            "S01의 처리 방식을 그대로 따라가면 됩니다.\n\n"
-            + ("> 조연 5종(명진혁·조민·강태윤·강태연·여사님)은 절감 옵션이 있습니다 — "
-               "걷기를 빼고 **정지 1프레임 × 4방향 = 4컷**으로 낮추면 288컷이 228컷이 됩니다.\n"
-               if d["id"] in {"myeongjinhyeok", "jomin", "taeyun", "taeyeon", "yeosanim"} else "")
-            + ("> **한 종을 색만 바꿔 대여섯 번 재활용**합니다. 색 교체가 쉽도록 면을 단순하게, "
-               "색 경계를 뚜렷하게 유지하세요.\n"
-               if d["id"].startswith("mob") else ""),
-            ["S01과 **같은 화풍·같은 등신·같은 색 수**인가",
-             "16컷이 같은 인물·같은 팔레트인가",
-             "행이 아래→왼쪽→오른쪽→위, 열이 정지·걷기1·2·3 순인가",
-             "48px로 줄인 뒤 **외곽선이 뭉개지지 않았는가**",
-             "걷기 3컷을 순환시켜 다리가 자연스럽게 움직이는가",
-             "**명찰이 전 컷에 있는가**"
-             + ("  — 이 인물만 **운영진용 다른 색**입니다"
-                if d["id"] == "myeongjinhyeok" else ""),
-             "의상·색이 확정값 그대로인가"]))
-        made.append(f"03_sprite/S{j:02d}_{d['id']}_sprite.md")
 
     # ── 04 스틸 18장 ────────────────────────────────────────
     scenes = [

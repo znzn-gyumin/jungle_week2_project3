@@ -2,7 +2,7 @@
 
 > **이 문서만 보고 작업할 수 있게 쓴 것입니다.** 다른 기획 문서를 안 읽어도 됩니다.
 >
-> 함께 볼 것 — 화풍 기준 [`character/pixel_demo.png`](./character/pixel_demo.png) · 공간 근거 [`campus/`](./campus/) 사진 17장 · 캠퍼스 안내도 [`Jungle_Campus.png`](./Jungle_Campus.png)
+> 함께 볼 것 — 캐릭터 규격 [`SPRITE_SPEC.md`](./character/SPRITE_SPEC.md) · 공간 근거 [`campus/`](./campus/) 사진 17장 · 캠퍼스 안내도 [`Jungle_Campus.png`](./Jungle_Campus.png)
 >
 > **파생 문서입니다.** 설정이 바뀌면 [GAME_DESIGN 6-3](../GAME_DESIGN.md#6-3-맵과-배경) · [WORLD_BIBLE 4절](../WORLD_BIBLE.md#4-공간)을 고치고 여기를 다시 뽑습니다.
 
@@ -35,7 +35,7 @@ python tools/cut_sheet.py tileset_indoor.png out/tiles --cols 4 --rows 4 --resiz
 
 ## 1. 화풍 기준
 
-**[`character/pixel_demo.png`](./character/pixel_demo.png)가 기준입니다.** 그 이미지를 그대로 쓰는 게 아니라 **화풍만** 가져옵니다.
+**캐릭터 도트와 같은 결이어야 합니다.** 타일이 배경이고 캐릭터가 그 위에 서므로, 기준은 [`SPRITE_SPEC.md`](./character/SPRITE_SPEC.md)의 수치입니다 — 1px 외곽선, 48px 격자.
 
 | | |
 |---|---|
@@ -252,7 +252,7 @@ limited palette, clean 1px dark outlines, retro jrpg style, tile grid layout,
 
 - [ ] 타일이 **48px 격자에 정확히** 맞는가
 - [ ] 바닥 타일 4장을 붙였을 때 **이음매가 안 보이는가**
-- [ ] [`pixel_demo.png`](./character/pixel_demo.png)와 나란히 놓고 **색 수·외곽선·디테일 밀도가 같은가**
+- [ ] 캐릭터 도트를 얹어 놓고 **색 수·외곽선·디테일 밀도가 맞는가**
 - [ ] 가구 높이가 **2~2.5등신 캐릭터** 기준인가 (책상이 캐릭터 허리쯤)
 - [ ] M1에 **화이트보드가 접근 가능한 위치**에 있는가
 - [ ] M1의 **문이 둘**이고 앞줄 연하 자리가 문2 옆인가
@@ -268,7 +268,7 @@ limited palette, clean 1px dark outlines, retro jrpg style, tile grid layout,
 
 ## 8. 순서
 
-1. **타일 샘플 한 조각** — 교육동 실내 바닥 + 벽 + 책상 하나. `pixel_demo.png`와 나란히 놓고 화풍 확정
+1. **타일 샘플 한 조각** — 교육동 실내 바닥 + 벽 + 책상 하나. 캐릭터 도트를 얹어 화풍 확정
 2. **교육동 실내 타일셋** 완성
 3. **M1 교육장 403** — 4절 도면대로. 화이트보드와 지정석이 핵심
 4. **야외 타일셋 → M5 커넥트가든**

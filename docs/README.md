@@ -16,6 +16,7 @@
 | [reference/campus/](./reference/campus/README.md) | 배경 원본 사진 17장 | — |
 | [reference/character/](./reference/character/README.md) | **히로인 6인 확정 프로필** — 외형·의상의 기준 | **확정** |
 | [reference/character/ART_BRIEF.md](./reference/character/ART_BRIEF.md) | **캐릭터 이미지 한 벌** — CG 66장 + 도트 288컷 | **파생** |
+| [reference/character/SPRITE_SPEC.md](./reference/character/SPRITE_SPEC.md) | **도트 스프라이트 설계도** — 18종 288컷, 규격·시트·외형 | **파생** |
 | [reference/TILE_BRIEF.md](./reference/TILE_BRIEF.md) | **타일셋·타일맵 한 벌** — 3종 + 7개 + 조명 오버레이 | **파생** |
 | [reference/NEXT_TILE.md](./reference/NEXT_TILE.md) | **타일 트랙 작업 지시서** — 세션이 읽고 바로 시작 | **작업 중** |
 | [reference/TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) | 타일 구현 인수인계 — 산출물·생성기 사용법 | **구현** |
@@ -148,7 +149,7 @@ grep -rn "옛이름" docs/ src/ --include="*.md" --include="*.vns"
 
 | 항목 | 막고 있는 것 | 언제 |
 |---|---|---|
-| **히로인 CG · 도트** | 화풍 기준은 확정([프로필](./reference/character/heroine_girl_profile.png) · [도트 데모](./reference/character/pixel_demo.png)). [ART_BRIEF](./reference/character/ART_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
+| **히로인 CG · 도트** | 외형은 확정([프로필](./reference/character/heroine_girl_profile.png)). 도트는 [SPRITE_SPEC](./reference/character/SPRITE_SPEC.md), CG는 [ART_BRIEF](./reference/character/ART_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
 | **타일셋 · 타일맵** | [TILE_BRIEF](./reference/TILE_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
 | **배경** | ①②③ 확보([backgrounds/](./reference/backgrounds/)). **④ 버스 사진 · ⑤⑥⑦ 일러스트 3장** 남음 | 2단계 전 |
 | **Firebase 프로젝트 생성** | 로그인·세이브·방명록 전부. 구현 순서 2번이라 **가장 먼저** ([TECH_DESIGN 7](./TECH_DESIGN.md#7-구현-순서)) | 구현 착수 시 |
