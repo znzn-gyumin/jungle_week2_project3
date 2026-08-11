@@ -18,10 +18,12 @@
 | [reference/character/ART_BRIEF.md](./reference/character/ART_BRIEF.md) | **캐릭터 이미지 한 벌** — CG 66장 + 도트 288컷 | **파생** |
 | [reference/character/SPRITE_SPEC.md](./reference/character/SPRITE_SPEC.md) | **도트 스프라이트 설계도** — 18종 288컷, 규격·시트·외형 | **파생** |
 | [reference/TILE_BRIEF.md](./reference/TILE_BRIEF.md) | **타일셋·타일맵 한 벌** — 3종 + 7개 + 조명 오버레이 | **파생** |
-| [reference/NEXT_TILE.md](./reference/NEXT_TILE.md) | **타일 트랙 작업 지시서** — 세션이 읽고 바로 시작 | **작업 중** |
 | [reference/TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) | 타일 구현 인수인계 — 산출물·생성기 사용법 | **구현** |
 | [reference/WORLD_PROMPTS.md](./reference/WORLD_PROMPTS.md) | **배경·UI 한 벌** — 배경 9장 + 로그인 화면 + 사진 시간대 변환 | **파생** |
 | [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 | **확정** |
+| [../assets/README.md](../assets/README.md) | **에셋 한 벌** — 폴더·이름 규칙, id 목록 | **확정** |
+| [reference/character/preview_cg.html](./reference/character/preview_cg.html) | CG 90장 눈으로 대조 | — |
+| [reference/character/preview_sprite.html](./reference/character/preview_sprite.html) | 도트 18종 · 아바타 36컷 대조 | — |
 | [reference/jungLover_logo.png](../assets/ui/logo.png) | 타이틀 로고 | **확정** |
 | `../src/script/*.vns` | 실제 대사 | **2단계에서 작성** |
 
