@@ -194,7 +194,7 @@
 | 공간 | 사진 | 쓸 곳 |
 |---|---|---|
 | **교육동 중정 테라스** (3·4F) | [`edu_terrace.png`](../assets/bg/campus/outdoor/edu_terrace.png) | 실외 · 높은 곳 · 난간 · 아래로 중정. 옥상이 없는 이 캠퍼스에서 옥상에 가장 가까운 공간 |
-| **정글 스텝** (교육동 실내) | [`jungle_step.png`](../assets/bg/campus/outdoor/jungle_step.png) | 책장 벽을 낀 계단식 라운지. 앉아서 얘기하기 좋은 반(半)공적 공간 |
+| **정글 스텝** (교육동 실내) | [`jungle_step.png`](../assets/bg/campus/indoor/jungle_step.png) | 책장 벽을 낀 계단식 라운지. 앉아서 얘기하기 좋은 반(半)공적 공간 |
 
 ### 4-2. 장소별 상세
 
