@@ -6,18 +6,20 @@
 >
 > **정본이 아니라 파생 문서입니다.** 값이 바뀌면 [CHARACTERS](../../CHARACTERS.md) · [GAME_DESIGN 6](../../GAME_DESIGN.md#6-에셋-목록) · [WORLD_BIBLE](../../WORLD_BIBLE.md) · [SCENARIO_OUTLINE](../../SCENARIO_OUTLINE.md)을 고치고 **여기를 다시 뽑습니다.**
 
-**총 제작량 — CG 60장 + 도트 216컷** (도트는 절감 시 176컷)
+**총 제작량 — CG 66장 + 도트 288컷** (도트는 절감 시 228컷)
 
 | # | 항목 | 수량 |
 |---|---|---|
-| ① | 히로인 몸통 | 12장 |
-| ② | 히로인 표정 파츠 | 30장 |
+| ① | 히로인 몸통 (**가슴 위 반신**) | 12장 |
+| ② | 히로인 표정 파츠 (**6종**) | 36장 |
 | ③ | 히로인 스틸 CG | 18장 |
-| ④ | 도트 스프라이트 | 18종 · 216컷 |
+| ④ | 도트 스프라이트 (**16컷/종**) | 18종 · 288컷 |
 
 **안 그려도 되는 것** — 주인공 CG(1인칭이라 얼굴이 화면에 안 나옴), 조연 CG(전원 도트만).
 
-> **③ 스틸 CG를 뺀 나머지는 이 문서와 [프로필 2장](./heroine_girl_profile.png)만으로 전부 그릴 수 있습니다.** 스틸만 배경 레퍼런스가 따로 필요합니다(4절).
+> **③ 스틸 CG를 뺀 나머지는 이 문서 + [프로필 2장](./heroine_girl_profile.png) + [도트 화풍 데모](./pixel_demo.png)만으로 전부 그릴 수 있습니다.** 스틸만 배경 레퍼런스가 따로 필요합니다(4절).
+>
+> **레퍼런스는 그대로 쓰는 게 아니라 기준입니다** — 프로필은 **외형·의상**, `pixel_demo.png`는 **도트 화풍**만 가져옵니다.
 >
 > **이 문서에 없는 것** — 타일셋 3종 · 도트 타일맵 7개 · 일러스트 배경 8장 · 로그인 화면. 캐릭터가 아니라서 여기 없고, 사양은 [GAME_DESIGN 6-3](../../GAME_DESIGN.md#6-3-맵과-배경)에 있습니다.
 
@@ -72,11 +74,13 @@
 
 | | |
 |---|---|
-| 캔버스 | **1000 × 2000px 세로 · 투명 배경 PNG** |
-| 크롭 | **전신(발끝까지).** 게임 화면에서는 하단이 대사창에 가리지만 스틸과 확대에 쓰이므로 전신으로 그립니다 |
-| 인물 배치 | 캔버스 가로 중앙, 세로로 꽉 차게 |
-| **표정 파츠** | **몸통과 같은 1000 × 2000 캔버스**에 얼굴 부분만 그리고 나머지는 투명. 그대로 겹치면 맞으므로 좌표 계산이 필요 없습니다 |
-| 필수 | 같은 인물의 **평상복·외출복·표정 5장이 전부 같은 얼굴 위치** |
+| 캔버스 | **1200 × 1500px 세로(4:5) · 투명 배경 PNG** |
+| 크롭 | **가슴 위 반신.** 전신이 아니라 흉상입니다 — 얼굴이 크게 보여야 표정 6종이 일을 합니다 |
+| 인물 배치 | 캔버스 가로 중앙, 머리 위에 여백 5~8% |
+| **표정 파츠** | **몸통과 같은 1200 × 1500 캔버스**에 얼굴 부분만 그리고 나머지는 투명. 그대로 겹치면 맞으므로 좌표 계산이 필요 없습니다 |
+| 필수 | 같은 인물의 **평상복·외출복·표정 6장이 전부 같은 얼굴 위치** |
+
+> **반신이라 하의·신발은 CG에 안 나옵니다.** 0절의 `하의·신발` 표는 **도트 스프라이트와 스틸 CG**에서 쓰입니다. 설정을 버리는 게 아니라 노출되는 자리가 다릅니다.
 
 **스틸 CG** — 1920 × 1080 가로, 불투명. 배경까지 한 장에 그립니다
 
@@ -85,10 +89,11 @@
 | | |
 |---|---|
 | 컷 | **48 × 48px** |
-| 시트 | 3열 × 4행 = **144 × 192px 한 장** (RPG Maker MZ 캐릭터칩 규격) |
+| 시트 | 4열 × 4행 = **192 × 192px 한 장** |
 | 행 순서 | **아래 → 왼쪽 → 오른쪽 → 위** |
-| 열 순서 | 걷기 3프레임, **가운데가 정지 포즈** |
-| 등신 | **2.5~3등신** (머리를 크게) |
+| 열 순서 | **정지 · 걷기1 · 걷기2 · 걷기3** |
+| 걷기 재생 | 걷기1→2→3 순환, 멈추면 **정지 컷** |
+| 등신 | **2~2.5등신** 치비 ([`pixel_demo.png`](./pixel_demo.png) 기준) |
 | 외곽선 | 어두운 색 1px |
 | 색 수 | 캐릭터당 **8~12색** |
 | 명찰 | 가슴에 밝은 **2×3px 사각형** + 목에서 내려오는 1px 검은 줄 |
@@ -98,7 +103,7 @@
 
 ```
 cg_{id}_body_casual.png          cg_{id}_body_outing.png
-cg_{id}_face_{normal|smile|shy|sad|surprise}.png
+cg_{id}_face_{normal|happy|shy|sad|surprise|angry}.png
 cg_{id}_still_{garden|climax|ending}.png
 sprite_{id}.png
 ```
@@ -149,15 +154,22 @@ sprite_{id}.png
 
 > **민규와 민아가 정반대로 움직입니다** — 민규는 가리던 얼굴을 드러내고, 민아는 묶고 있던 걸 풉니다. 둘 다 "평소에 잠가둔 걸 하루만 여는" 동작인데 한쪽은 얼굴이고 한쪽은 머리입니다.
 
-> **필수 조건: 평상복과 외출복의 얼굴 위치·크기가 픽셀 단위로 같아야 합니다.** 표정 파츠 5장을 두 몸통에 공용으로 얹기 때문입니다. 어긋나면 표정을 12세트 그려야 합니다.
+> **필수 조건: 평상복과 외출복의 얼굴 위치·크기가 픽셀 단위로 같아야 합니다.** 표정 파츠 6장을 두 몸통에 공용으로 얹기 때문입니다. 어긋나면 표정을 12세트 그려야 합니다.
 
 ---
 
-## 3. 표정 파츠 — 30장 (6인 × 5종)
+## 3. 표정 파츠 — 36장 (6인 × 6종)
 
-`평상` · `미소` · `부끄러움` · `슬픔` · `놀람`
+| 표정 | 파일 키 |
+|---|---|
+| **기본** | `normal` |
+| **기쁨** | `happy` |
+| **부끄러움** | `shy` |
+| **슬픔** | `sad` |
+| **놀람** | `surprise` |
+| **화남** | `angry` |
 
-**`화남`은 그리지 않습니다.** 히로인이 화내는 씬은 김민아 초반뿐이고 `평상` + 대사로 충분합니다.
+> **`화남`은 지금 시나리오에서 김민아 초반에만 쓰입니다.** 그래도 받아둡니다 — 나중에 시나리오를 고치거나 더 맞는 표정이 필요할 때 다시 의뢰하지 않아도 됩니다.
 
 | | 표정 설계 |
 |---|---|
@@ -239,22 +251,22 @@ sprite_{id}.png
 
 ---
 
-## 5. 도트 스프라이트 — 18종 · 216컷
+## 5. 도트 스프라이트 — 18종 · 288컷
 
-**스펙:** 48 × 48px, **4방향 × 3프레임 = 12컷 / 종** (RPG Maker MZ 캐릭터칩 규격)
+**스펙:** 48 × 48px, **4방향 × 4프레임 = 16컷 / 종** — 정지 1 + 걷기 3. 시트는 4열 × 4행 = **192 × 192px**
 
 | 대상 | 종 | 컷 |
 |---|---|---|
-| 주인공 (남 · 여) | 2 | 24 |
-| 히로인 6인 | 6 | 72 |
-| 절친 한지오 · 한지아 | 2 | 24 |
-| 조연 명진혁 · 조민 · 강태윤 · 강태연 · 여사님 | 5 | 60 |
-| 무명 동기용 공용 스프라이트 | 3 | 36 |
-| **합계** | **18** | **216** |
+| 주인공 (남 · 여) | 2 | 32 |
+| 히로인 6인 | 6 | 96 |
+| 절친 한지오 · 한지아 | 2 | 32 |
+| 조연 명진혁 · 조민 · 강태윤 · 강태연 · 여사님 | 5 | 80 |
+| 무명 동기용 공용 스프라이트 | 3 | 48 |
+| **합계** | **18** | **288** |
 
 - **복장은 종당 1벌**입니다. D7 사복은 CG로만 나오고 도트로는 등장하지 않습니다
 - **명찰은 전 컷 착용.** 48px에서는 점 몇 개지만 계속 보입니다
-- **절감:** 조연 5종을 3프레임 대신 **1프레임(정지) × 4방향 = 4컷**으로 낮추면 → **176컷**
+- **절감:** 조연 5종을 걷기 없이 **정지 1프레임 × 4방향 = 4컷**으로 낮추면 → **228컷**
 
 ### 히로인 6인
 
@@ -308,12 +320,12 @@ sprite_{id}.png
 ## 7. 손으로 그릴 때의 순서
 
 1. **히로인 1인의 도트 정면 1장** — 화풍 확정. **참조 CG가 없는 도트 12종이 전부 여기서 파생**되므로 이게 먼저입니다
-2. **같은 인물의 몸통(평상복) 1장 + 표정 5장** — 얼굴 위치 정렬 방식을 여기서 확정
-3. 나머지 몸통 11장 → 표정 25장
-4. 도트 18종 216컷
+2. **같은 인물의 몸통(평상복) 1장 + 표정 6장** — 얼굴 위치 정렬 방식을 여기서 확정
+3. 나머지 몸통 11장 → 표정 30장 (인당 6종)
+4. 도트 18종 288컷
 5. 스틸 18장 — **①커넥트가든부터.** 가장 중요한 컷입니다
 
-**스틸을 뺀 나머지(몸통 12 · 표정 30 · 도트 216컷)는 이 문서와 프로필 2장만으로 전부 그릴 수 있습니다.**
+**스틸을 뺀 나머지(몸통 12 · 표정 36 · 도트 288컷)는 이 문서 + 프로필 2장 + `pixel_demo.png`만으로 전부 그릴 수 있습니다.**
 
 ---
 
@@ -324,11 +336,11 @@ sprite_{id}.png
 | 항목 | 장수 | 프롬프트로 나오는가 |
 |---|---|---|
 | **몸통** | 12 | ✅ **나옵니다.** 단 12번 나눠 요청 + 매번 참조 이미지 첨부 |
-| **표정 파츠** | 30 | ❌ 생성이 아니라 **인페인팅**입니다 ([12절](#12-표정-파츠--인페인팅-절차)) |
-| **도트** | 216컷 | ❌ 생성이 아니라 **CG 변환 + 수작업**입니다 ([14절](#14-도트--생성이-아니라-변환입니다)) |
+| **표정 파츠** | 36 | ❌ 생성이 아니라 **인페인팅**입니다 ([12절](#12-표정-파츠--인페인팅-절차)) |
+| **도트** | 288컷 | ❌ 생성이 아니라 **CG 변환 + 수작업**입니다 ([14절](#14-도트--생성이-아니라-변환입니다)) |
 | **스틸 CG** | 18 | ✅ 나옵니다. 생성에 가장 잘 맞는 항목입니다 (13절) |
 
-**스틸을 뺀 258장 중 프롬프트로 나오는 건 12장입니다.** 나머지 246장은 경로가 다릅니다 — 프롬프트를 아무리 잘 써도 안 바뀝니다.
+**스틸을 뺀 336장 중 프롬프트로 나오는 건 12장입니다.** 나머지 324장은 경로가 다릅니다 — 프롬프트를 아무리 잘 써도 안 바뀝니다.
 
 ### 도구에 따라 갈립니다
 
@@ -358,8 +370,8 @@ sprite_{id}.png
 |---|---|---|
 | **스틸 CG 18장** | ✅ 좋음 | 그대로 생성 |
 | **몸통 12장** | ⚠️ 보통 | 참조 이미지 필수. 손·발이 자주 깨지므로 재생성 여유를 두세요 |
-| **표정 30장** | ❌ 직접 생성 불가 | 몸통에서 **인페인팅으로 파생** ([12절](#12-표정-파츠--인페인팅-절차)) |
-| **도트 216컷** | ❌ 생성 불가 | **CG 축소 → 정리 절차** ([14절](#14-도트--생성이-아니라-변환입니다)) |
+| **표정 36장** | ❌ 직접 생성 불가 | 몸통에서 **인페인팅으로 파생** ([12절](#12-표정-파츠--인페인팅-절차)) |
+| **도트 288컷** | ❌ 생성 불가 | **CG 축소 → 정리 절차** ([14절](#14-도트--생성이-아니라-변환입니다)) |
 
 ---
 
@@ -369,8 +381,10 @@ sprite_{id}.png
 
 ```
 korean webtoon illustration style, semi-realistic anime, soft cel shading,
-clean lineart, warm muted palette, full body standing pose, facing viewer,
-neutral relaxed stance, arms visible, plain flat background
+clean lineart, warm muted palette, upper body bust crop from the chest up,
+facing viewer, head and shoulders fill the frame,
+relaxed neutral posture, arms lowered naturally, calm neutral expression,
+plain flat background
 ```
 
 > **`transparent background`는 대부분의 모델이 못 만듭니다.** `plain flat background`로 뽑고 후처리에서 배경을 지우는 편이 빠릅니다.
@@ -378,9 +392,11 @@ neutral relaxed stance, arms visible, plain flat background
 ### 부정 프롬프트 — 공통
 
 ```
-photorealistic, 3d render, extra fingers, extra limbs, deformed hands,
-malformed feet, cropped legs, cropped head, watermark, signature, text,
-multiple characters, busy background, oversaturated, lens flare
+photorealistic, 3d render, extra fingers, deformed hands, cropped head,
+full body, legs, feet, watermark, signature, text,
+multiple characters, busy background, oversaturated, lens flare,
+dramatic pose, arms crossed, raised hands, hands near the face,
+strong emotion, laughing, crying, angry face
 ```
 
 **외출복 6장에는 아래를 추가합니다** — 명찰을 벗는 날이기 때문입니다.
@@ -403,6 +419,14 @@ black lanyard around neck with a small white ID card
 
 각 인물마다 **평상복 → 외출복 순서로** 뽑으세요. 평상복이 얼굴의 기준이 되고, 외출복은 그 결과를 참조 이미지로 다시 물립니다.
 
+> ### 몸통은 포즈와 표정이 중립이어야 합니다
+>
+> **몸통 하나에 표정 6종을 얹습니다.** 팔짱을 낀 몸통에는 `기쁨`이 안 얹히고, 웃고 있는 몸통에는 `슬픔`이 안 얹힙니다. 입만 바뀌고 몸이 그대로라 어색해집니다.
+>
+> 그래서 아래 프롬프트에는 **자세도 표정도 안 적혀 있습니다.** 중립 규칙은 [10절 스타일 접미사](#스타일-접미사--모든-인물-프롬프트-뒤에-붙입니다)에 한 번만 들어 있고, 부정 프롬프트가 극적인 포즈를 막습니다.
+>
+> **인물의 감정은 전부 [표정 파츠](#12-표정-파츠--인페인팅-절차)가 담당합니다.** 몸통에 적힌 건 **머리·의상·소지품**뿐입니다 — 그것만으로도 여섯이 충분히 갈립니다.
+
 ### 김민아 `minah`
 
 **평상복** — 참조: 여자 프로필 좌측
@@ -410,9 +434,8 @@ black lanyard around neck with a small white ID card
 ```
 22 year old korean woman, long straight black hair tied high in a ponytail,
 sharp upturned cat-like eyes with clear pupils, slim face, thin lips,
-slender build, black zip-up hoodie over a white tee, black track pants,
-black running shoes worn with the heels crushed down, arms crossed,
-flat expression but sharp alert eyes, black lanyard around neck with a small white ID card
+slender build, black zip-up hoodie over a white tee,
+black lanyard around neck with a small white ID card
 ```
 
 **외출복** — 참조: 위에서 뽑은 평상복
@@ -420,7 +443,6 @@ flat expression but sharp alert eyes, black lanyard around neck with a small whi
 ```
 same woman, hair completely down for the first time, long straight black hair
 loose over the shoulders, black slip dress with a thin white shirt worn open over it,
-black strap sandals, arms not crossed, slightly self-conscious expression,
 no lanyard, no id card
 ```
 
@@ -433,17 +455,15 @@ no lanyard, no id card
 ```
 23 year old korean woman, long wavy brown hair, large round doe-like eyes,
 long eyelashes, slim neck and narrow shoulders, beige knit sweater with the
-sleeves pulled down over her hands, ivory ankle-length long skirt,
-white canvas shoes neatly laced, timid posture with hands held close to the body,
-startled gentle expression, black lanyard around neck with a small white ID card
+sleeves pulled down over her hands,
+black lanyard around neck with a small white ID card
 ```
 
 **외출복**
 
 ```
-same woman, light sky blue shirt dress with a thin belt, sleeves rolled up
-revealing her wrists and forearms, small crossbody bag, low white sandals,
-hands relaxed at her sides, slightly more open posture, no lanyard, no id card
+same woman, light sky blue shirt dress, sleeves rolled up
+revealing her wrists and forearms, small crossbody bag strap across the shoulder, no lanyard, no id card
 ```
 
 > **소매를 걷어 손목이 보이는 것**이 이 장의 전부입니다. 평상복에서 손이 소매에 감춰져 있어야 대비가 삽니다.
@@ -454,19 +474,17 @@ hands relaxed at her sides, slightly more open posture, no lanyard, no id card
 
 ```
 21 year old korean woman, brown hair tied high, big round downturned puppy-like eyes,
-round cheeks, bright open smile, oversized bright yellow hoodie much too large for her,
-black short pants almost entirely hidden under the hoodie, white high-top sneakers
-with yellow laces, ankle socks, headphones resting around her neck,
-energetic bouncy posture, black lanyard around neck with a small white ID card
+round cheeks, oversized bright yellow hoodie much too large for her,
+headphones resting around her neck,
+black lanyard around neck with a small white ID card
 ```
 
 **외출복**
 
 ```
-same woman, cream sleeveless top and denim skirt, slim figure now clearly visible
-after the oversized hoodie is gone, hair clip, several bracelets on one wrist,
-headphones still resting around her neck, bright excited expression,
-no lanyard, no id card
+same woman, cream sleeveless top, shoulders and arms now bare after the oversized
+hoodie is gone, hair clip, several bracelets on one wrist,
+headphones still resting around her neck, no lanyard, no id card
 ```
 
 > **헤드폰은 양쪽 다 유지**합니다. 이 인물의 모티프라 사라지면 안 됩니다.
@@ -478,18 +496,16 @@ no lanyard, no id card
 ```
 22 year old korean man, long front bangs covering half of his face,
 narrow sharp eyes, angular jaw, very thin build, faint dark circles,
-black hoodie, black wide-leg pants dragging on the floor,
-black high-top sneakers with the laces untied, hands in pockets,
-not making eye contact, expressionless, black lanyard around neck with a small white ID card
+black hoodie with the hood down,
+black lanyard around neck with a small white ID card
 ```
 
 **외출복**
 
 ```
 same man, bangs swept back so both eyes are fully visible for the first time,
-black overshirt open over a white tee, dark slacks, a silver ring,
-black boots with the laces tied, standing straight,
-still expressionless but now looking forward, no lanyard, no id card
+black overshirt open over a white tee, a silver ring on one hand,
+no lanyard, no id card
 ```
 
 > **눈이 드러나는 것**이 핵심입니다. 평상복에서 앞머리가 확실히 얼굴을 가려야 합니다.
@@ -500,21 +516,19 @@ still expressionless but now looking forward, no lanyard, no id card
 
 ```
 24 year old korean man, tall with broad shoulders and a large frame,
-short cropped hair, big bright eyes that crease when he smiles,
-green varsity jacket over a white tee, light blue straight denim jeans,
-clean white high-top basketball shoes, wide open smile showing his gums,
-confident welcoming posture, black lanyard around neck with a small white ID card
+short cropped hair, big bright eyes,
+green varsity jacket over a white tee,
+black lanyard around neck with a small white ID card
 ```
 
 **외출복**
 
 ```
 same man, no varsity jacket, linen shirt with the top button undone,
-beige chinos, wristwatch, a cap, relaxed shoulders,
-easier and less performed smile than usual, no lanyard, no id card
+wristwatch, a cap, no lanyard, no id card
 ```
 
-> **재킷을 벗은 것**이 핵심입니다. 어깨선이 눈에 띄게 편해 보여야 합니다.
+> **재킷을 벗은 것**이 핵심입니다. 바시티 재킷이 만들던 어깨 실루엣이 없어져야 합니다.
 
 ### 장윤호 `yunho`
 
@@ -523,18 +537,16 @@ easier and less performed smile than usual, no lanyard, no id card
 ```
 20 year old korean man, round gentle eyes, soft facial lines, mild youthful face,
 cream cardigan over a white tee with a small dog-shaped pin on the chest,
-beige chinos with the cuffs rolled once, white canvas sneakers neatly laced,
-attentive polite posture, warm mild expression,
 black lanyard around neck with a small white ID card
 ```
 
 **외출복**
 
 ```
-same man, navy striped short-sleeve shirt, white shorts, canvas tote bag
-with the small dog pin moved onto the bag strap, white sneakers,
+same man, navy striped short-sleeve shirt, canvas tote bag strap over the shoulder
+with the small dog pin moved onto it,
 carefully coordinated outfit that looks a little too planned,
-slightly nervous cheerful expression, no lanyard, no id card
+no lanyard, no id card
 ```
 
 ---
@@ -547,18 +559,19 @@ slightly nervous cheerful expression, no lanyard, no id card
 
 1. 인물의 **평상복 몸통을 먼저 확정**합니다
 2. 그 이미지를 그대로 두고 **얼굴 영역만 마스킹**해 인페인팅합니다
-3. 결과에서 **얼굴 부분만 잘라** 투명 캔버스(1000×2000)의 같은 위치에 올립니다
-4. 5장이 전부 같은 캔버스·같은 위치가 됩니다
+3. 결과에서 **얼굴 부분만 잘라** 투명 캔버스(1200×1500)의 같은 위치에 올립니다
+4. 6장이 전부 같은 캔버스·같은 위치가 됩니다
 
 인페인팅 프롬프트는 **표정만** 씁니다. 머리·옷·구도는 마스크 밖이라 안 건드립니다.
 
-| 표정 | 프롬프트 | 인물별 방향 |
-|---|---|---|
-| `normal` 평상 | `neutral calm expression` | 기준 얼굴 |
-| `smile` 미소 | `soft genuine smile, eyes slightly narrowed` | |
-| `shy` 부끄러움 | `blushing, eyes averted, slightly parted lips` | |
-| `sad` 슬픔 | `downcast eyes, lowered brows, subdued` | |
-| `surprise` 놀람 | `wide eyes, raised brows, slightly open mouth` | |
+| 표정 | 프롬프트 |
+|---|---|
+| `normal` 기본 | `neutral calm expression` — 기준 얼굴 |
+| `happy` 기쁨 | `bright genuine smile, eyes crinkled` |
+| `shy` 부끄러움 | `blushing, eyes averted, slightly parted lips` |
+| `sad` 슬픔 | `downcast eyes, lowered brows, subdued` |
+| `surprise` 놀람 | `wide eyes, raised brows, slightly open mouth` |
+| `angry` 화남 | `furrowed brows, mouth tight, direct hard stare` |
 
 **인물별로 진폭을 다르게 줍니다.**
 
@@ -566,12 +579,12 @@ slightly nervous cheerful expression, no lanyard, no id card
 |---|---|
 | **김민아** | `expression barely changes but the eyes carry everything` — 표정 근육은 거의 안 움직이고 눈만 |
 | **이승희** | `very subtle, smallest range of all` — 여섯 중 진폭이 가장 작음 |
-| **장윤정** | `bright and large range` · `normal`은 **두 결로** — 웃는 평상 / 헤드폰 쓴 무표정 |
+| **장윤정** | `bright and large range` · `normal`은 **웃음기 없는 쪽으로** — 헤드폰 쓴 작업 모드가 이 인물의 반전이라 기본이 밝으면 낙차가 죽습니다 |
 | **김민규** | `avoids eye contact even when smiling` — 시선을 안 주는 게 기본 |
 | **이승민** | `big open smile showing gums` — 웃음이 크게 |
 | **장윤호** | `gentle, narrower range than yunjung` — 같은 강아지상인데 덜 움직임 |
 
-**`화남`은 만들지 않습니다.**
+**`angry`는 김민아 외에는 거의 안 쓰이지만 여섯 다 받아둡니다.** 나중에 시나리오가 바뀔 여지를 남기는 쪽이 다시 의뢰하는 것보다 쌉니다.
 
 ---
 
@@ -580,7 +593,7 @@ slightly nervous cheerful expression, no lanyard, no id card
 **생성에 가장 잘 맞는 항목입니다.** 배경까지 한 장에 들어가므로 그대로 뽑으면 됩니다.
 
 - 규격: **1920 × 1080 가로, 불투명**
-- 배경 레퍼런스가 필요하면 [WORLD_PROMPTS 9~12절](../WORLD_PROMPTS.md#9-캠퍼스-사진-시간대-변환--규칙)로 뽑은 심야·여명 이미지를 참조로 넣으세요
+- 배경 레퍼런스가 필요하면 [WORLD_PROMPTS 6~9절](../WORLD_PROMPTS.md#6-캠퍼스-사진-시간대-변환--규칙)로 뽑은 심야·여명 이미지를 참조로 넣으세요
 - 인물 참조 이미지는 **평상복 몸통**을 씁니다 (①②는 평상복 차림)
 
 ### 공통 배경 프롬프트
@@ -656,12 +669,13 @@ very low key lighting, high contrast, most of the frame barely readable shadow
 
 ### 실제 경로 — CG 축소 후 정리
 
-1. **몸통 CG(평상복 정면)를 정사각으로 크롭**합니다 — 머리부터 발끝까지
-2. **48 × 48로 축소**합니다. 반드시 **nearest neighbor**(뭉개짐 방지)
-3. **색을 8~12색으로 감축**합니다 (indexed color / posterize)
-4. **외곽선 1px**을 어두운 색으로 정리합니다
-5. 머리를 크게 조정해 **2.5~3등신**으로 만듭니다 — 축소만 하면 8등신이라 쯔꾸르 화풍이 안 납니다
-6. **정면 1장을 확정한 뒤** 좌·우·뒤 3방향과 걷기 3프레임을 손으로 파생합니다
+> **[`pixel_demo.png`](./pixel_demo.png)가 도착점입니다.** 그 이미지를 쓰는 게 아니라, 결과가 그 화풍이 되도록 맞춥니다 — 2~2.5등신, 1px 외곽선, 얼굴이 크고 눈이 또렷한 치비.
+
+1. **몸통 CG의 얼굴을 기준**으로 삼되, **전신 실루엣은 새로 잡습니다** — 반신 CG에는 하의·신발이 없으므로 0절 표를 보고 그립니다
+2. **48 × 48 캔버스**에 직접 찍습니다. CG를 축소만 하면 8등신이 되어 화풍이 안 맞습니다
+3. **2~2.5등신**으로 머리를 크게, 몸을 작게
+4. **색을 8~12색으로** 제한하고 **외곽선 1px**을 어두운 색으로
+5. **정지 정면 1컷을 확정한 뒤** 좌·우·뒤 3방향과 걷기 3프레임을 파생합니다 — 한 종당 16컷
 
 > **1번 인물의 정면 1장이 전체 화풍을 결정합니다.** 이게 확정되기 전에 나머지 17종을 건드리지 마세요.
 
@@ -682,16 +696,16 @@ very low key lighting, high contrast, most of the frame barely readable shadow
 **몸통**
 
 - [ ] 참조 인물과 **얼굴이 같은 사람인가**
-- [ ] **발끝까지** 들어갔는가 (잘리면 하의·신발 설정이 죽습니다)
-- [ ] 손가락·발이 깨지지 않았는가
+- [ ] **가슴 위 반신**인가 (전신이 나오면 다시 — 얼굴이 작아집니다)
+- [ ] 손가락이 깨지지 않았는가
 - [ ] 평상복에 **명찰이 있고** 외출복에 **없는가**
-- [ ] 캔버스 **1000 × 2000**, 배경 제거, 투명 PNG
+- [ ] 캔버스 **1200 × 1500**, 배경 제거, 투명 PNG
 - [ ] 같은 인물의 평상복·외출복 **얼굴 위치가 같은가**
 
 **표정**
 
 - [ ] 몸통과 **같은 캔버스·같은 위치**에 얹혀 있는가
-- [ ] 5장이 서로 **머리·옷이 동일**한가 (마스크 밖이 바뀌면 실패)
+- [ ] 6장이 서로 **머리·옷이 동일**한가 (마스크 밖이 바뀌면 실패)
 
 **스틸**
 
@@ -701,16 +715,17 @@ very low key lighting, high contrast, most of the frame barely readable shadow
 
 **도트**
 
-- [ ] **2.5~3등신**인가
+- [ ] **2~2.5등신**인가 (`pixel_demo.png`와 나란히 놓고 비교)
 - [ ] 색이 8~12색인가
-- [ ] 시트가 **144 × 192px**, 행 순서가 아래→왼쪽→오른쪽→위인가
+- [ ] 시트가 **192 × 192px**(4열 × 4행), 행 순서가 아래→왼쪽→오른쪽→위인가
+- [ ] 열 순서가 **정지 · 걷기1 · 걷기2 · 걷기3**인가
 
 ---
 
 ## 16. 생성 도구로 만들 때의 순서
 
 1. **김민아 평상복 몸통** — 참조 이미지 물려서 여러 번 뽑아 하나 확정
-2. 그걸로 **표정 5종 인페인팅** — 파츠 방식이 도는지 검증
+2. 그걸로 **표정 6종 인페인팅** — 파츠 방식이 도는지 검증
 3. 같은 인물 **도트 정면 1장**(5절 절차) — **전체 화풍 확정**
 4. 여기까지 되면 나머지는 반복입니다. 인물별로 평상복 → 외출복 → 표정 순
 5. 스틸 18장 — **①커넥트가든부터**

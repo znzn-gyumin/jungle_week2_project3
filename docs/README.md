@@ -15,8 +15,10 @@
 | [reference/Jungle_Campus.png](./reference/Jungle_Campus.png) | 공간 설정의 1차 자료 (안내도) | — |
 | [reference/campus/](./reference/campus/README.md) | 배경 원본 사진 17장 | — |
 | [reference/character/](./reference/character/README.md) | **히로인 6인 확정 프로필** — 외형·의상의 기준 | **확정** |
-| [reference/character/ART_BRIEF.md](./reference/character/ART_BRIEF.md) | **캐릭터 이미지 한 벌** — 사양(1~7) + 생성 프롬프트(8~16) | **파생** |
-| [reference/WORLD_PROMPTS.md](./reference/WORLD_PROMPTS.md) | **배경·맵·UI 한 벌** — 프롬프트(0~8) + 사진 시간대 변환(9~14) | **파생** |
+| [reference/character/ART_BRIEF.md](./reference/character/ART_BRIEF.md) | **캐릭터 이미지 한 벌** — CG 66장 + 도트 288컷 | **파생** |
+| [reference/TILE_BRIEF.md](./reference/TILE_BRIEF.md) | **타일셋·타일맵 한 벌** — 3종 + 7개 + 조명 오버레이 | **파생** |
+| [reference/WORLD_PROMPTS.md](./reference/WORLD_PROMPTS.md) | **배경·UI 한 벌** — 배경 8장 + 로그인 화면 + 사진 시간대 변환 | **파생** |
+| [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 | **확정** |
 | [reference/jungLover_logo.png](./reference/jungLover_logo.png) | 타이틀 로고 | **확정** |
 | `../src/script/*.vns` | 실제 대사 | **2단계에서 작성** |
 
@@ -30,7 +32,7 @@
 
    확인 대상은 `docs/`의 **여덟 문서**입니다 — 이 `README.md`와 `GAME_DESIGN.md` · `CHARACTERS.md` · `WORLD_BIBLE.md` · `SCENARIO_OUTLINE.md` · `TECH_DESIGN.md`, 그리고 값을 담은 레퍼런스 둘 `reference/character/README.md` · `reference/campus/README.md`. README에도 씬 수·줄 수가 적히므로 검사 대상입니다. 2단계에 들어가면 `src/script/*.vns`가 추가됩니다
 
-   **[ART_BRIEF.md](./reference/character/ART_BRIEF.md)와 [WORLD_PROMPTS.md](./reference/WORLD_PROMPTS.md)는 여덟에 들어가지 않습니다.** 위 문서들에서 값을 모아 한 벌로 뽑은 **파생 문서**라, 값이 바뀌면 대조하는 게 아니라 **다시 뽑습니다.** 여기에만 있는 값은 없어야 합니다
+   **[ART_BRIEF.md](./reference/character/ART_BRIEF.md) · [TILE_BRIEF.md](./reference/TILE_BRIEF.md) · [WORLD_PROMPTS.md](./reference/WORLD_PROMPTS.md)는 여덟에 들어가지 않습니다.** 위 문서들에서 값을 모아 한 벌로 뽑은 **파생 문서**라, 값이 바뀌면 대조하는 게 아니라 **다시 뽑습니다.** 여기에만 있는 값은 없어야 합니다
 
 3. **점검은 두 층입니다.**
    - **값**: 숫자·이름·장소·시각이 여덟 파일에서 같은가 (`grep`으로 보조)
@@ -86,6 +88,7 @@
 | 10 | **WB 8~11** 톤·사운드·UI | 팔레트, BGM, 대사창 | ✅ |
 | 11 | **GD 6** 에셋 목록 | CG 직접 제공 반영, 배경 8장 확정 | ✅ |
 | 12 | **GD 7** 분량 예산 | 90씬 / 1,980줄 | ✅ |
+| 12+ | **GD 6** 에셋 확정 | CG 66장(표정 6종·반신) · 도트 288컷(16컷/종) · 배경 8장 | ✅ |
 | 13 | **SO 0~8 골격** | 씬 자리·ID·선택지 위치·집필 절차 | ✅ |
 | 14 | **TECH_DESIGN** | 스택·DSL·상태·인증·방명록·배포 | ✅ |
 | 15 | **로그인·클라우드 세이브** | Google 로그인 필수, Firestore 3슬롯 | ✅ |
@@ -122,7 +125,7 @@
 | **인증 · 저장 · 방명록** | TECH_DESIGN 1·2·4-1~4-3·6·7 → GAME_DESIGN 0-1·1·2-5·6-4 → WORLD_BIBLE 7-2·11 → SCENARIO_OUTLINE 6절 |
 | **공간 (장소 추가·삭제·개명)** | WORLD_BIBLE 2·4·6·7·8·10 → CHARACTERS(자리·명장면) → GAME_DESIGN 6-3(배경 목록) → SCENARIO_OUTLINE 전 씬의 장소 칸 → TECH_DESIGN 1·2·5(맵 파일명) → `.vns`의 `@bg` |
 | **캐릭터 (나이·학년·설정)** | **CHARACTERS** → WORLD_BIBLE 4-2-1·4-2-2(좌석)·5-1-2(티켓) → GAME_DESIGN 4(선호 수치)·6-2(CG) → SCENARIO_OUTLINE 6인 표 전부 → **ART_BRIEF 다시 뽑기** |
-| **에셋 (CG·도트·배경 물량)** | GAME_DESIGN 6 → WORLD_BIBLE 7-3(명찰)·8(비주얼) → reference/campus → **ART_BRIEF · WORLD_PROMPTS 다시 뽑기** |
+| **에셋 (CG·도트·배경 물량)** | GAME_DESIGN 6 → WORLD_BIBLE 7-3(명찰)·8(비주얼) → reference/campus → **ART_BRIEF · TILE_BRIEF · WORLD_PROMPTS 다시 뽑기** |
 | **스탯 수치** | GAME_DESIGN 2-1·2-2·2-3·**2-4(구간 도달 시점)** → SCENARIO_OUTLINE 7(선택지 총람) → CHARACTERS(모티프 단계가 걸린 구간) |
 | **씬 추가·삭제** | SCENARIO_OUTLINE → GAME_DESIGN 7(씬 수·줄 수) → 집필 순서 |
 | **호칭 단계** | GAME_DESIGN 2-4(구간 규칙) → CHARACTERS(인물별 4단계) → TECH_DESIGN 3-2(치환 토큰) |
@@ -143,7 +146,9 @@ grep -rn "옛이름" docs/ src/ --include="*.md" --include="*.vns"
 
 | 항목 | 막고 있는 것 | 언제 |
 |---|---|---|
-| **히로인 CG** (몸통 · 표정 파츠 · 스틸) | 프로필은 확정됐고 [6-2](./GAME_DESIGN.md#6-2-이벤트-cg-히로인-전용) 사양의 나머지가 필요합니다 | 2단계 전 |
+| **히로인 CG · 도트** | 화풍 기준은 확정([프로필](./reference/character/heroine_girl_profile.png) · [도트 데모](./reference/character/pixel_demo.png)). [ART_BRIEF](./reference/character/ART_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
+| **타일셋 · 타일맵** | [TILE_BRIEF](./reference/TILE_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
+| **배경** | ①②③ 확보([backgrounds/](./reference/backgrounds/)). **④ 버스 사진 · ⑤⑥⑦ 일러스트 3장** 남음 | 2단계 전 |
 | **Firebase 프로젝트 생성** | 로그인·세이브·방명록 전부. 구현 순서 2번이라 **가장 먼저** ([TECH_DESIGN 7](./TECH_DESIGN.md#7-구현-순서)) | 구현 착수 시 |
 
 **해결됨**: **프로젝트명·로고** · **히로인 6인 프로필 확정** · 실명 사용 · 캠프 주최 단체명 · 메신저 UI 구현 · **히로인 6인 이름·나이·전공** · **주인공 컴퓨터공학과 22세** · 6인 병행 제작 · 연적 구도 없음 · **6인 독립 설계(묶음 라벨 없음)** · 테마 컬러 6색 · 외출 선호 6인분 · **Google 로그인 필수(게스트 없음)** · **방명록 = 화이트보드, 인게임 날짜 해금** · **참가자 명찰(캠퍼스 안 상시 착용)** · **도트 복장 캐릭터당 1벌** · **평상복 하의·신발 6인분** · **D7 외출복 6벌**
@@ -162,7 +167,7 @@ grep -rn "옛이름" docs/ src/ --include="*.md" --include="*.vns"
 | 어느 씬에서 무슨 일이 일어나는가 (씬 ID·자리·줄 수·선택지 위치·6인 사건) | **SCENARIO_OUTLINE** |
 | 구현 형식 (DSL·상태·맵·배포·**인증·방명록**) | **TECH_DESIGN** |
 | **그림 기준** (외형·의상·명찰·카드 색) | **reference/character** |
-| 그림 제작 한 벌 (파생) | 캐릭터는 **reference/character/ART_BRIEF** · 나머지는 **reference/WORLD_PROMPTS** |
+| 그림 제작 한 벌 (파생) | 캐릭터 **ART_BRIEF** · 타일 **TILE_BRIEF** · 배경·UI **WORLD_PROMPTS** |
 | 진행 상태와 미확정 항목 | **README** |
 
 **CHARACTERS와 SCENARIO_OUTLINE은 같은 데이터의 전치가 되기 쉽습니다.** 경계는 이렇습니다 — *이 사람이 누구인가*는 CHARACTERS, *그래서 D9에 뭘 하는가*는 SCENARIO_OUTLINE. 인물 절에 씬별 사건을 다시 적지 않습니다.

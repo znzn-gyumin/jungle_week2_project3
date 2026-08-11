@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jungLover — 로그인 화면</title>
+<style>
+  /* ── 팔레트 ───────────────────────────────────────────────
+     --ink 는 jungLover_intro.png 의 실제 배경색 실측값입니다.
+     인트로 이미지가 정확히 1920×1080(16:9)이라 크롭 없이 화면을 채웁니다.
+     게임 화면이라 단일 테마로 고정합니다(뷰어 테마를 따르지 않음). */
+  :root{
+    --ink:       #0C0C18;   /* 인트로 배경 — 실측값 */
+    --glow:      #C4A6F0;   /* 레터링 발광 */
+    --gold:      #D9A441;   /* 코너 장식 */
+    --paper:     #F2EDE4;
+    --paper-dim: #8F88A0;
+
+    --stage-w: 1600px;
+    --ease: cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:"Pretendard","Pretendard Variable",-apple-system,"Apple SD Gothic Neo",
+                "Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+    display:grid;
+    place-items:center;
+    padding:24px;
+  }
+
+  /* ── 16:9 게임 화면 ───────────────────────────────────── */
+  .stage{
+    position:relative;
+    width:min(100%,var(--stage-w));
+    aspect-ratio:16/9;
+    background:var(--ink);
+    overflow:hidden;
+    border-radius:2px;
+    box-shadow:0 40px 120px -30px #000;
+  }
+
+  .intro{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;          /* 1920×1080 원본이라 실제로는 무손실 */
+    animation:fade 1400ms var(--ease) both;
+  }
+
+  /* 버튼이 놓이는 하단만 아주 살짝 눌러 가독성 확보.
+     인트로 하단은 원래 비어 있어서 강한 스크림이 필요 없습니다. */
+  .scrim{
+    position:absolute; left:0; right:0; bottom:0;
+    height:34%;
+    background:linear-gradient(to top,
+      color-mix(in oklab, var(--ink) 88%, transparent) 0%,
+      transparent 100%);
+    pointer-events:none;
+  }
+
+  .actions{
+    position:absolute; left:0; right:0;
+    bottom:clamp(28px,5.4%,64px);
+    display:flex; flex-direction:column; align-items:center;
+    gap:14px;
+    padding:0 24px;
+    animation:rise 1200ms var(--ease) 520ms both;
+  }
+
+  .signin{
+    display:inline-flex; align-items:center; gap:14px;
+    padding:15px 28px;
+    font:500 17px/1 inherit;
+    letter-spacing:-.01em;
+    color:#1F1B24;
+    background:var(--paper);
+    border:0;
+    border-radius:3px;
+    cursor:pointer;
+    box-shadow:0 2px 0 color-mix(in oklab, var(--gold) 60%, transparent),
+               0 18px 40px -18px #000;
+    transition:transform 180ms var(--ease), box-shadow 180ms var(--ease);
+  }
+  .signin:hover{
+    transform:translateY(-2px);
+    box-shadow:0 4px 0 var(--gold), 0 24px 48px -20px #000;
+  }
+  .signin:active{ transform:translateY(0); }
+  .signin:focus-visible{ outline:2px solid var(--glow); outline-offset:4px; }
+  .signin svg{ width:20px; height:20px; flex:none; }
+
+  .note{
+    margin:0;
+    max-width:36ch;
+    font-size:14px;
+    line-height:1.7;
+    color:var(--paper-dim);
+    text-align:center;
+    text-wrap:balance;
+  }
+
+  @keyframes fade{ from{ opacity:0; } to{ opacity:1; } }
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(16px); }
+    to  { opacity:1; transform:none; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .intro,.actions{ animation:none; }
+    .signin{ transition:none; }
+  }
+
+  /* 화면 밖 주석 — 실제 게임에는 안 들어갑니다. */
+  .spec{
+    width:min(100%,var(--stage-w));
+    margin-top:20px;
+    font-size:13px; line-height:1.8;
+    color:#5C566B;
+  }
+  .spec b{ color:#8B8399; font-weight:600; }
+  .spec code{ font-size:12px; }
+</style>
+</head>
+<body>
+
+  <div class="stage">
+    <img class="intro" src="../jungLover_intro.png"
+         alt="jungLover — 11박 12일, 연애는 커리큘럼에 없었다">
+    <div class="scrim"></div>
+
+    <div class="actions">
+      <button class="signin" type="button">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.5l6.8-6.8C35.9 2.4 30.4 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.2 17.7 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.1 24.6c0-1.6-.1-3.1-.4-4.6H24v9.1h12.4c-.5 2.9-2.1 5.3-4.6 6.9l7.2 5.6c4.2-3.9 6.6-9.7 6.6-16.6z"/>
+          <path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C1 16.3 0 20 0 24s1 7.7 2.6 10.8l7.9-6.1z"/>
+          <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.2-5.6c-2 1.4-4.6 2.2-8.7 2.2-6.3 0-11.6-3.7-13.5-9.1l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/>
+        </svg>
+        Google로 계속하기
+      </button>
+
+      <p class="note">진행 상황이 계정에 저장돼, 다른 기기에서도 이어서 할 수 있습니다.</p>
+    </div>
+  </div>
+
+  <p class="spec">
+    <b>사양</b> · 16:9 · 배경 <code>jungLover_intro.png</code>(1920×1080 원본, 크롭 없음) ·
+    하단에만 옅은 스크림 · 버튼 하나와 한 줄 설명뿐 ·
+    본문 <b>Pretendard</b>(여기서는 시스템 한글 폰트로 대체 — 구현 시 교체) ·
+    게임 화면이라 <b>단일 테마 고정</b>
+  </p>
+
+</body>
+</html>
