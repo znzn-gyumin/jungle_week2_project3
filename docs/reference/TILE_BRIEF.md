@@ -242,7 +242,7 @@ limited palette, clean 1px dark outlines, retro jrpg style, tile grid layout,
 | `dormitory_room.jpg` | M6 | 2인실 |
 | `basketball_court.jpg` | — | 숙소동 옆 외부 코트 |
 | `edu_terrace.jpg` | — | 교육동 중정 회랑, 주황 난간. 예비 |
-| `cand_campus_view.jpg` `cand_airplane_view.jpg` | — | 항공샷. **설정 검증용**, 타일 근거 부적합 |
+| `aerial_view_2.jpg` `cand_aerial_view.jpg` | — | 항공샷. **설정 검증용**, 타일 근거 부적합 |
 
 **전체 배치는 [`Jungle_Campus.png`](./Jungle_Campus.png)** 안내도를 따릅니다 — 교육동은 ㅁ자 중정, 숙소동은 ㄷ자, 그 사이를 커넥트가든이 세로로 꿰뚫습니다.
 

@@ -99,7 +99,7 @@
 **파일명**
 
 ```
-assets/cg/stand/   {id}_{casual|outing}_{normal|happy|shy|sad|surprise|angry}.png
+assets/cg/standing/   {id}_{camp|outing}_{normal|happy|shy|sad|surprise|angry}.png
 assets/cg/event/      {id}_{garden|climax|ending}.png
 assets/dot/walk/   {id}.png          걷기 4방향 x 4프레임 시트 192 x 256
 assets/dot/face/   {id}_{expr}.png   도트 감정 아바타 48 x 64 (히로인만)
@@ -302,7 +302,7 @@ assets/bg/{outing|epilogue|campus}/
 | `basketball_court.jpg` | 외부 농구코트 |
 | `jungle_step.jpg` | 교육동 실내 계단식 라운지 |
 | `edu_terrace.jpg` | 교육동 중정 외부 회랑 (3·4F) |
-| `cand_campus_view.jpg` `cand_airplane_view.jpg` | 항공샷 — 설정 검증용, 배경 부적합 |
+| `aerial_view_2.jpg` `cand_aerial_view.jpg` | 항공샷 — 설정 검증용, 배경 부적합 |
 
 ---
 

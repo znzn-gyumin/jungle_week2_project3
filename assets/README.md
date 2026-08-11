@@ -7,7 +7,7 @@
 ```
 assets/
 ├─ cg/
-│    stand/      {id}_{casual|outing}_{expr}.png   72   立ち絵 — 대화 중 계속 서 있음
+│    standing/      {id}_{camp|outing}_{expr}.png   72   立ち絵 — 대화 중 계속 서 있음
 │    event/      {id}_{garden|climax|ending}.png   18   イベントCG — 명장면, 화면 전체
 ├─ dot/
 │    walk/       {id}.png                          18   192×256 시트

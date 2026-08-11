@@ -59,12 +59,12 @@ def cell(src: str, label: str, name: str) -> str:
 
 def build_cg() -> str:
     out = ["<p class='note'>파일명이 곧 라벨입니다. 클릭하면 원본 크기로 열립니다.</p>"]
-    for outfit, ok in (("casual", "평상복"), ("outing", "D7 외출복")):
+    for outfit, ok in (("camp", "평상복"), ("outing", "D7 외출복")):
         out.append(f"<section class='cg'><h2>반신 CG — {ok}</h2><div class='grid'>")
         for i in IDS:
             for e, ek in EXPR:
                 n = f"{i}_{outfit}_{e}.png"
-                out.append(cell(f"{REL}/cg/stand/{n}", f"{KR[i]} · {ek}", n))
+                out.append(cell(f"{REL}/cg/standing/{n}", f"{KR[i]} · {ek}", n))
         out.append("</div></section>")
     out.append("<section class='still'><h2>스틸 CG — 18장</h2><div class='grid'>")
     for s, sk in SCENE:
