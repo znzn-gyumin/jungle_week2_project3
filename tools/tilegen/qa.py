@@ -22,7 +22,8 @@ FLOOR_PREFIX = "f_"
 # 패턴 주기가 48의 약수라 '보이는 선'이 설계 의도인 타일들 (줄눈·널 이음·단코)
 DESIGNED_EDGE = {"f_vinyl_seam", "f_stage_step", "f_tile", "f_deck_edge",
                  "f_deck_v", "f_deck_v2", "f_deck_h", "f_pave", "f_pave_b",
-                 "f_corridor", "f_corridor_b", "f_room", "f_park_line_v", "f_park_line_h"}
+                 "f_corridor", "f_corridor_b", "f_room", "f_park_line_v", "f_park_line_h",
+                 "f_pave_shade", "f_pave_shade_b", "f_soffit_top", "f_soffit_bot"}
 
 
 def _t(img, i, cols):
@@ -189,20 +190,130 @@ def check_maps():
         yx = int(npcs["younger"]["x"] // TS)
         if abs(yx - d2x) > 3:
             issues.append("[m1] 연하 자리가 문2 옆이 아님")
-    team4 = sorted(int(o["x"] // TS) for o in objs(m1, "npc")
-                   if prop(o, "role") == "team4")
-    if len(team4) != 4:
-        issues.append(f"[m1] 4조가 4명이 아님 ({len(team4)}명)")
-    elif max(team4) - min(team4) > 6:
-        issues.append("[m1] 4조가 나란히 앉아 있지 않음")
+    # 4조 넷이 나란히 붙어 있는가 (브리프 7절 추가 항목)
+    t4 = sorted((int(o["x"] // TS), int(o["y"] // TS)) for o in objs(m1, "npc")
+                if prop(o, "role") == "team4")
+    if len(t4) != 4:
+        issues.append(f"[m1] 4조가 4명이 아님 ({len(t4)}명)")
+    else:
+        xs = [p[0] for p in t4]
+        if len({p[1] for p in t4}) != 1:
+            issues.append("[m1] 4조가 같은 줄에 있지 않음")
+        gaps = [b - a for a, b in zip(xs, xs[1:])]
+        if max(gaps) > 2:
+            issues.append(f"[m1] 4조가 나란히 붙어 있지 않음 (간격 {gaps})")
+        # 다른 줄보다 촘촘해야 '뭉쳐 있다'가 보인다
+        others = []
+        for o in objs(m1, "npc"):
+            if prop(o, "role") in (None, "coach") or prop(o, "role") == "team4":
+                continue
+            others.append((int(o["y"] // TS), int(o["x"] // TS)))
+        byrow = collections.defaultdict(list)
+        for ry, rx in others:
+            byrow[ry].append(rx)
+        wide = [min(b - a for a, b in zip(sorted(v), sorted(v)[1:]))
+                for v in byrow.values() if len(v) > 1]
+        if wide and max(gaps) >= min(wide):
+            issues.append("[m1] 4조 간격이 다른 줄과 같아 '뭉쳐 있다'가 안 보임")
+
+    # 동갑·연상·연하가 세 방향으로 흩어져 있는가
+    seats = {o["name"]: (int(o["x"] // TS), int(o["y"] // TS)) for o in objs(m1, "npc")}
+    if all(k in seats for k in ("player_seat", "younger", "older", "sameage")):
+        px, py = seats["player_seat"]
+        dirs = set()
+        for k in ("younger", "older", "sameage"):
+            sx, sy = seats[k]
+            dirs.add((1 if sx > px else -1 if sx < px else 0,
+                      1 if sy > py else -1 if sy < py else 0))
+        if len(dirs) < 3:
+            issues.append(f"[m1] 동갑·연상·연하가 세 방향으로 흩어져 있지 않음 (방향 {len(dirs)}종)")
+        # 좌석 총수 = 교육장 안 NPC (코치 제외)
+        room_npc = [o for o in objs(m1, "npc") if prop(o, "role") != "coach"]
+        if len(room_npc) != 24:
+            issues.append(f"[m1] 교육장 지정석이 24석이 아님 ({len(room_npc)}석)")
+
+    # ---- M5 전용 (브리프 3절 "빼면 안 되는 둘")
+    m5 = docs["m5_connect_garden"]
+    idx = _piece_ids("tileset_outdoor")
+    gid0 = next(t["firstgid"] for t in m5["tilesets"] if t["name"] == "tileset_outdoor")
+    objlayer = next(l for l in m5["layers"] if l["name"] == "objects")["data"]
+    ground = next(l for l in m5["layers"] if l["name"] == "ground")["data"]
+
+    def count(piece, data=None):
+        ids = {gid0 + i for i in idx["pieces"].get(piece, [])}
+        return sum(1 for g in (data if data is not None else objlayer) if g in ids)
+
+    chair_tiles = sum(count(p) for p in idx["pieces"] if p.startswith("chair_out")) \
+        + count("stool_g") + count("stool_w")
+    table_tiles = count("table_out") + count("table_out_g") + count("high_table")
+    if chair_tiles < 12:
+        issues.append(f"[m5] 데크에 앉을 수 있는 의자가 부족 ({chair_tiles}개 · 12개 이상 필요)")
+    if table_tiles < 4:
+        issues.append(f"[m5] 야외 테이블이 부족 ({table_tiles})")
+    if count("high_table") == 0:
+        issues.append("[m5] 초록 원형 하이테이블이 없음")
+    if count("piloti_round") == 0:
+        issues.append("[m5] 필로티(원기둥) 열이 없음")
+    shade = sum(count(p, ground) for p in ("f_pave_shade", "f_pave_shade_b"))
+    if shade < 60:
+        issues.append(f"[m5] 필로티 아래 통로(그늘진 포장)가 없거나 너무 좁음 ({shade}칸)")
+    else:
+        # 통로가 실제로 지나갈 수 있어야 한다
+        W5, H5, walk5 = walkable_grid(m5)
+        ids = {gid0 + i for i in idx["pieces"]["f_pave_shade"]} | \
+              {gid0 + i for i in idx["pieces"]["f_pave_shade_b"]}
+        rows = sorted({i // W5 for i, g in enumerate(ground) if g in ids})
+        if not any(all(walk5[r * W5 + x] for x in range(6, W5 - 6)) for r in rows):
+            issues.append("[m5] 필로티 통로가 가로로 뚫려 있지 않음")
+
     extras = [o for o in objs(m1, "npc") if prop(o, "role") == "extra"]
-    seats = len(objs(m1, "npc"))
-    return summary, issues, dict(m1_seats=seats, m1_extras=len(extras))
+    return summary, issues, dict(
+        m1_room_seats=len([o for o in objs(m1, "npc") if prop(o, "role") != "coach"]),
+        m1_unnamed=len(extras) + sum(1 for o in objs(m1, "npc")
+                                     if prop(o, "role") == "team4" and prop(o, "named") is False),
+        m5_chairs=chair_tiles, m5_tables=table_tiles,
+        m5_piloti=count("piloti_round"), m5_passage_tiles=shade)
+
+
+def _piece_ids(name):
+    with open(os.path.join(TSDIR, name + ".index.json"), encoding="utf-8") as f:
+        return json.load(f)
+
+
+def check_dawn():
+    """여명이 보라 → 파랑인가 (브리프 5절 · 7절 추가 항목).
+    실제 렌더 결과에서 위/아래 색상(Hue)을 재서 판정한다."""
+    import colorsys
+    from .render import render, apply_lighting, MAPDIR as MD
+    im, _ = render(os.path.join(MD, "m5_connect_garden.json"), show_objects_layer=False)
+    lit = apply_lighting(im.convert("RGB"), "dawn")
+    W, H = lit.size
+
+    def avg(y0, y1):
+        px = lit.crop((0, y0, W, y1)).resize((1, 1)).getpixel((0, 0))
+        h, s, v = colorsys.rgb_to_hsv(*[c / 255 for c in px])
+        return px, h * 360, s
+
+    top, htop, stop = avg(int(H * 0.05), int(H * 0.20))
+    bot, hbot, sbot = avg(int(H * 0.80), int(H * 0.95))
+    issues = []
+    # 보라 250~300° / 파랑 200~250°
+    if not (240 <= htop <= 310):
+        issues.append(f"[여명] 위쪽이 보라가 아님 (hue {htop:.0f}° · rgb {top})")
+    if not (195 <= hbot <= 265):
+        issues.append(f"[여명] 아래쪽이 파랑이 아님 (hue {hbot:.0f}° · rgb {bot})")
+    if hbot >= htop:
+        issues.append(f"[여명] 위→아래가 보라→파랑 방향이 아님 ({htop:.0f}° → {hbot:.0f}°)")
+    return issues, dict(top_hue=round(htop), bottom_hue=round(hbot),
+                        top_rgb=top, bottom_rgb=bot)
 
 
 def report():
     ts = check_tilesets()
     summary, issues, extra = check_maps()
+    dawn_issues, dawn = check_dawn()
+    issues = issues + dawn_issues
+    extra = dict(extra, dawn=dawn)
     return ts, summary, issues, extra
 
 

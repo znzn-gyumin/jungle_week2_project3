@@ -32,8 +32,9 @@ def main():
         save(fit(im2), os.path.join(PRE, f"debug_{name}.png"))
 
     # 2) 조명 5종 — M1(실내)과 M5(야외·여명 전용)
-    for name, crop in (("m1_basecamp_4f", (96, 240, 1536, 1344)),
-                       ("m5_connect_garden", (0, 240, 1536, 1392))):
+    # M5는 데크 + 필로티 통로가 한 컷에 들어오도록 아래쪽까지 자른다
+    for name, crop in (("m1_basecamp_4f", (96, 240, 1488, 1344)),
+                       ("m5_connect_garden", (0, 480, 1536, 2208))):
         base_full, doc = render(os.path.join(MAPDIR, name + ".json"), show_objects_layer=False)
         base = base_full.crop(crop).convert("RGB")
         lights = light_sources(doc)

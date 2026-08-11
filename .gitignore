@@ -1,3 +1,5 @@
 
 # 정리 대기
 _to_delete/
+__pycache__/
+*.pyc

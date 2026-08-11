@@ -16,7 +16,11 @@ LIGHTING = {
     "evening":   dict(grad=("#E8763C", "#2A3A63"), blend="overlay", opacity=0.35),
     "night":     dict(color="#153A4A", blend="multiply", opacity=0.45),
     "deepnight": dict(color="#0B1220", blend="multiply", opacity=0.72),
-    "dawn":      dict(grad=("#5B3E8C", "#3E6BB0"), blend="screen", opacity=0.40),
+    # 여명은 "해 뜨기 직전"이라 심야의 어둠이 남아 있어야 한다.
+    # 밝은 낮 화면에 screen 만 얹으면 따뜻한 분홍이 되어 스펙과 반대로 나온다.
+    # 그래서 ① 탈채도 ② 청보라로 어둡게 를 먼저 깔고 ③ 스펙의 보라→파랑 screen 을 얹는다.
+    "dawn":      dict(grad=("#5B3E8C", "#3E6BB0"), blend="screen", opacity=0.42,
+                      sat=-0.60, predark=("#171326", 0.74)),
 }
 
 
@@ -171,6 +175,9 @@ def apply_lighting(im: Image.Image, key: str):
         g = arr.mean(axis=2, keepdims=True)
         arr = g + (arr - g) * (1 + cfg["sat"])
         base = Image.fromarray(np.clip(arr, 0, 255).astype("uint8"), "RGB")
+    if cfg.get("predark"):
+        col, amt = cfg["predark"]
+        base = _blend(base, Image.new("RGB", base.size, _hex(col)), "multiply", amt)
     if "grad" in cfg:
         c0, c1 = _hex(cfg["grad"][0]), _hex(cfg["grad"][1])
         h = base.height

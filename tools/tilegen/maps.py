@@ -85,13 +85,13 @@ def seat_row(m, ts, desks, chair_xs, dy, chair="chair_up"):
 def m1(TS_):
     """교육동 4F — 허브. 교육장 403(지정석) · 코칭실 403 · 커뮤니티 라운지 · 복도.
 
-    브리프 4절 도면
-            [문1] ──── 화이트보드 ──── [문2]
-       앞줄                       [연하]      ← 문2 옆
-       주인공
-       가운데줄        [4조 4명 나란히]
-       뒷줄  [연상](기둥 뒤)         [동갑](창가)
-       ══════════════ 통창 ══════════════
+    브리프 4절 — 자리마다 누가 앉는지가 정해져 있다. 균일 그리드로 깔면 안 된다.
+      동갑  뒷줄 창가 끝   화이트보드에서 가장 먼 자리. 아무도 뒤에서 화면을 못 본다
+      연상  뒷줄 기둥 옆   시선이 안 닿는 자리
+      연하  앞줄 문2 옆    오가는 사람이 다 보이는 자리
+      4조   가운데 줄 한가운데 4석 밀착 — 뭉쳐 있다는 것 자체가 이 조의 표현
+      주인공 가운데
+    6조 넷이 세 방향으로 흩어져 있어서, 어느 방향으로 걷느냐가 곧 루트 선택이 된다.
     """
     W, H = 44, 30
     m = TileMap("m1_basecamp_4f", W, H, TS_, lighting="day,evening,night,deepnight")
@@ -125,41 +125,70 @@ def m1(TS_):
     m.trigger("door1_exit", 5, RY - 1, kind="door", door="1")
     m.trigger("door2_exit", 23, RY - 1, kind="door", door="2")
 
-    # ---- 지정석
-    LEFT_DESK, RIGHT_DESK = [4, 7, 10], [17, 20, 23]
-    LEFT_CH, RIGHT_CH = [5, 8, 11], [18, 21, 24]
-    seat_row(m, E, LEFT_DESK + RIGHT_DESK, LEFT_CH + RIGHT_CH, 10)   # 앞줄
-    # 2번째 줄 — 오른쪽 블록은 4자리(총 25석: 24 지정석 + 주인공석)
-    seat_row(m, E, LEFT_DESK + RIGHT_DESK, LEFT_CH + [18, 20, 22, 24], 14)
-    # 가운데 줄 — 4조는 간격 2칸으로 뭉쳐 앉는다(브리프: 뭉쳐 있다는 게 이 조의 표현)
-    seat_row(m, E, LEFT_DESK + RIGHT_DESK, [5, 8] + [18, 20, 22, 24], 18)
-    seat_row(m, E, LEFT_DESK + RIGHT_DESK, LEFT_CH + RIGHT_CH, 22)   # 뒷줄
+    # ---- 지정석 24석 (브리프 4절 "자리마다 누가 앉는지가 정해져 있습니다")
+    #
+    # 균일 그리드로 깔지 않는다. 줄마다 책상 섬(pod)의 크기와 위치가 다르고,
+    # 6조 넷(주인공·연하·연상·동갑)이 서로 다른 방향에 앉는다.
+    # 누구에게 말을 걸지 = 어느 방향으로 걷는지 = 루트 선택.
+    #
+    #        [문1 x5]      ┌── 화이트보드 x12~16 ──┐        [문2 x23]
+    #  앞줄  y12   4  7 10 │        아일           │ 19 (22)25      (22)=연하
+    #  2줄   y16   4  7 10 │       (15)            │    23  26      (15)=주인공
+    #  가운데y20   4       │  12 14 16 18 ←4조밀착 │        26
+    #  뒷줄  y24  (5) 8 11 │                       │ 21 24 (27)     (5)=연상 (27)=동갑
+    #  ══════════════════ 남쪽 통창 y27 ══════════════════
+    #  기둥 (3,21)-(3,22) — 연상 자리 바로 위. 화이트보드에서 시선이 안 닿는다.
+
+    seat_row(m, E, [3, 6, 9] + [18, 21, 24], [4, 7, 10] + [19, 22, 25], 10)  # 앞줄
+    # 2번째 줄 — 가운데에 주인공 책상 하나만 따로 놓는다
+    seat_row(m, E, [3, 6, 9] + [14] + [22, 25], [4, 7, 10] + [15] + [23, 26], 14)
+    # 가운데 줄 — 4조는 간격 2칸으로 밀착(다른 줄은 3칸). 뭉쳐 있다는 것 자체가 표현
+    seat_row(m, E, [3] + [11, 14, 17] + [25], [4] + [12, 14, 16, 18] + [26], 18)
+    seat_row(m, E, [4, 7, 10] + [20, 23, 26], [5, 8, 11] + [21, 24, 27], 22)  # 뒷줄
 
     # ---- 기둥 (뒷줄 한쪽 · 시선이 안 닿는 자리를 만드는 장치)
     m.place(E, "pillar", 3, 21)
 
     # ---- NPC (지정석 = 캐릭터 묘사)
-    m.npc("player_seat", 11, 16, role="player", label="주인공 지정석")
-    m.npc("younger", 24, 12, role="heroine_younger", label="장윤정 / 장윤호",
-          seat="앞줄 · 문2 옆", note="문1로 나가면 지나치지 않는다")
-    for i, cx in enumerate([18, 20, 22, 24]):
-        m.npc(f"team4_{i+1}", cx, 20, role="team4", label=f"4조 {i+1}",
-              seat="가운데 줄 · 네 명이 나란히")
-    m.npc("older", 5, 24, role="heroine_older", label="이승희 / 이승민",
-          seat="뒷줄 · 기둥 뒤")
-    m.npc("sameage", 24, 24, role="heroine_sameage", label="김민아 / 김민규",
-          seat="뒷줄 · 창가")
-    # 무명 17명 — 남는 자리를 공용 스프라이트로 채운다
-    taken = {(11, 16), (24, 12), (18, 20), (20, 20), (22, 20), (24, 20), (5, 24), (24, 24)}
-    rows = {10 + 2: LEFT_CH + RIGHT_CH, 14 + 2: LEFT_CH + [18, 20, 22, 24],
-            18 + 2: [5, 8] + [18, 20, 22, 24], 22 + 2: LEFT_CH + RIGHT_CH}
+    SEATS = {
+        "player":  (15, 16),                                   # 정중앙
+        "younger": (22, 12),                                   # 앞줄 · 문2(x23) 옆
+        "older":   (5, 24),                                    # 뒷줄 · 기둥(3,21) 옆
+        "sameage": (27, 24),                                   # 뒷줄 창가 끝
+        "team4":   [(12, 20), (14, 20), (16, 20), (18, 20)],   # 가운데 줄 한가운데 밀착
+    }
+    m.npc("player_seat", *SEATS["player"], role="player", label="주인공 지정석",
+          seat="가운데 — 학번도 실력도 가운데인 사람의 자리")
+    m.npc("younger", *SEATS["younger"], role="heroine_younger", label="장윤정 / 장윤호",
+          seat="앞줄 · 문2 옆",
+          note="오가는 사람이 다 보이는 자리. 문1로 나가면 지나치지 않는다")
+    m.npc("older", *SEATS["older"], role="heroine_older", label="이승희 / 이승민",
+          seat="뒷줄 · 기둥 옆", note="시선이 안 닿는 자리")
+    m.npc("sameage", *SEATS["sameage"], role="heroine_sameage", label="김민아 / 김민규",
+          seat="뒷줄 창가 끝",
+          note="화이트보드에서 가장 먼 자리. 아무도 뒤에서 화면을 못 본다")
+    # 4조 = 강태윤·강태연 · 한지오·한지아 · 조민 + 무명 1 (넷이 나란히)
+    TEAM4 = ["강태윤 / 강태연", "한지오 / 한지아", "조민", "무명"]
+    for i, (cx, cy) in enumerate(SEATS["team4"]):
+        m.npc(f"team4_{i+1}", cx, cy, role="team4", label=TEAM4[i],
+              named=(TEAM4[i] != "무명"),
+              seat="가운데 줄 · 네 명이 나란히 — 뭉쳐 있다는 것 자체가 이 조의 표현")
+
+    # 무명 — 남는 자리를 공용 스프라이트로 채워 스물네 자리가 다 찬 것처럼 보이게 한다
+    ROWS = {12: [4, 7, 10, 19, 22, 25],
+            16: [4, 7, 10, 15, 23, 26],
+            20: [4, 12, 14, 16, 18, 26],
+            24: [5, 8, 11, 21, 24, 27]}
+    taken = {SEATS["player"], SEATS["younger"], SEATS["older"], SEATS["sameage"]}
+    taken |= set(SEATS["team4"])
     k = 0
-    for cy, xs in rows.items():
+    for cy, xs in ROWS.items():
         for cx in xs:
             if (cx, cy) in taken:
                 continue
             k += 1
             m.npc(f"extra_{k:02d}", cx, cy, role="extra", label="무명")
+    # 총 24석 = 무명 17 + 주인공 1 + 동갑·연상·연하 3 + 4조 중 이름 있는 3
 
     # ---- 코칭실 403 (문이 늘 열려 있음)
     room(m, E, 36, 8, 7, 8, floor="f_carpet_b")
@@ -400,87 +429,148 @@ def m4(TS_):
 
 
 # ================================================================== M5
+def table_set(m, ts, x, y, green=False, sides="ud"):
+    """야외 테이블 한 세트. (x,y)는 테이블 2x2의 좌상단.
+    sides: u=위 의자 d=아래 의자 l=왼쪽 r=오른쪽"""
+    g = "_g" if green else ""
+    m.place(ts, "table_out_g" if green else "table_out", x, y)
+    if "u" in sides:
+        m.set_obj(x, y - 1, ts, f"chair_out{g}_down", 0)
+    if "d" in sides:
+        m.set_obj(x + 1, y + 2, ts, f"chair_out{g}_up", 0)
+    if "l" in sides:
+        m.set_obj(x - 1, y + 1, ts, f"chair_out{g}_right", 0)
+    if "r" in sides:
+        m.set_obj(x + 2, y + 1, ts, f"chair_out{g}_left", 0)
+
+
 def m5(TS_):
     """커넥트가든 — 감정 정점. 카페 앞 우드데크 · 두 동 사이 통로.
-    안내도상 교육동(ㅁ자)과 숙소동(ㄷ자) 사이를 **세로로 꿰뚫는** 공간이므로 세로로 길게 잡는다.
-    여명(04:30~) 오버레이는 이 맵 전용."""
+    안내도상 교육동(ㅁ자)과 숙소동(ㄷ자) 사이를 세로로 꿰뚫는 공간이라 세로로 길다.
+    여명(04:30~) 오버레이는 이 맵 전용.
+
+    브리프 3절 "M5 커넥트가든 — 빼면 안 되는 둘"
+      ① 야외 테이블과 의자 — 흰 와이어프레임 + 올리브그린 + 가운데 초록 하이테이블/스툴.
+         빈 의자가 채워졌다가 다시 비는 게 이 공간의 모티프다(D1 → D7 → D11).
+      ② 필로티 아래 통로 — 남쪽(숙소동 방향) 끝의 원기둥 열과 그 아래 뚫린 통로.
+         "건너간다"가 이 게임의 작별 인사다.
+    """
     W, H = 32, 46
     m = TileMap("m5_connect_garden", W, H, TS_, lighting="night,deepnight,dawn")
     O = "out"
     m.fill(O, "f_pave", variants=["f_pave", "f_pave_b"])
 
-    # 좌우 건물 (교육동 / 숙소동) — 3타일 폭 외벽
-    for y in range(0, H, 3):
+    PILOTI_Y = 36          # 필로티 통로 시작 (건물 밑면 그늘 경계)
+    DECK_Y0, DECK_Y1 = 5, 32
+
+    # ---- 좌우 건물 (교육동 / 숙소동) — 필로티 구간 위쪽까지만 벽이 내려온다
+    for y in range(0, PILOTI_Y - 2, 3):
         m.place(O, "bld_wall", 0, y); m.place(O, "bld_wall", 1, y)
         m.place(O, "bld_wall", W - 2, y); m.place(O, "bld_wall", W - 1, y)
-    # 교육동 시그니처 주황 캔틸레버 (사진의 오렌지 난간)
-    m.place(O, "bld_cantilever", 2, 6)
-    m.place(O, "bld_cantilever", 2, 24)
+    m.place(O, "bld_cantilever", 2, 6)      # 교육동 시그니처 주황 캔틸레버
+    m.place(O, "bld_cantilever", 2, 26)
     m.place(O, "bld_cantilever", W - 5, 15)
-    # 필로티 기둥
-    for py in (10, 22, 34):
+    for py in (9, 21):                      # 데크 옆 각기둥 필로티
         m.place(O, "piloti", 2, py)
         m.place(O, "piloti", W - 4, py)
 
-    # 중앙 우드데크 (카페 앞)
-    for y in range(6, H - 6):
+    # ---- 중앙 우드데크 (카페 앞)
+    for y in range(DECK_Y0, DECK_Y1 + 1):
         for x in range(6, W - 6):
             m.set_ground(x, y, O, "f_deck_v" if (x + y) % 5 else "f_deck_v2")
     for x in range(6, W - 6):
-        m.set_ground(x, 6, O, "f_deck_edge")
-        m.set_ground(x, H - 7, O, "f_deck_edge")
+        m.set_ground(x, DECK_Y0, O, "f_deck_edge")
+        m.set_ground(x, DECK_Y1, O, "f_deck_edge")
 
-    # 석축 화단 — 데크 양옆 (사진의 낮은 석축 옹벽)
-    for y in (12, 26, 38):
-        for x in range(5, 11):
+    # ---- 석축 화단 (사진의 낮은 석축 옹벽) + 지지대 댄 어린 나무
+    for y in (11, 24):
+        for x in list(range(5, 10)) + list(range(W - 10, W - 5)):
             m.place(O, "planter_wall", x, y)
-        for x in range(W - 11, W - 5):
-            m.place(O, "planter_wall", x, y)
-    for y in (11, 25, 37):
-        for x in range(5, 11):
-            m.set_obj(x, y, O, "planter_cap", 0)
-        for x in range(W - 11, W - 5):
-            m.set_obj(x, y, O, "planter_cap", 0)
-    # 지지대 댄 어린 나무 — 화단 위
-    for y, xs in ((9, (5, 8)), (23, (5, 8)), (35, (5, 8))):
-        for x in xs:
-            m.place(O, "tree_young", x, y)
-        for x in (W - 10, W - 7):
-            m.place(O, "tree_young", x, y)
+        for x in list(range(5, 10)) + list(range(W - 10, W - 5)):
+            m.set_obj(x, y - 1, O, "planter_cap", 0)
+    for ty in (8, 21):
+        for x in (5, 8, W - 10, W - 7):
+            m.place(O, "tree_young", x, ty)
 
-    # 야외 테이블 세트 (카페 앞)
-    sets = [(13, 9, False), (19, 9, True), (13, 19, True), (19, 19, False),
-            (13, 30, False), (19, 30, True)]
-    for tx, ty, green in sets:
-        m.place(O, "table_out_g" if green else "table_out", tx, ty)
-        m.set_obj(tx, ty + 2, O, "chair_out_g_up" if green else "chair_out_up", 0)
-        m.set_obj(tx + 1, ty - 1, O, "chair_out_g_down" if green else "chair_out_down", 0)
-    m.place(O, "bench_metal", 13, 39)
-    m.place(O, "bench_metal", 17, 24)
+    # ---- ① 야외 테이블과 의자 ------------------------------------------------
+    # 사진처럼 흰 와이어프레임과 올리브그린을 섞고, 가운데에 초록 하이테이블 + 스툴.
+    table_set(m, O, 11, 6, green=False, sides="udr")
+    table_set(m, O, 18, 6, green=True,  sides="udl")
+    table_set(m, O, 11, 14, green=True, sides="udl")
+    table_set(m, O, 18, 14, green=False, sides="udr")
+    table_set(m, O, 12, 27, green=False, sides="ud")
+    table_set(m, O, 18, 27, green=True,  sides="ud")
+    table_set(m, O, 7, 17, green=False, sides="dr")
+    table_set(m, O, 23, 17, green=True,  sides="dl")
 
-    # 볼라드 조명 — 심야에 얼굴이 겨우 보이는 유일한 광원
-    for by in (8, 15, 22, 29, 36, 42):
-        m.place(O, "bollard", 11, by)
-        m.place(O, "bollard", W - 12, by)
-    m.set_obj(15, 43, O, "trash_out", 0)
+    # 가운데 초록 원형 하이테이블 2조 + 스툴 — 사진 한가운데 있는 그것
+    m.place(O, "high_table", 14, 18)
+    for sx, sy in ((13, 19), (16, 19), (14, 21), (15, 17)):
+        m.set_obj(sx, sy, O, "stool_g", 0)
+    m.place(O, "high_table", 14, 10)
+    for sx, sy in ((13, 11), (16, 11), (15, 9)):
+        m.set_obj(sx, sy, O, "stool_w", 0)
 
-    # 연결 — 북쪽 교육동 후문(M3) / 남쪽 숙소동(M6)
-    for y in range(20, 24):                       # 서쪽 = 교육동 후문
+    m.place(O, "bench_metal", 8, 30)
+    m.place(O, "bench_metal", 20, 30)
+    m.set_obj(24, 31, O, "trash_out", 0)
+
+    # D7 새벽 → 여명, D11 새벽에 둘이 앉는 자리.
+    # 빈 의자가 채워졌다가 다시 비는 게 이 공간의 모티프다.
+    m.trigger("two_chairs", 11, 14, w=4, h=3, kind="scene", label="그 자리",
+              note="D1 비어 있음 → D7 처음 채워짐 → D11 다시 앉지만 곧 빌 걸 안다",
+              seats="2")
+
+    # ---- 볼라드 조명 — 심야에 얼굴이 겨우 보이는 유일한 광원
+    for by in (7, 13, 19, 25, 31):
+        m.place(O, "bollard", 10, by)
+        m.place(O, "bollard", W - 11, by)
+
+    # ---- ② 필로티 아래 통로 (숙소동 방향 끝) ---------------------------------
+    #   y36  건물 밑면이 시작되는 그늘 경계
+    #   y37~41  그늘진 통로 바닥 + 흰 원기둥 열
+    #   y42  그늘이 끝나는 경계
+    #   y43~45  건너편(숙소동 앞마당) — 통로 너머로 보이는 밝은 포장
+    for x in range(W):
+        m.set_ground(x, PILOTI_Y, O, "f_soffit_top")
+        m.objects[m.i(x, PILOTI_Y)] = 0
+        m.open(x, PILOTI_Y)
+    for y in range(PILOTI_Y + 1, PILOTI_Y + 6):
+        for x in range(W):
+            m.set_ground(x, y, O, "f_pave_shade" if (x + y) % 3 else "f_pave_shade_b")
+            m.objects[m.i(x, y)] = 0
+            m.open(x, y)
+    for x in range(W):
+        m.set_ground(x, PILOTI_Y + 6, O, "f_soffit_bot")
+        m.objects[m.i(x, PILOTI_Y + 6)] = 0
+        m.open(x, PILOTI_Y + 6)
+    for y in range(PILOTI_Y + 7, H):
+        for x in range(W):
+            m.set_ground(x, y, O, "f_pave" if (x + y) % 4 else "f_pave_b")
+            m.objects[m.i(x, y)] = 0
+            m.open(x, y)
+    # 원기둥 열 — 사이가 다 뚫려 있어 건너편이 보인다
+    for px in (1, 7, 13, 19, 25):
+        m.place(O, "piloti_round", px, PILOTI_Y + 1)
+    for bx in (4, 16, 28):
+        m.place(O, "bollard", bx, PILOTI_Y + 8)
+    m.trigger("piloti_passage", 4, PILOTI_Y + 2, w=24, h=4, kind="scene",
+              label="필로티 아래 통로",
+              note="교육동 → 숙소동. 건너간다 = 오늘은 잔다. 이 게임의 작별 인사")
+
+    # ---- 연결 : 서쪽 교육동 후문(M3) / 남쪽 숙소동(M6)
+    for y in range(20, 24):
         for x in range(0, 6):
             m.objects[m.i(x, y)] = 0
             m.set_ground(x, y, O, "f_pave")
             m.open(x, y)
         m.portal("m3_basecamp_1f", 0, y, 41, 20 + (y - 20), name="to_basecamp_1f")
         m.portal("m3_basecamp_1f", 1, y, 41, 20 + (y - 20), name="to_basecamp_1f")
-    for x in range(12, 20):                       # 남쪽 = 숙소동
-        for y in range(H - 4, H):
-            m.objects[m.i(x, y)] = 0
-            m.set_ground(x, y, O, "f_pave")
-            m.open(x, y)
+    for x in range(12, 20):
         m.portal("m6_nestcamp", x, H - 1, 17 + (x - 12) % 4, 3, name="to_nestcamp")
-    m.trigger("garden_center", 14, 20, w=4, h=4, kind="scene",
+    m.trigger("garden_center", 13, 17, w=6, h=6, kind="scene",
               label="커넥트가든 중앙", note="감정 정점 씬 지점 · 여명 오버레이 전용 맵")
-    m.trigger("spawn_default", 15, 22, kind="spawn")
+    m.trigger("spawn_default", 15, 24, kind="spawn")
     return m
 
 

@@ -30,6 +30,12 @@ export interface LightingPreset {
   opacity: number;
   /** 타일맵 레이어에 걸 채도 보정. 음수면 채도를 뺀다. */
   saturation?: number;
+  /**
+   * 본 오버레이 **앞에** 깔 어둠. [색, 불투명도] · MULTIPLY.
+   * 여명처럼 "해 뜨기 직전"인 시간대는 밝은 낮 화면에 screen 만 얹으면
+   * 따뜻한 분홍이 되어 스펙(보라→파랑)과 반대로 나온다. 어둠을 먼저 깔아야 한다.
+   */
+  preDarken?: [number, number];
   /** 점광원을 어둠에서 파낼지 (심야·밤) */
   punchLights: boolean;
   /** 점광원 반경 배율 */
@@ -72,9 +78,11 @@ export const LIGHTING: Record<TimeOfDay, LightingPreset> = {
     label: '심야 (02~03)',
   },
   dawn: {
-    gradient: [0x5b3e8c, 0x3e6bb0],
+    gradient: [0x5b3e8c, 0x3e6bb0], // 위 보라 → 아래 파랑
     blend: Phaser.BlendModes.SCREEN,
-    opacity: 0.4,
+    opacity: 0.42,
+    saturation: -0.6, // 여명은 색이 빠진다
+    preDarken: [0x171326, 0.74], // 심야의 어둠이 아직 남아 있다
     punchLights: false,
     lightScale: 0.8,
     label: '여명 (04:30~) · M5 전용',
@@ -149,7 +157,10 @@ export function collectLights(map: Phaser.Tilemaps.Tilemap): LightSource[] {
  */
 export class LightingOverlay {
   private scene: Phaser.Scene;
+  /** 본 오버레이 (색·그라데이션 + 점광원 파내기) */
   private rt!: Phaser.GameObjects.RenderTexture;
+  /** preDarken 용 선행 어둠 레이어 */
+  private rtDark!: Phaser.GameObjects.RenderTexture;
   private gradKey = 'lighting-grad';
   private lightKey = 'lighting-radial';
   private current: TimeOfDay = 'day';
@@ -168,10 +179,17 @@ export class LightingOverlay {
     this.height = map.heightInPixels;
     this.lights = collectLights(map);
     this.rt?.destroy();
-    this.rt = this.scene.add
+    this.rtDark?.destroy();
+    // 선행 어둠이 아래(depth), 본 오버레이가 위
+    this.rtDark = this.scene.add
       .renderTexture(0, 0, this.width, this.height)
       .setOrigin(0, 0)
       .setDepth(depth)
+      .setScrollFactor(1);
+    this.rt = this.scene.add
+      .renderTexture(0, 0, this.width, this.height)
+      .setOrigin(0, 0)
+      .setDepth(depth + 1)
       .setScrollFactor(1);
     this.setTime(this.current);
   }
@@ -181,6 +199,17 @@ export class LightingOverlay {
     const p = LIGHTING[t];
     if (!this.rt) return;
 
+    // ---- 1) 선행 어둠 (여명 전용)
+    this.rtDark.clear();
+    if (p.preDarken) {
+      const [c, a] = p.preDarken;
+      this.rtDark.setBlendMode(Phaser.BlendModes.MULTIPLY).setAlpha(a).setVisible(true);
+      this.rtDark.fill(c, 1);
+    } else {
+      this.rtDark.setVisible(false);
+    }
+
+    // ---- 2) 본 오버레이
     this.rt.setBlendMode(p.blend);
     this.rt.setAlpha(p.opacity);
     this.rt.clear();
@@ -199,7 +228,7 @@ export class LightingOverlay {
       this.rt.fill(p.color!, 1);
     }
 
-    // 점광원 — 어둠을 ERASE 로 파낸다. 심야에는 이 구멍만 남는다.
+    // ---- 3) 점광원 — 어둠을 ERASE 로 파낸다. 심야에는 이 구멍만 남는다.
     if (p.punchLights && this.lights.length) {
       for (const l of this.lights) {
         const k = LIGHT_KINDS[l.kind];
@@ -217,7 +246,11 @@ export class LightingOverlay {
     }
   }
 
-  /** 낮의 채도 −10% — 타일 레이어에 회색 tint 를 살짝 섞어 근사한다. */
+  /**
+   * 채도 보정 — 낮 −10%, 여명 −60%.
+   * Phaser 기본 파이프라인에 채도 셰이더가 없어 회백색 tint 로 근사한다.
+   * 정확히 맞추려면 커스텀 파이프라인으로 교체할 것.
+   */
   applySaturation(layers: Phaser.Tilemaps.TilemapLayer[]) {
     const p = LIGHTING[this.current];
     const amount = p.saturation ?? 0;
@@ -226,8 +259,6 @@ export class LightingOverlay {
         l.clearTint();
         return;
       }
-      // 채도만 깎는 셰이더가 없으므로, 아주 옅은 회백색 tint 로 대체한다.
-      // 정확한 채도 조절이 필요하면 커스텀 파이프라인으로 교체할 것.
       const v = Math.round(255 * (1 + amount * 0.12));
       l.setTint(Phaser.Display.Color.GetColor(v, v, v));
     });

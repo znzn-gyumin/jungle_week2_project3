@@ -1,12 +1,12 @@
 {
  "columns": 12,
  "image": "tileset_outdoor.png",
- "imageheight": 384,
+ "imageheight": 480,
  "imagewidth": 576,
  "margin": 0,
  "name": "tileset_outdoor",
  "spacing": 0,
- "tilecount": 96,
+ "tilecount": 120,
  "tiledversion": "1.10.2",
  "tileheight": 48,
  "tilewidth": 48,
@@ -14,7 +14,7 @@
  "version": "1.10",
  "tiles": [
   {
-   "id": 11,
+   "id": 15,
    "properties": [
     {
      "name": "collides",
@@ -24,7 +24,7 @@
    ]
   },
   {
-   "id": 12,
+   "id": 16,
    "properties": [
     {
      "name": "collides",
@@ -34,7 +34,7 @@
    ]
   },
   {
-   "id": 13,
+   "id": 17,
    "properties": [
     {
      "name": "collides",
@@ -44,7 +44,7 @@
    ]
   },
   {
-   "id": 18,
+   "id": 22,
    "properties": [
     {
      "name": "collides",
@@ -54,37 +54,7 @@
    ]
   },
   {
-   "id": 19,
-   "properties": [
-    {
-     "name": "collides",
-     "type": "bool",
-     "value": true
-    }
-   ]
-  },
-  {
-   "id": 27,
-   "properties": [
-    {
-     "name": "collides",
-     "type": "bool",
-     "value": true
-    }
-   ]
-  },
-  {
-   "id": 29,
-   "properties": [
-    {
-     "name": "collides",
-     "type": "bool",
-     "value": true
-    }
-   ]
-  },
-  {
-   "id": 30,
+   "id": 23,
    "properties": [
     {
      "name": "collides",
@@ -95,16 +65,6 @@
   },
   {
    "id": 31,
-   "properties": [
-    {
-     "name": "collides",
-     "type": "bool",
-     "value": true
-    }
-   ]
-  },
-  {
-   "id": 32,
    "properties": [
     {
      "name": "collides",
@@ -270,16 +230,51 @@
      "name": "collides",
      "type": "bool",
      "value": true
-    },
-    {
-     "name": "light",
-     "type": "string",
-     "value": "bollard"
     }
    ]
   },
   {
    "id": 49,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 50,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 51,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 52,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 53,
    "properties": [
     {
      "name": "collides",
@@ -309,47 +304,12 @@
    ]
   },
   {
-   "id": 56,
-   "properties": [
-    {
-     "name": "collides",
-     "type": "bool",
-     "value": true
-    },
-    {
-     "name": "light",
-     "type": "string",
-     "value": "window"
-    }
-   ]
-  },
-  {
-   "id": 57,
-   "properties": [
-    {
-     "name": "collides",
-     "type": "bool",
-     "value": true
-    },
-    {
-     "name": "light",
-     "type": "string",
-     "value": "window"
-    }
-   ]
-  },
-  {
    "id": 58,
    "properties": [
     {
      "name": "collides",
      "type": "bool",
      "value": true
-    },
-    {
-     "name": "light",
-     "type": "string",
-     "value": "window"
     }
    ]
   },
@@ -384,12 +344,77 @@
    ]
   },
   {
+   "id": 62,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 63,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 64,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 65,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 66,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 67,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
    "id": 68,
    "properties": [
     {
      "name": "collides",
      "type": "bool",
      "value": true
+    },
+    {
+     "name": "light",
+     "type": "string",
+     "value": "bollard"
     }
    ]
   },
@@ -404,7 +429,7 @@
    ]
   },
   {
-   "id": 70,
+   "id": 74,
    "properties": [
     {
      "name": "collides",
@@ -430,6 +455,11 @@
      "name": "collides",
      "type": "bool",
      "value": true
+    },
+    {
+     "name": "light",
+     "type": "string",
+     "value": "window"
     }
    ]
   },
@@ -440,6 +470,11 @@
      "name": "collides",
      "type": "bool",
      "value": true
+    },
+    {
+     "name": "light",
+     "type": "string",
+     "value": "window"
     }
    ]
   },
@@ -450,6 +485,11 @@
      "name": "collides",
      "type": "bool",
      "value": true
+    },
+    {
+     "name": "light",
+     "type": "string",
+     "value": "window"
     }
    ]
   },
@@ -484,27 +524,7 @@
    ]
   },
   {
-   "id": 82,
-   "properties": [
-    {
-     "name": "collides",
-     "type": "bool",
-     "value": true
-    }
-   ]
-  },
-  {
-   "id": 83,
-   "properties": [
-    {
-     "name": "collides",
-     "type": "bool",
-     "value": true
-    }
-   ]
-  },
-  {
-   "id": 84,
+   "id": 88,
    "properties": [
     {
      "name": "collides",
@@ -534,7 +554,127 @@
    ]
   },
   {
-   "id": 91,
+   "id": 95,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 96,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 97,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 98,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 99,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 100,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 101,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 102,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 103,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 104,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 109,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 110,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 111,
    "properties": [
     {
      "name": "collides",

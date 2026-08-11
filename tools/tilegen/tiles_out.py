@@ -244,20 +244,138 @@ def table_out(green=False):
 
 
 def chair_out(dir_="up", green=False):
+    """야외 의자 1타일. connect_garden 의 흰 와이어프레임 / 올리브그린 두 종.
+    등받이가 가로 스트립인 게 사진의 특징이라 그걸 살린다."""
     def fn(c: Canvas):
         col = C("#5E8F4C") if green else C("#DEDCD5")
         cx = 24
         c.shadow(13, 41, 34, 45, (0, 0, 0, 55))
-        c.rect(cx - 11, 24, cx + 10, 32, col)
-        c.hline(24, cx - 11, cx + 10, mix(col, WHT, .35))
-        if dir_ == "up":
-            c.rect(cx - 10, 30, cx + 9, 44, shade(col, -.18))
+        if dir_ in ("up", "down"):
+            c.rect(cx - 11, 24, cx + 10, 32, col)            # 좌판
+            c.hline(24, cx - 11, cx + 10, mix(col, WHT, .40))
+            if dir_ == "up":                                  # 등받이가 아래(뒤)
+                c.rect(cx - 10, 30, cx + 9, 44, shade(col, -.18))
+                for y in range(32, 44, 3):
+                    c.hline(y, cx - 9, cx + 8, shade(col, -.32))
+            else:                                             # 등받이가 위
+                c.rect(cx - 10, 8, cx + 9, 26, col)
+                c.rect(cx - 8, 10, cx + 7, 24, shade(col, -.12))
+                for y in range(11, 24, 3):
+                    c.hline(y, cx - 7, cx + 6, shade(col, -.28))
+            for lx in (cx - 10, cx + 7):
+                c.rect(lx, 32, lx + 1, 42, shade(col, -.30))
         else:
-            c.rect(cx - 10, 8, cx + 9, 26, col)
-            c.rect(cx - 8, 10, cx + 7, 24, shade(col, -.12))
-        for lx in (cx - 10, cx + 7):
-            c.rect(lx, 32, lx + 1, 42, shade(col, -.30))
+            sgn = 1 if dir_ == "right" else -1
+            c.rect(cx - 10, 24, cx + 9, 33, col)
+            c.hline(24, cx - 10, cx + 9, mix(col, WHT, .40))
+            bx = cx + sgn * 9
+            c.rect(min(bx, bx - sgn * 5), 10, max(bx, bx - sgn * 5), 30, shade(col, -.15))
+            for y in range(12, 29, 3):
+                c.hline(y, min(bx, bx - sgn * 4), max(bx, bx - sgn * 4), shade(col, -.30))
+            for lx in (cx - 9, cx + 7):
+                c.rect(lx, 33, lx + 1, 42, shade(col, -.30))
         c.outline(OL)
+    return fn
+
+
+def high_table():
+    """초록 원형 받침 하이테이블 2x2 — 사진 한가운데 있는 그것.
+    일반 테이블보다 상판이 높아 앞면(기둥)이 길다."""
+    def fn(c: Canvas):
+        W = TS * 2
+        cx = W // 2
+        top = C("#457039")
+        c.shadow(cx - 16, 74, cx + 15, 84, (0, 0, 0, 70))
+        c.ellipse(cx, 80, 15, 5, C("#2F4E2A"))               # 베이스
+        c.ellipse(cx, 78, 15, 5, C("#457039"))
+        c.rect(cx - 4, 40, cx + 3, 79, C("#2F4E2A"))         # 기둥 (길다 = 높다)
+        c.rect(cx - 4, 40, cx - 2, 79, C("#457039"))
+        c.ellipse(cx, 40, 24, 10, shade(top, -.30))          # 상판 옆면
+        c.ellipse(cx, 34, 24, 10, top)                       # 상판 윗면
+        c.ellipse(cx, 32, 18, 7, mix(top, WHT, .20))
+        c.ellipse(cx - 7, 30, 7, 3, mix(top, WHT, .38))
+        c.outline(OL)
+    return fn
+
+
+def stool(green=True):
+    """하이테이블용 스툴 1타일 — 등받이 없음, 좌판이 높다."""
+    def fn(c: Canvas):
+        col = C("#457039") if green else C("#DEDCD5")
+        cx = 24
+        c.shadow(15, 41, 32, 45, (0, 0, 0, 55))
+        c.ellipse(cx, 42, 10, 4, shade(col, -.35))           # 발 링
+        c.rect(cx - 3, 24, cx + 2, 42, shade(col, -.22))     # 기둥
+        c.ellipse(cx, 24, 12, 5, shade(col, -.18))
+        c.ellipse(cx, 21, 12, 5, col)                        # 좌판
+        c.ellipse(cx - 3, 19, 6, 2, mix(col, WHT, .35))
+        c.outline(OL)
+    return fn
+
+
+def piloti_round():
+    """흰 원기둥 2x3 — 건물이 이 위에 떠 있고 아래로 건너편이 뚫려 보인다."""
+    def fn(c: Canvas):
+        W, H = TS * 2, TS * 3
+        cx = W // 2
+        c.shadow(cx - 22, H - 16, cx + 21, H - 4, (0, 0, 0, 85))
+        # 기둥 몸통 — 원기둥이라 좌우가 곡면 셰이딩
+        for x in range(cx - 17, cx + 17):
+            t = (x - (cx - 17)) / 33.0
+            if t < 0.18:   col = BLD3
+            elif t < 0.32: col = BLD2
+            elif t < 0.62: col = WHT
+            elif t < 0.80: col = BLD2
+            else:          col = BLD3
+            c.vline(x, 6, H - 14, col)
+        c.ellipse(cx, 6, 17, 6, BLD1)                        # 기둥 머리(주두)
+        c.ellipse(cx, 4, 17, 6, WHT)
+        c.ellipse(cx, H - 14, 17, 6, BLD3)                   # 주각
+        c.ellipse(cx, H - 12, 20, 7, BLD2)
+        c.ellipse(cx, H - 10, 20, 7, BLD3)
+        c.outline(OL)
+    return fn
+
+
+def f_pave_shade(seed=1):
+    """필로티 아래 그늘진 포장 — 건물 밑면이 덮고 있어 어둡다."""
+    def fn(c: Canvas):
+        c.fill(mix(CON1, C("#4B4B4F"), .42))
+        base = mix(CON1, C("#4B4B4F"), .42)
+        for y in range(TS):
+            for x in range(TS):
+                r = rnd(x, y, seed)
+                if r < 0.09: c.set(x, y, shade(base, -.10))
+                elif r < 0.13: c.set(x, y, shade(base, .07))
+        for k in (0, 24):
+            c.hline(k, 0, TS - 1, shade(base, -.16))
+            c.vline(k, 0, TS - 1, shade(base, -.16))
+    return fn
+
+
+def f_soffit_edge(top=True):
+    """건물 밑면(soffit)이 시작/끝나는 경계 — 그늘 경계선."""
+    def fn(c: Canvas):
+        base = mix(CON1, C("#4B4B4F"), .42)
+        lite = C("#CFCFCB")
+        if top:
+            c.rect(0, 0, TS - 1, 13, lite)
+            for y in range(14, 26):
+                t = (y - 14) / 12
+                c.hline(y, 0, TS - 1, mix(lite, base, t))
+            c.rect(0, 26, TS - 1, TS - 1, base)
+            c.hline(13, 0, TS - 1, C("#A8A8A6"))
+        else:
+            c.rect(0, 0, TS - 1, 21, base)
+            for y in range(22, 34):
+                t = (y - 22) / 12
+                c.hline(y, 0, TS - 1, mix(base, lite, t))
+            c.rect(0, 34, TS - 1, TS - 1, lite)
+        for y in range(TS):
+            for x in range(TS):
+                if rnd(x, y, 91) < 0.05:
+                    p = c.get(x, y)[:3]
+                    c.set(x, y, shade(p, -.06))
     return fn
 
 
@@ -469,6 +587,10 @@ def build():
     b.add("f_asphalt", 1, 1, f_asphalt(1), solid=[], layer=G)
     b.add("f_park_line_v", 1, 1, f_park_line(True), solid=[], layer=G)
     b.add("f_park_line_h", 1, 1, f_park_line(False), solid=[], layer=G)
+    b.add("f_pave_shade", 1, 1, f_pave_shade(1), solid=[], layer=G)
+    b.add("f_pave_shade_b", 1, 1, f_pave_shade(2), solid=[], layer=G)
+    b.add("f_soffit_top", 1, 1, f_soffit_edge(True), solid=[], layer=G)
+    b.add("f_soffit_bot", 1, 1, f_soffit_edge(False), solid=[], layer=G)
     b.add("planter_wall", 1, 2, planter_wall())
     b.add("planter_cap", 1, 1, planter_cap())
     b.add("tree_young", 2, 3, tree_young(), solid=[4, 5])
@@ -478,8 +600,16 @@ def build():
     b.add("table_out_g", 2, 2, table_out(True))
     b.add("chair_out_up", 1, 1, chair_out("up", False))
     b.add("chair_out_down", 1, 1, chair_out("down", False))
+    b.add("chair_out_left", 1, 1, chair_out("left", False))
+    b.add("chair_out_right", 1, 1, chair_out("right", False))
     b.add("chair_out_g_up", 1, 1, chair_out("up", True))
     b.add("chair_out_g_down", 1, 1, chair_out("down", True))
+    b.add("chair_out_g_left", 1, 1, chair_out("left", True))
+    b.add("chair_out_g_right", 1, 1, chair_out("right", True))
+    b.add("high_table", 2, 2, high_table())
+    b.add("stool_g", 1, 1, stool(True))
+    b.add("stool_w", 1, 1, stool(False))
+    b.add("piloti_round", 2, 3, piloti_round(), solid=[2, 3, 4, 5])
     b.add("bench_metal", 3, 2, bench_metal())
     b.add("bollard", 1, 2, bollard(), light="bollard", light_sub=[0])
     b.add("piloti", 2, 3, piloti(), solid=[4, 5])
