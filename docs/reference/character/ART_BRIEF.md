@@ -240,7 +240,7 @@ sprite_{id}.png
 | | 5년 후 | 복장 | 배경 |
 |---|---|---|---|
 | **김민아** 27 | 같은 회사 다른 팀. 여전히 코드 리뷰로 싸우고 퇴근은 같이 함 | 검은 니트에 카디건 · 머리는 어깨에서 느슨하게 · 사원증. **여전히 검정인데 후드가 아님** | **와인바 테라스 (밤)** |
-| **김민규** 27 | 이제 제때 자고 제때 먹음 | 회색 셔츠 · **앞머리를 정리해 이마가 보이고 다크서클이 없음.** 살도 조금 붙음 | 오피스 |
+| **김민규** 27 | 이제 제때 자고 제때 먹음 | 회색 셔츠 · **앞머리를 정리해 이마가 보이고 다크서클이 없음.** 살도 조금 붙음 | **와인바 (밤)** |
 | **이승민** 29 | 늦게 시작한 사람의 첫 출근날 아침 | **새것 티가 나는 정장.** 넥타이가 삐뚤고 소매가 김 | 오피스 |
 | **장윤호** 25 | **자기가 만든 걸 자기 이름으로 냄** | 흰 셔츠 · 가디건 없음 · **강아지 뱃지가 사원증 스트랩에** | 오피스 |
 | **이승희** 28 | 먼저 연락하는 사람이 됨 | 아이보리 **반팔** 셔츠 · 긴 웨이브 그대로. **감출 소매가 없는 옷** | 전시장 |
@@ -686,7 +686,7 @@ very low key lighting, high contrast, most of the frame barely readable shadow
 | | 배경 | 추가할 문장 |
 |---|---|---|
 | **김민아** 27 | **와인바 테라스 (밤)** | `same company different team, still arguing over code reviews, leaving work together` |
-| **김민규** 27 | 오피스 | `sleeping and eating properly now, healthier, calm` |
+| **김민규** 27 | **와인바 (밤)** | `sleeping and eating properly now, healthier, calm` |
 | **이승민** 29 | 오피스 | `first day at a new job, someone else looking after him this time` |
 | **장윤호** 25 | 오피스 | `presenting his own work under his own name, finally` |
 | **이승희** 28 | 전시장 | `now the one who reaches out first, standing by her own exhibited work` |
