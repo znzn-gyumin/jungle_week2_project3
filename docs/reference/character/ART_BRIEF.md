@@ -200,7 +200,7 @@ assets/bg/{outing|epilogue|campus}/
 
 ### ① D7 새벽 커넥트가든 → 여명
 
-**배경 레퍼런스:** [`connect_garden.jpg`](../../../assets/bg/campus/outdoor/connect_garden.jpg) — 카페 앞 우드데크. 야외 테이블과 의자, 뒤로 필로티 아래가 뚫려 보임
+**배경 레퍼런스:** [`connect_garden.png`](../../../assets/bg/campus/outdoor/connect_garden.png) — 카페 앞 우드데크. 야외 테이블과 의자, 뒤로 필로티 아래가 뚫려 보임
 **색조:** 심야(먹빛 남색) → **여명(보라→파랑)**
 
 **루트 최대 명장면**이고 **게임에서 유일하게 해가 뜨는 씬**입니다. 저녁에 소나기가 그친 뒤 새벽 2시에 앉아, 하늘이 밝아질 때까지 있습니다. 낮에는 아무도 눈여겨보지 않고 통과하는 공간이 새벽 두 시에 완전히 다른 장소가 됩니다.
@@ -216,11 +216,11 @@ assets/bg/{outing|epilogue|campus}/
 | **장윤정** | 마감 끝나고도 애교를 부리다 갑자기 뚝 그침. **헤드폰 한쪽을 내민다** |
 | **장윤호** | 조원들 다 챙겨 보내고 마지막에 혼자 남음. **"저는… 잘 모르겠어요, 뭐가 하고 싶은지."** |
 
-> 승희와 승민은 4F 라운지에서 시작해 가든으로 내려오는 씬입니다. 보조 참고: [`community_lounge_1.jpg`](../../../assets/bg/campus/indoor/community_lounge_1.jpg)
+> 승희와 승민은 4F 라운지에서 시작해 가든으로 내려오는 씬입니다. 보조 참고: [`community_lounge_1.png`](../../../assets/bg/campus/indoor/community_lounge_1.png)
 
 ### ② D9 교육장 403 — 심야
 
-**배경 레퍼런스:** [`classroom_1.jpg`](../../../assets/bg/campus/indoor/classroom_1.jpg) · [`classroom_2.jpg`](../../../assets/bg/campus/indoor/classroom_2.jpg)
+**배경 레퍼런스:** [`classroom_1.png`](../../../assets/bg/campus/indoor/classroom_1.png) · [`classroom_2.png`](../../../assets/bg/campus/indoor/classroom_2.png)
 **색조:** 심야(먹빛 남색 · 점광원만). 새벽 2시엔 키보드 소리만 남습니다
 
 **히로인의 서브플롯이 해결되는 지점**입니다. 각자 자기 방식으로 무너지고 주인공이 그걸 목격합니다.
@@ -290,19 +290,19 @@ assets/bg/{outing|epilogue|campus}/
 
 | 파일 | 공간 |
 |---|---|
-| **`connect_garden.jpg`** | **커넥트가든** (카페 앞 데크) — 스틸 ① |
-| **`classroom_1.jpg` `classroom_2.jpg`** | **교육장 403** — 스틸 ② · 게임의 허브 |
-| `coaching_room.jpg` | 코칭실 403 |
-| `community_lounge_1.jpg` `community_lounge_2.jpg` | 커뮤니티 라운지 (4F) |
-| `opendesk.jpg` | 오픈데스크 존 (2F) |
-| `lobby.jpg` | 로비 (1F) |
-| `jungle_stage.jpg` | 정글스테이지 (B1) — 입소 OT · 수료식 |
-| `canteen.jpg` `cafe.jpg` | 카페테리아 · 카페 (B1) |
-| `dormitory_room.jpg` | 숙소 2인실 |
-| `basketball_court.jpg` | 외부 농구코트 |
-| `jungle_step.jpg` | 교육동 실내 계단식 라운지 |
-| `edu_terrace.jpg` | 교육동 중정 외부 회랑 (3·4F) |
-| `aerial_view_2.jpg` `cand_aerial_view.jpg` | 항공샷 — 설정 검증용, 배경 부적합 |
+| **`connect_garden.png`** | **커넥트가든** (카페 앞 데크) — 스틸 ① |
+| **`classroom_1.png` `classroom_2.png`** | **교육장 403** — 스틸 ② · 게임의 허브 |
+| `coaching_room.png` | 코칭실 403 |
+| `community_lounge_1.png` `community_lounge_2.png` | 커뮤니티 라운지 (4F) |
+| `opendesk.png` | 오픈데스크 존 (2F) |
+| `lobby.png` | 로비 (1F) |
+| `jungle_stage.png` | 정글스테이지 (B1) — 입소 OT · 수료식 |
+| `canteen.png` `cafe.png` | 카페테리아 · 카페 (B1) |
+| `dormitory_room.png` | 숙소 2인실 |
+| `basketball_court.png` | 외부 농구코트 |
+| `jungle_step.png` | 교육동 실내 계단식 라운지 |
+| `edu_terrace.png` | 교육동 중정 외부 회랑 (3·4F) |
+| `aerial_view_2.png` `cand_aerial_view.jpg` | 항공샷 — 설정 검증용, 배경 부적합 |
 
 ---
 

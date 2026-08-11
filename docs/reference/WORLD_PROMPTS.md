@@ -66,7 +66,7 @@ ui elements, hud, frame borders, photorealistic, 3d render, fisheye, tilted hori
 
 ### 사진 조달 — ①②③④ 넷만
 
-**⑧은 이미 있습니다** — `jungle_stage.jpg`. 새로 구할 건 넷뿐입니다.
+**⑧은 이미 있습니다** — `jungle_stage.png`. 새로 구할 건 넷뿐입니다.
 
 | 출처 | 라이선스 | 쓸 곳 |
 |---|---|---|
@@ -205,7 +205,7 @@ a low bench in the center, quiet and bright, no people
 - [ ] 1920 × 1080 가로인가
 - [ ] 파일명 `5years_night_window.png`
 
-### ⑧ D12 수료식 · 정글스테이지 — **6루트 공통** · **사진**(`jungle_stage.jpg`)
+### ⑧ D12 수료식 · 정글스테이지 — **6루트 공통** · **사진**(`jungle_stage.png`)
 
 **명찰을 벗는 컷**이자 캠프의 끝을 알리는 시각적 신호입니다. B1의 소규모 계단식 강당이고, 24명뿐이라 **앞쪽만 찹니다.**
 
@@ -367,11 +367,11 @@ M1 타일맵의 화이트보드를 그대로 쓰고 글을 그 위에 얹습니�
 
 | 사진 | 시간대 | 쓰이는 곳 |
 |---|---|---|
-| `connect_garden.jpg` | **심야** | **D7 새벽 2시** — 루트 최대 명장면 |
-| `connect_garden.jpg` | **여명** | **D7 해 뜨는 순간** — 게임 전체에서 한 번 |
-| `connect_garden.jpg` | 밤 | D1 23시 지나가는 길 · D11 마지막 밤 |
-| `classroom_1.jpg` | **심야** | **D9 교육장 403** |
-| `classroom_2.jpg` | **심야** | 〃 (다른 각도) |
+| `connect_garden.png` | **심야** | **D7 새벽 2시** — 루트 최대 명장면 |
+| `connect_garden.png` | **여명** | **D7 해 뜨는 순간** — 게임 전체에서 한 번 |
+| `connect_garden.png` | 밤 | D1 23시 지나가는 길 · D11 마지막 밤 |
+| `classroom_1.png` | **심야** | **D9 교육장 403** |
+| `classroom_2.png` | **심야** | 〃 (다른 각도) |
 
 ### 2순위 — 자유 이동 구간 (8장)
 
@@ -379,25 +379,25 @@ M1 타일맵의 화이트보드를 그대로 쓰고 글을 그 위에 얹습니�
 
 | 사진 | 시간대 |
 |---|---|
-| `classroom_1.jpg` | 저녁 · 밤 |
-| `classroom_2.jpg` | 저녁 · 밤 |
-| `opendesk.jpg` | 저녁 · 밤 |
-| `lobby.jpg` | 저녁 · 밤 |
+| `classroom_1.png` | 저녁 · 밤 |
+| `classroom_2.png` | 저녁 · 밤 |
+| `opendesk.png` | 저녁 · 밤 |
+| `lobby.png` | 저녁 · 밤 |
 
 ### 3순위 — 나머지 씬 공간 (6장)
 
 | 사진 | 시간대 | 쓰이는 곳 |
 |---|---|---|
-| `community_lounge_1.jpg` | 심야 | 이승희 / 이승민 루트 핵심 씬 (4F) |
-| `coaching_room.jpg` | 밤 | 코치 1:1 상담 |
-| `jungle_stage.jpg` | 심야 | 밤에 텅 빈 강당 |
-| `canteen.jpg` | 심야 | 새벽 야식 |
-| `cafe.jpg` | 심야 | 〃 |
-| `dormitory_room.jpg` | 밤 | 메신저 씬의 무대 |
+| `community_lounge_1.png` | 심야 | 이승희 / 이승민 루트 핵심 씬 (4F) |
+| `coaching_room.png` | 밤 | 코치 1:1 상담 |
+| `jungle_stage.png` | 심야 | 밤에 텅 빈 강당 |
+| `canteen.png` | 심야 | 새벽 야식 |
+| `cafe.png` | 심야 | 〃 |
+| `dormitory_room.png` | 밤 | 메신저 씬의 무대 |
 
 ### 옵션 (4장)
 
-`basketball_court.jpg` 밤 · `edu_terrace.jpg` 밤 · `jungle_step.jpg` 밤 · `connect_garden.jpg` 저녁
+`basketball_court.png` 밤 · `edu_terrace.png` 밤 · `jungle_step.png` 밤 · `connect_garden.png` 저녁
 
 ---
 
@@ -413,7 +413,7 @@ M1 타일맵의 화이트보드를 그대로 쓰고 글을 그 위에 얹습니�
 
 > people, humans, figures, different furniture, changed layout, moved camera, city skyline, urban lights, light pollution, street lamps in the distance, traffic, neon signs, cartoon, illustration, oversaturated
 
-### `connect_garden.jpg` — 커넥트가든 (최우선)
+### `connect_garden.png` — 커넥트가든 (최우선)
 
 **공간**: 넓은 우드데크 야외 테라스. 앞쪽에 흰 와이어 프레임 의자·테이블과 올리브그린 의자·테이블이 섞여 놓여 있고, 가운데 초록 원형 받침 하이테이블과 스툴. 낮은 석축 화단이 데크를 감싸고 어린 나무들이 목재 지지대에 묶여 서 있음. 좌측과 배경은 흰 커튼월 건물, 상층부에 **주황색 타공 패널**. 배경 건물은 **필로티 기둥** 위에 떠 있어 그 아래로 건너편이 뚫려 보임. 우측에 유리 파사드와 계단.
 
@@ -429,7 +429,7 @@ M1 타일맵의 화이트보드를 그대로 쓰고 글을 그 위에 얹습니�
 
 > **의자는 비워두세요.** D7 스틸에서 히로인이 앉는 자리라, 빈 상태가 기본 배경입니다.
 
-### `classroom_1.jpg` · `classroom_2.jpg` — 교육장 403
+### `classroom_1.png` · `classroom_2.png` — 교육장 403
 
 **공간**: 긴 직사각형 강의실을 뒤에서 앞으로 본 구도. **좌측 벽에 대형 유리 화이트보드 두 판과 벽걸이 디스플레이**, 그 아래 강연대. **우측은 바닥부터 천장까지 통유리**에 회색 커튼, 창밖에 나무들. 천장은 흰 텍스처 타일 격자에 **매입형 사각 LED 패널**이 줄지어 있음. 바닥은 회베이지 카펫타일. 흰 상판 폴딩 테이블이 군집으로 붙어 있고 회색 메시 사무의자가 캐스터로 놓여 있음.
 
@@ -451,16 +451,16 @@ M1 타일맵의 화이트보드를 그대로 쓰고 글을 그 위에 얹습니�
 
 | 사진 | 덧붙일 것 |
 |---|---|
-| `opendesk.jpg` | 지정석 없는 공용 테이블. 24시간 개방이라 **밤에도 사람이 있었던 흔적** |
-| `lobby.jpg` | 1층 로비. 밤엔 안내데스크 조명만 |
-| `community_lounge_1.jpg` | 4층 소파존. **심야엔 아무도 없음** — 이 비어 있음이 씬의 전제 |
-| `coaching_room.jpg` | 문이 항상 열려 있음. 안에 커피머신 |
-| `jungle_stage.jpg` | 계단식 강당. 심야엔 **비상등만** |
-| `canteen.jpg` · `cafe.jpg` | 배식 끝난 새벽. 냉장고와 자판기 발광 |
-| `dormitory_room.jpg` | 2인실. **한 사람은 자고 한 사람은 폰을 보는** 밤. 폰 화면빛 |
-| `basketball_court.jpg` | 외부 코트. 야간 조명탑이 들어옴 |
-| `edu_terrace.jpg` | 중정 회랑, 주황 난간. 밤엔 난간 조명만 |
-| `jungle_step.jpg` | 책장 벽 계단식 라운지 |
+| `opendesk.png` | 지정석 없는 공용 테이블. 24시간 개방이라 **밤에도 사람이 있었던 흔적** |
+| `lobby.png` | 1층 로비. 밤엔 안내데스크 조명만 |
+| `community_lounge_1.png` | 4층 소파존. **심야엔 아무도 없음** — 이 비어 있음이 씬의 전제 |
+| `coaching_room.png` | 문이 항상 열려 있음. 안에 커피머신 |
+| `jungle_stage.png` | 계단식 강당. 심야엔 **비상등만** |
+| `canteen.png` · `cafe.png` | 배식 끝난 새벽. 냉장고와 자판기 발광 |
+| `dormitory_room.png` | 2인실. **한 사람은 자고 한 사람은 폰을 보는** 밤. 폰 화면빛 |
+| `basketball_court.png` | 외부 코트. 야간 조명탑이 들어옴 |
+| `edu_terrace.png` | 중정 회랑, 주황 난간. 밤엔 난간 조명만 |
+| `jungle_step.png` | 책장 벽 계단식 라운지 |
 
 ---
 

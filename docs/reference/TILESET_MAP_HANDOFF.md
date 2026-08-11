@@ -158,7 +158,7 @@ loadMap(key: string) {
 
 **① 야외 테이블과 의자**
 
-`connect_garden.jpg` 그대로 **흰 와이어프레임**과 **올리브그린**을 섞었고, 가운데에
+`connect_garden.png` 그대로 **흰 와이어프레임**과 **올리브그린**을 섞었고, 가운데에
 **초록 원형 받침 하이테이블 + 스툴**을 놓았습니다. 신규 타일 4종을 추가했습니다.
 
 | 신규 타일 | 크기 | 설명 |
@@ -247,7 +247,7 @@ loadMap(key: string) {
 `night`·`deepnight` 에서 `LightingOverlay` 가 어둠을 이 지점에서 `ERASE` 로 파냅니다.
 `ceiling`(매입 LED)은 밤·심야에 꺼집니다. **심야에 남는 건 발밑 조명·건물 창·모니터·자판기뿐**입니다.
 
-`preview/lighting_m1_basecamp_4f.jpg` · `preview/lighting_m5_connect_garden.jpg` 에서
+`preview/lighting_m1_basecamp_4f.jpg` · `preview/lighting_m5_connect_garden.png` 에서
 5종을 실제로 얹은 결과를 확인하세요. 특히 M5 심야 컷이 브리프가 말한 "얼굴이 거의 안 보이는 어둠"입니다.
 
 각 맵 JSON의 `lighting` 프로퍼티에 그 맵에서 쓸 시간대가 콤마로 들어 있습니다.

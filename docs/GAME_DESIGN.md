@@ -409,11 +409,11 @@
 
 | 스틸 | 장소 · 시각 | 레퍼런스 | 팔레트 |
 |---|---|---|---|
-| ① D7 커넥트가든 | 카페 앞 데크 · 02시 → 여명 | [`connect_garden.jpg`](../assets/bg/campus/outdoor/connect_garden.jpg) | 심야 → **여명**(보라→파랑) |
-| ② D9 교육장 403 | 심야 | [`classroom_1.jpg`](../assets/bg/campus/indoor/classroom_1.jpg) · [`classroom_2.jpg`](../assets/bg/campus/indoor/classroom_2.jpg) | 심야(먹빛 남색 · 점광원) |
+| ① D7 커넥트가든 | 카페 앞 데크 · 02시 → 여명 | [`connect_garden.png`](../assets/bg/campus/outdoor/connect_garden.png) | 심야 → **여명**(보라→파랑) |
+| ② D9 교육장 403 | 심야 | [`classroom_1.png`](../assets/bg/campus/indoor/classroom_1.png) · [`classroom_2.png`](../assets/bg/campus/indoor/classroom_2.png) | 심야(먹빛 남색 · 점광원) |
 | ③ 엔딩 | 5년 후 · 캠퍼스 아님 | **없음** — 오피스 / 전시장 / 밤 창가 ([6-3](#6-3-맵과-배경) 배경 5~7) | — |
 
-팔레트는 [WORLD_BIBLE 8-1](./WORLD_BIBLE.md#8-1-시간대별-팔레트). 승희·승민의 ①은 4F 라운지에서 시작해 가든으로 내려오는 씬이라 [`community_lounge_1.jpg`](../assets/bg/campus/indoor/community_lounge_1.jpg)를 보조 참고로 쓸 수 있습니다.
+팔레트는 [WORLD_BIBLE 8-1](./WORLD_BIBLE.md#8-1-시간대별-팔레트). 승희·승민의 ①은 4F 라운지에서 시작해 가든으로 내려오는 씬이라 [`community_lounge_1.png`](../assets/bg/campus/indoor/community_lounge_1.png)를 보조 참고로 쓸 수 있습니다.
 
 **D7 외출에는 스틸을 두지 않습니다.** 장소가 셋이라 스틸로 처리하면 6인 × 3장소 = **18장이 더** 필요해집니다. 대신 **외출복 몸통 + 일러스트 배경 3장**([6-3](#6-3-맵과-배경))으로 받습니다 — 몸통 2종 중 하나가 이 날을 위해 있는 이유입니다 ([WORLD_BIBLE 4-4](./WORLD_BIBLE.md#4-4-외출-3곳-d7)).
 
@@ -467,7 +467,7 @@
 
 - **캠퍼스 안은 도트**이므로 D7에 **도트 → 실사**로 낙차가 커집니다. "밖에 나왔다"는 감각을 화면으로 만든다는 [1-2](#1-2-캠퍼스-안--도트-이동--캠퍼스-밖--이벤트-씬)의 의도가 강해집니다
 - **5년 후만 일러스트**라 에필로그가 현재와 다른 층에 있다는 게 그림으로 전달됩니다
-- **⑧은 이미 있습니다** — [`jungle_stage.jpg`](../assets/bg/campus/indoor/jungle_stage.jpg). 새로 조달할 사진은 ①~④ 넷뿐입니다
+- **⑧은 이미 있습니다** — [`jungle_stage.png`](../assets/bg/campus/indoor/jungle_stage.png). 새로 조달할 사진은 ①~④ 넷뿐입니다
 
 **사진은 회화풍으로 보정해서 씁니다.** 웹툰풍 캐릭터가 실사 위에 서면 이질감이 크므로, 채도·대비를 낮추고 색조를 시간대 팔레트로 통일합니다. 보정 수치와 조달 출처는 [WORLD_PROMPTS 2절](./reference/WORLD_PROMPTS.md#2-배경--9장-사진-5--일러스트-4).
 

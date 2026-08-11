@@ -118,7 +118,7 @@ limited palette, clean 1px dark outlines, retro jrpg style, tile grid layout,
 
 ### M5 커넥트가든 — 빼면 안 되는 둘
 
-**이 게임 최대 명장면의 무대**라 두 가지가 반드시 있어야 합니다. 원본은 [`campus/connect_garden.jpg`](../../assets/bg/campus/outdoor/connect_garden.jpg).
+**이 게임 최대 명장면의 무대**라 두 가지가 반드시 있어야 합니다. 원본은 [`campus/connect_garden.png`](../../assets/bg/campus/outdoor/connect_garden.png).
 
 **① 야외 테이블과 의자**
 
@@ -231,18 +231,18 @@ limited palette, clean 1px dark outlines, retro jrpg style, tile grid layout,
 
 | 사진 | 맵 | 비고 |
 |---|---|---|
-| **`classroom_1.jpg` `classroom_2.jpg`** | **M1** | **타일 배치의 1차 근거.** 화이트보드 왼쪽 벽, 통유리 오른쪽, 매입 LED 천장 |
-| `coaching_room.jpg` | M1 | 코칭실 403. 문이 늘 열려 있음 |
+| **`classroom_1.png` `classroom_2.png`** | **M1** | **타일 배치의 1차 근거.** 화이트보드 왼쪽 벽, 통유리 오른쪽, 매입 LED 천장 |
+| `coaching_room.png` | M1 | 코칭실 403. 문이 늘 열려 있음 |
 | `community_lounge_1·2.jpg` | M1 · M2 | 층마다 하나. 소파, 정수기 |
-| `opendesk.jpg` | M2 | 지정석 없는 공용 테이블 |
-| `lobby.jpg` `jungle_step.jpg` | M3 | 로비 · 책장 벽 계단식 라운지 |
-| `jungle_stage.jpg` | M4 | 계단식 강당. 24명이라 앞쪽만 참 |
-| `canteen.jpg` `cafe.jpg` | M4 | 카페테리아 · 카페 |
-| **`connect_garden.jpg`** | **M5** | 우드데크, 야외 테이블, 석축 화단, **필로티 기둥** |
-| `dormitory_room.jpg` | M6 | 2인실 |
-| `basketball_court.jpg` | — | 숙소동 옆 외부 코트 |
-| `edu_terrace.jpg` | — | 교육동 중정 회랑, 주황 난간. 예비 |
-| `aerial_view_2.jpg` `cand_aerial_view.jpg` | — | 항공샷. **설정 검증용**, 타일 근거 부적합 |
+| `opendesk.png` | M2 | 지정석 없는 공용 테이블 |
+| `lobby.png` `jungle_step.png` | M3 | 로비 · 책장 벽 계단식 라운지 |
+| `jungle_stage.png` | M4 | 계단식 강당. 24명이라 앞쪽만 참 |
+| `canteen.png` `cafe.png` | M4 | 카페테리아 · 카페 |
+| **`connect_garden.png`** | **M5** | 우드데크, 야외 테이블, 석축 화단, **필로티 기둥** |
+| `dormitory_room.png` | M6 | 2인실 |
+| `basketball_court.png` | — | 숙소동 옆 외부 코트 |
+| `edu_terrace.png` | — | 교육동 중정 회랑, 주황 난간. 예비 |
+| `aerial_view_2.png` `cand_aerial_view.jpg` | — | 항공샷. **설정 검증용**, 타일 근거 부적합 |
 
 **전체 배치는 [`Jungle_Campus.png`](./Jungle_Campus.png)** 안내도를 따릅니다 — 교육동은 ㅁ자 중정, 숙소동은 ㄷ자, 그 사이를 커넥트가든이 세로로 꿰뚫습니다.
 
