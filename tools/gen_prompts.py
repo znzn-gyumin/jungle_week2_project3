@@ -322,7 +322,7 @@ BG_ENDING = {
     """),
 }
 BG_ENDING_KR = {"office": "오피스", "gallery": "전시장", "winebar": "와인바 테라스 (밤)"}
-BG_ENDING_FILE = {"office": "5years_office_noon.png", "gallery": "5years_museum.png",
+BG_ENDING_FILE = {"office": "5years_office.png", "gallery": "5years_gallary.png",
                   "winebar": "5years_bar.png"}
 
 # 엔딩 다섯은 낮·실내라 어둠을 막지만 민아만 밤이다.
