@@ -93,9 +93,12 @@ NEG_CLIMAX = NEG_BASE + ",\n" + block("""
 # 스틸 ③(엔딩)은 낮·실내이고 5년 뒤입니다.
 # NEG_STILL 의 어둠 관련 토큰(bright daylight, evenly lit, city lights ...)을
 # 그대로 쓰면 "late afternoon light / spot lighting" 과 정면으로 충돌합니다.
+# 차단 대상은 **캠프 명찰**이지 사원증이 아닙니다.
+# 민아는 5년 후 "사원증 랜야드"를 걸고, 윤호는 "강아지 뱃지가 사원증 스트랩에" 달립니다.
+# 앞서 쓰던 `lanyard, id card` 통짜 차단은 그 둘을 지워버립니다.
 NEG_ENDING = NEG_BASE + ",\n" + block("""
-    lanyard, id card, name tag, badge on chest,
-    student clothes, school hoodie, campus, classroom, dormitory,
+    black campus lanyard, J logo badge, student id card,
+    student clothes, school hoodie, oversized hoodie, campus, classroom, dormitory,
     teenage look, night scene, darkness
 """)
 
@@ -131,6 +134,11 @@ HEROINES = [
                "monitor light on her face",
         ending_bg="office", ending_age=27,
         ending="same company different team, still arguing over code reviews, leaving work together",
+        ending_wear="black knit top under a cardigan, hair loose at shoulder length, "
+                    "an employee ID card on a lanyard",
+        ending_note="**여전히 검정인데 후드가 아닙니다.** 색은 안 바뀌고 형태만 바뀝니다. "
+                    "머리는 캠프 때 높게 묶던 것이 어깨에서 느슨하게 풀립니다.",
+        ending_badge=True,
     ),
     dict(
         id="seunghee", kr="이승희", theme="#B5806F",
@@ -156,6 +164,12 @@ HEROINES = [
         climax="left out of the group decision, still unable to speak, standing slightly apart",
         ending_bg="gallery", ending_age=28,
         ending="now the one who reaches out first, standing by her own exhibited work",
+        ending_wear="ivory short-sleeve shirt, forearms fully bare, "
+                    "long wavy hair unchanged from five years ago",
+        ending_note="**감출 소매가 없는 옷을 골랐습니다.** 캠프 때 소매로 손을 감싸던 사람이고, "
+                    "D7에 한 번 걷었던 게 5년 뒤엔 기본값입니다 — **소매 길이가 5년을 말합니다.** "
+                    "머리는 유일하게 안 바뀝니다.",
+        ending_badge=False,
     ),
     dict(
         id="yunjung", kr="장윤정", theme="#E0A230",
@@ -181,6 +195,11 @@ HEROINES = [
         climax="just told that a second-year would not understand, frozen mid-sentence",
         ending_bg="gallery", ending_age=26,
         ending="her graduation project became a released game, showing it",
+        ending_wear="still yellow but a well-fitted jacket instead of an oversized hoodie, "
+                    "headphones still resting around her neck",
+        ending_note="**노란색은 유지하고 실루엣만 바뀝니다.** 헐렁하던 후드가 몸에 맞는 재킷이 됩니다. "
+                    "**헤드폰은 그대로** — 자기 게임을 낸 사람이 됐는데 작업 도구는 안 바뀌었습니다.",
+        ending_badge=False,
     ),
     dict(
         id="mingyu", kr="김민규", theme="#4E6288",
@@ -206,6 +225,11 @@ HEROINES = [
         climax="perfect work on the screen, completely hollow expression, nobody noticing",
         ending_bg="office", ending_age=27,
         ending="sleeping and eating properly now, healthier, calm",
+        ending_wear="grey shirt, bangs swept back so the forehead is fully visible, "
+                    "no dark circles under the eyes, slightly fuller face, healthy skin",
+        ending_note="**옷보다 얼굴에서 먼저 보여야 합니다.** 다크서클이 없어지고 살이 조금 붙었습니다. "
+                    "앞머리로 얼굴을 가리던 사람이 이마를 드러냅니다.",
+        ending_badge=False,
     ),
     dict(
         id="seungmin", kr="이승민", theme="#5F8F42",
@@ -228,6 +252,12 @@ HEROINES = [
         climax="collapsed at the desk, the cheerfulness finally dropped",
         ending_bg="office", ending_age=29,
         ending="first day at a new job, someone else looking after him this time",
+        ending_wear="a brand new suit that still looks new, tie slightly crooked, "
+                    "sleeves a little too long, no signature color anywhere",
+        ending_note="**여섯 중 유일하게 자기 색이 없습니다.** 다섯은 캠프 때 색을 유지하는데 "
+                    "승민만 새 정장이라 초록이 사라집니다 — **제일 늦게 시작한 사람의 표시**입니다. "
+                    "넥타이가 삐뚤고 소매가 긴 것도 그래서입니다.",
+        ending_badge=False,
     ),
     dict(
         id="yunho", kr="장윤호", theme="#C9A170",
@@ -252,6 +282,11 @@ HEROINES = [
         climax="asked what he wants and unable to answer, looking away",
         ending_bg="office", ending_age=25,
         ending="presenting his own work under his own name, finally",
+        ending_wear="white shirt, no cardigan, "
+                    "a small dog-shaped pin clipped onto his employee ID strap",
+        ending_note="**뱃지가 세 번째 자리로 옮겨갑니다** — 가슴(평상복) → 토트백(D7) → "
+                    "**사원증 스트랩**(5년 후). 크림 가디건이 사라지고 흰 셔츠만 남습니다.",
+        ending_badge=True,
     ),
 ]
 
@@ -267,88 +302,100 @@ HEROINES = [
 DOT_ONLY = [
     dict(
         id="doyun", kr="이도윤", who="남 22 · 컴퓨터공학 3학년 · 주인공",
-        given="1인칭이라 얼굴이 화면에 안 나옴. 무난하게. 이름은 플레이어가 바꿉니다",
-        blank="머리 길이·색, 눈, 체형, 키, 복장 전부, 테마 컬러",
-        draft="short dark brown hair, plain grey zip-up hoodie over a white tee, "
-              "dark navy pants, white sneakers",
+        wear="short messy hair, grey zip-up hoodie, black pants, white sneakers, "
+             "entirely desaturated greyscale outfit",
+        note="**무채색이 이 사람의 자리입니다** — 여섯 중 누구와 서 있어도 배경이 됩니다. "
+             "학번도 실력도 가운데. 1인칭이라 CG는 없고 도트만 필요합니다.",
+        gap="머리 색, 후드 안에 입은 상의, 체형",
     ),
     dict(
         id="doa", kr="이도아", who="여 22 · 컴퓨터공학 3학년 · 주인공 여자판",
-        given="도윤과 동일 설정. 성별만 다름",
-        blank="외형 전부 — 도윤과 별개로 정해진 것이 없습니다",
-        draft="shoulder-length dark brown hair, plain grey zip-up hoodie over a white tee, "
-              "dark navy pants, white sneakers",
+        wear="shoulder-length hair tied back in one, grey zip-up hoodie, black pants, "
+             "white sneakers, entirely desaturated greyscale outfit",
+        note="도윤과 **복장은 완전히 같고 머리만 다릅니다.** 무채색인 이유도 같습니다.",
+        gap="머리 색, 후드 안에 입은 상의, 체형",
     ),
     dict(
         id="jio", kr="한지오", who="남 22 · 컴퓨터공학 3학년 · 절친 겸 룸메이트 · 4조",
-        given="말이 빠르고 많음. 밝고 가벼운 인상. 정보통. 플레이어와 같은 성별",
-        blank="머리, 눈, 체형, 키, 복장, 색",
-        draft="messy light brown hair, bright orange graphic tee under an open blue check shirt, "
-              "beige shorts, colorful sneakers",
+        wear="messy tousled hair, coral short-sleeve t-shirt, shorts, slippers, "
+             "bare arms, no outer layer of any kind",
+        note="**겉옷이 없는 유일한 인물입니다.** 히로인 여섯은 냉방 때문에 겉옷을 하나씩 "
+             "걸치는데 절친만 반팔입니다 — 같은 방을 쓰는 사이라 격식이 제일 없습니다. "
+             "**팔이 드러나는 게 이 인물의 표식**이라 소매를 만들지 마세요.",
+        gap="머리 색, 반바지 색, 슬리퍼 색",
     ),
     dict(
         id="jia", kr="한지아", who="여 22 · 한지오 여자판",
-        given="성별만 다르고 말투는 동일",
-        blank="외형 전부 — 지오와 구분되는 지시가 없습니다",
-        draft="light brown hair in a short ponytail, bright orange graphic tee under "
-              "an open blue check shirt, beige shorts, colorful sneakers",
+        wear="hair in a loose messy bun, coral short-sleeve t-shirt, shorts, slippers, "
+             "bare arms, no outer layer of any kind",
+        note="지오와 **복장은 완전히 같고 머리만 다릅니다.** 겉옷 없음·팔 드러남도 그대로.",
+        gap="머리 색, 반바지 색, 슬리퍼 색",
     ),
     dict(
         id="myeongjinhyeok", kr="명진혁", who="남 32 · 담당 코치 · 컴공 석사 후 스타트업 3년",
-        given="무표정. 유일한 어른. 참가자들과 열 살 안팎 차이라 확실히 어른 쪽",
-        blank="머리, 눈, 체형, 키, 복장, 안경 유무. 코치가 명찰을 거는지도 미지정",
-        draft="short neat black hair, plain dark grey long-sleeve shirt, black slacks, "
-              "dark leather shoes, no lanyard",
+        wear="black shirt with the sleeves rolled up to the elbows, black slacks, "
+             "black leather dress shoes, entirely monochrome from head to toe",
+        note="**혼자 셔츠와 구두입니다.** 학생들 사이에서 유일한 어른 옷이고, 그게 "
+             "열 살 차이를 48px에서 읽히게 하는 유일한 수단입니다.",
+        badge="a staff lanyard in a different color from the participants' black one",
+        badge_kr="**운영진용 다른 색 랜야드** — 참가자의 검은 랜야드와 구분됩니다",
+        gap="머리(길이·색 전부), 랜야드의 구체적 색",
     ),
     dict(
         id="jomin", kr="조민", who="21 · 중성적 · 게임소프트웨어 2학년 · 경쟁 조(4조)",
-        given="과묵하고 표현이 없음. 조용한 실력자. 3~5자 단답. 성별이 중성적으로 확정",
-        blank="머리, 눈, 체형, 키, 복장, 색",
-        draft="short straight black bob, androgynous silhouette, oversized plain black tee, "
-              "dark grey wide pants, black sneakers",
+        wear="dark grey hoodie worn up over the head, black pants, "
+             "androgynous silhouette that does not read as either gender, "
+             "face always shadowed under the hood",
+        note="**후드를 쓴 유일한 인물**이고 얼굴이 늘 그늘입니다. 성별이 안 읽히는 게 "
+             "설계라 실루엣에서 어깨선·허리선을 만들지 마세요.",
+        gap="머리(후드에 가려짐, 대체 묘사 없음), 신발",
     ),
     dict(
         id="taeyun", kr="강태윤", who="남 23 · 컴퓨터공학 4학년 · 경쟁 조(4조) 대표",
-        given="사교성 좋고 실력도 준수. 악역이 아니라 한 발 빠른 사람. "
-              "히로인에게 접근하지 않음 — 연적 구도 없음",
-        blank="머리, 눈, 체형, 키, 복장, 색",
-        draft="short tidy dark hair, clean white shirt with the sleeves rolled up, "
-              "navy chino pants, brown loafers",
+        wear="white shirt under a navy knit vest, beige chino pants, white sneakers, "
+             "the neatest outfit in the room",
+        note="**여섯 조 통틀어 가장 단정합니다.** 승민이 \"갖춰 입은 학생\"이면 이쪽은 "
+             "**이미 취업한 사람처럼** 보입니다 — 그게 위협감의 정체입니다. "
+             "악역이 아니라 한 발 빠른 사람으로 그리세요.",
+        gap="머리(길이·색 전부)",
     ),
     dict(
         id="taeyeon", kr="강태연", who="여 23 · 강태윤 여자판",
-        given="위와 동일 조건",
-        blank="외형 전부",
-        draft="dark hair in a low ponytail, clean white shirt with the sleeves rolled up, "
-              "navy chino pants, brown loafers",
+        wear="white blouse under a navy knit vest, beige slacks, white sneakers, "
+             "the neatest outfit in the room",
+        note="태윤과 같은 조합이고 **셔츠가 블라우스, 치노가 슬랙스**로만 바뀝니다.",
+        gap="머리(길이·색 전부)",
     ),
     dict(
-        id="yeosanim", kr="여사님", who="여 50대 · B1 지하 카페테리아",
-        given="**앞치마.** 학생들 이름을 다 외우고 있음. 사투리 약간, 반말. 코믹 릴리프",
-        blank="머리 색·스타일, 체형, 앞치마 색, 안쪽 옷. **참가자가 아닌데 명찰을 거는지도 미지정** — 아래 초안은 안 거는 쪽으로 잡았습니다",
-        draft="short permed greying hair, warm apron over a simple long-sleeve top, "
-              "comfortable dark pants, flat shoes, no lanyard",
+        id="yeosanim", kr="여사님", who="여 50대 · B1 카페테리아",
+        wear="pink apron over a comfortable loose long-sleeve shirt, white food-service cap",
+        note="**유일한 앞치마와 모자**입니다. B1에서만 보입니다.",
+        gap="머리(위생모에 가려짐), 하의, 신발, 셔츠 색",
     ),
     dict(
         id="mob_a", kr="공용 A", who="무명 동기 17명용 공용 스프라이트",
-        given="3종을 **색만 바꿔** 재활용해 스물네 자리를 채웁니다",
-        blank="성별, 나이, 머리, 복장, 기본 색, 3종의 구분 기준 전부",
-        draft="generic male student, short dark hair, plain solid-color tee, plain pants, "
-              "sneakers, very simple flat shapes so the palette can be swapped",
+        wear="generic background student, short-sleeve tee and shorts, "
+             "hair as a simple flat mass, no facial detail at all",
+        note="**티셔츠 색만 갈아 끼웁니다.** 교체용 색은 이름 있는 인물이 쓰지 않는 "
+             "**회갈 · 연보라 · 올리브 · 남색 · 벽돌** 중에서 고르세요. "
+             "얼굴 디테일을 넣지 마세요 — 배경 인원이라 눈에 띄면 안 됩니다.",
+        gap="신발, 하의 색, 머리 색, 성별",
     ),
     dict(
         id="mob_b", kr="공용 B", who="무명 동기 17명용 공용 스프라이트",
-        given="〃",
-        blank="〃",
-        draft="generic female student, medium-length dark hair, plain solid-color tee, "
-              "plain pants, sneakers, very simple flat shapes so the palette can be swapped",
+        wear="generic background student, zip-up hoodie and long pants, "
+             "hair as a simple flat mass, no facial detail at all",
+        note="**후드 색만 갈아 끼웁니다.** 교체용 색은 "
+             "**회갈 · 연보라 · 올리브 · 남색 · 벽돌** 중에서. 얼굴 디테일 없음.",
+        gap="신발, 하의 색, 머리 색, 성별",
     ),
     dict(
         id="mob_c", kr="공용 C", who="무명 동기 17명용 공용 스프라이트",
-        given="〃",
-        blank="〃",
-        draft="generic student with a plain solid-color hoodie, short dark hair, plain pants, "
-              "sneakers, very simple flat shapes so the palette can be swapped",
+        wear="generic background student, button shirt and blue jeans, "
+             "hair as a simple flat mass, no facial detail at all",
+        note="**셔츠 색만 갈아 끼웁니다.** 교체용 색은 "
+             "**회갈 · 연보라 · 올리브 · 남색 · 벽돌** 중에서. 얼굴 디테일 없음.",
+        gap="신발, 머리 색, 성별",
     ),
 ]
 
@@ -531,42 +578,40 @@ def main() -> int:
         made.append(f"03_sprite/S{i:02d}_{h['id']}_sprite.md")
 
     for j, d in enumerate(DOT_ONLY, start=7):
+        badge = d.get("badge", "a black lanyard with a small bright ID card on the chest")
         write(OUT / "03_sprite" / f"S{j:02d}_{d['id']}_sprite.md", prompt_file(
             f"S{j:02d} · {d['kr']} 도트 시트 (16컷)",
             [("파일명", f"`sprite_{d['id']}.png`"),
              ("인물", d["who"]),
              ("시트", "1024 × 1024 정사각 · 4열 × 4행 = 16셀"),
+             ("컷", "48 × 48px · 행 아래→왼쪽→오른쪽→위 · 열 정지·걷기1·2·3"),
              ("참조 이미지", "**S01(김민아) 도트 시트 확정본** — 화풍 기준"),
              ("선행 조건", "S01 확정"),
+             ("명찰", d.get("badge_kr", "검은 랜야드 + 밝은 ID 카드 — **전 컷 착용**")),
              ("자르기", f"`python tools/cut_sheet.py sheet_{d['id']}_sprite.png "
                         f"out/{d['id']} {cut_cmd}`")],
-            SPRITE_BASE + ",\n" + d["draft"]
-            + ("" if "no lanyard" in d["draft"]
-               else ",\na black lanyard with a small bright ID card on the chest"),
+            SPRITE_BASE + ",\n" + d["wear"] + ",\n" + badge,
             NEG_SPRITE,
-            "> ## ⚠️ 이 인물의 외형은 **문서에 없습니다**\n"
-            ">\n"
-            "> **정본이 못박은 것** "
-            "(`CHARACTERS.md` · `GAME_DESIGN.md` · `ART_BRIEF.md` 5절 종합) — "
-            f"{d['given']}\n"
-            ">\n"
-            f"> **비어 있는 것** — {d['blank']}\n"
-            ">\n"
-            "> 위 프롬프트의 의상·머리는 **이 팩이 지어낸 초안이고 확정이 아닙니다.** "
-            "그대로 뽑으면 `CHARACTERS.md`에 없는 신규 설정이 생깁니다. "
-            "**뽑기 전에 값을 정하고 `CHARACTERS.md`에 먼저 반영하세요.**\n\n"
+            "> " + d["note"] + "\n\n"
+            "> **S01(김민아)을 참조로 물리세요.** 화풍·등신·색 수가 거기에 맞아야 합니다. "
+            "참조 CG가 없는 인물이라 화풍 판단의 근거가 S01뿐입니다.\n\n"
+            f"> 문서에 아직 없는 것 — {d['gap']}. 48px에서 거의 안 보이는 항목들이라 "
+            "S01의 처리 방식을 그대로 따라가면 됩니다.\n\n"
             + ("> 조연 5종(명진혁·조민·강태윤·강태연·여사님)은 절감 옵션이 있습니다 — "
                "걷기를 빼고 **정지 1프레임 × 4방향 = 4컷**으로 낮추면 288컷이 228컷이 됩니다.\n"
                if d["id"] in {"myeongjinhyeok", "jomin", "taeyun", "taeyeon", "yeosanim"} else "")
-            + ("> 공용 3종은 **색만 바꿔** 무명 17명을 채웁니다. "
-               "색 교체가 쉽도록 면을 단순하게, 색 경계를 뚜렷하게 유지하세요.\n"
+            + ("> **한 종을 색만 바꿔 대여섯 번 재활용**합니다. 색 교체가 쉽도록 면을 단순하게, "
+               "색 경계를 뚜렷하게 유지하세요.\n"
                if d["id"].startswith("mob") else ""),
-            ["**의상·머리를 문서에 반영한 뒤에 뽑았는가**",
-             "S01과 **같은 화풍·같은 등신·같은 색 수**인가",
+            ["S01과 **같은 화풍·같은 등신·같은 색 수**인가",
              "16컷이 같은 인물·같은 팔레트인가",
-             "행·열 순서가 맞는가",
-             "48px로 줄인 뒤 외곽선이 뭉개지지 않았는가",
-             "명찰 유무가 설정과 맞는가 (코치·여사님은 참가자가 아닙니다)"]))
+             "행이 아래→왼쪽→오른쪽→위, 열이 정지·걷기1·2·3 순인가",
+             "48px로 줄인 뒤 **외곽선이 뭉개지지 않았는가**",
+             "걷기 3컷을 순환시켜 다리가 자연스럽게 움직이는가",
+             "**명찰이 전 컷에 있는가**"
+             + ("  — 이 인물만 **운영진용 다른 색**입니다"
+                if d["id"] == "myeongjinhyeok" else ""),
+             "의상·색이 확정값 그대로인가"]))
         made.append(f"03_sprite/S{j:02d}_{d['id']}_sprite.md")
 
     # ── 04 스틸 18장 ────────────────────────────────────────
@@ -635,22 +680,25 @@ def main() -> int:
              ("캔버스", "1920 × 1080 가로 · 불투명"),
              ("배경", BG_ENDING_KR[bgk] + " — 캠퍼스가 아닙니다. 배경 레퍼런스 없음"),
              ("인물 참조", f"**{h['kr']} 평상복 몸통 확정본 — 얼굴만**"),
-             ("선행 조건", "해당 인물 평상복 몸통 확정")],
-            BG_ENDING[bgk] + ",\n" + f"{h['ending_age']} year old, " + h["ending"] + ",\n"
-            + (("office-appropriate adult work clothing" if bgk == "office"
-                else "smart casual adult clothing suited to a gallery opening")
-               + ", clearly different from student clothes, "
-                 "hair styled differently from five years ago, no lanyard,\n") + CORE_STYLE,
+             ("선행 조건", "해당 인물 평상복 몸통 확정"),
+             ("명찰", "**사원증** — 캠프 명찰(검은 랜야드 + `J` 카드)은 없습니다"
+                      if h["ending_badge"] else "없음 — 캠프 명찰도 사원증도 지정 없음")],
+            BG_ENDING[bgk] + ",\n"
+            + f"{h['ending_age']} year old, " + h["ending"] + ",\n"
+            + h["ending_wear"] + ",\n" + CORE_STYLE,
             NEG_ENDING,
-            "> \"커리어의 완성\"이 아니라 **학생이던 우리가 사회인이 된 첫 구간**의 온도로 갑니다.\n\n"
-            "> **옷과 머리가 캠프 때와 달라야 합니다.** 얼굴만 참조로 물리고 복장은 새로 지정하세요.\n\n"
-            "> ## ⚠️ 5년 후 복장은 **문서에 없습니다**\n"
-            ">\n"
-            "> `CHARACTERS.md`가 정하는 것은 5년 후의 **상황**뿐이고 복장은 비어 있습니다. "
-            "위 프롬프트의 복장 한 줄은 자리를 채운 것이지 확정이 아닙니다. "
-            "여섯 명의 5년 후 복장을 먼저 정하세요 — **엔딩 6장이 서로 통일감이 있어야 합니다.**",
-            ["**학생 때와 옷·머리가 다른가**",
-             "명찰이 없는가",
+            "> " + h["ending_note"] + "\n\n"
+            "> \"커리어의 완성\"이 아니라 **학생이던 우리가 사회인이 된 첫 구간**의 온도로 갑니다. "
+            "얼굴만 참조로 물리고 복장은 위 확정값을 쓰세요.\n\n"
+            + ("> **이 인물은 사원증이 있습니다.** 부정 프롬프트가 차단하는 건 "
+               "캠프 명찰(검은 랜야드 + `J` 카드)뿐이라 사원증은 살아 있어야 합니다.\n\n"
+               if h["ending_badge"] else "")
+            + "> 하의·신발은 문서에 지정이 없습니다. 상의 톤에 맞춰 무난하게 두세요 — "
+              "**엔딩 6장이 서로 통일감이 있어야 합니다.**",
+            ["복장이 확정값 그대로인가",
+             "**학생 때와 옷·머리가 다른가**",
+             "캠프 명찰(검은 랜야드 + `J` 카드)이 없는가",
+             ("**사원증이 있는가**" if h["ending_badge"] else "사원증을 임의로 넣지 않았는가"),
              "나이대가 20대 중후반으로 읽히는가",
              "인물이 몸통 확정본과 같은 사람인가",
              "여섯 장의 엔딩이 서로 톤이 맞는가 (전부 뽑은 뒤 나란히 확인)",
