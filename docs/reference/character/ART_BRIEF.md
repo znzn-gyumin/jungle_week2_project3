@@ -99,7 +99,7 @@
 **파일명**
 
 ```
-assets/cg/standing/   {id}_{camp|outing}_{normal|happy|shy|sad|surprise|angry}.png
+assets/cg/standing/   {id}_{campus|outing}_{normal|happy|shy|sad|surprise|angry}.png
 assets/cg/event/      {id}_{garden|climax|ending}.png
 assets/dot/walk/   {id}.png          걷기 4방향 x 4프레임 시트 192 x 256
 assets/dot/face/   {id}_{expr}.png   도트 감정 아바타 48 x 64 (히로인만)
