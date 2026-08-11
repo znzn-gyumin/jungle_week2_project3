@@ -1,0 +1,15 @@
+{
+ "columns": 2,
+ "image": "tileset_meta.png",
+ "imageheight": 48,
+ "imagewidth": 96,
+ "margin": 0,
+ "name": "tileset_meta",
+ "spacing": 0,
+ "tilecount": 2,
+ "tiledversion": "1.10.2",
+ "tileheight": 48,
+ "tilewidth": 48,
+ "type": "tileset",
+ "version": "1.10"
+}
