@@ -15,11 +15,10 @@
 | [reference/Jungle_Campus.png](./reference/Jungle_Campus.png) | 공간 설정의 1차 자료 (안내도) | — |
 | [reference/campus/](../assets/bg/campus/README.md) | 배경 원본 사진 17장 | — |
 | [reference/character/](./reference/character/README.md) | **히로인 6인 확정 프로필** — 외형·의상의 기준 | **확정** |
-| [reference/character/ART_BRIEF.md](./reference/character/ART_BRIEF.md) | **캐릭터 이미지 한 벌** — CG 66장 + 도트 288컷 | **파생** |
+| [reference/character/CG_SPEC.md](./reference/character/CG_SPEC.md) | **CG 90장** — 외형·복장 근거·규격 | **파생** |
 | [reference/character/DOT_SPEC.md](./reference/character/DOT_SPEC.md) | **도트 스프라이트 설계도** — 18종 288컷, 규격·시트·외형 | **파생** |
-| [reference/TILE_BRIEF.md](./reference/TILE_BRIEF.md) | **타일셋·타일맵 한 벌** — 3종 + 7개 + 조명 오버레이 | **파생** |
 | [reference/TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) | 타일 구현 인수인계 — 산출물·생성기 사용법 | **구현** |
-| [reference/WORLD_PROMPTS.md](./reference/WORLD_PROMPTS.md) | **배경·UI 한 벌** — 배경 9장 + 로그인 화면 + 사진 시간대 변환 | **파생** |
+| [reference/ui/README.md](./reference/ui/README.md) | **UI 화면 넷** — 로그인만 미제작 | **파생** |
 | [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 | **확정** |
 | [../assets/README.md](../assets/README.md) | **에셋 한 벌** — 폴더·이름 규칙, id 목록 | **확정** |
 | [reference/character/preview_cg.html](./reference/character/preview_cg.html) | CG 90장 눈으로 대조 | — |
@@ -37,7 +36,7 @@
 
    확인 대상은 `docs/`의 **여덟 문서**입니다 — 이 `README.md`와 `GAME_DESIGN.md` · `CHARACTERS.md` · `WORLD_BIBLE.md` · `SCENARIO_OUTLINE.md` · `TECH_DESIGN.md`, 그리고 값을 담은 레퍼런스 둘 `reference/character/README.md` · `reference/campus/README.md`. README에도 씬 수·줄 수가 적히므로 검사 대상입니다. 2단계에 들어가면 `src/script/*.vns`가 추가됩니다
 
-   **[ART_BRIEF.md](./reference/character/ART_BRIEF.md) · [TILE_BRIEF.md](./reference/TILE_BRIEF.md) · [WORLD_PROMPTS.md](./reference/WORLD_PROMPTS.md)는 여덟에 들어가지 않습니다.** 위 문서들에서 값을 모아 한 벌로 뽑은 **파생 문서**라, 값이 바뀌면 대조하는 게 아니라 **다시 뽑습니다.** 여기에만 있는 값은 없어야 합니다
+   **[CG_SPEC.md](./reference/character/CG_SPEC.md) · [DOT_SPEC.md](./reference/character/DOT_SPEC.md) · [TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) · [ui/README.md](./reference/ui/README.md)는 여덟에 들어가지 않습니다.** 위 문서들에서 값을 모아 뽑은 **파생 문서**라, 값이 바뀌면 대조하는 게 아니라 **다시 뽑습니다.** 여기에만 있는 값은 없어야 합니다
 
 3. **점검은 두 층입니다.**
    - **값**: 숫자·이름·장소·시각이 여덟 파일에서 같은가 (`grep`으로 보조)
@@ -129,8 +128,8 @@
 | **플레이 타임 / 분량** | GAME_DESIGN 상단·1-2·2-1·2-2·7·8 → TECH_DESIGN 3 도입부, 6 에셋 용량 |
 | **인증 · 저장 · 방명록** | TECH_DESIGN 1·2·4-1~4-3·6·7 → GAME_DESIGN 0-1·1·2-5·6-4 → WORLD_BIBLE 7-2·11 → SCENARIO_OUTLINE 6절 |
 | **공간 (장소 추가·삭제·개명)** | WORLD_BIBLE 2·4·6·7·8·10 → CHARACTERS(자리·명장면) → GAME_DESIGN 6-3(배경 목록) → SCENARIO_OUTLINE 전 씬의 장소 칸 → TECH_DESIGN 1·2·5(맵 파일명) → `.vns`의 `@bg` |
-| **캐릭터 (나이·학년·설정)** | **CHARACTERS** → WORLD_BIBLE 4-2-1·4-2-2(좌석)·5-1-2(티켓) → GAME_DESIGN 4(선호 수치)·6-2(CG) → SCENARIO_OUTLINE 6인 표 전부 → **ART_BRIEF 다시 뽑기** |
-| **에셋 (CG·도트·배경 물량)** | GAME_DESIGN 6 → WORLD_BIBLE 7-3(명찰)·8(비주얼) → reference/campus → **ART_BRIEF · TILE_BRIEF · WORLD_PROMPTS 다시 뽑기** |
+| **캐릭터 (나이·학년·설정)** | **CHARACTERS** → WORLD_BIBLE 4-2-1·4-2-2(좌석)·5-1-2(티켓) → GAME_DESIGN 4(선호 수치)·6-2(CG) → SCENARIO_OUTLINE 6인 표 전부 → **CG_SPEC 다시 뽑기** |
+| **에셋 (CG·도트·배경 물량)** | GAME_DESIGN 6 → WORLD_BIBLE 7-3(명찰)·8(비주얼) → assets/bg/campus → **CG_SPEC · DOT_SPEC 다시 뽑기** |
 | **스탯 수치** | GAME_DESIGN 2-1·2-2·2-3·**2-4(구간 도달 시점)** → SCENARIO_OUTLINE 7(선택지 총람) → CHARACTERS(모티프 단계가 걸린 구간) |
 | **씬 추가·삭제** | SCENARIO_OUTLINE → GAME_DESIGN 7(씬 수·줄 수) → 집필 순서 |
 | **호칭 단계** | GAME_DESIGN 2-4(구간 규칙) → CHARACTERS(인물별 4단계) → TECH_DESIGN 3-2(치환 토큰) |
@@ -151,8 +150,8 @@ grep -rn "옛이름" docs/ src/ --include="*.md" --include="*.vns"
 
 | 항목 | 막고 있는 것 | 언제 |
 |---|---|---|
-| **히로인 CG · 도트** | 외형은 확정([프로필](./reference/character/profiles/heroine_girl_profile.png)). 도트는 [DOT_SPEC](./reference/character/DOT_SPEC.md), CG는 [ART_BRIEF](./reference/character/ART_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
-| **타일셋 · 타일맵** | [TILE_BRIEF](./reference/TILE_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
+| **히로인 CG · 도트** | **CG 90장 · 도트 324컷 전부 완성** — [`assets/`](../assets/README.md) | ✅ |
+| **타일셋 · 타일맵** | **3종 · 7개 · 조명 5종 완성** — [TILESET_MAP_HANDOFF](./reference/TILESET_MAP_HANDOFF.md) | ✅ |
 | **배경** | **9장 전부 확보** — [`assets/bg/`](../assets/bg/) | ✅ |
 | **Firebase 프로젝트 생성** | 로그인·세이브·방명록 전부. 구현 순서 2번이라 **가장 먼저** ([TECH_DESIGN 7](./TECH_DESIGN.md#7-구현-순서)) | 구현 착수 시 |
 
@@ -172,7 +171,7 @@ grep -rn "옛이름" docs/ src/ --include="*.md" --include="*.vns"
 | 어느 씬에서 무슨 일이 일어나는가 (씬 ID·자리·줄 수·선택지 위치·6인 사건) | **SCENARIO_OUTLINE** |
 | 구현 형식 (DSL·상태·맵·배포·**인증·방명록**) | **TECH_DESIGN** |
 | **그림 기준** (외형·의상·명찰·카드 색) | **reference/character** |
-| 그림 제작 한 벌 (파생) | 캐릭터 **ART_BRIEF** · 타일 **TILE_BRIEF** · 배경·UI **WORLD_PROMPTS** |
+| 에셋 사양 (파생) | CG **CG_SPEC** · 도트 **DOT_SPEC** · 타일 **TILESET_MAP_HANDOFF** · UI **ui/README** |
 | 진행 상태와 미확정 항목 | **README** |
 
 **CHARACTERS와 SCENARIO_OUTLINE은 같은 데이터의 전치가 되기 쉽습니다.** 경계는 이렇습니다 — *이 사람이 누구인가*는 CHARACTERS, *그래서 D9에 뭘 하는가*는 SCENARIO_OUTLINE. 인물 절에 씬별 사건을 다시 적지 않습니다.
