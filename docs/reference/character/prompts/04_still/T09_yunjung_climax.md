@@ -17,7 +17,7 @@
 
 > **10절 스타일 접미사를 그대로 붙이지 않았습니다.** `bust crop` · `plain flat background` · `calm neutral expression`은 배경을 그려야 하는 스틸과 충돌합니다. 화풍 부분만 남겼습니다.
 
-> 배경이 잘 안 나오면 [`WORLD_PROMPTS.md` 6~9절](../../WORLD_PROMPTS.md)로 먼저 **심야·여명 배경 이미지를 뽑아 참조로 함께 넣으세요**(13절 지시).
+> 배경이 잘 안 나오면 [`WORLD_PROMPTS.md` 6~9절](../../../WORLD_PROMPTS.md)로 먼저 **심야·여명 배경 이미지를 뽑아 참조로 함께 넣으세요**(13절 지시).
 
 ## 프롬프트
 
