@@ -98,15 +98,19 @@ src/
 
 firestore.rules               # 보안 규칙 (4-3)
 
+assets/                       # 규격은 assets/README.md
+├─ cg/{standing,event}/
+├─ dot/{walk,face}/
+├─ bg/{outing,epilogue,campus}/
+├─ map/                     # Tiled 익스포트 7개
+├─ tilesets/
+└─ ui/
+
 public/
-├─ img/{sprite,cg,bg,ui}/
-├─ audio/{bgm,se}/
-└─ map/                     # Tiled 익스포트 7개
-   ├─ m1_basecamp_4f.json   m2_basecamp_2f.json
-   ├─ m3_basecamp_1f.json   m4_basecamp_b1.json
-   ├─ m5_connect_garden.json  m6_nestcamp.json
-   └─ m7_gate.json
+└─ audio/{bgm,se}/
 ```
+
+> **`assets/`는 `public/` 밖에 있습니다.** Vite는 `public/`만 그대로 복사하므로, `vite.config.ts`에 **`publicDir` 추가 또는 복사 플러그인**이 필요합니다. 런타임에 URL로 읽는 파일들이라 번들에 들어가면 안 됩니다.
 
 ---
 
@@ -570,7 +574,7 @@ match /guestbook/{uid} {
 ### 5-1. 타일맵
 
 - Tiled로 48×48 타일맵 7개 제작
-- 레이어: `ground` / `objects` / `collision` / `npc`(오브젝트 레이어) / `portal`(오브젝트 레이어)
+- 레이어: 타일 `ground` / `objects` / `collision` · 오브젝트 `npc` / `portal` / `trigger`
 - 타일셋 3종 — **교육동 실내 / 숙소동 실내 / 야외**
 - 주인공: 4방향 × 4프레임(정지 1 + 걷기 3), 방향키/WASD
 
@@ -579,8 +583,16 @@ match /guestbook/{uid} {
 `portal` 오브젝트에 목적지 맵과 좌표를 넣습니다. 계단·문에 닿으면 페이드 후 전환합니다.
 
 ```json
-{ "name": "portal", "to": "m2_basecamp_2f", "x": 320, "y": 96, "spawnX": 320, "spawnY": 640 }
+{ "name": "stairs_to_2f", "type": "portal",
+  "x": 1296, "y": 192, "width": 48, "height": 48,
+  "properties": [
+    { "name": "to",     "type": "string", "value": "m2_basecamp_2f" },
+    { "name": "spawnX", "type": "int",    "value": 1320 },
+    { "name": "spawnY", "type": "int",    "value": 1320 }
+  ] }
 ```
+
+**Tiled 형식 그대로**라 커스텀 파서가 필요 없습니다. 포탈 48개가 전부 양방향으로 물려 있습니다.
 
 **Phaser Scene은 하나**(`CampusScene`)이고 맵 데이터만 교체합니다. 씬을 7개 만들면 상태 공유가 번거로워집니다.
 
@@ -636,7 +648,7 @@ npm run build
 3. `.vns` 파서 + 컴파일러 — 테스트 씬 1개로 검증
 4. VN 재생기: 대사 표시, 타자 효과, 클릭 진행, 선택지
 5. GameState + **Firestore 세이브/로드** (보안 규칙 포함)
-6. 배경·CG 표시, 캐릭터 스프라이트 + 표정 파츠 합성
+6. 배경·CG 표시 — 반신 CG는 표정마다 한 장이라 **파일을 교체**하고 **크로스페이드 120~150ms**를 겁니다 (합성이 아닙니다)
 7. 장윤정 루트 프롤로그~과정 1 스크립트 작성 → **여기서 처음으로 "게임"이 됨**
 8. Phaser 맵 2개(M1 교육장 403 · M5 커넥트가든) + NPC 상호작용 → 이후 나머지 5개 확장
 9. 과정 2~결말 스크립트, 엔딩 3종 판정

@@ -2,7 +2,7 @@
 
 근거 사진: connect_garden.jpg (우드데크·야외 테이블·석축 화단·필로티 기둥)
           basketball_court.jpg
-브리프 2절 목록: 우드데크 · 낮은 석축 · 지지대 댄 어린 나무 · 야외 테이블/의자 ·
+구성: 우드데크 · 낮은 석축 · 지지대 댄 어린 나무 · 야외 테이블/의자 ·
                포장 보도 · 잔디 · 볼라드 조명 · 흰 필로티 기둥 · 버스정류장 · 주차선
 """
 from .core import Canvas, TS, rnd, mix, shade, hexc
@@ -396,7 +396,7 @@ def bench_metal():
 
 
 def bollard():
-    """볼라드 조명 1x2 — 심야에 남는 발밑 광원(브리프 5절)."""
+    """볼라드 조명 1x2 — 심야에 남는 발밑 광원."""
     def fn(c: Canvas):
         H = TS * 2
         c.shadow(17, H - 8, 30, H - 4, (0, 0, 0, 65))

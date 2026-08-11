@@ -1,4 +1,4 @@
-"""검수 — TILE_BRIEF 7절 체크리스트를 기계적으로 검증한다.
+"""검수 — 타일셋·타일맵 기준을 기계적으로 검증한다.
 
   [ ] 타일이 48px 격자에 정확히 맞는가          → 아틀라스 크기 · 타일 수
   [ ] 바닥 타일 4장을 붙였을 때 이음매가 안 보이는가 → 경계 픽셀 불연속도 측정
@@ -164,7 +164,7 @@ def check_maps():
                             lighting=next(p["value"] for p in doc["properties"]
                                           if p["name"] == "lighting")))
 
-    # ---- M1 전용 (브리프 4절)
+    # ---- M1 전용 (WORLD_BIBLE 4-2-2)
     m1 = docs["m1_basecamp_4f"]
     W, H, walk = walkable_grid(m1)
     tr = {o["name"]: o for o in objs(m1, "trigger")}
@@ -188,7 +188,7 @@ def check_maps():
         yx = int(npcs["younger"]["x"] // TS)
         if abs(yx - d2x) > 3:
             issues.append("[m1] 연하 자리가 문2 옆이 아님")
-    # 4조 넷이 나란히 붙어 있는가 (브리프 7절 추가 항목)
+    # 4조 넷이 나란히 붙어 있는가
     t4 = sorted((int(o["x"] // TS), int(o["y"] // TS)) for o in objs(m1, "npc")
                 if prop(o, "role") == "team4")
     if len(t4) != 4:
@@ -230,7 +230,7 @@ def check_maps():
         if len(room_npc) != 24:
             issues.append(f"[m1] 교육장 지정석이 24석이 아님 ({len(room_npc)}석)")
 
-    # ---- M5 전용 (브리프 3절 "빼면 안 되는 둘")
+    # ---- M5 전용 ("빼면 안 되는 둘")
     m5 = docs["m5_connect_garden"]
     idx = _piece_ids("tileset_outdoor")
     gid0 = next(t["firstgid"] for t in m5["tilesets"] if t["name"] == "tileset_outdoor")
@@ -279,7 +279,7 @@ def _piece_ids(name):
 
 
 def check_dawn():
-    """여명이 보라 → 파랑인가 (브리프 5절 · 7절 추가 항목).
+    """여명이 보라 → 파랑인가 (WORLD_BIBLE 8-1).
     실제 렌더 결과에서 위/아래 색상(Hue)을 재서 판정한다."""
     import colorsys
     from .render import render, apply_lighting, MAPDIR as MD

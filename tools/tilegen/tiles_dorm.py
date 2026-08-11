@@ -1,7 +1,7 @@
 """숙소동 실내 타일셋 — M6
 
 근거 사진: dormitory_room.jpg
-구성(브리프 2절): 복도 · 번호판 달린 방문 · 2인실 침대 · 작은 책상 ·
+구성: 복도 · 번호판 달린 방문 · 2인실 침대 · 작은 책상 ·
                 세탁기 · 러닝머신과 웨이트 · 계단참
 """
 from .core import Canvas, TS, rnd, mix, shade, hexc
@@ -301,7 +301,7 @@ def weights():
 
 
 def stair_landing():
-    """계단참 2x2 — 3F↔4F 사이. 브리프상 감정적으로 중요한 지점."""
+    """계단참 2x2 — 3F↔4F 사이. 감정적으로 중요한 지점."""
     def fn(c: Canvas):
         W, H = TS * 2, TS * 2
         c.rect(2, 2, W - 3, H - 3, WAL3)
@@ -356,7 +356,7 @@ def vending_dorm():
 
 
 def lamp_floor():
-    """복도 발밑 조명 — 심야에 남는 점광원(브리프 5절)."""
+    """복도 발밑 조명 — 심야에 남는 점광원."""
     def fn(c: Canvas):
         c.rect(20, 30, 27, 44, MET2)
         c.rect(18, 26, 29, 31, MET1)

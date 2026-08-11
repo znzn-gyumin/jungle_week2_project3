@@ -251,7 +251,7 @@ def w_glass(c: Canvas):
 
 
 def w_whiteboard(c: Canvas):
-    """화이트보드 5x2 — M1 필수. 다가가 읽는 상호작용 지점(브리프 4절).
+    """화이트보드 5x2 — M1 필수. 다가가 읽는 상호작용 지점.
     classroom_1 사진 그대로 왼쪽 대형 유리 화이트보드 + 오른쪽 벽걸이 디스플레이."""
     W = TS * 5
     _wall_noise(c, 0, 0, W - 1, TS * 2 - 1, WAL1, 31)
@@ -297,7 +297,7 @@ def w_whiteboard(c: Canvas):
 
 
 def w_door(open_=False):
-    """문 1x2. M1은 문이 둘이어야 한다(브리프 4절)."""
+    """문 1x2. M1은 문이 둘이어야 한다."""
     def fn(c: Canvas):
         _wall_noise(c, 0, 0, TS - 1, TS * 2 - 1, WAL1, 37)
         c.rect(0, 0, TS - 1, 3, WAL3)
@@ -442,7 +442,7 @@ def lounge_table():
 
 
 def vending():
-    """자판기 1x2 — 심야에 남는 몇 안 되는 광원(브리프 5절)."""
+    """자판기 1x2 — 심야에 남는 몇 안 되는 광원."""
     def fn(c: Canvas):
         H = TS * 2
         c.shadow(6, H - 8, TS - 7, H - 3, (0, 0, 0, 70))
@@ -518,7 +518,7 @@ def bookshelf():
 
 
 def pillar():
-    """기둥 1x2 — M1 뒷줄 한쪽에 필수(브리프 4절). 시선이 안 닿는 자리를 만든다."""
+    """기둥 1x2 — M1 뒷줄 한쪽에 필수. 시선이 안 닿는 자리를 만든다."""
     def fn(c: Canvas):
         H = TS * 2
         c.shadow(2, H - 9, TS - 3, H - 2, (0, 0, 0, 90))

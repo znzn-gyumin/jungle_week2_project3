@@ -4,7 +4,7 @@ Phaser 3는 외부 타일셋 참조(source: *.tsj)를 해석하지 못하므로 
 **임베드**한다. Tiled 에디터는 임베드된 타일셋도 그대로 열고 편집할 수 있다.
 (.tsj / .png 는 별도로도 내보내므로 Tiled에서 새 맵을 만들 때 재사용 가능)
 
-레이어 (TILE_BRIEF 3절)
+레이어
   ground     tilelayer  — 바닥
   objects    tilelayer  — 가구/벽/집기
   collision  tilelayer  — 0이 아니면 막힘 (meta 타일셋의 마커)

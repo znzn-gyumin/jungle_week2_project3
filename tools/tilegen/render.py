@@ -7,7 +7,7 @@ from .paths import ROOT, OUT, TSDIR, MAPDIR, PRE
 
 TS = 48
 
-# 조명 오버레이 5종 (TILE_BRIEF 5절)
+# 조명 오버레이 5종 (WORLD_BIBLE 8-1)
 LIGHTING = {
     "day":       dict(color="#FFE6B8", blend="soft-light", opacity=0.12, sat=-0.10),
     "evening":   dict(grad=("#E8763C", "#2A3A63"), blend="overlay", opacity=0.35),
@@ -136,7 +136,7 @@ LIGHT_KINDS = {
 
 
 def punch_lights(base: Image.Image, lit: Image.Image, lights, key, offset=(0, 0)):
-    """어둠을 점광원 위치에서 걷어낸다 — 심야에 남는 건 이것뿐(브리프 5절)."""
+    """어둠을 점광원 위치에서 걷어낸다 — 심야에 남는 건 이것뿐."""
     import numpy as np
     cfg = LIGHTING[key]
     scale = {"night": 1.0, "deepnight": 0.62}.get(key)

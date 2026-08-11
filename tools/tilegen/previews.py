@@ -53,7 +53,7 @@ def main():
             sheet.paste(t.resize((w, h), Image.LANCZOS), ((i % cols) * w, (i // cols) * h))
         save(fit(sheet, 1400, 1700), os.path.join(PRE, f"lighting_{name}.png"))
 
-    # 3) 이음매 검사 — 주요 바닥 타일을 4x4로 붙여 본다 (브리프 7절)
+    # 3) 이음매 검사 — 주요 바닥 타일을 4x4로 붙여 본다
     checks = [("tileset_edu_indoor", ["f_carpet_a", "f_vinyl_a", "f_rug", "f_stage_step"]),
               ("tileset_dorm_indoor", ["f_corridor", "f_room", "f_gym", "f_tile"]),
               ("tileset_outdoor", ["f_deck_v", "f_pave", "f_grass", "f_asphalt"])]

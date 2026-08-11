@@ -1,5 +1,7 @@
 /**
- * jungLover — 조명 오버레이 (TILE_BRIEF 5절)
+ * jungLover — 조명 오버레이
+ *
+ * 팔레트 정본: docs/WORLD_BIBLE.md 8-1 · 구현: docs/reference/TILESET_MAP_HANDOFF.md 5절
  *
  * 타일맵은 **맵당 낮 기준 한 벌**뿐이고, 시간대는 그 위에 오버레이를 얹어 만든다.
  * 타일을 시간대별로 여러 벌 만들지 않는다.
@@ -89,7 +91,7 @@ export const LIGHTING: Record<TimeOfDay, LightingPreset> = {
   },
 };
 
-/** 맵별로 주로 나오는 시간대 (브리프 5절). 맵 프로퍼티 `lighting` 과 같은 값. */
+/** 맵별로 주로 나오는 시간대. 맵 프로퍼티 `lighting` 과 같은 값. */
 export const MAP_TIMES: Record<string, TimeOfDay[]> = {
   m1_basecamp_4f: ['day', 'evening', 'night', 'deepnight'],
   m2_basecamp_2f: ['day', 'deepnight'],

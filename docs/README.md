@@ -3,7 +3,7 @@
 > ## **jungLover**
 > ### 11박 12일, 연애는 커리큘럼에 없었다
 >
-> 부트캠프 연애 시뮬레이션 — 포트폴리오용 웹 게임. 로고: [`jungLover_logo.png`](../assets/ui/logo.png)
+> 부트캠프 연애 시뮬레이션 — 포트폴리오용 웹 게임. 로고: [`assets/ui/logo.png`](../assets/ui/logo.png)
 
 | 문서 | 무엇을 정하는가 | 상태 |
 |---|---|---|
@@ -13,16 +13,14 @@
 | [SCENARIO_OUTLINE.md](./SCENARIO_OUTLINE.md) | **어떤 순서로** — 90씬 구성, 6인 병행 집필 절차 | 확정 |
 | [TECH_DESIGN.md](./TECH_DESIGN.md) | **어떻게 구현하는가** — 스택, DSL, 상태, **인증·저장·방명록**, 배포 | 확정 |
 | [reference/Jungle_Campus.png](./reference/Jungle_Campus.png) | 공간 설정의 1차 자료 (안내도) | — |
-| [reference/campus/](../assets/bg/campus/README.md) | 배경 원본 사진 17장 | — |
+| [../assets/bg/campus/](../assets/bg/campus/README.md) | 캠퍼스 사진 17장 — 타일맵의 근거 | — |
 | [reference/character/](./reference/character/README.md) | **히로인 6인 확정 프로필** — 외형·의상의 기준 | **확정** |
 | [../assets/README.md](../assets/README.md) | **에셋 규격** — 폴더·이름·CG·도트 규격 | **파생** |
 | [reference/TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) | 타일 구현 인수인계 — 산출물·생성기 사용법 | **구현** |
 | [reference/ui/README.md](./reference/ui/README.md) | **UI 화면 넷** — 로그인만 미제작 | **파생** |
 | [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 | **확정** |
-| [../assets/README.md](../assets/README.md) | **에셋 한 벌** — 폴더·이름 규칙, id 목록 | **확정** |
 | [reference/character/preview_cg.html](./reference/character/preview_cg.html) | CG 90장 눈으로 대조 | — |
 | [reference/character/preview_dot.html](./reference/character/preview_dot.html) | 도트 18종 · 아바타 36컷 대조 | — |
-| [reference/jungLover_logo.png](../assets/ui/logo.png) | 타이틀 로고 | **확정** |
 | `../src/script/*.vns` | 실제 대사 | **2단계에서 작성** |
 
 ---
@@ -33,7 +31,7 @@
 
 2. **바꿀 때마다 전 파일을 직접 읽어 확인합니다.** 목록이나 색인에 의존하지 않습니다. 값(숫자·고유명사)은 `grep`으로 잡히지만 **행동 묘사·설정 서술은 안 잡히므로**, 관련 절을 눈으로 읽어야 합니다.
 
-   확인 대상은 `docs/`의 **여덟 문서**입니다 — 이 `README.md`와 `GAME_DESIGN.md` · `CHARACTERS.md` · `WORLD_BIBLE.md` · `SCENARIO_OUTLINE.md` · `TECH_DESIGN.md`, 그리고 값을 담은 레퍼런스 둘 `reference/character/README.md` · `reference/campus/README.md`. README에도 씬 수·줄 수가 적히므로 검사 대상입니다. 2단계에 들어가면 `src/script/*.vns`가 추가됩니다
+   확인 대상은 **일곱 문서**입니다 — 이 `README.md`와 `GAME_DESIGN.md` · `CHARACTERS.md` · `WORLD_BIBLE.md` · `SCENARIO_OUTLINE.md` · `TECH_DESIGN.md`, 그리고 값을 담은 `reference/character/README.md`. README에도 씬 수·줄 수가 적히므로 검사 대상입니다. 2단계에 들어가면 `src/script/*.vns`가 추가됩니다
 
    **[assets/README.md](../assets/README.md) · [TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) · [ui/README.md](./reference/ui/README.md)는 여덟에 들어가지 않습니다.** 위 문서들에서 값을 모아 뽑은 **파생 문서**라, 값이 바뀌면 대조하는 게 아니라 **다시 뽑습니다.** 여기에만 있는 값은 없어야 합니다
 
@@ -91,7 +89,7 @@
 | 10 | **WB 8~11** 톤·사운드·UI | 팔레트, BGM, 대사창 | ✅ |
 | 11 | **GD 6** 에셋 목록 | CG 직접 제공 반영, 배경 9장 확정 | ✅ |
 | 12 | **GD 7** 분량 예산 | 90씬 / 1,980줄 | ✅ |
-| 12+ | **GD 6** 에셋 확정 | CG 66장(표정 6종·반신) · 도트 288컷(16컷/종) · 배경 9장 | ✅ |
+| 12+ | **GD 6** 에셋 확정 | CG 90장(반신 72 · 스틸 18) · 도트 288컷 + 아바타 36 · 배경 9장 | ✅ |
 | 13 | **SO 0~8 골격** | 씬 자리·ID·선택지 위치·집필 절차 | ✅ |
 | 14 | **TECH_DESIGN** | 스택·DSL·상태·인증·방명록·배포 | ✅ |
 | 15 | **로그인·클라우드 세이브** | Google 로그인 필수, Firestore 3슬롯 | ✅ |
@@ -112,7 +110,7 @@
 
 **절 번호 순서가 곧 파장 순서**입니다. WB 1절을 고치면 아래 전부가 흔들리지만, WB 8절을 고치면 아무것도 안 흔들립니다.
 
-**1단계는 닫혔습니다.** 히로인은 묶음 라벨 없이 **여섯 각자**로 설계되어 있고, 키워드·자리·모티프·선호·호칭·어미 규칙·테마 컬러가 전부 6열입니다. 계정·방명록도 설계가 끝났습니다. 남은 건 **에셋(히로인 CG)과 Firebase 프로젝트 생성**뿐이고, 둘 다 대사 집필과 병행할 수 있습니다.
+**1단계는 닫혔습니다.** 히로인은 묶음 라벨 없이 **여섯 각자**로 설계되어 있고, 키워드·자리·모티프·선호·호칭·어미 규칙·테마 컬러가 전부 6열입니다. 계정·방명록도 설계가 끝났고 **에셋도 전부 나왔습니다.** 남은 건 **Firebase 프로젝트 생성**뿐이고, 대사 집필과 병행할 수 있습니다.
 
 ### 대사는 2단계에 씁니다
 
@@ -149,12 +147,11 @@ grep -rn "옛이름" docs/ src/ --include="*.md" --include="*.vns"
 
 | 항목 | 막고 있는 것 | 언제 |
 |---|---|---|
-| **히로인 CG · 도트** | **CG 90장 · 도트 324컷 전부 완성** — [`assets/`](../assets/README.md) | ✅ |
-| **타일셋 · 타일맵** | **3종 · 7개 · 조명 5종 완성** — [TILESET_MAP_HANDOFF](./reference/TILESET_MAP_HANDOFF.md) | ✅ |
-| **배경** | **9장 전부 확보** — [`assets/bg/`](../assets/bg/) | ✅ |
 | **Firebase 프로젝트 생성** | 로그인·세이브·방명록 전부. 구현 순서 2번이라 **가장 먼저** ([TECH_DESIGN 7](./TECH_DESIGN.md#7-구현-순서)) | 구현 착수 시 |
+| **로그인 화면 그림** | 타이틀 진입. 시안은 [`ui/login.html`](./reference/ui/login.html), 사양은 [`ui/README`](./reference/ui/README.md) | 구현 착수 시 |
+| **WebP 변환** | 배포. 지금 `assets/`가 214MB라 그대로는 못 올립니다 ([assets/README](../assets/README.md#용량)) | 배포 전 |
 
-**해결됨**: **프로젝트명·로고** · **히로인 6인 프로필 확정** · 실명 사용 · 캠프 주최 단체명 · 메신저 UI 구현 · **히로인 6인 이름·나이·전공** · **주인공 컴퓨터공학과 22세** · 6인 병행 제작 · 연적 구도 없음 · **6인 독립 설계(묶음 라벨 없음)** · 테마 컬러 6색 · 외출 선호 6인분 · **Google 로그인 필수(게스트 없음)** · **방명록 = 화이트보드, 인게임 날짜 해금** · **참가자 명찰(캠퍼스 안 상시 착용)** · **도트 복장 캐릭터당 1벌** · **평상복 하의·신발 6인분** · **D7 외출복 6벌**
+**에셋은 전부 나왔습니다** — CG 90 · 도트 324 · 배경 9 · 타일셋 3 · 타일맵 7 · 조명 5.
 
 ---
 
@@ -185,4 +182,4 @@ grep -rn "옛이름" docs/ src/ --include="*.md" --include="*.vns"
 2. **`.vns` MVP 세로** — 장윤정 27씬 477줄 (#19)
 3. **배치 1~12 가로** — 씬 1개씩 6인분 (#20)
 
-**화풍은 이미 확정됐습니다** ([프로필](./reference/character/README.md)). 남은 CG(표정 파츠 · 스틸)는 위 1~2와 병행해서 받으면 됩니다.
+**에셋은 전부 완성됐습니다** ([`assets/`](../assets/README.md)). 2단계는 대사만 쓰면 됩니다.
