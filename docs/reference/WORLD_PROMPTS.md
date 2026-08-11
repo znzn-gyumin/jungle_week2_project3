@@ -249,7 +249,7 @@ below it, generous whitespace, no other ui elements, 16:9
 
 ### ② 타이틀 — 참고
 
-로고 [`jungLover_logo.png`](./jungLover_logo.png)를 씁니다. **먹빛 배경 + 보라 발광 + 금빛 장식**이라 심야와 여명을 한 화면에 겹쳐놓은 색이고, 게임의 시그니처 그라데이션이 첫 화면에서 예고됩니다.
+로고 [`jungLover_logo.png`](../../assets/ui/logo.png)를 씁니다. **먹빛 배경 + 보라 발광 + 금빛 장식**이라 심야와 여명을 한 화면에 겹쳐놓은 색이고, 게임의 시그니처 그라데이션이 첫 화면에서 예고됩니다.
 
 메뉴 세 개: `이어하기` · `방명록` · `새 게임`
 

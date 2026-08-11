@@ -52,7 +52,7 @@
 
 한 회차에 등장하는 건 **주인공과 반대 성별 3인**입니다. 6조 구성이 통째로 바뀝니다.
 
-> **확정 프로필 이미지가 있습니다** — [여자 3인](./reference/character/heroine_girl_profile.png) · [남자 3인](./reference/character/heroine_boy_profile.png) ([레퍼런스 설명](./reference/character/README.md)). 아래 `외형` 행은 그 이미지를 옮겨 적은 것이고, **그림과 어긋나면 이미지가 기준**입니다.
+> **확정 프로필 이미지가 있습니다** — [여자 3인](./reference/character/profiles/heroine_girl_profile.png) · [남자 3인](./reference/character/profiles/heroine_boy_profile.png) ([레퍼런스 설명](./reference/character/README.md)). 아래 `외형` 행은 그 이미지를 옮겨 적은 것이고, **그림과 어긋나면 이미지가 기준**입니다.
 
 ### 2-0. 한눈에
 

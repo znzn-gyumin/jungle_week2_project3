@@ -19,7 +19,7 @@
 
 > **생성 도구로 만든다면 [8절](#8-생성-도구로-만들-때--먼저-읽을-것)부터 보세요.** 표정과 도트는 **시트**로 뽑아 [`tools/cut_sheet.py`](../../../tools/cut_sheet.py)로 자릅니다 — 전부 **54요청**이면 끝납니다.
 >
-> **반신 CG는 이 문서 + [프로필 2장](./heroine_girl_profile.png)만으로 그릴 수 있습니다.** 스틸만 배경 레퍼런스가 따로 필요합니다(4절).
+> **반신 CG는 이 문서 + [프로필 2장](./profiles/heroine_girl_profile.png)만으로 그릴 수 있습니다.** 스틸만 배경 레퍼런스가 따로 필요합니다(4절).
 >
 > **프로필은 그대로 쓰는 게 아니라 기준입니다** — **외형과 의상**만 가져옵니다.
 >
@@ -99,11 +99,14 @@
 **파일명**
 
 ```
-cg_{id}_body_casual.png          cg_{id}_body_outing.png
-cg_{id}_face_{normal|happy|shy|sad|surprise|angry}.png
-cg_{id}_still_{garden|climax|ending}.png
-sprite_{id}.png
+assets/cg/      cg_{id}_{casual|outing}_{normal|happy|shy|sad|surprise|angry}.png
+                cg_{id}_still_{garden|climax|ending}.png
+assets/sprite/  sprite_{id}.png          걷기 4방향 x 4프레임 시트 192 x 256
+                face_{id}_{expr}.png     도트 감정 아바타 48 x 64 (히로인만)
+assets/bg/      bg_{name}.png
 ```
+
+**몸통과 표정이 한 장이라 `body` · `face` 로 나뉘지 않습니다.** 옷과 표정이 곧 파일명입니다.
 
 히로인 `id` — `minah` `seunghee` `yunjung` `mingyu` `seungmin` `yunho`
 도트 전용 `id` — `doyun` `doa` `jio` `jia` `myeongjinhyeok` `jomin` `taeyun` `taeyeon` `yeosanim` `mob_a` `mob_b` `mob_c`
@@ -112,7 +115,7 @@ sprite_{id}.png
 
 ## 1. 히로인 6인
 
-레퍼런스: [`heroine_girl_profile.png`](./heroine_girl_profile.png) · [`heroine_boy_profile.png`](./heroine_boy_profile.png)
+레퍼런스: [`heroine_girl_profile.png`](./profiles/heroine_girl_profile.png) · [`heroine_boy_profile.png`](./profiles/heroine_boy_profile.png)
 
 | | 나이 / 학년 / 전공 | 동물상 | 테마 컬러 | 평상복 · 외형 | 모티프 |
 |---|---|---|---|---|---|
@@ -358,7 +361,7 @@ sprite_{id}.png
 | | |
 |---|---|
 | **① 장당 한 요청** | 이 문서에서 그 한 장의 프롬프트만 복사해 씁니다 |
-| **② 참조 이미지 필수** | [프로필](./heroine_girl_profile.png)에서 **해당 인물만 잘라** character reference로 넣습니다. 안 넣으면 같은 인물이 매번 달라집니다 |
+| **② 참조 이미지 필수** | [프로필](./profiles/heroine_girl_profile.png)에서 **해당 인물만 잘라** character reference로 넣습니다. 안 넣으면 같은 인물이 매번 달라집니다 |
 | **③ 규격은 후처리** | 캔버스 1024 × 1280 · 투명 배경 · 시트 배열은 **프롬프트로 지정해도 안 지켜집니다.** 생성 후 편집 툴에서 맞춥니다 |
 | **④ 표정은 파생** | 6종을 따로 생성하면 얼굴 위치가 어긋납니다. **몸통을 확정한 뒤 그걸 참조로 표정 시트 1장**을 뽑습니다 |
 | **⑤ 비율은 참조가 정합니다** | **출력이 참조 이미지의 가로세로 비율을 그대로 따라갑니다.** 4:5로 자른 참조를 넣으세요 |

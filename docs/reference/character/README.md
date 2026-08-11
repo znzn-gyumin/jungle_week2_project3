@@ -4,8 +4,8 @@
 
 | 파일 | 내용 |
 |---|---|
-| [`heroine_girl_profile.png`](./heroine_girl_profile.png) | **여자 히로인 3인** — 김민아 · 이승희 · 장윤정 |
-| [`heroine_boy_profile.png`](./heroine_boy_profile.png) | **남자 히로인 3인** — 김민규 · 이승민 · 장윤호 |
+| [`heroine_girl_profile.png`](./profiles/heroine_girl_profile.png) | **여자 히로인 3인** — 김민아 · 이승희 · 장윤정 |
+| [`heroine_boy_profile.png`](./profiles/heroine_boy_profile.png) | **남자 히로인 3인** — 김민규 · 이승민 · 장윤호 |
 
 설정값(키워드 · 나이 · 전공 · 테마 컬러 · 문체)은 [CHARACTERS.md](../../CHARACTERS.md)에 있습니다. 여기 이미지는 **그림 기준**이고, 값이 어긋나면 CHARACTERS가 정본입니다.
 

@@ -3,7 +3,7 @@
 > ## **jungLover**
 > ### 11박 12일, 연애는 커리큘럼에 없었다
 >
-> 부트캠프 연애 시뮬레이션 — 포트폴리오용 웹 게임. 로고: [`jungLover_logo.png`](./reference/jungLover_logo.png)
+> 부트캠프 연애 시뮬레이션 — 포트폴리오용 웹 게임. 로고: [`jungLover_logo.png`](../assets/ui/logo.png)
 
 | 문서 | 무엇을 정하는가 | 상태 |
 |---|---|---|
@@ -22,7 +22,7 @@
 | [reference/TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) | 타일 구현 인수인계 — 산출물·생성기 사용법 | **구현** |
 | [reference/WORLD_PROMPTS.md](./reference/WORLD_PROMPTS.md) | **배경·UI 한 벌** — 배경 9장 + 로그인 화면 + 사진 시간대 변환 | **파생** |
 | [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 | **확정** |
-| [reference/jungLover_logo.png](./reference/jungLover_logo.png) | 타이틀 로고 | **확정** |
+| [reference/jungLover_logo.png](../assets/ui/logo.png) | 타이틀 로고 | **확정** |
 | `../src/script/*.vns` | 실제 대사 | **2단계에서 작성** |
 
 ---
@@ -149,7 +149,7 @@ grep -rn "옛이름" docs/ src/ --include="*.md" --include="*.vns"
 
 | 항목 | 막고 있는 것 | 언제 |
 |---|---|---|
-| **히로인 CG · 도트** | 외형은 확정([프로필](./reference/character/heroine_girl_profile.png)). 도트는 [SPRITE_SPEC](./reference/character/SPRITE_SPEC.md), CG는 [ART_BRIEF](./reference/character/ART_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
+| **히로인 CG · 도트** | 외형은 확정([프로필](./reference/character/profiles/heroine_girl_profile.png)). 도트는 [SPRITE_SPEC](./reference/character/SPRITE_SPEC.md), CG는 [ART_BRIEF](./reference/character/ART_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
 | **타일셋 · 타일맵** | [TILE_BRIEF](./reference/TILE_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
 | **배경** | 8장 확보 ([backgrounds/](./reference/backgrounds/) 7장 + `campus/jungle_stage.jpg`). **⑦ 5년 후 밤 창가 1장 남음** — Normal 6종 + 솔로 공통 | 2단계 전 |
 | **Firebase 프로젝트 생성** | 로그인·세이브·방명록 전부. 구현 순서 2번이라 **가장 먼저** ([TECH_DESIGN 7](./TECH_DESIGN.md#7-구현-순서)) | 구현 착수 시 |
