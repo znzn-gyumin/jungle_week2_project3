@@ -26,7 +26,7 @@ KR = {"minah": "김민아", "seunghee": "이승희", "yunjung": "장윤정",
       "mob_a": "공용 A", "mob_b": "공용 B", "mob_c": "공용 C"}
 EXPR = [("normal", "기본"), ("happy", "기쁨"), ("shy", "부끄러움"),
         ("sad", "슬픔"), ("surprise", "놀람"), ("angry", "화남")]
-SCENE = [("garden", "① 가든"), ("climax", "② 클라이맥스"), ("ending", "③ 엔딩")]
+SCENE = [("garden", "① 가든"), ("classroom", "② 교육장 403"), ("ending", "③ 엔딩")]
 DOT_ONLY = ["doyun", "doa", "jio", "jia", "myeongjinhyeok", "jomin",
             "taeyun", "taeyeon", "yeosanim", "mob_a", "mob_b", "mob_c"]
 

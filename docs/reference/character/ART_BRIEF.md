@@ -100,7 +100,7 @@
 
 ```
 assets/cg/standing/   {id}_{campus|outing}_{normal|happy|shy|sad|surprise|angry}.png
-assets/cg/event/      {id}_{garden|climax|ending}.png
+assets/cg/event/      {id}_{garden|classroom|ending}.png
 assets/dot/walk/   {id}.png          걷기 4방향 x 4프레임 시트 192 x 256
 assets/dot/face/   {id}_{expr}.png   도트 감정 아바타 48 x 64 (히로인만)
 assets/bg/{outing|epilogue|campus}/
@@ -218,7 +218,7 @@ assets/bg/{outing|epilogue|campus}/
 
 > 승희와 승민은 4F 라운지에서 시작해 가든으로 내려오는 씬입니다. 보조 참고: [`community_lounge_1.jpg`](../../../assets/bg/campus/indoor/community_lounge_1.jpg)
 
-### ② D9 클라이맥스 — 교육장 403 심야
+### ② D9 교육장 403 — 심야
 
 **배경 레퍼런스:** [`classroom_1.jpg`](../../../assets/bg/campus/indoor/classroom_1.jpg) · [`classroom_2.jpg`](../../../assets/bg/campus/indoor/classroom_2.jpg)
 **색조:** 심야(먹빛 남색 · 점광원만). 새벽 2시엔 키보드 소리만 남습니다
@@ -644,7 +644,7 @@ sky a soft gradient from deep violet at the top to pale blue at the horizon,
 ground and structures still in silhouette, no city lights anywhere, humid summer dawn air
 ```
 
-**② D9 클라이맥스 — 교육장 403 심야**
+**② D9 교육장 403 — 심야**
 
 ```
 long seminar room at 2am, almost all ceiling lights off, only two or three computer
@@ -673,7 +673,7 @@ very low key lighting, high contrast, most of the frame barely readable shadow
 | **장윤정** | `holding out one side of her headphones toward the viewer, suddenly quiet, no trace of her usual cheerfulness` |
 | **장윤호** | `alone on the deck after seeing everyone off, looking down, unable to answer` |
 
-### 인물별 순간 — ②클라이맥스
+### 인물별 순간 — ②교육장 403
 
 | | 추가할 문장 |
 |---|---|

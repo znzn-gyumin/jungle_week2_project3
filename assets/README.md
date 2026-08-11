@@ -8,7 +8,7 @@
 assets/
 ├─ cg/
 │    standing/      {id}_{campus|outing}_{expr}.png   72   立ち絵 — 대화 중 계속 서 있음
-│    event/      {id}_{garden|climax|ending}.png   18   イベントCG — 명장면, 화면 전체
+│    event/      {id}_{garden|classroom|ending}.png   18   イベントCG — 명장면, 화면 전체
 ├─ dot/
 │    walk/       {id}.png                          18   192×256 시트
 │    face/       {id}_{expr}.png                   36   48×64 감정 아바타
