@@ -2,7 +2,7 @@
 
 > **이 문서만 보고 작업할 수 있게 쓴 것입니다.** 다른 기획 문서를 안 읽어도 됩니다.
 >
-> 함께 볼 것 — 캐릭터 규격 [`SPRITE_SPEC.md`](./character/SPRITE_SPEC.md) · 공간 근거 [`campus/`](../../assets/bg/campus/) 사진 17장 · 캠퍼스 안내도 [`Jungle_Campus.png`](./Jungle_Campus.png)
+> 함께 볼 것 — 캐릭터 규격 [`DOT_SPEC.md`](./character/DOT_SPEC.md) · 공간 근거 [`campus/`](../../assets/bg/campus/) 사진 17장 · 캠퍼스 안내도 [`Jungle_Campus.png`](./Jungle_Campus.png)
 >
 > **파생 문서입니다.** 설정이 바뀌면 [GAME_DESIGN 6-3](../GAME_DESIGN.md#6-3-맵과-배경) · [WORLD_BIBLE 4절](../WORLD_BIBLE.md#4-공간)을 고치고 여기를 다시 뽑습니다.
 
@@ -35,7 +35,7 @@ python tools/cut_sheet.py tileset_indoor.png out/tiles --cols 4 --rows 4 --resiz
 
 ## 1. 화풍 기준
 
-**캐릭터 도트와 같은 결이어야 합니다.** 타일이 배경이고 캐릭터가 그 위에 서므로, 기준은 [`SPRITE_SPEC.md`](./character/SPRITE_SPEC.md)의 수치입니다 — 1px 외곽선, 48px 격자.
+**캐릭터 도트와 같은 결이어야 합니다.** 타일이 배경이고 캐릭터가 그 위에 서므로, 기준은 [`DOT_SPEC.md`](./character/DOT_SPEC.md)의 수치입니다 — 1px 외곽선, 48px 격자.
 
 | | |
 |---|---|

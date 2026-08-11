@@ -1,13 +1,15 @@
 # assets — 게임 에셋
 
-**폴더가 맥락을 줍니다.** 그래서 파일명에 `cg_` `sprite_` 같은 접두어를 붙이지 않습니다.
+**폴더가 맥락을 줍니다.** 그래서 파일명에 접두어를 붙이지 않습니다.
+
+이름은 VN 관례를 따릅니다 — **立ち絵**(대화 중 서 있는 반신)와 **イベントCG**(명장면 한 장)는 그리는 방식도 쓰이는 자리도 달라서 원래 별개로 부릅니다. **ドット絵**는 픽셀 아트고, `SD`는 등신 비율을 가리키는 말이라 이 자리엔 안 맞습니다.
 
 ```
 assets/
 ├─ cg/
-│    portrait/   {id}_{casual|outing}_{expr}.png   72   반신, 대화 중 계속
-│    still/      {id}_{garden|climax|ending}.png   18   명장면, 화면 전체
-├─ sprite/
+│    stand/      {id}_{casual|outing}_{expr}.png   72   立ち絵 — 대화 중 계속 서 있음
+│    event/      {id}_{garden|climax|ending}.png   18   イベントCG — 명장면, 화면 전체
+├─ dot/
 │    walk/       {id}.png                          18   192×256 시트
 │    face/       {id}_{expr}.png                   36   48×64 감정 아바타
 ├─ bg/
@@ -59,13 +61,13 @@ assets/
 
 걷기는 **`2 → 3 → 4` 순환**, 멈추면 1열. 타일 `(x, y)`에 그릴 때 좌표는 **`(x*48, y*48 − 16)`** — 폭은 타일 한 칸이고 세로만 1.33칸이라 머리가 위 칸을 침범합니다.
 
-사양은 [`SPRITE_SPEC.md`](../docs/reference/character/SPRITE_SPEC.md).
+사양은 [`DOT_SPEC.md`](../docs/reference/character/DOT_SPEC.md).
 
 ---
 
 ## 눈으로 대조하기
 
-[`preview_cg.html`](../docs/reference/character/preview_cg.html) · [`preview_sprite.html`](../docs/reference/character/preview_sprite.html) — 파일명이 라벨로 붙어 있습니다. 에셋 이름을 바꾸면 `python tools/gen_preview.py`로 다시 만듭니다.
+[`preview_cg.html`](../docs/reference/character/preview_cg.html) · [`preview_dot.html`](../docs/reference/character/preview_dot.html) — 파일명이 라벨로 붙어 있습니다. 에셋 이름을 바꾸면 `python tools/gen_preview.py`로 다시 만듭니다.
 
 ## 용량
 

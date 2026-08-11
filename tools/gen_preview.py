@@ -4,7 +4,7 @@
     python tools/gen_preview.py
 
 출력  docs/reference/character/preview_cg.html
-      docs/reference/character/preview_sprite.html
+      docs/reference/character/preview_dot.html
 
 파일명이 곧 라벨이다. 어떤 그림이 어떤 파일인지 눈으로 대조하려고 만든다.
 에셋 이름을 바꾸면 다시 돌린다.
@@ -64,30 +64,30 @@ def build_cg() -> str:
         for i in IDS:
             for e, ek in EXPR:
                 n = f"{i}_{outfit}_{e}.png"
-                out.append(cell(f"{REL}/cg/portrait/{n}", f"{KR[i]} · {ek}", n))
+                out.append(cell(f"{REL}/cg/stand/{n}", f"{KR[i]} · {ek}", n))
         out.append("</div></section>")
     out.append("<section class='still'><h2>스틸 CG — 18장</h2><div class='grid'>")
     for s, sk in SCENE:
         for i in IDS:
             n = f"{i}_{s}.png"
-            out.append(cell(f"{REL}/cg/still/{n}", f"{KR[i]} · {sk}", n))
+            out.append(cell(f"{REL}/cg/event/{n}", f"{KR[i]} · {sk}", n))
     out.append("</div></section>")
     return "".join(out)
 
 
-def build_sprite() -> str:
+def build_dot() -> str:
     out = ["<p class='note'>시트는 4열 × 4행, 셀 48 × 64px. "
            "행은 아래·왼쪽·오른쪽·위, 열은 정지·걷기1·2·3입니다.</p>",
            "<section class='sheet'><h2>걷기 시트 — 18종</h2><div class='grid'>"]
     for i in IDS + DOT_ONLY:
         n = f"{i}.png"
-        out.append(cell(f"{REL}/sprite/walk/{n}", KR[i], n))
+        out.append(cell(f"{REL}/dot/walk/{n}", KR[i], n))
     out.append("</div></section>")
     out.append("<section class='sheet face'><h2>도트 감정 아바타 — 36컷 (히로인만)</h2><div class='grid'>")
     for i in IDS:
         for e, ek in EXPR:
             n = f"{i}_{e}.png"
-            out.append(cell(f"{REL}/sprite/face/{n}", f"{KR[i]} · {ek}", n))
+            out.append(cell(f"{REL}/dot/face/{n}", f"{KR[i]} · {ek}", n))
     out.append("</div></section>")
     return "".join(out)
 
@@ -95,7 +95,7 @@ def build_sprite() -> str:
 def main() -> int:
     for name, title, body in (
         ("preview_cg.html", "jungLover — CG 90장", build_cg()),
-        ("preview_sprite.html", "jungLover — 도트 18종 · 아바타 36컷", build_sprite()),
+        ("preview_dot.html", "jungLover — 도트 18종 · 아바타 36컷", build_dot()),
     ):
         (OUT / name).write_text(page(title, body), encoding="utf-8")
         print("  ", OUT.relative_to(ROOT) / name)

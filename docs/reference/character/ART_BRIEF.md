@@ -94,15 +94,15 @@
 | 시트 | 4열 × 4행 = **192 × 256px 한 장** |
 | 색 수 | 캐릭터당 **8~12색** · 외곽선 어두운 색 1px · 배경 투명 |
 
-**나머지는 [`SPRITE_SPEC.md`](./SPRITE_SPEC.md)**에 있습니다 — 행·열 순서, 걷기 재생, 등신, 명찰, 맵 위 배치 좌표.
+**나머지는 [`DOT_SPEC.md`](./DOT_SPEC.md)**에 있습니다 — 행·열 순서, 걷기 재생, 등신, 명찰, 맵 위 배치 좌표.
 
 **파일명**
 
 ```
-assets/cg/portrait/   {id}_{casual|outing}_{normal|happy|shy|sad|surprise|angry}.png
-assets/cg/still/      {id}_{garden|climax|ending}.png
-assets/sprite/walk/   {id}.png          걷기 4방향 x 4프레임 시트 192 x 256
-assets/sprite/face/   {id}_{expr}.png   도트 감정 아바타 48 x 64 (히로인만)
+assets/cg/stand/   {id}_{casual|outing}_{normal|happy|shy|sad|surprise|angry}.png
+assets/cg/event/      {id}_{garden|climax|ending}.png
+assets/dot/walk/   {id}.png          걷기 4방향 x 4프레임 시트 192 x 256
+assets/dot/face/   {id}_{expr}.png   도트 감정 아바타 48 x 64 (히로인만)
 assets/bg/{outing|epilogue|campus}/
 ```
 
@@ -263,7 +263,7 @@ assets/bg/{outing|epilogue|campus}/
 
 ## 5. 도트 스프라이트 — 18종 · 288컷
 
-**전부 [`SPRITE_SPEC.md`](./SPRITE_SPEC.md)에 있습니다** — 규격, 시트 배치, 걷기 프레임, 히로인 6인과 조연 12종의 외형까지.
+**전부 [`DOT_SPEC.md`](./DOT_SPEC.md)에 있습니다** — 규격, 시트 배치, 걷기 프레임, 히로인 6인과 조연 12종의 외형까지.
 
 | 대상 | 종 | 컷 |
 |---|---|---|
@@ -373,7 +373,7 @@ assets/bg/{outing|epilogue|campus}/
 | **몸통 12장** | 개별 | 참조 이미지 필수. 손이 자주 깨지므로 재생성 여유를 두세요 ([11절](#11-몸통-프롬프트--12장)) |
 | **표정 36장** | **시트 6장** | 몸통 확정 후 그걸 참조로 ([12절](#12-표정-시트--6장--36컷)) |
 | **스틸 18장** | 개별 | 배경까지 한 장 ([13절](#13-스틸-프롬프트--18장)) |
-| **도트 288컷** | — | 손으로 그립니다 ([SPRITE_SPEC](./SPRITE_SPEC.md)) |
+| **도트 288컷** | — | 손으로 그립니다 ([DOT_SPEC](./DOT_SPEC.md)) |
 
 ---
 
@@ -701,7 +701,7 @@ very low key lighting, high contrast, most of the frame barely readable shadow
 
 ## 14. 도트 스프라이트 — 18종 · 288컷
 
-**사양은 [`SPRITE_SPEC.md`](./SPRITE_SPEC.md)에 있습니다.** 손으로 그리므로 생성 프롬프트가 아니라 설계도를 씁니다 — 규격·시트 배치·걷기 프레임·18종 외형이 전부 거기 모여 있습니다.
+**사양은 [`DOT_SPEC.md`](./DOT_SPEC.md)에 있습니다.** 손으로 그리므로 생성 프롬프트가 아니라 설계도를 씁니다 — 규격·시트 배치·걷기 프레임·18종 외형이 전부 거기 모여 있습니다.
 
 이 문서에서 알아야 할 것은 물량뿐입니다.
 
@@ -786,7 +786,7 @@ python tools/cut_sheet.py sheet_minah_face.png out/minah --cols 3 --rows 2 --dek
 
 1. **김민아 평상복 몸통** — 참조 이미지 물려서 여러 번 뽑아 하나 확정
 2. **김민아 표정 시트 1장** → 잘라서 몸통에 얹어봅니다. **여기서 시트 방식이 되는지 판가름**납니다
-3. **김민아 도트 1종** → 맵 위에 얹어 확인. **전체 화풍 확정** ([SPRITE_SPEC](./SPRITE_SPEC.md))
+3. **김민아 도트 1종** → 맵 위에 얹어 확인. **전체 화풍 확정** ([DOT_SPEC](./DOT_SPEC.md))
 4. 여기까지 셋이 통과하면 나머지는 반복입니다 — 인물별 몸통 2 → 표정 시트 1 → 도트 시트 1
 5. 참조 CG가 없는 도트 12종 (히로인 도트를 참조로)
 6. 스틸 18장 — **①커넥트가든부터**
