@@ -242,7 +242,7 @@ loadMap(key: string) {
 `night`·`deepnight` 에서 `LightingOverlay` 가 어둠을 이 지점에서 `ERASE` 로 파냅니다.
 `ceiling`(매입 LED)은 밤·심야에 꺼집니다. **심야에 남는 건 발밑 조명·건물 창·모니터·자판기뿐**입니다.
 
-`preview/lighting_m1_basecamp_4f.jpg` · `preview/lighting_m5_connect_garden.png` 에서
+`preview/lighting_m1_basecamp_4f.jpg` · `preview/lighting_m5_connect_garden.jpg` 에서
 5종을 실제로 얹은 결과를 확인하세요. 특히 M5 심야 컷이 [WORLD_BIBLE 8-1](../WORLD_BIBLE.md#8-1-시간대별-팔레트)이 말한 "얼굴이 거의 안 보이는 어둠"입니다.
 
 각 맵 JSON의 `lighting` 프로퍼티에 그 맵에서 쓸 시간대가 콤마로 들어 있습니다.

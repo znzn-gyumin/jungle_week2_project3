@@ -461,14 +461,14 @@ def main() -> int:
             write(OUT / "04_still" / f"T{idx:02d}_{h['id']}_{sc['key']}.md", prompt_file(
                 f"T{idx:02d} · {h['kr']} 스틸 {sc['title']}",
                 [("파일명", f"`cg_{h['id']}_still_{sc['key']}.png`"),
-                 ("캔버스", "1920 × 1080 가로 · 불투명"),
+                 ("캔버스", "가로 16:9 · 불투명 — 1920 × 1080 목표"),
                  ("색조", sc["tone"]),
                  ("배경 레퍼런스", f"`{sc['bg_ref']}` — **구조만** 가져옵니다"),
                  ("인물 참조", f"**{h['kr']} 반신 CG 평상복 `{h[sc['key'] + '_face']}` 칸**"),
                  ("선행 조건", "해당 인물 반신 CG 확정")],
                 attach, prompt, sc["neg"], sc["notes"],
                 sc["checks"] + ["인물이 반신 CG와 같은 사람인가",
-                                "1920 × 1080 가로, 불투명인가"]))
+                                "가로 16:9 · 불투명인가"]))
             made.append(f"04_still/T{idx:02d}_{h['id']}_{sc['key']}.md")
             idx += 1
 
@@ -499,7 +499,7 @@ def main() -> int:
         write(OUT / "04_still" / f"T{idx:02d}_{h['id']}_ending.md", prompt_file(
             f"T{idx:02d} · {h['kr']} 스틸 ③ 엔딩 — 5년 후 ({h['ending_age']}세)",
             [("파일명", f"`cg_{h['id']}_still_ending.png`"),
-             ("캔버스", "1920 × 1080 가로 · 불투명"),
+             ("캔버스", "가로 16:9 · 불투명 — 1920 × 1080 목표"),
              ("배경", BG_ENDING_KR[bgk] + " — 캠퍼스가 아닙니다"),
              ("인물 참조", f"**{h['kr']} 반신 CG `{h['ending_face']}` 칸 — 얼굴만**"),
              ("선행 조건", "해당 인물 반신 CG 확정"),
@@ -521,7 +521,7 @@ def main() -> int:
              "학생이 아니라 **사회인으로 보이는가**",
              f"배경이 {BG_ENDING_KR[bgk]}인가",
              "인물이 반신 CG와 같은 사람인가",
-             "1920 × 1080 가로, 불투명인가"]))
+             "가로 16:9 · 불투명인가"]))
         made.append(f"04_still/T{idx:02d}_{h['id']}_ending.md")
         idx += 1
 
