@@ -7,7 +7,7 @@
 | **순서** | 좌→우, 위→아래 — `normal` `happy` `shy` / `sad` `surprise` `angry` |
 | **참조 이미지** | **김민아 평상복 몸통 확정본** |
 | **선행 조건** | B01 확정 |
-| **자르기** | `python tools/cut_sheet.py sheet_minah_face.png out/minah --cols 3 --rows 2 --dekey ffffff --trim --names normal,happy,shy,sad,surprise,angry` |
+| **자르기** | `python tools/cut_sheet.py sheet_minah_face.png out/minah --cols 3 --rows 2 --dekey 00b140 --tol 40 --trim --names normal,happy,shy,sad,surprise,angry` |
 
 > 표정 근육은 거의 안 움직이고 **눈만** 움직입니다. 여섯 셀의 입 모양 차이를 최소로.
 
@@ -25,7 +25,8 @@ same head angle and same scale in every cell, only the expression differs,
 row 1 left to right: neutral calm / bright genuine smile / blushing with eyes averted,
 row 2 left to right: downcast sad / wide-eyed surprise / furrowed angry,
 korean webtoon illustration style, semi-realistic anime, soft cel shading,
-clean lineart, plain flat white background, no body, no hands, no text labels,
+clean lineart, flat solid chroma key green background, one uniform color,
+no body, no hands, no text labels,
 expression barely changes but the eyes carry everything
 ```
 
@@ -36,7 +37,8 @@ photorealistic, 3d render, extra fingers, deformed hands,
 watermark, signature, text, oversaturated, lens flare,
 different people, inconsistent face, varying head size,
 body, shoulders, hands, arms,
-labels, borders between cells, grid lines, busy background
+labels, borders between cells, grid lines, busy background,
+gradient background, color spill on hair edges, rim light
 ```
 
 ## 받고 나서 확인할 것
@@ -45,6 +47,6 @@ labels, borders between cells, grid lines, busy background
 - [ ] 6컷의 **머리 크기·각도가 같은가** — 다르면 정렬로 못 메웁니다
 - [ ] 몸통과 화풍·각도가 이어지는가
 - [ ] 셀 사이에 테두리·라벨·글자가 없는가
-- [ ] 배경이 단색 흰색인가
+- [ ] 배경이 단색 초록인가 · 머리 가장자리에 초록이 번지지 않았는가
 - [ ] 잘라낸 6장이 같은 1024 × 1280 캔버스의 같은 위치에 있는가
 - [ ] 몸통에 얹었을 때 **눈이 안 떨리는가** (한 번은 실제로 얹어 확인)

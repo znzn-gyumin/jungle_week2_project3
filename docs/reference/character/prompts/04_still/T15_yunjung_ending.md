@@ -22,7 +22,8 @@ gallery exhibition space, white walls, spot lighting, quiet,
 26 year old, her graduation project became a released game, showing it,
 still yellow but a well-fitted jacket instead of an oversized hoodie, headphones still resting around her neck,
 korean webtoon illustration style, semi-realistic anime, soft cel shading,
-clean lineart, warm muted palette
+clean lineart, warm muted palette,
+hair rendered in exactly the stated color, the palette does not tint it
 ```
 
 ## 부정 프롬프트

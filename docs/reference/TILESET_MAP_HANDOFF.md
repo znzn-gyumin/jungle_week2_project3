@@ -260,20 +260,28 @@ loadMap(key: string) {
 
 ## 6. 맵 연결
 
+**[`GAME_DESIGN 6-3`](../GAME_DESIGN.md#6-3-맵과-배경) 정본을 따릅니다.**
+
 ```
         M7 정문 ──정문── M3 1F ──후문── M5 커넥트가든 ──── M6 숙소동
-                          │
-                       계단 ↕
+                          │  ↕ 계단
                        M2 2F ──계단── M1 4F   ← 허브
                           │
-                       계단 ↕
-                       M4 B1
+        M3 1F ────────────┴─ ↕ 계단 ── M4 B1
 ```
 
-- 교육동 3F는 만들지 않았고 계단을 **4F ↔ 2F 직결**로 처리했습니다.
-- **M4(B1)는 브리프 다이어그램대로 M2(2F)에 붙였습니다.** 물리적으로는 B1이 1F 아래라
-  M3에 붙는 게 자연스럽습니다. 다이어그램이 의도한 것인지 확인이 필요합니다 —
-  `maps.py` 의 `m2` / `m4` 포탈 두 줄만 고치면 됩니다.
+**M3(1F)이 수직 동선의 허브입니다** — 위로 M2(2F), 아래로 M4(B1), 밖으로 M7(정문)과 M5(커넥트가든).
+
+| 계단 | 좌표 |
+|---|---|
+| M3 1F ↕ M2 2F | M3 (27,3) ↔ M2 (27,25) |
+| M2 2F ↕ M1 4F | M2 (20,3) ↔ M1 (31,24) · **3F는 만들지 않아 4F↔2F 직결** |
+| M3 1F ↕ M4 B1 | M3 (31,3) ↔ M4 (25,3) |
+
+> **1차 구현은 `TILE_BRIEF` 3절 다이어그램을 따라 M4를 M2 아래에 붙였습니다.**
+> 그 다이어그램이 정본과 어긋나 있었고, 지금은 정본대로 **M4 ↔ M3** 로 고쳤습니다.
+
+- 교육동 3F는 만들지 않습니다. 이번 기수가 안 쓰는 빈 층이라 계단을 4F ↔ 2F 직결로 처리합니다.
 - M6는 **한 맵 안에 1F·3F·4F를 세로로 담고** x17~20을 전 층 관통 계단 스파인으로 썼습니다.
   3F↔4F 구간이 브리프가 지목한 **계단참**입니다.
 
@@ -324,15 +332,41 @@ QA가 검사하는 것 (★ = 이번에 추가된 브리프 7절 항목):
 
 ```bash
 pip install pillow numpy
-python -m tilegen.build      # 타일셋 3종 + 맵 7개 재생성
-python -m tilegen.qa         # 검수
-python -m tilegen.previews   # 프리뷰 재생성
+
+# 저장소 루트에서
+python -m tools.tilegen.build      # 타일셋 3종 + 맵 7개 재생성
+python -m tools.tilegen.qa         # 검수
+python -m tools.tilegen.previews   # 프리뷰 재생성
 ```
 
-- 타일 하나 고치기 → `tilegen/tiles_edu.py` (또는 `tiles_dorm` / `tiles_out`) 의 해당 함수
-- 팔레트 → `tilegen/palettes.py`
-- 맵 배치 → `tilegen/maps.py`
-- 조명 수치 → `tilegen/render.py` 의 `LIGHTING` 과 `src/config/lighting.ts` **양쪽**
+> **Windows에서 `python` 이 MSYS2 쪽으로 잡히면** Pillow가 없어 `ModuleNotFoundError: No module
+> named 'PIL'` 로 죽습니다. 인터프리터를 직접 지정하세요.
+>
+> ```bash
+> PY="C:/Users/wfami/AppData/Local/Python/pythoncore-3.14-64/python.exe"
+> "$PY" -m tools.tilegen.build
+> ```
+
+### 출력 경로 규칙
+
+`tools/tilegen/paths.py` 가 두 레이아웃을 구분합니다.
+
+| 레이아웃 | 조건 | 출력 위치 |
+|---|---|---|
+| **배포** (이 저장소) | `tilegen` 의 부모 폴더 이름이 `tools` | 저장소 루트 — `assets/` `preview/` |
+| 개발 (생성기만 따로) | 그 외 | `<부모>/out/assets` `<부모>/out/preview` |
+
+환경변수 `JL_OUT` 으로 강제 지정할 수도 있습니다.
+
+> 1차 배포판은 이 구분이 없어서, 저장소에서 돌리면 `tools/out/assets/…` 에 엉뚱하게 썼습니다.
+> 지금은 저장소 루트의 `assets/` `preview/` 를 바로 덮어씁니다.
+
+### 어디를 고치나
+
+- 타일 하나 고치기 → `tools/tilegen/tiles_edu.py` (또는 `tiles_dorm` / `tiles_out`) 의 해당 함수
+- 팔레트 → `tools/tilegen/palettes.py`
+- 맵 배치·좌석·포탈 → `tools/tilegen/maps.py`
+- 조명 수치 → `tools/tilegen/render.py` 의 `LIGHTING` 과 `src/config/lighting.ts` **양쪽**
   (프리뷰와 게임이 같은 값을 쓰도록 두 곳에 있습니다)
 
 Tiled에서 직접 손보셔도 됩니다. 단, **재빌드하면 덮어쓰므로** 손본 맵은 파일명을 바꾸거나
@@ -345,8 +379,7 @@ Tiled에서 직접 손보셔도 됩니다. 단, **재빌드하면 덮어쓰므�
 1. **화풍 밀도** — 판단 보류 중입니다. 타일은 외곽선이 옅은 저채도 미니멀이고 `pixel_demo.png`
    캐릭터는 굵은 1px 외곽선의 만화적 스타일입니다. **캐릭터 도트 시트가 나오면 M1 위에 합성해
    보고 결정합니다.** 그때까지 타일은 건드리지 않습니다.
-2. **M4의 계단 연결** — 브리프 다이어그램대로 B1을 M2(2F)에 붙여뒀습니다. 물리적으로는 M3(1F)
-   아래가 자연스럽습니다. `maps.py` 의 `m2` / `m4` 포탈 두 줄만 고치면 됩니다. (미해결)
+2. ~~M4의 계단 연결~~ — **해결.** `GAME_DESIGN 6-3` 정본대로 M4 ↔ M3 으로 고쳤습니다.
 3. **낮 채도 −10% / 여명 채도 −60%** — Phaser 기본 파이프라인에 채도 셰이더가 없어 회백색
    tint 로 근사했습니다. 프리뷰(Pillow)는 정확한 채도 연산을 쓰므로 **게임 화면이 프리뷰보다
    약간 더 쨍할 수 있습니다.** 정확히 맞추려면 커스텀 파이프라인이 필요합니다.
@@ -365,3 +398,13 @@ Tiled에서 직접 손보셔도 됩니다. 단, **재빌드하면 덮어쓰므�
 | ② M5 필로티 | 남쪽 끝 y36~42에 원기둥 5본 + 그늘진 통로 + 건너편 포장. `piloti_round` `f_pave_shade` `f_soffit_top/bot` 신규 타일 4종. 야외 팔레트에 중간 무채색 2색 추가(28→30색) |
 | ③ 여명 | 따뜻한 분홍 → **보라(259°) → 파랑(225°)**. 탈채도 + 선행 어둠을 스펙 screen 앞에 추가 |
 | 검수 | 브리프 7절 추가 4항목을 `qa.py` 에 자동 검사로 구현 |
+
+---
+
+## 11. 3차 수정 이력
+
+| 항목 | 무엇을 고쳤나 |
+|---|---|
+| M4 계단 | `GAME_DESIGN 6-3` 정본대로 **M4(B1) ↔ M3(1F)** 로 변경. M2의 B1 계단 제거, M3에 (31,3) 계단 추가. M3이 수직 동선 허브가 됨 |
+| 출력 경로 버그 | 생성기를 저장소에서 돌리면 `tools/out/assets/…` 에 쓰던 문제 수정. `paths.py` 신설 — 배포 레이아웃에서는 저장소 루트에 바로 씁니다 |
+| 실행 방법 문서화 | `python -m tools.tilegen.build` · Windows에서 MSYS2 python 이 잡히는 문제 대응 |

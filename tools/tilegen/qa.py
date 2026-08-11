@@ -12,11 +12,9 @@ from __future__ import annotations
 import json, os, collections
 from PIL import Image
 
+from .paths import ROOT, OUT, TSDIR, MAPDIR
+
 TS = 48
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "out")
-TSDIR = os.path.join(OUT, "assets", "tilesets")
-MAPDIR = os.path.join(OUT, "assets", "map")
 
 FLOOR_PREFIX = "f_"
 # 패턴 주기가 48의 약수라 '보이는 선'이 설계 의도인 타일들 (줄눈·널 이음·단코)

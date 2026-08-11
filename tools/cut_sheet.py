@@ -12,9 +12,9 @@ PIL 이 안 깔리는 환경(Python 3.14 등)을 전제로 PNG 를 직접 읽고
       --names down_idle,down_w1,down_w2,down_w3,left_idle,left_w1,left_w2,left_w3,\\
 right_idle,right_w1,right_w2,right_w3,up_idle,up_w1,up_w2,up_w3
 
-  # 표정 시트 → 얼굴 6장, 흰 배경 제거
+  # 표정 시트 → 얼굴 6장, 초록 배경 제거
   python tools/cut_sheet.py sheet_minah_face.png out/ \\
-      --cols 3 --rows 2 --dekey ffffff --names normal,happy,shy,sad,surprise,angry
+      --cols 3 --rows 2 --dekey 00b140 --tol 40 --names normal,happy,shy,sad,surprise,angry
 
   # 여백이 있는 시트 (좌 40 상 60, 셀 사이 간격 12)
   python tools/cut_sheet.py sheet.png out/ --cols 4 --rows 4 \\

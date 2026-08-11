@@ -22,7 +22,8 @@ modern open-plan office interior, late afternoon light, calm,
 29 year old, first day at a new job, someone else looking after him this time,
 a brand new suit that still looks new, tie slightly crooked, sleeves a little too long, no signature color anywhere,
 korean webtoon illustration style, semi-realistic anime, soft cel shading,
-clean lineart, warm muted palette
+clean lineart, warm muted palette,
+hair rendered in exactly the stated color, the palette does not tint it
 ```
 
 ## 부정 프롬프트

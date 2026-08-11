@@ -68,9 +68,12 @@ refs/ref_{id}.png ─┬─→ 평상복 몸통 ─┬─→ 외출복 몸통
 ```text
 korean webtoon illustration style, semi-realistic anime, soft cel shading,   ← 화풍
 clean lineart, warm muted palette,                                           ← 화풍
-upper body bust crop from the chest up, facing viewer,                       ← 구도
-head and shoulders fill the frame, relaxed neutral posture,                  ← 구도
-arms lowered naturally, calm neutral expression, plain flat background       ← 구도
+hair rendered in exactly the stated color, ...                               ← 화풍
+tight bust portrait, head and shoulders shot, cropped at the sternum,        ← 구도
+the bottom edge of the frame sits just below the collarbone, ...             ← 구도
+subject centered horizontally ... a small empty gap above the head, ...      ← 구도
+relaxed neutral posture, arms lowered naturally, calm neutral expression,    ← 구도
+flat solid chroma key green background, one uniform color, no gradient       ← 구도
 ```
 
 | 카테고리 | 화풍 | 구도 | 이유 |
@@ -78,7 +81,7 @@ arms lowered naturally, calm neutral expression, plain flat background       ←
 | **몸통** | ✅ | ✅ | 10절 원문 그대로입니다 |
 | **표정 시트** | ✅ | ❌ | 12절은 "**얼굴과 목까지만.** 몸통·손은 넣지 마세요" — `bust crop`과 충돌 |
 | **도트 시트** | ❌ | ❌ | 웹툰 화풍을 붙이면 픽셀이 깨집니다. 14절은 "**의상·머리 부분만** 가져다 붙입니다" |
-| **스틸** | ✅ | ❌ | 배경을 그려야 하는데 `plain flat background`가 막습니다. 감정이 목적인데 `calm neutral expression`이 막습니다 |
+| **스틸** | ✅ | ❌ | 배경을 그려야 하는데 `chroma key green background`가 막습니다. 감정이 목적인데 `calm neutral expression`이 막습니다 |
 
 부정 프롬프트도 같은 이유로 나눴습니다.
 
@@ -89,22 +92,7 @@ arms lowered naturally, calm neutral expression, plain flat background       ←
 
 ---
 
-## 브리프에서 고친 것
-
-이 팩은 아래를 **고쳐서** 반영했습니다. `ART_BRIEF.md` 원문은 아직 그대로입니다.
-
-| # | 위치 | 문제 | 이 팩의 처리 |
-|---|---|---|---|
-| 1 | 0절 vs 9절 ③ | 캔버스가 **1024×1280**과 **1000×2000**으로 불일치 | 0절(1024×1280)을 따랐습니다 — 4:5이고 생성 도구 출력비에 맞습니다 |
-| 2 | 3절 | "2 × 5 = **10** 조합" | 표정이 6종이므로 **2 × 6 = 12**입니다 |
-| 3 | 9절 ④ | "**5종**을 따로 생성하면" | 6종입니다 |
-| 4 | 13절 ① 배경 | `empty white wire chairs`인데 인물이 그 위에 앉습니다 | `empty`를 뺐습니다. 4절 자신이 "**빈 의자가 처음으로 채워지는 그림**"이라고 적어둔 컷입니다 |
-| 5 | 12절 | 부정 프롬프트를 10절에 "더하라"고 했는데, 10절에 `laughing, crying, angry face`가 있습니다 | 표정 시트에서 그 토큰을 뺐습니다 — 시트가 만들어야 하는 게 바로 그 표정입니다 |
-| 6 | 13절 | 스틸에도 10절 스타일 접미사를 붙이라고 했는데 `plain flat background`가 들어 있습니다 | 화풍만 남기고 구도 토큰을 뺐습니다 |
-
-**정정 — "13절 vs 2절 복장 모순"은 모순이 아니었습니다.** 13절의 "①②는 평상복"과 2절의 "D7은 외출복·명찰 없음"이 충돌한다고 봤는데, 4절 ①은 **D7 새벽 2시, 캠퍼스 안**입니다. 외출복은 그날 낮에 캠퍼스를 벗어날 때의 차림이라 시각이 다릅니다. **평상복 + 명찰이 맞습니다.**
-
-## 4절이 지시했는데 13절에 안 적힌 것
+## 스틸에서 놓치기 쉬운 것
 
 - **승희·승민의 가든 씬은 4F 라운지에서 시작합니다.** 보조 참고 `community_lounge_1.jpg` — `T02`·`T05`에만 넣었습니다
 - **배경이 잘 안 나오면 [`WORLD_PROMPTS.md` 6~9절](../../WORLD_PROMPTS.md)로 심야·여명 배경을 먼저 뽑아 참조로 함께 넣으세요.** 13절 지시인데 놓치기 쉽습니다

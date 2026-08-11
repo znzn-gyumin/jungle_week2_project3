@@ -9,7 +9,7 @@
 | **참조 이미지** | **S01(김민아) 도트 시트 확정본** — 화풍 기준 |
 | **선행 조건** | S01 확정 |
 | **명찰** | 검은 랜야드 + 밝은 ID 카드 — **전 컷 착용** |
-| **자르기** | `python tools/cut_sheet.py sheet_taeyun_sprite.png out/taeyun --cols 4 --rows 4 --resize 48x48 --dekey ffffff --names down_idle,down_w1,down_w2,down_w3,left_idle,left_w1,left_w2,left_w3,right_idle,right_w1,right_w2,right_w3,up_idle,up_w1,up_w2,up_w3` |
+| **자르기** | `python tools/cut_sheet.py sheet_taeyun_sprite.png out/taeyun --cols 4 --rows 4 --resize 48x48 --dekey 00b140 --tol 40 --names down_idle,down_w1,down_w2,down_w3,left_idle,left_w1,left_w2,left_w3,right_idle,right_w1,right_w2,right_w3,up_idle,up_w1,up_w2,up_w3` |
 
 > **여섯 조 통틀어 가장 단정합니다.** 승민이 "갖춰 입은 학생"이면 이쪽은 **이미 취업한 사람처럼** 보입니다 — 그게 위협감의 정체입니다. 악역이 아니라 한 발 빠른 사람으로 그리세요.
 
@@ -28,7 +28,8 @@ chibi proportions with a large head, about 2.5 heads tall, crisp 1px dark outlin
 limited palette of 10 colors, flat shading, no anti-aliasing,
 row 1 facing toward the viewer, row 2 facing left, row 3 facing right, row 4 facing away,
 column 1 standing still, columns 2 to 4 walk cycle frames,
-plain flat white background, no text, no labels, no grid lines,
+flat solid chroma key green background, one uniform color,
+no text, no labels, no grid lines,
 white shirt under a navy knit vest, beige chino pants, white sneakers, the neatest outfit in the room,
 a black lanyard with a small bright ID card on the chest
 ```
@@ -38,7 +39,8 @@ a black lanyard with a small bright ID card on the chest
 ```text
 anti-aliasing, blurry, gradient shading, realistic proportions, tall body,
 different characters, inconsistent colors, text, labels, grid lines, drop shadow,
-photorealistic, 3d render, watermark, signature
+photorealistic, 3d render, watermark, signature,
+gradient background, color spill on outlines
 ```
 
 ## 받고 나서 확인할 것

@@ -182,7 +182,7 @@ sprite_{id}.png
 | **이승민** | **웃을 때 잇몸이 보이는 게 이 캐릭터의 전부.** 크고 시원하게 웃습니다 |
 | **장윤호** | 순함. **윤정보다 진폭을 좁게** — 같은 강아지상인데 덜 움직입니다 |
 
-**레이어 분리 필수** — 몸통과 표정이 분리돼야 2 × 5 = 10 조합이 나옵니다. 통짜로 렌더링하면 물량이 6배가 됩니다.
+**레이어 분리 필수** — 몸통과 표정이 분리돼야 2 × 6 = 12 조합이 나옵니다. 통짜로 렌더링하면 물량이 6배가 됩니다.
 
 ---
 
@@ -395,8 +395,9 @@ sprite_{id}.png
 |---|---|
 | **① 장당 한 요청** | 이 문서에서 그 한 장의 프롬프트만 복사해 씁니다 |
 | **② 참조 이미지 필수** | [프로필](./heroine_girl_profile.png)에서 **해당 인물만 잘라** character reference로 넣습니다. 안 넣으면 같은 인물이 매번 달라집니다 |
-| **③ 규격은 후처리** | 캔버스 1000×2000 · 투명 배경 · 시트 배열은 **프롬프트로 지정해도 안 지켜집니다.** 생성 후 편집 툴에서 맞춥니다 |
-| **④ 표정은 파생** | 5종을 따로 생성하면 얼굴 위치가 어긋납니다. **몸통 확정 후 얼굴만 인페인팅** |
+| **③ 규격은 후처리** | 캔버스 1024 × 1280 · 투명 배경 · 시트 배열은 **프롬프트로 지정해도 안 지켜집니다.** 생성 후 편집 툴에서 맞춥니다 |
+| **④ 표정은 파생** | 6종을 따로 생성하면 얼굴 위치가 어긋납니다. **몸통을 확정한 뒤 그걸 참조로 표정 시트 1장**을 뽑습니다 |
+| **⑤ 비율은 참조가 정합니다** | **출력이 참조 이미지의 가로세로 비율을 그대로 따라갑니다.** 4:5로 자른 참조를 넣으세요 |
 
 ### 생성 적합도
 
@@ -415,20 +416,33 @@ sprite_{id}.png
 
 ```
 korean webtoon illustration style, semi-realistic anime, soft cel shading,
-clean lineart, warm muted palette, upper body bust crop from the chest up,
-facing viewer, head and shoulders fill the frame,
+clean lineart, warm muted palette,
+hair rendered in exactly the stated color, the palette does not tint it,
+tight bust portrait, head and shoulders shot, cropped at the sternum,
+the bottom edge of the frame sits just below the collarbone,
+face large and clearly readable, head and shoulders fill the frame,
+subject centered horizontally with equal empty margin on the left and right,
+a small empty gap above the head, hair not touching the top edge,
+facing viewer straight on, shoulders level and symmetrical,
 relaxed neutral posture, arms lowered naturally, calm neutral expression,
-plain flat background
+flat solid chroma key green background, one uniform color, no gradient
 ```
 
-> **`transparent background`는 대부분의 모델이 못 만듭니다.** `plain flat background`로 뽑고 후처리에서 배경을 지우는 편이 빠릅니다.
+> **`upper body`를 쓰지 않습니다.** 태그로 읽으면 **허리 위**라서 얼굴이 작아집니다. 크롭은 `portrait` → `upper body` → `cowboy shot` → `full body` 순으로 넓어지므로, 원하는 자리를 얻으려면 긍정에서 `portrait` 쪽으로 당기고 **부정에서 `upper body` 아래를 막습니다.**
+>
+> **`transparent background`는 대부분의 모델이 못 만듭니다.** 초록 단색으로 뽑고 `cut_sheet.py --dekey 00b140 --tol 40`으로 뺍니다. **흰 배경을 쓰면 안 됩니다** — 민아의 흰 티, 승희의 아이보리, 흰 스니커즈 셋이 같이 뚫립니다.
 
 ### 부정 프롬프트 — 공통
 
 ```
-photorealistic, 3d render, extra fingers, deformed hands, cropped head,
-full body, legs, feet, watermark, signature, text,
-multiple characters, busy background, oversaturated, lens flare,
+photorealistic, 3d render, extra fingers, deformed hands,
+watermark, signature, text, oversaturated, lens flare,
+cropped head, hair cropped at the top edge, head touching the top edge,
+upper body, cowboy shot, full body, waist, hips, midriff, legs, feet,
+off center subject, subject pushed to one side, uneven side margins,
+multiple characters, busy background,
+gradient background, textured background, shadow cast on the background, vignette,
+color spill on hair edges, rim light, tinted skin,
 dramatic pose, arms crossed, raised hands, hands near the face,
 strong emotion, laughing, crying, angry face
 ```
@@ -441,10 +455,10 @@ lanyard, id card, name tag, badge on chest
 
 ### 인물 공통 요소
 
-여섯 다 **검은 랜야드에 흰 ID 카드**를 목에 겁니다 (평상복만).
+여섯 다 **검은 랜야드에 흰 ID 카드**를 목에 겁니다 (평상복만). **카드가 크롭선 위에 남게** 위치를 못박습니다 — 안 그러면 줄만 보이거나 크롭이 허리까지 내려갑니다.
 
 ```
-black lanyard around neck with a small white ID card
+black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
 ```
 
 ---
@@ -469,7 +483,7 @@ black lanyard around neck with a small white ID card
 22 year old korean woman, long straight black hair tied high in a ponytail,
 sharp upturned cat-like eyes with clear pupils, slim face, thin lips,
 slender build, black zip-up hoodie over a white tee,
-black lanyard around neck with a small white ID card
+black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
 ```
 
 **외출복** — 참조: 위에서 뽑은 평상복
@@ -490,7 +504,7 @@ no lanyard, no id card
 23 year old korean woman, long wavy brown hair, large round doe-like eyes,
 long eyelashes, slim neck and narrow shoulders, beige knit sweater with the
 sleeves pulled down over her hands,
-black lanyard around neck with a small white ID card
+black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
 ```
 
 **외출복**
@@ -510,7 +524,7 @@ revealing her wrists and forearms, small crossbody bag strap across the shoulder
 21 year old korean woman, brown hair tied high, big round downturned puppy-like eyes,
 round cheeks, oversized bright yellow hoodie much too large for her,
 headphones resting around her neck,
-black lanyard around neck with a small white ID card
+black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
 ```
 
 **외출복**
@@ -531,7 +545,7 @@ headphones still resting around her neck, no lanyard, no id card
 22 year old korean man, long front bangs covering half of his face,
 narrow sharp eyes, angular jaw, very thin build, faint dark circles,
 black hoodie with the hood down,
-black lanyard around neck with a small white ID card
+black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
 ```
 
 **외출복**
@@ -552,7 +566,7 @@ no lanyard, no id card
 24 year old korean man, tall with broad shoulders and a large frame,
 short cropped hair, big bright eyes,
 green varsity jacket over a white tee,
-black lanyard around neck with a small white ID card
+black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
 ```
 
 **외출복**
@@ -571,7 +585,7 @@ wristwatch, a cap, no lanyard, no id card
 ```
 20 year old korean man, round gentle eyes, soft facial lines, mild youthful face,
 cream cardigan over a white tee with a small dog-shaped pin on the chest,
-black lanyard around neck with a small white ID card
+black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
 ```
 
 **외출복**
@@ -595,7 +609,7 @@ no lanyard, no id card
 | 셀 | 약 **341 × 512** — 얼굴만이라 이 해상도로 충분합니다 |
 | 담는 것 | **얼굴과 목까지만.** 몸통·손은 넣지 마세요 |
 | 순서 | 좌→우, 위→아래 — `기본` `기쁨` `부끄러움` / `슬픔` `놀람` `화남` |
-| 배경 | **단색 흰색.** 자를 때 투명화합니다 |
+| 배경 | **단색 초록**(`#00B140`). 자를 때 투명화합니다 |
 
 > **몸통을 먼저 확정하고, 그 이미지를 참조로 시트를 뽑으세요.** 그래야 시트의 얼굴이 몸통과 같은 각도·같은 화풍으로 나옵니다.
 
@@ -608,14 +622,16 @@ same head angle and same scale in every cell, only the expression differs,
 row 1 left to right: neutral calm / bright genuine smile / blushing with eyes averted
 row 2 left to right: downcast sad / wide-eyed surprise / furrowed angry
 korean webtoon illustration style, semi-realistic anime, soft cel shading,
-clean lineart, plain flat white background, no body, no hands, no text labels
+clean lineart, flat solid chroma key green background, one uniform color,
+no body, no hands, no text labels
 ```
 
-부정 프롬프트에 아래를 더합니다.
+**10절 부정에서 `strong emotion, laughing, crying, angry face`와 몸통 전용 구도 토큰을 빼고** 아래를 더합니다 — 이 시트가 만들어야 하는 게 바로 그 표정입니다.
 
 ```
 different people, inconsistent face, varying head size, body, shoulders, hands,
-text, labels, borders between cells, watermark
+text, labels, borders between cells, watermark,
+gradient background, color spill on hair edges, rim light
 ```
 
 | 인물 | 덧붙일 것 |
@@ -654,7 +670,7 @@ text, labels, borders between cells, watermark
 **① D7 새벽 커넥트가든 → 여명**
 
 ```
-outdoor wooden deck terrace at dawn, low stone planter walls, empty white wire chairs
+outdoor wooden deck terrace at dawn, low stone planter walls, white wire chairs
 and olive green chairs and tables, young slender trees, white curtain-wall buildings
 with orange perforated panels above, piloti columns with an open passage underneath,
 sky a soft gradient from deep violet at the top to pale blue at the horizon,
@@ -726,7 +742,7 @@ very low key lighting, high contrast, most of the frame barely readable shadow
 | 셀 | 약 **256 × 256** → 48 × 48로 축소 |
 | 행 | **아래 → 왼쪽 → 오른쪽 → 위** |
 | 열 | **정지 · 걷기1 · 걷기2 · 걷기3** |
-| 배경 | **단색.** 자를 때 투명화합니다 |
+| 배경 | **단색 초록**(`#00B140`). 자를 때 투명화합니다 — 흰 스니커즈 셋과 겹치지 않게 |
 
 **[`pixel_demo.png`](./pixel_demo.png)가 도착점입니다** — 2~2.5등신, 1px 외곽선, 얼굴이 크고 눈이 또렷한 치비. 그 이미지를 쓰는 게 아니라 결과가 그 화풍이 되도록 맞춥니다.
 
@@ -738,14 +754,16 @@ chibi proportions with a large head, about 2.5 heads tall, crisp 1px dark outlin
 limited palette of 10 colors, flat shading, no anti-aliasing,
 row 1 facing toward the viewer, row 2 facing left, row 3 facing right, row 4 facing away
 column 1 standing still, columns 2 to 4 walk cycle frames,
-plain flat background, no text, no labels, no grid lines
+flat solid chroma key green background, one uniform color,
+no text, no labels, no grid lines
 ```
 
-부정 프롬프트에 아래를 더합니다.
+**10절 부정은 쓰지 않고** 아래만 씁니다 — 웹툰 화풍·반신 구도 토큰이 픽셀과 정면으로 충돌합니다.
 
 ```
 anti-aliasing, blurry, gradient shading, realistic proportions, tall body,
-different characters, inconsistent colors, text, labels, grid lines, drop shadow
+different characters, inconsistent colors, text, labels, grid lines, drop shadow,
+gradient background, color spill on outlines
 ```
 
 인물 묘사는 [11절](#11-몸통-프롬프트--12장)의 **의상·머리 부분만** 가져다 붙입니다. 도트에는 **하의·신발이 보이므로** [0절 표](#복장의-근거)도 함께 넣으세요 — 민아는 검은 트랙팬츠, 승희는 아이보리 롱스커트 식으로.
@@ -763,13 +781,13 @@ different characters, inconsistent colors, text, labels, grid lines, drop shadow
 **도트 시트 → 48×48 컷 16장**
 
 ```bash
-python tools/cut_sheet.py sheet_minah_sprite.png out/minah --cols 4 --rows 4 --resize 48x48 --dekey ffffff --names down_idle,down_w1,down_w2,down_w3,left_idle,left_w1,left_w2,left_w3,right_idle,right_w1,right_w2,right_w3,up_idle,up_w1,up_w2,up_w3
+python tools/cut_sheet.py sheet_minah_sprite.png out/minah --cols 4 --rows 4 --resize 48x48 --dekey 00b140 --tol 40 --names down_idle,down_w1,down_w2,down_w3,left_idle,left_w1,left_w2,left_w3,right_idle,right_w1,right_w2,right_w3,up_idle,up_w1,up_w2,up_w3
 ```
 
 **표정 시트 → 얼굴 6장**
 
 ```bash
-python tools/cut_sheet.py sheet_minah_face.png out/minah --cols 3 --rows 2 --dekey ffffff --trim --names normal,happy,shy,sad,surprise,angry
+python tools/cut_sheet.py sheet_minah_face.png out/minah --cols 3 --rows 2 --dekey 00b140 --tol 40 --trim --names normal,happy,shy,sad,surprise,angry
 ```
 
 | 옵션 | 하는 일 |
@@ -777,7 +795,7 @@ python tools/cut_sheet.py sheet_minah_face.png out/minah --cols 3 --rows 2 --dek
 | `--cols` `--rows` | 격자 |
 | `--margin 좌,상,우,하` · `--gutter` | 시트에 여백이나 셀 간격이 있을 때 |
 | `--resize 48x48` | **최근접 이웃** 축소 — 도트를 뭉개지 않습니다 |
-| `--dekey ffffff` `--tol` | 배경색을 투명으로 |
+| `--dekey 00b140` `--tol 40` | 배경색을 투명으로. 생성된 초록이 정확히 `#00B140`이 아니라 여유가 필요합니다 |
 | `--trim` | 투명 여백 제거 |
 | `--names` | 좌→우, 위→아래 순서로 이름 지정 |
 
@@ -792,7 +810,11 @@ python tools/cut_sheet.py sheet_minah_face.png out/minah --cols 3 --rows 2 --dek
 **몸통**
 
 - [ ] 참조 인물과 **얼굴이 같은 사람인가**
-- [ ] **가슴 위 반신**인가 (전신이 나오면 다시 — 얼굴이 작아집니다)
+- [ ] **가슴 위 반신**인가 — 허리가 보이면 다시. 얼굴이 작아집니다
+- [ ] **머리 위 여백이 5~8%인가** (머리카락이 위 모서리에 닿으면 다시)
+- [ ] **인물이 가로 중앙인가** (한쪽 여백만 넓으면 다시)
+- [ ] **머리색이 설명대로인가** — 검은 머리가 갈색으로 도는 일이 있습니다
+- [ ] 배경이 단색 초록인가 · 머리 가장자리에 초록이 번지지 않았는가
 - [ ] 손가락이 깨지지 않았는가
 - [ ] 평상복에 **명찰이 있고** 외출복에 **없는가**
 - [ ] 캔버스 **1024 × 1280**, 배경 제거, 투명 PNG

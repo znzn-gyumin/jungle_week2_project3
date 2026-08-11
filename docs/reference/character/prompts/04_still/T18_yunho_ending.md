@@ -24,7 +24,8 @@ modern open-plan office interior, late afternoon light, calm,
 25 year old, presenting his own work under his own name, finally,
 white shirt, no cardigan, a small dog-shaped pin clipped onto his employee ID strap,
 korean webtoon illustration style, semi-realistic anime, soft cel shading,
-clean lineart, warm muted palette
+clean lineart, warm muted palette,
+hair rendered in exactly the stated color, the palette does not tint it
 ```
 
 ## 부정 프롬프트

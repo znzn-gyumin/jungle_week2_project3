@@ -7,7 +7,7 @@
 | **컷** | 48 × 48px · 행 아래→왼쪽→오른쪽→위 · 열 정지·걷기1·2·3 |
 | **참조 이미지** | `../../refs/ref_mingyu.png` + `../../pixel_demo.png` |
 | **선행 조건** | S01 확정 (화풍 기준) |
-| **자르기** | `python tools/cut_sheet.py sheet_mingyu_sprite.png out/mingyu --cols 4 --rows 4 --resize 48x48 --dekey ffffff --names down_idle,down_w1,down_w2,down_w3,left_idle,left_w1,left_w2,left_w3,right_idle,right_w1,right_w2,right_w3,up_idle,up_w1,up_w2,up_w3` |
+| **자르기** | `python tools/cut_sheet.py sheet_mingyu_sprite.png out/mingyu --cols 4 --rows 4 --resize 48x48 --dekey 00b140 --tol 40 --names down_idle,down_w1,down_w2,down_w3,left_idle,left_w1,left_w2,left_w3,right_idle,right_w1,right_w2,right_w3,up_idle,up_w1,up_w2,up_w3` |
 
 > **S01(김민아)을 참조로 물리세요.** 화풍·등신·색 수가 거기에 맞아야 합니다.
 
@@ -23,7 +23,8 @@ chibi proportions with a large head, about 2.5 heads tall, crisp 1px dark outlin
 limited palette of 10 colors, flat shading, no anti-aliasing,
 row 1 facing toward the viewer, row 2 facing left, row 3 facing right, row 4 facing away,
 column 1 standing still, columns 2 to 4 walk cycle frames,
-plain flat white background, no text, no labels, no grid lines,
+flat solid chroma key green background, one uniform color,
+no text, no labels, no grid lines,
 long front bangs covering half of his face, black hoodie with the hood down,
 black wide-leg pants with the hems dragging on the floor, black high-top sneakers with the laces undone,
 a black lanyard with a small bright ID card on the chest
@@ -34,7 +35,8 @@ a black lanyard with a small bright ID card on the chest
 ```text
 anti-aliasing, blurry, gradient shading, realistic proportions, tall body,
 different characters, inconsistent colors, text, labels, grid lines, drop shadow,
-photorealistic, 3d render, watermark, signature
+photorealistic, 3d render, watermark, signature,
+gradient background, color spill on outlines
 ```
 
 ## 받고 나서 확인할 것

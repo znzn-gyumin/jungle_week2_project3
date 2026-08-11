@@ -22,7 +22,8 @@ modern open-plan office interior, late afternoon light, calm,
 27 year old, sleeping and eating properly now, healthier, calm,
 grey shirt, bangs swept back so the forehead is fully visible, no dark circles under the eyes, slightly fuller face, healthy skin,
 korean webtoon illustration style, semi-realistic anime, soft cel shading,
-clean lineart, warm muted palette
+clean lineart, warm muted palette,
+hair rendered in exactly the stated color, the palette does not tint it
 ```
 
 ## 부정 프롬프트

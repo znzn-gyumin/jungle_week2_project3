@@ -1,13 +1,12 @@
 """타일맵 7개 (TILE_BRIEF 3절·4절).
 
-연결 (브리프 3절)
+연결 (GAME_DESIGN 6-3 정본)
     M7 정문 ──정문── M3 1F ──후문── M5 커넥트가든 ──── M6 숙소동
-                      │
-                   계단 ↕
+                      │  ↕ 계단
                    M2 2F ──계단── M1 4F   ← 허브   (3F는 없음: 4F↔2F 직결)
-                      │
-                   계단 ↕
-                   M4 B1
+    M3 1F ↕ 계단 ── M4 B1
+
+M3이 수직 동선의 허브다 — 위로 M2, 아래로 M4, 밖으로 M7과 M5.
 """
 from .map_core import TileMap, PIECE_SIZE
 
@@ -290,9 +289,6 @@ def m2(TS_):
     m.place(E, "stairs_down", 27, 25)
     m.portal("m3_basecamp_1f", 27, 26, 20, 5, name="stairs_to_1f")
     m.portal("m3_basecamp_1f", 28, 26, 21, 5, name="stairs_to_1f")
-    m.place(E, "stairs_down", 34, 3)                 # B1(정글스테이지/카페테리아)
-    m.portal("m4_basecamp_b1", 34, 4, 25, 6, name="stairs_to_b1")
-    m.portal("m4_basecamp_b1", 35, 4, 26, 6, name="stairs_to_b1")
     m.trigger("spawn_default", 20, 5, kind="spawn")
     return m
 
@@ -354,6 +350,9 @@ def m3(TS_):
     m.place(E, "stairs_up", 27, 3)
     m.portal("m2_basecamp_2f", 27, 4, 27, 27, name="stairs_to_2f")
     m.portal("m2_basecamp_2f", 28, 4, 28, 27, name="stairs_to_2f")
+    m.place(E, "stairs_down", 31, 3)                 # B1 (정글스테이지 · 카페테리아 · 편의점)
+    m.portal("m4_basecamp_b1", 31, 4, 25, 6, name="stairs_to_b1")
+    m.portal("m4_basecamp_b1", 32, 4, 26, 6, name="stairs_to_b1")
     m.place(E, "vending", 24, 3)
     m.set_obj(25, 4, E, "water_cooler", 0)
 
@@ -420,10 +419,12 @@ def m4(TS_):
     m.trigger("convenience", 31, 24, w=8, h=2, kind="room", room="convenience")
     m.trigger("grab_and_go", 41, 22, w=1, h=1, kind="interact", label="그랩앤고")
 
-    # ---- 계단 (B1 ↔ 2F)
+    # ---- 계단 (B1 ↔ 1F)
+    # GAME_DESIGN 6-3 정본: M4 → M3. B1은 1F 아래다.
+    # (TILE_BRIEF 3절 구버전 다이어그램은 M4를 M2 아래에 그렸었다 — 정본을 따른다)
     m.place(E, "stairs_up", 25, 3)
-    m.portal("m2_basecamp_2f", 25, 4, 34, 5, name="stairs_to_2f")
-    m.portal("m2_basecamp_2f", 26, 4, 35, 5, name="stairs_to_2f")
+    m.portal("m3_basecamp_1f", 25, 4, 31, 5, name="stairs_to_1f")
+    m.portal("m3_basecamp_1f", 26, 4, 32, 5, name="stairs_to_1f")
     m.trigger("spawn_default", 25, 6, kind="spawn")
     return m
 

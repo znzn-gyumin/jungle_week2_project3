@@ -8,11 +8,7 @@ from . import tiles_edu, tiles_dorm, tiles_out, palettes as P
 from .map_core import TileMap, Tileset, register_sizes
 from . import maps as M
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "out")
-TSDIR = os.path.join(OUT, "assets", "tilesets")
-MAPDIR = os.path.join(OUT, "assets", "map")
-PRE = os.path.join(OUT, "preview")
+from .paths import ROOT, OUT, TSDIR, MAPDIR, PRE
 
 
 # --------------------------------------------------------------- 메타 타일셋

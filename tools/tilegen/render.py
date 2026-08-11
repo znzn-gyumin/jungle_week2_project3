@@ -3,12 +3,9 @@ from __future__ import annotations
 import json, os
 from PIL import Image, ImageDraw
 
+from .paths import ROOT, OUT, TSDIR, MAPDIR, PRE
+
 TS = 48
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "out")
-TSDIR = os.path.join(OUT, "assets", "tilesets")
-MAPDIR = os.path.join(OUT, "assets", "map")
-PRE = os.path.join(OUT, "preview")
 
 # 조명 오버레이 5종 (TILE_BRIEF 5절)
 LIGHTING = {

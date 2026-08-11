@@ -34,14 +34,19 @@ def block(s: str) -> str:
 
 CORE_STYLE = block("""
     korean webtoon illustration style, semi-realistic anime, soft cel shading,
-    clean lineart, warm muted palette
+    clean lineart, warm muted palette,
+    hair rendered in exactly the stated color, the palette does not tint it
 """)
 
 BUST_FRAMING = block("""
-    upper body bust crop from the chest up,
-    facing viewer, head and shoulders fill the frame,
+    tight bust portrait, head and shoulders shot, cropped at the sternum,
+    the bottom edge of the frame sits just below the collarbone,
+    face large and clearly readable, head and shoulders fill the frame,
+    subject centered horizontally with equal empty margin on the left and right,
+    a small empty gap above the head, hair not touching the top edge,
+    facing viewer straight on, shoulders level and symmetrical,
     relaxed neutral posture, arms lowered naturally, calm neutral expression,
-    plain flat background
+    flat solid chroma key green background, one uniform color, no gradient
 """)
 
 NEG_BASE = block("""
@@ -50,8 +55,12 @@ NEG_BASE = block("""
 """)
 
 NEG_BODY = NEG_BASE + ",\n" + block("""
-    cropped head, full body, legs, feet,
+    cropped head, hair cropped at the top edge, head touching the top edge,
+    upper body, cowboy shot, full body, waist, hips, midriff, legs, feet,
+    off center subject, subject pushed to one side, uneven side margins,
     multiple characters, busy background,
+    gradient background, textured background, shadow cast on the background, vignette,
+    color spill on hair edges, rim light, tinted skin,
     dramatic pose, arms crossed, raised hands, hands near the face,
     strong emotion, laughing, crying, angry face
 """)
@@ -63,14 +72,16 @@ NEG_NO_BADGE = "lanyard, id card, name tag, badge on chest"
 NEG_FACE = NEG_BASE + ",\n" + block("""
     different people, inconsistent face, varying head size,
     body, shoulders, hands, arms,
-    labels, borders between cells, grid lines, busy background
+    labels, borders between cells, grid lines, busy background,
+    gradient background, color spill on hair edges, rim light
 """)
 
 # 도트: 화풍 토큰을 일절 넣지 않습니다. 웹툰 화풍을 붙이면 픽셀이 깨집니다.
 NEG_SPRITE = block("""
     anti-aliasing, blurry, gradient shading, realistic proportions, tall body,
     different characters, inconsistent colors, text, labels, grid lines, drop shadow,
-    photorealistic, 3d render, watermark, signature
+    photorealistic, 3d render, watermark, signature,
+    gradient background, color spill on outlines
 """)
 
 # 스틸 ①②(심야·여명): full body / legs / feet / busy background / strong emotion 을 뺐습니다.
@@ -116,7 +127,7 @@ HEROINES = [
             22 year old korean woman, long straight black hair tied high in a ponytail,
             sharp upturned cat-like eyes with clear pupils, slim face, thin lips,
             slender build, black zip-up hoodie over a white tee,
-            black lanyard around neck with a small white ID card
+            black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
         """),
         outing=block("""
             same woman, hair completely down for the first time, long straight black hair
@@ -146,7 +157,7 @@ HEROINES = [
             23 year old korean woman, long wavy brown hair, large round doe-like eyes,
             long eyelashes, slim neck and narrow shoulders, beige knit sweater with the
             sleeves pulled down over her hands,
-            black lanyard around neck with a small white ID card
+            black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
         """),
         outing=block("""
             same woman, light sky blue shirt dress, sleeves rolled up
@@ -177,7 +188,7 @@ HEROINES = [
             21 year old korean woman, brown hair tied high, big round downturned puppy-like eyes,
             round cheeks, oversized bright yellow hoodie much too large for her,
             headphones resting around her neck,
-            black lanyard around neck with a small white ID card
+            black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
         """),
         outing=block("""
             same woman, cream sleeveless top, shoulders and arms now bare after the oversized
@@ -207,7 +218,7 @@ HEROINES = [
             22 year old korean man, long front bangs covering half of his face,
             narrow sharp eyes, angular jaw, very thin build, faint dark circles,
             black hoodie with the hood down,
-            black lanyard around neck with a small white ID card
+            black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
         """),
         outing=block("""
             same man, bangs swept back so both eyes are fully visible for the first time,
@@ -237,7 +248,7 @@ HEROINES = [
             24 year old korean man, tall with broad shoulders and a large frame,
             short cropped hair, big bright eyes,
             green varsity jacket over a white tee,
-            black lanyard around neck with a small white ID card
+            black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
         """),
         outing=block("""
             same man, no varsity jacket, linen shirt with the top button undone,
@@ -264,7 +275,7 @@ HEROINES = [
         casual=block("""
             20 year old korean man, round gentle eyes, soft facial lines, mild youthful face,
             cream cardigan over a white tee with a small dog-shaped pin on the chest,
-            black lanyard around neck with a small white ID card
+            black lanyard around the neck, the cord visible on the chest and the small white ID card resting at the sternum just above the bottom edge
         """),
         outing=block("""
             same man, navy striped short-sleeve shirt, canvas tote bag strap over the shoulder
@@ -406,7 +417,8 @@ SPRITE_BASE = block("""
     limited palette of 10 colors, flat shading, no anti-aliasing,
     row 1 facing toward the viewer, row 2 facing left, row 3 facing right, row 4 facing away,
     column 1 standing still, columns 2 to 4 walk cycle frames,
-    plain flat white background, no text, no labels, no grid lines
+    flat solid chroma key green background, one uniform color,
+    no text, no labels, no grid lines
 """)
 
 FACE_BASE = block("""
@@ -416,7 +428,8 @@ FACE_BASE = block("""
     row 1 left to right: neutral calm / bright genuine smile / blushing with eyes averted,
     row 2 left to right: downcast sad / wide-eyed surprise / furrowed angry,
     korean webtoon illustration style, semi-realistic anime, soft cel shading,
-    clean lineart, plain flat white background, no body, no hands, no text labels
+    clean lineart, flat solid chroma key green background, one uniform color,
+    no body, no hands, no text labels
 """)
 
 BG_GARDEN = block("""
@@ -474,6 +487,8 @@ def main() -> int:
             f"B{n:02d} · {h['kr']} 평상복 몸통",
             [("파일명", f"`cg_{h['id']}_body_casual.png`"),
              ("캔버스", "1024 × 1280 세로(4:5) · 배경 제거 후 투명 PNG"),
+             ("비율", "**출력이 참조 이미지의 가로세로 비율을 그대로 따라갑니다.** 넣기 전에 참조가 4:5인지 확인하세요"),
+             ("배경", "**초록 단색으로 뽑고** `cut_sheet.py --dekey 00b140 --tol 40` 로 뺍니다 — 흰 배경은 흰 티셔츠·아이보리 스커트와 겹칩니다"),
              ("참조 이미지", f"`../../refs/ref_{h['id']}.png`"),
              ("선행 조건", "없음"),
              ("테마 컬러", f"`{h['theme']}` — UI 강조색입니다. **의상·머리색에 쓰지 마세요**")],
@@ -484,11 +499,15 @@ def main() -> int:
             "> 참조 이미지의 **포즈와 표정은 가져오지 마세요.** 원본이 중립이 아닙니다. "
             "가져올 것은 얼굴·머리·의상뿐입니다.",
             ["참조 인물과 얼굴이 같은 사람인가",
-             "**가슴 위 반신**인가 (전신이 나오면 다시 — 얼굴이 작아집니다)",
+             "**가슴 위 반신**인가 — 허리가 보이면 다시. 얼굴이 작아집니다",
+             "**머리 위에 여백이 5~8% 있는가** (머리카락이 위 모서리에 닿으면 다시)",
+             "**인물이 가로 중앙인가** (한쪽 여백만 넓으면 다시)",
              "자세가 중립인가 (팔짱·손을 든 포즈가 따라오지 않았는가)",
              "표정이 중립인가 (표정 6종을 얹어야 합니다)",
              "손가락이 깨지지 않았는가",
              "**명찰(검은 랜야드 + 흰 ID 카드)이 있는가**",
+             "**머리색이 설명대로인가** — 검은 머리가 갈색으로 도는 일이 있습니다",
+             "배경이 단색 초록인가 · 머리 가장자리에 초록이 번지지 않았는가",
              "캔버스 1024 × 1280, 배경 제거, 투명 PNG"]))
         made.append(f"01_body/B{n:02d}_{h['id']}_casual.md")
 
@@ -497,6 +516,7 @@ def main() -> int:
             f"B{m:02d} · {h['kr']} D7 외출복 몸통",
             [("파일명", f"`cg_{h['id']}_body_outing.png`"),
              ("캔버스", "1024 × 1280 세로(4:5) · 배경 제거 후 투명 PNG"),
+             ("배경", "**초록 단색으로 뽑고** `cut_sheet.py --dekey 00b140 --tol 40` 로 뺍니다 — 흰 배경은 흰 티셔츠·아이보리 스커트와 겹칩니다"),
              ("참조 이미지", f"**B{n:02d}에서 확정한 평상복 결과물** (`ref_{h['id']}.png` 아님)"),
              ("선행 조건", f"B{n:02d} 확정"),
              ("명찰", "**없음** — 캠퍼스를 벗어나는 날입니다")],
@@ -509,7 +529,9 @@ def main() -> int:
              "평상복과 **얼굴 위치·크기가 같은가** (겹쳐서 확인)",
              "**명찰이 없는가**",
              "가슴 위 반신 · 중립 자세 · 중립 표정인가",
+             "머리 위 여백 5~8% · 인물이 가로 중앙인가",
              "손가락이 깨지지 않았는가",
+             "배경이 단색 초록인가",
              "캔버스 1024 × 1280, 배경 제거, 투명 PNG"]))
         made.append(f"01_body/B{m:02d}_{h['id']}_outing.md")
 
@@ -523,7 +545,7 @@ def main() -> int:
              ("참조 이미지", f"**{h['kr']} 평상복 몸통 확정본**"),
              ("선행 조건", f"B{i*2-1:02d} 확정"),
              ("자르기", f"`python tools/cut_sheet.py sheet_{h['id']}_face.png "
-                        f"out/{h['id']} --cols 3 --rows 2 --dekey ffffff --trim "
+                        f"out/{h['id']} --cols 3 --rows 2 --dekey 00b140 --tol 40 --trim "
                         f"--names normal,happy,shy,sad,surprise,angry`")],
             FACE_BASE + ",\n" + h["face_extra"],
             NEG_FACE,
@@ -538,13 +560,13 @@ def main() -> int:
              "6컷의 **머리 크기·각도가 같은가** — 다르면 정렬로 못 메웁니다",
              "몸통과 화풍·각도가 이어지는가",
              "셀 사이에 테두리·라벨·글자가 없는가",
-             "배경이 단색 흰색인가",
+             "배경이 단색 초록인가 · 머리 가장자리에 초록이 번지지 않았는가",
              "잘라낸 6장이 같은 1024 × 1280 캔버스의 같은 위치에 있는가",
              "몸통에 얹었을 때 **눈이 안 떨리는가** (한 번은 실제로 얹어 확인)"]))
         made.append(f"02_face/F{i:02d}_{h['id']}_face_sheet.md")
 
     # ── 03 도트 시트 18장 ───────────────────────────────────
-    cut_cmd = ("--cols 4 --rows 4 --resize 48x48 --dekey ffffff --names "
+    cut_cmd = ("--cols 4 --rows 4 --resize 48x48 --dekey 00b140 --tol 40 --names "
                "down_idle,down_w1,down_w2,down_w3,left_idle,left_w1,left_w2,left_w3,"
                "right_idle,right_w1,right_w2,right_w3,up_idle,up_w1,up_w2,up_w3")
 

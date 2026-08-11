@@ -22,7 +22,8 @@ gallery exhibition space, white walls, spot lighting, quiet,
 28 year old, now the one who reaches out first, standing by her own exhibited work,
 ivory short-sleeve shirt, forearms fully bare, long wavy hair unchanged from five years ago,
 korean webtoon illustration style, semi-realistic anime, soft cel shading,
-clean lineart, warm muted palette
+clean lineart, warm muted palette,
+hair rendered in exactly the stated color, the palette does not tint it
 ```
 
 ## 부정 프롬프트

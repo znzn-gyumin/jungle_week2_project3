@@ -24,14 +24,51 @@ PY="C:/Users/wfami/AppData/Local/Python/pythoncore-3.14-64/python.exe"
 | | |
 |---|---|
 | ✅ 끝남 | 인물별 레퍼런스 크롭 6장 · 프롬프트 팩 54건 (값 전부 채워짐) |
-| ⬜ **지금 할 일** | **도트 스프라이트를 코드로 그리기** — 이 세션이 합니다 |
+| ✅ 끝남 | `tools/chargen/` — 48px 치비 드로잉 모듈. `tilegen/core.py` 원시함수 재사용 |
+| ✅ 끝남 | **김민아 16컷** (`out/assets/sprites/sprite_minah.png`) + 비교 이미지 |
+| ⬜ **지금 할 일** | **화풍 판단** — `out/preview/compare_minah.png` 를 보고 통과/반려 |
+| ⬜ 통과하면 | 나머지 17종 — `python tools/chargen/build.py --all` |
 | ⬜ 병행 | CG 66장 — **사람이 이미지 도구에** 넣습니다 |
 
-**생성된 이미지는 아직 하나도 없습니다.**
+**도트는 김민아 1종이 나왔습니다.** CG는 아직 하나도 없습니다.
+
+### 판단이 필요한 지점 — 등신
+
+| | 등신 |
+|---|---|
+| 이 문서 「산출 규격」 | **2~2.5등신** |
+| `pixel_demo.png` 실측 | **약 1.5등신** (머리+머리카락이 실루엣의 69%) |
+| 지금 코드 | **1.96등신** |
+
+**규격과 레퍼런스가 서로 다릅니다.** 규격 하한에 맞춰 1.96으로 뒀습니다.
+데모처럼 더 치비로 가려면 [`body.py`](../../tools/chargen/body.py)의 `HEAD_H` 한 값만
+올리면 됩니다 (`23` → `27` 이면 약 1.6등신). 나머지 17종을 뽑기 **전에** 정하세요.
 
 ---
 
-## 할 일 — 도트 스프라이트를 코드로
+## ~~할 일 — 도트 스프라이트를 코드로~~ ✅ 김민아까지 끝남
+
+> ```bash
+> "$PY" tools/chargen/build.py            # 김민아만
+> "$PY" tools/chargen/build.py --all      # 통과 후 18종 전부
+> "$PY" tools/chargen/compare.py          # 비교 이미지 다시 만들기
+> ```
+>
+> | 파일 | 하는 일 |
+> |---|---|
+> | `chargen/palette.py` | 18종 색. 가까운 색을 자동 병합해 **8~12색 제약을 강제**합니다 |
+> | `chargen/body.py` | 48px 드로잉 원시함수. **`HEAD_H` 한 값이 등신을 정합니다** |
+> | `chargen/chars.py` | 18종 정의. 왼쪽은 오른쪽의 **좌우 반전**이라 두 방향이 어긋날 수 없습니다 |
+> | `chargen/build.py` | 시트 PNG + 걷기 GIF |
+> | `chargen/compare.py` | 화풍 판단용 비교 이미지 |
+>
+> 외곽선 `#2A2632`는 `tilegen/palettes.py`와 **같은 값**입니다 — 캐릭터가 타일 위에서
+> 붕 뜨지 않게 하는 부분이라 바꾸지 마세요.
+
+<details>
+<summary>원래 지시 (기록용)</summary>
+
+### 할 일 — 도트 스프라이트를 코드로
 
 **[`tools/tilegen/`](../../tools/tilegen/)이 이미 이 방식으로 타일셋 3종을 만들었습니다.** 같은 경로로 캐릭터 도트를 그립니다.
 
@@ -91,6 +128,8 @@ PY="C:/Users/wfami/AppData/Local/Python/pythoncore-3.14-64/python.exe"
 
 [`tools/tilegen/core.py`](../../tools/tilegen/core.py)에 48px 드로잉 원시함수가 있습니다 — 결정론 노이즈, 팔레트 스냅, 알파 팽창 외곽선. **캐릭터용 새 모듈을 만들되 그 원시함수를 재사용**하세요. 팔레트도 [`tools/tilegen/palettes.py`](../../tools/tilegen/palettes.py)와 같은 규칙으로.
 
+</details>
+
 ---
 
 ## 병행 — CG 66장은 사람이 합니다
@@ -105,7 +144,7 @@ PY="C:/Users/wfami/AppData/Local/Python/pythoncore-3.14-64/python.exe"
 **②가 갈림길입니다.** 잘라 얹었을 때 얼굴이 떨리면 시트를 버리고 인페인팅으로 돌아가야 하고 **요청이 36번 더 붙습니다.**
 
 ```bash
-"$PY" tools/cut_sheet.py sheet_minah_face.png out/minah --cols 3 --rows 2 --dekey ffffff --trim --names normal,happy,shy,sad,surprise,angry
+"$PY" tools/cut_sheet.py sheet_minah_face.png out/minah --cols 3 --rows 2 --dekey 00b140 --tol 40 --trim --names normal,happy,shy,sad,surprise,angry
 ```
 
 > **도트를 코드로 그리기로 하면 `03_sprite/` 18건은 안 씁니다.** 지우지는 말고 남겨두세요 — 코드 결과가 `pixel_demo` 밀도에 못 미쳐서 생성으로 돌아갈 수 있습니다.

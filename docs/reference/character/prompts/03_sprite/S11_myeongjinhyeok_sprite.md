@@ -9,7 +9,7 @@
 | **참조 이미지** | **S01(김민아) 도트 시트 확정본** — 화풍 기준 |
 | **선행 조건** | S01 확정 |
 | **명찰** | **운영진용 다른 색 랜야드** — 참가자의 검은 랜야드와 구분됩니다 |
-| **자르기** | `python tools/cut_sheet.py sheet_myeongjinhyeok_sprite.png out/myeongjinhyeok --cols 4 --rows 4 --resize 48x48 --dekey ffffff --names down_idle,down_w1,down_w2,down_w3,left_idle,left_w1,left_w2,left_w3,right_idle,right_w1,right_w2,right_w3,up_idle,up_w1,up_w2,up_w3` |
+| **자르기** | `python tools/cut_sheet.py sheet_myeongjinhyeok_sprite.png out/myeongjinhyeok --cols 4 --rows 4 --resize 48x48 --dekey 00b140 --tol 40 --names down_idle,down_w1,down_w2,down_w3,left_idle,left_w1,left_w2,left_w3,right_idle,right_w1,right_w2,right_w3,up_idle,up_w1,up_w2,up_w3` |
 
 > **혼자 셔츠와 구두입니다.** 학생들 사이에서 유일한 어른 옷이고, 그게 열 살 차이를 48px에서 읽히게 하는 유일한 수단입니다.
 
@@ -28,7 +28,8 @@ chibi proportions with a large head, about 2.5 heads tall, crisp 1px dark outlin
 limited palette of 10 colors, flat shading, no anti-aliasing,
 row 1 facing toward the viewer, row 2 facing left, row 3 facing right, row 4 facing away,
 column 1 standing still, columns 2 to 4 walk cycle frames,
-plain flat white background, no text, no labels, no grid lines,
+flat solid chroma key green background, one uniform color,
+no text, no labels, no grid lines,
 black shirt with the sleeves rolled up to the elbows, black slacks, black leather dress shoes, entirely monochrome from head to toe,
 a staff lanyard in a different color from the participants' black one
 ```
@@ -38,7 +39,8 @@ a staff lanyard in a different color from the participants' black one
 ```text
 anti-aliasing, blurry, gradient shading, realistic proportions, tall body,
 different characters, inconsistent colors, text, labels, grid lines, drop shadow,
-photorealistic, 3d render, watermark, signature
+photorealistic, 3d render, watermark, signature,
+gradient background, color spill on outlines
 ```
 
 ## 받고 나서 확인할 것

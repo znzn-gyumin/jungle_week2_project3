@@ -24,7 +24,8 @@ modern open-plan office interior, late afternoon light, calm,
 27 year old, same company different team, still arguing over code reviews, leaving work together,
 black knit top under a cardigan, hair loose at shoulder length, an employee ID card on a lanyard,
 korean webtoon illustration style, semi-realistic anime, soft cel shading,
-clean lineart, warm muted palette
+clean lineart, warm muted palette,
+hair rendered in exactly the stated color, the palette does not tint it
 ```
 
 ## 부정 프롬프트
