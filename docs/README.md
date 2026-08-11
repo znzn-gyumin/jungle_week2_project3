@@ -12,7 +12,7 @@
 | [WORLD_BIBLE.md](./WORLD_BIBLE.md) | **어떤 세계인가** — 캠프 설정, 일정, 공간, 용어, 톤, 사운드, UI | 확정 |
 | [SCENARIO_OUTLINE.md](./SCENARIO_OUTLINE.md) | **어떤 순서로** — 90씬 구성, 6인 병행 집필 절차 | 확정 |
 | [TECH_DESIGN.md](./TECH_DESIGN.md) | **어떻게 구현하는가** — 스택, DSL, 상태, **인증·저장·방명록**, 배포 | 확정 |
-| [reference/Jungle_Campus.png](./reference/Jungle_Campus.png) | 공간 설정의 1차 자료 (안내도) | — |
+| [reference/jungle_campus.png](./reference/jungle_campus.png) | 공간 설정의 1차 자료 (안내도) | — |
 | [../assets/bg/campus/](../assets/bg/campus/README.md) | 캠퍼스 사진 17장 — 타일맵의 근거 | — |
 | [reference/character/](./reference/character/README.md) | **히로인 6인 확정 프로필** — 외형·의상의 기준 | **확정** |
 | [../assets/README.md](../assets/README.md) | **에셋 규격** — 폴더·이름·CG·도트 규격 | **파생** |

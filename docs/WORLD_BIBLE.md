@@ -108,13 +108,13 @@
 
 ## 4. 공간
 
-> **실제 캠퍼스 안내도**([`Jungle_Campus.png`](./reference/Jungle_Campus.png))를 기준으로 작성했습니다.
+> **실제 캠퍼스 안내도**([`jungle_campus.png`](./reference/jungle_campus.png))를 기준으로 작성했습니다.
 >
 > 안내도의 시설 명칭(BASE CAMP / NEST CAMP / 커넥트가든 / 정글라운지 / 정글스테이지)은 실존 시설의 고유 명칭입니다. 1절에서 **실명 사용**으로 결정했으므로 시설명도 그대로 씁니다. 배포 시 각색으로 선회하면 이 절의 고유명사 전부가 함께 바뀝니다.
 
 ### 4-1. 배치도 — 안내도 도면 기준
 
-[`Jungle_Campus.png`](./reference/Jungle_Campus.png)의 평면을 그대로 옮긴 것입니다. 방위는 나침반이 비스듬해 혼동을 부르므로 **지도 상단/하단** 기준으로만 표기합니다.
+[`jungle_campus.png`](./reference/jungle_campus.png)의 평면을 그대로 옮긴 것입니다. 방위는 나침반이 비스듬해 혼동을 부르므로 **지도 상단/하단** 기준으로만 표기합니다.
 
 ```
                           ▲ 지도 상단
