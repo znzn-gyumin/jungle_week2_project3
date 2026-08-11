@@ -17,7 +17,8 @@
 | [reference/character/](./reference/character/README.md) | **히로인 6인 확정 프로필** — 외형·의상의 기준 | **확정** |
 | [reference/character/ART_BRIEF.md](./reference/character/ART_BRIEF.md) | **캐릭터 이미지 한 벌** — CG 66장 + 도트 288컷 | **파생** |
 | [reference/TILE_BRIEF.md](./reference/TILE_BRIEF.md) | **타일셋·타일맵 한 벌** — 3종 + 7개 + 조명 오버레이 | **파생** |
-| [reference/TILE_FIXES.md](./reference/TILE_FIXES.md) | 1차 산출물 대조 결과와 수정 요청 | **작업 중** |
+| [reference/NEXT_CHARACTER.md](./reference/NEXT_CHARACTER.md) | **캐릭터 트랙 작업 지시서** — 세션이 읽고 바로 시작 | **작업 중** |
+| [reference/NEXT_TILE.md](./reference/NEXT_TILE.md) | **타일 트랙 작업 지시서** — 세션이 읽고 바로 시작 | **작업 중** |
 | [reference/TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) | 타일 구현 인수인계 — 산출물·생성기 사용법 | **구현** |
 | [reference/WORLD_PROMPTS.md](./reference/WORLD_PROMPTS.md) | **배경·UI 한 벌** — 배경 8장 + 로그인 화면 + 사진 시간대 변환 | **파생** |
 | [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 | **확정** |
