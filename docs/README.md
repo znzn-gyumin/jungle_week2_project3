@@ -153,7 +153,7 @@ grep -rn "옛이름" docs/ src/ --include="*.md" --include="*.vns"
 |---|---|---|
 | **히로인 CG · 도트** | 외형은 확정([프로필](./reference/character/profiles/heroine_girl_profile.png)). 도트는 [SPRITE_SPEC](./reference/character/SPRITE_SPEC.md), CG는 [ART_BRIEF](./reference/character/ART_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
 | **타일셋 · 타일맵** | [TILE_BRIEF](./reference/TILE_BRIEF.md) 사양대로 제작 중 | 2단계 전 |
-| **배경** | 8장 확보 ([backgrounds/](./reference/backgrounds/) 7장 + `campus/jungle_stage.jpg`). **⑦ 5년 후 밤 창가 1장 남음** — Normal 6종 + 솔로 공통 | 2단계 전 |
+| **배경** | **9장 전부 확보** — [`assets/bg/`](../assets/bg/) | ✅ |
 | **Firebase 프로젝트 생성** | 로그인·세이브·방명록 전부. 구현 순서 2번이라 **가장 먼저** ([TECH_DESIGN 7](./TECH_DESIGN.md#7-구현-순서)) | 구현 착수 시 |
 
 **해결됨**: **프로젝트명·로고** · **히로인 6인 프로필 확정** · 실명 사용 · 캠프 주최 단체명 · 메신저 UI 구현 · **히로인 6인 이름·나이·전공** · **주인공 컴퓨터공학과 22세** · 6인 병행 제작 · 연적 구도 없음 · **6인 독립 설계(묶음 라벨 없음)** · 테마 컬러 6색 · 외출 선호 6인분 · **Google 로그인 필수(게스트 없음)** · **방명록 = 화이트보드, 인게임 날짜 해금** · **참가자 명찰(캠퍼스 안 상시 착용)** · **도트 복장 캐릭터당 1벌** · **평상복 하의·신발 6인분** · **D7 외출복 6벌**

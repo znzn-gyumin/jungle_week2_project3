@@ -3,3 +3,6 @@
 _to_delete/
 __pycache__/
 *.pyc
+
+# 생성물 — tools/gen_prompts.py 가 만든다
+docs/reference/character/prompts/

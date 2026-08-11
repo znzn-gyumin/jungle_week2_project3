@@ -346,8 +346,8 @@ BG_ENDING = {
     """),
 }
 BG_ENDING_KR = {"office": "오피스", "gallery": "전시장", "winebar": "와인바 테라스 (밤)"}
-BG_ENDING_FILE = {"office": "5years_office.png", "gallery": "5years_gallary.png",
-                  "winebar": "5years_bar.png"}
+BG_ENDING_FILE = {"office": "epilogue/office.png", "gallery": "epilogue/gallery.png",
+                  "winebar": "epilogue/winebar.png"}
 
 # 엔딩 다섯은 낮·실내라 어둠을 막지만 민아만 밤이다.
 NEG_NIGHT = "10대 같은 인상, 밤 장면, 어둠,"
@@ -481,7 +481,7 @@ def main() -> int:
             1. 인물 — **{h['kr']} 반신 CG 평상복 `{h['ending_face']}` 칸** — **얼굴만** 가져옵니다
 
             캠퍼스가 아닙니다. 캠퍼스 사진을 넣으면 안 됩니다.
-            대화 배경으로 쓸 `backgrounds/{BG_ENDING_FILE[bgk]}` 을 함께 넣으면 스틸과 배경이 이어집니다.
+            대화 배경으로 쓸 `assets/bg/{BG_ENDING_FILE[bgk]}` 을 함께 넣으면 스틸과 배경이 이어집니다.
 
             **복장은 참조에서 가져오지 마세요.** 5년이 지나 전부 다릅니다.
         """)
