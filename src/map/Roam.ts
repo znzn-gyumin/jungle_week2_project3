@@ -66,6 +66,8 @@ export class Roam {
   private tutorialEl: HTMLElement | null = null;
   /** 넘어갈 수 있을 때 화면 위에 뜨는 한 줄 */
   private goEl!: HTMLElement;
+  /** 튜토리얼과 진행 안내를 담는 화면 위 세로줄 */
+  private topEl!: HTMLElement;
   /** 방금 배운 것 한 줄 */
   private learned = "";
   private me = { x: 0, y: 0 };
@@ -437,7 +439,7 @@ export class Roam {
     window.removeEventListener("keydown", this.onKey);
     this.tutorialEl?.remove();
     this.tutorialEl = null;
-    this.goEl.remove();
+    this.topEl.remove();
     const after = this.block.after;
     this.destroy();
     this.onDone(after);

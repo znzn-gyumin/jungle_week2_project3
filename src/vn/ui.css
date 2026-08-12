@@ -429,8 +429,7 @@
   position: absolute;
   /* **중앙 상단.** 걸으면서 눈을 거의 안 떼도 되고, 아래쪽 대사창·안내와
      안 겹칩니다. 뒤가 비치므로 맵을 가리지 않습니다. */
-  left: 50%;
-  top: 5.4rem;
+  order: 1;
   z-index: 8;
   width: max-content;
   /* **미니맵을 안 침범합니다.** 왼쪽 위 HUD 가 300px 이라, 가운데 정렬인
@@ -442,6 +441,7 @@
   /* 살아 있는 느낌으로 아주 조금씩 커졌다 작아집니다 — 크게 흔들면
      읽는 데 방해가 되므로 3% 안쪽으로 둡니다. */
   animation: tut-breathe 3.4s ease-in-out infinite;
+  transform-origin: 50% 0;
   color: #fff;
   background: rgb(28 18 30 / 42%);
   backdrop-filter: blur(10px) saturate(1.25);
@@ -458,7 +458,7 @@
 
 @keyframes tut-breathe {
   0%, 100% {
-    transform: translateX(-50%) scale(1);
+    transform: scale(1);
     box-shadow:
       0 0 34px rgb(255 122 178 / 55%),
       0 0 90px rgb(255 122 178 / 30%),
@@ -467,7 +467,7 @@
   }
 
   50% {
-    transform: translateX(-50%) scale(1.028);
+    transform: scale(1.028);
     box-shadow:
       0 0 46px rgb(255 122 178 / 78%),
       0 0 120px rgb(255 122 178 / 46%),
@@ -726,31 +726,44 @@
 
 /* 넘어갈 수 있게 됐다는 한 줄. 화면 위 가운데에서 천천히 깜빡입니다 —
    맵을 가리지 않게 옅게 두고, 빠르게 깜빡이면 눈이 아픕니다. */
+/* 「ENTER를 눌러 스토리를 진행하세요」 — 튜토리얼 상자 바로 아래.
+   **글씨는 늘 또렷합니다.** 통째로 흐려지면 읽으려는 순간 사라지는
+   글이 되므로, 옅어져도 78% 아래로는 안 내려갑니다. */
 .roam-go {
-  position: absolute;
-  left: 50%;
-  top: 1.5rem;
-  z-index: 9;
+  order: 2;
   margin: 0;
-  padding: 0.45rem 1.4rem;
-  font-size: 0.95rem;
-  letter-spacing: 0.06em;
+  padding: 0.55rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
   color: #fff;
-  background: rgb(24 20 32 / 30%);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgb(255 255 255 / 18%);
+  background: rgb(28 18 30 / 62%);
+  backdrop-filter: blur(10px) saturate(1.25);
+  border: 1px solid rgb(255 200 224 / 45%);
   border-radius: 999px;
-  text-shadow: 0 1px 4px rgb(0 0 0 / 65%);
+  text-shadow: 0 1px 4px rgb(0 0 0 / 80%);
   pointer-events: none;
-  transform: translateX(-50%);
-  animation: roam-go-blink 2.6s ease-in-out infinite;
+  animation: roam-go-blink 2.8s ease-in-out infinite;
 }
 
 .roam-go[hidden] { display: none; }
 
+/* 튜토리얼 상자와 같은 분홍 백라이트 */
 @keyframes roam-go-blink {
-  0%, 100% { opacity: 0.34; }
-  50% { opacity: 0.92; }
+  0%, 100% {
+    opacity: 0.78;
+    box-shadow:
+      0 0 22px rgb(255 122 178 / 40%),
+      0 0 60px rgb(255 122 178 / 20%);
+  }
+
+  50% {
+    opacity: 1;
+    box-shadow:
+      0 0 34px rgb(255 122 178 / 78%),
+      0 0 92px rgb(255 122 178 / 44%);
+  }
 }
 
 
@@ -817,5 +830,21 @@
   color: #8d6a5e;
   white-space: nowrap;
   opacity: 0.85;
+  pointer-events: none;
+}
+
+
+/* 튜토리얼과 진행 안내를 담는 화면 위 세로줄. 안내는 늘 튜토리얼
+   바로 아래에 붙고, 튜토리얼이 걷히면 그 자리로 올라옵니다. */
+.roam-top {
+  position: absolute;
+  left: 50%;
+  top: 1.6rem;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.15rem;
+  transform: translateX(-50%);
   pointer-events: none;
 }
