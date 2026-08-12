@@ -31,7 +31,16 @@ assets/
 
 **도트 전용 12** — `doyun` `doa` `jio` `jia` `myeongjinhyeok` `jomin` `taeyun` `taeyeon` `yeosanim` `mob_a` `mob_b` `mob_c`
 
-**표정 6** — `normal` `happy` `shy` `sad` `surprise` `angry`
+**표정 6** — 파일명은 영문이고 **`.vns` 는 한글로 씁니다.** 컴파일러가 이 표로 바꿉니다.
+
+| `.vns` | 파일명 |
+|---|---|
+| `기본` | `normal` |
+| `기쁨` | `happy` |
+| `부끄러움` | `shy` |
+| `슬픔` | `sad` |
+| `놀람` | `surprise` |
+| `화남` | `angry` |
 
 ---
 

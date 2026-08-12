@@ -6,3 +6,11 @@ __pycache__/
 
 # 생성물 — tools/gen_prompts.py 가 만든다
 docs/reference/character/prompts/
+
+# 빌드
+node_modules/
+dist/
+
+# 임시 폴더 — 내용물은 추적하지 않습니다 (assets/temp/README.md 참고)
+assets/temp/*
+!assets/temp/README.md

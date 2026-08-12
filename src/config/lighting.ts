@@ -258,7 +258,8 @@ export class LightingOverlay {
     const amount = p.saturation ?? 0;
     layers.forEach((l) => {
       if (!amount) {
-        l.clearTint();
+        // TilemapLayer 에는 clearTint 가 없다. 흰색이 중립값이다.
+        l.setTint(0xffffff);
         return;
       }
       const v = Math.round(255 * (1 + amount * 0.12));
