@@ -98,7 +98,7 @@ def zoomstrip(path):
     """확대 필터 판단용 — 같은 조각을 NEAREST / BILINEAR 로 8배."""
     font = ImageFont.truetype(FONT, 20)
     small = ImageFont.truetype(FONT, 15)
-    crop = (10 * TS + 8, 11 * TS + 20, 10 * TS + 8 + 56, 11 * TS + 20 + 42)
+    crop = (196, 560, 196 + 76, 560 + 52)   # 책상 앞면 + 의자 — 새 외곽선이 보이는 자리
     cells, labels = [], []
     for v, _ in VARIANTS:
         im, _doc = compose(os.path.join(ROOT, v), "m1_basecamp_4f")

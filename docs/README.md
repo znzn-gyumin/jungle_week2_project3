@@ -19,7 +19,8 @@
 | [../assets/README.md](../assets/README.md) | **에셋 규격** — 폴더·이름·CG·도트 규격 | **파생** |
 | [reference/TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) | 타일 구현 인수인계 — 산출물·생성기 사용법 | **구현** |
 | [../public/audio/bgm/README.md](../public/audio/bgm/README.md) | **BGM 8곡 발주서** — 톤 · 쓰이는 곳 · 규격 | 대기 |
-| [reference/TILESET_RESTYLE.md](./reference/TILESET_RESTYLE.md) | 타일 화풍을 도트 인물에 맞추는 작업 지시 — 결과는 `assets/temp/` 로 | 시도 |
+| [reference/TILESET_RESTYLE.md](./reference/TILESET_RESTYLE.md) | 타일 화풍을 도트 인물에 맞추는 작업 지시 | 시도 |
+| [reference/TILESET_RESTYLE_RESULT.md](./reference/TILESET_RESTYLE_RESULT.md) | 그 결과와 판단 근거 — **채택 안 함, BASE 유지** | 보류 |
 | [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 — 사양은 [WORLD_BIBLE 11](./WORLD_BIBLE.md#11-ui-톤) · 에셋은 [assets/README](../assets/README.md#ui) | **확정** |
 | [reference/character/preview_cg.html](./reference/character/preview_cg.html) | CG 90장 눈으로 대조 | — |
 | [reference/character/preview_dot.html](./reference/character/preview_dot.html) | 도트 18종 · 아바타 36컷 대조 | — |
