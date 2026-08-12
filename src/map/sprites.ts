@@ -56,3 +56,13 @@ export const HEAD_OVERHANG = 16;
  * (assets/README 배경 · 1920 × 1080).
  */
 export const DESIGN = { width: 1920, height: 1080 } as const;
+
+/**
+ * 맵 캔버스만 더 크게 그립니다.
+ *
+ * 줌을 1.5 처럼 어중간하게 낮추면 타일 경계가 소수 픽셀에 걸려 격자가
+ * 보입니다. **줌은 정수 2 로 두고 그리는 해상도를 키우면** 같은 배율에서
+ * 더 넓은 범위가 들어옵니다 — 2560 폭이면 가로 26칸입니다.
+ * CSS 가 1920 무대 안으로 통째로 축소하므로 이음매는 안 생깁니다.
+ */
+export const MAP_DESIGN = { width: 2560, height: 1440 } as const;

@@ -9,6 +9,7 @@
 import Phaser from 'phaser';
 
 import { LightingOverlay, type TimeOfDay } from '../config/lighting';
+import { HEROINE_BY_NAME, THEME } from '../core/types';
 import type { FreeroamNpc, MapId } from '../core/types';
 import { CAST, CELL, DIR_ROW, HEAD_OVERHANG, PLAYER_DOT, type Dir } from './sprites';
 
@@ -54,12 +55,18 @@ export type RoamSetup = {
   onTrigger: (target: string) => void;
 };
 
+/** 그 인물의 테마 컬러 — 히로인이 아니면 중립색 */
+function npcTheme(who: string): string {
+  const id = HEROINE_BY_NAME[who];
+  return id ? THEME[id] : '#c9b8a8';
+}
+
 export type MiniData = {
   w: number;
   h: number;
   blocked: boolean[];
   stairs: { x: number; y: number; dir: 'down' | 'up' | null }[];
-  npcs: { x: number; y: number }[];
+  npcs: { x: number; y: number; theme: string }[];
 };
 
 const asset = (p: string): string => `${import.meta.env.BASE_URL}assets/${p}`;
@@ -96,6 +103,8 @@ export class CampusScene extends Phaser.Scene {
   }[] = [];
   /** 직전 프레임의 발 위치 — 어느 쪽에서 들어왔는지 판정합니다 */
   private lastFeet = { x: 0, y: 0 };
+  /** 되돌릴 자리 — 계단을 반대 방향에서 밟으면 여기로 밀어냅니다 */
+  private lastPos = { x: 0, y: 0 };
   /** 맵을 막 옮긴 직후에는 되돌아가는 포탈을 한 박자 무시합니다 */
   private portalCooldown = 0;
   /** 맵을 옮길 때 지워야 합니다 — 안 지우면 두 맵이 겹쳐 쌓이고 충돌체가 둘이 됩니다 */
@@ -208,7 +217,11 @@ export class CampusScene extends Phaser.Scene {
       h: map.height,
       blocked,
       stairs: this.portals.map((p) => ({ x: p.rect.x / TS, y: p.rect.y / TS, dir: p.dir })),
-      npcs: this.npcSprites.map((n) => ({ x: n.sprite.x / TS, y: n.sprite.y / TS })),
+      npcs: this.npcSprites.map((n) => ({
+        x: n.sprite.x / TS,
+        y: n.sprite.y / TS,
+        theme: npcTheme(n.npc.who),
+      })),
     };
     this.onMini?.(this.lastMini);
   }
@@ -344,7 +357,8 @@ export class CampusScene extends Phaser.Scene {
       const mark = this.add
         .text(s.x + TS / 2, s.y - 6, '!', {
           fontSize: '20px',
-          color: '#ffd45e',
+          // 그 인물의 테마 컬러 (CHARACTERS 2절)
+          color: npcTheme(n.who),
           stroke: '#2a2632',
           strokeThickness: 4,
         })
@@ -384,7 +398,11 @@ export class CampusScene extends Phaser.Scene {
     if (this.lastMini) {
       this.lastMini = {
         ...this.lastMini,
-        npcs: this.npcSprites.map((n) => ({ x: n.sprite.x / TS, y: n.sprite.y / TS })),
+        npcs: this.npcSprites.map((n) => ({
+          x: n.sprite.x / TS,
+          y: n.sprite.y / TS,
+          theme: npcTheme(n.npc.who),
+        })),
       };
       this.onMini?.(this.lastMini);
     }
@@ -419,15 +437,21 @@ export class CampusScene extends Phaser.Scene {
     // 계단을 밟으면 맵이 바뀝니다
     if (this.portalCooldown <= 0) {
       const feet = new Phaser.Geom.Point(this.player.x + TS / 2, this.player.y + HEAD_OVERHANG + TS / 2);
-      const hit = this.portals.find((p) => {
-        if (!Phaser.Geom.Rectangle.ContainsPoint(p.rect, feet)) return false;
-        // 내려가는 계단은 **위에서만**, 올라가는 계단은 **아래에서만**.
-        // 직전 프레임에 어디 있었는지로 판정합니다.
-        if (p.dir === 'down') return this.lastFeet.y <= p.rect.y;
-        if (p.dir === 'up') return this.lastFeet.y >= p.rect.bottom;
-        return true;
-      });
+      const on = this.portals.find((p) => Phaser.Geom.Rectangle.ContainsPoint(p.rect, feet));
+      // 내려가는 계단은 **위에서만**, 올라가는 계단은 **아래에서만** 들어갑니다.
+      // 반대쪽에서 오면 벽처럼 막습니다 — 그냥 지나가게 두면 계단이 통로가 됩니다.
+      const ok =
+        !on ||
+        !on.dir ||
+        (on.dir === 'down' ? this.lastFeet.y <= on.rect.y : this.lastFeet.y >= on.rect.bottom);
+      if (on && !ok) {
+        this.player.setPosition(this.lastPos.x, this.lastPos.y);
+        this.player.setVelocity(0, 0);
+        return;
+      }
       this.lastFeet = { x: feet.x, y: feet.y };
+      this.lastPos = { x: this.player.x, y: this.player.y };
+      const hit = ok ? on : undefined;
       if (hit) {
         this.hint.setVisible(false);
         this.loadMap(hit.to, Math.floor(hit.sx / TS), Math.floor(hit.sy / TS));
@@ -446,8 +470,8 @@ export class CampusScene extends Phaser.Scene {
       .filter((x) => x.d < REACH)
       .sort((a, b) => a.d - b.d)[0];
 
-    for (const { mark } of this.npcSprites) {
-      mark.setText('!').setColor('#ffd45e').setFontSize(20);
+    for (const { npc, mark } of this.npcSprites) {
+      mark.setText('!').setColor(npcTheme(npc.who)).setFontSize(20);
     }
     this.hint.setVisible(Boolean(near));
     if (near) {

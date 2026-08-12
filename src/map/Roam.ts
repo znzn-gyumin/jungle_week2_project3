@@ -11,7 +11,8 @@ import Phaser from 'phaser';
 import type { TimeOfDay } from '../config/lighting';
 import { HEROINE_GENDER, type FreeroamNpc, type GameState, type Line } from '../core/types';
 import { CampusScene, type MiniData } from './CampusScene';
-import { DESIGN, scoutName } from './sprites';
+import { HEROINE_BY_NAME, THEME } from '../core/types';
+import { MAP_DESIGN, scoutName } from './sprites';
 
 type Block = Extract<Line, { t: 'freeroam' }>;
 
@@ -78,7 +79,7 @@ export class Roam {
       scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        ...DESIGN,
+        ...MAP_DESIGN,
       },
       physics: { default: 'arcade', arcade: { gravity: { x: 0, y: 0 } } },
       scene: CampusScene,
@@ -170,30 +171,17 @@ export class Roam {
         if (d.blocked[y * d.w + x]) g.fillRect(x * s, y * s, Math.ceil(s), Math.ceil(s));
       }
     }
-    const theme = getComputedStyle(el).getPropertyValue('--theme').trim() || '#e0567b';
     g.fillStyle = '#2a2632';
     for (const p of d.stairs) g.fillRect(p.x * s - 1, p.y * s - 1, s + 2, s + 2);
-    // 오르내림을 화살표로 — 맵 위 표시와 같은 기호입니다
-    g.font = 'bold 11px sans-serif';
-    g.textAlign = 'center';
-    g.textBaseline = 'middle';
-    for (const p of d.stairs) {
-      if (!p.dir) continue;
-      const t = p.dir === 'down' ? '▼' : '▲';
-      g.lineWidth = 3;
-      g.strokeStyle = '#ffffff';
-      g.strokeText(t, p.x * s, p.y * s);
-      g.fillStyle = '#2a2632';
-      g.fillText(t, p.x * s, p.y * s);
-    }
     g.font = `bold ${Math.max(11, s * 2.4)}px sans-serif`;
     g.textAlign = 'center';
     g.textBaseline = 'middle';
+    // 사람마다 **자기** 테마 컬러입니다 — 말하는 사람 색이 아닙니다
     for (const n of d.npcs) {
       g.lineWidth = 3;
       g.strokeStyle = '#ffffff';
       g.strokeText('!', n.x * s, n.y * s);
-      g.fillStyle = theme;
+      g.fillStyle = n.theme;
       g.fillText('!', n.x * s, n.y * s);
     }
     // 나는 파란 점 — 계단(청록)·사람(분홍)과 안 겹치는 색입니다
@@ -210,10 +198,15 @@ export class Roam {
   /** 남은 목표를 맵 위에 적어 둡니다 */
   updateGuide(): void {
     if (!this.guideEl) return;
-    const left = this.usable().map((n) => n.who);
+    const left = this.usable().map((n) => {
+      const id = HEROINE_BY_NAME[n.who];
+      return { who: n.who, color: id ? THEME[id] : '#b4485a' };
+    });
     this.guideEl.innerHTML = `
       <p class="roam-guide__goal"><b>${this.left}명</b>에게 더 말을 걸어요</p>
-      <p class="roam-guide__who">${left.map((w) => `<span>${w}</span>`).join('')}</p>
+      <p class="roam-guide__who">${left
+        .map((w) => `<span style="color:${w.color};border-color:${w.color}">${w.who}</span>`)
+        .join('')}</p>
       <p class="roam-guide__keys">방향키 이동 · <b>스페이스</b> 말 걸기 · 청록은 계단</p>`;
   }
 
