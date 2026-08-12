@@ -29,11 +29,11 @@ export class Backdrop {
       parent: this.host,
       backgroundColor: '#0b0c17',
       pixelArt: true,
-      scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-        ...MAP_DESIGN,
-      },
+      // **NONE + CSS 늘리기.** FIT 은 부모의 화면상 크기를 재는데, 무대가
+      // CSS transform 으로 이미 축소돼 있어 두 번 줄어듭니다. 캔버스를
+      // 2560×1440 으로 고정하고 늘리는 일은 CSS 에 맡깁니다 — 무대와 같은
+      // 16:9 라 늘려도 안 찌그러집니다.
+      scale: { mode: Phaser.Scale.NONE, ...MAP_DESIGN },
       scene: CampusScene,
     });
     this.game.scene.start('campus', {

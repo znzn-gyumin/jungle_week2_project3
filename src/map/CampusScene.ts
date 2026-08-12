@@ -166,10 +166,6 @@ export class CampusScene extends Phaser.Scene {
     this.cursors = this.input.keyboard!.createCursorKeys();
     this.interactKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-    if (this.setup.still) {
-      this.loadMap(this.setup.map, this.setup.x, this.setup.y);
-      return;
-    }
     this.player = this.physics.add
       .sprite(0, 0, `dot_${dot}`, 0)
       .setOrigin(0, 0)
@@ -195,6 +191,12 @@ export class CampusScene extends Phaser.Scene {
     this.uiCam.ignore(this.player);
     this.scale.on('resize', (g: Phaser.Structs.Size) => this.uiCam?.setSize(g.width, g.height));
 
+    // 배경으로만 쓰는 맵도 주인공을 세웁니다 — 사람이 없으면 같은 자리인데도
+    // 자유 이동과 다른 화면처럼 보입니다.
+    if (this.setup.still) {
+      this.hint.setVisible(false);
+      this.player.body!.enable = false;
+    }
     this.loadMap(this.setup.map, this.setup.x, this.setup.y);
   }
 
@@ -286,7 +288,9 @@ export class CampusScene extends Phaser.Scene {
 
     // 트리거 맵에 진입하는 것만으로 발동하는 씬
     const trg = this.setup.triggers.find((t) => t.map === id);
-    if (trg) this.time.delayedCall(400, () => this.setup.onTrigger(trg.target));
+    if (trg && !this.setup.still) {
+      this.time.delayedCall(400, () => this.setup.onTrigger(trg.target));
+    }
   }
 
   /** 계단·문 — `spawnX/Y` 는 도착 맵의 월드 픽셀(타일 중심)입니다 */
