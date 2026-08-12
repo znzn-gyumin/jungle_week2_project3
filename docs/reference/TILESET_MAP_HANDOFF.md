@@ -283,21 +283,21 @@ loadMap(key: string) {
 ```
 $ python -m tilegen.qa
 == 타일셋 ==
-  tileset_edu_indoor   576×432  격자OK  103타일  32색  외곽선 5.1%  최대이음매 2.80 (f_rug)
-  tileset_dorm_indoor  576×240  격자OK   52타일  27색  외곽선 6.1%  최대이음매 1.19 (f_gym)
-  tileset_outdoor      576×480  격자OK  112타일  30색  외곽선 9.0%  최대이음매 1.20 (f_grass_b)
+  tileset_edu_indoor   576×432 격자OK 103타일  32색  외곽선 5.1%  최대이음매 2.80 (f_rug)
+  tileset_dorm_indoor  576×240 격자OK  52타일  27색  외곽선 6.1%  최대이음매 1.19 (f_gym)
+  tileset_outdoor      576×480 격자OK 112타일  30색  외곽선 9.0%  최대이음매 1.20 (f_grass_b)
 == 맵 ==
-  m1  44×30  통행 753 / 도달 753   npc 25(교육장 24 + 코치)  portal 2  trigger 6
-  m2  44×30  통행 770 / 도달 770   portal 6
-  m3  44×30  통행 901 / 도달 901   portal 10
-  m4  44×30  통행 865 / 도달 865   portal 2
-  m5  32×46  통행 1138 / 도달 1138 portal 16  trigger 4
-  m6  40×47  통행 944 / 도달 944   portal 8   trigger 24
-  m7  40×30  통행 1136 / 도달 1136 portal 4
+  m1  44x30 통행 753 / 도달 753  npc 25  portal 2  trigger 6
+  m2  44x30 통행 770 / 도달 770  portal 4  trigger 4
+  m3  44x30 통행 901 / 도달 901  npc 1  portal 12  trigger 7
+  m4  44x30 통행 865 / 도달 865  npc 1  portal 2  trigger 5
+  m5  32x46 통행 1138 / 도달 1138  portal 16  trigger 4
+  m6  40x47 통행 944 / 도달 944  portal 8  trigger 24
+  m7  40x30 통행 1136 / 도달 1136  portal 4  trigger 4
 == M1/M5/여명 ==
   m1 지정석 24 · 무명 17
   m5 의자·스툴 27 · 필로티 원기둥 5본 · 통로 160칸
-  여명 위 hue 259°(보라) → 아래 225°(파랑)
+  여명 위 hue 259°(보라) → 아래 225°(파랑)  — numpy 필요
 == 문제 없음 ==
 ```
 
