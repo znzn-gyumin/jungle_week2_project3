@@ -14,6 +14,17 @@ import type { FreeroamNpc, MapId } from '../core/types';
 import { backLine, openLine } from './chatter';
 import { CAST, CELL, DIR_ROW, HEAD_OVERHANG, PLAYER_DOT, type Dir } from './sprites';
 
+/** 배경 인물 도트 — 이름이 붙은 셋과 무명 셋 */
+const EXTRA_DOTS = ['jomin', 'taeyun', 'taeyeon', 'mob_a', 'mob_b', 'mob_c'];
+
+/** 그 자리에 앉은 사람의 도트를 고릅니다 — 이름이 있으면 그 사람 것으로 */
+function extraDot(labelText: string, i: number): string {
+  if (labelText.includes('조민')) return 'jomin';
+  if (labelText.includes('태윤')) return 'taeyun';
+  if (labelText.includes('태연')) return 'taeyeon';
+  return EXTRA_DOTS[3 + (i % 3)];
+}
+
 const TS = 48;
 const ALL_MAPS: MapId[] = [
   'm1_basecamp_4f', 'm2_basecamp_2f', 'm3_basecamp_1f', 'm4_basecamp_b1',
@@ -145,6 +156,9 @@ export class CampusScene extends Phaser.Scene {
 
     const dots = new Set<string>([PLAYER_DOT[this.setup.gender]]);
     for (const n of this.setup.npcs) if (CAST[n.who]) dots.add(CAST[n.who].dot);
+    // 맵 npc 레이어에 적힌 나머지 스물몇 명 — 말은 못 걸어도 자리에는
+    // 있어야 합니다. 텅 빈 교육장은 캠프처럼 안 보입니다.
+    for (const d of EXTRA_DOTS) dots.add(d);
     for (const d of dots) {
       this.load.spritesheet(`dot_${d}`, asset(`dot/walk/${d}.webp`), {
         frameWidth: CELL.w,
@@ -391,6 +405,8 @@ export class CampusScene extends Phaser.Scene {
     this.metMarks = [];
     const layer = map.getObjectLayer('npc');
     if (!layer) return;
+    /** 말을 걸 수 있는 사람이 이미 앉은 자리 — 배경 인물은 여기를 피합니다 */
+    const used = new Set<Phaser.Types.Tilemaps.TiledObject>();
 
     for (const n of this.setup.npcs) {
       if (n.map !== id) continue;
@@ -428,6 +444,23 @@ export class CampusScene extends Phaser.Scene {
       });
       this.uiCam?.ignore([s, mark]);
       this.npcSprites.push({ npc: n, sprite: s, mark, met: false });
+      used.add(obj);
+    }
+
+    // ---- 배경 인물. 말은 못 걸지만 자리에는 있습니다.
+    let i = 0;
+    for (const o of layer.objects) {
+      if (used.has(o)) continue;
+      const props = o.properties as { name: string; value: string }[] | undefined;
+      const text = String(props?.find((p) => p.name === 'label')?.value ?? '');
+      const key = `dot_${extraDot(text, i++)}`;
+      if (!this.textures.exists(key)) continue;
+      const sp = this.add
+        .image(o.x ?? 0, (o.y ?? 0) - HEAD_OVERHANG, key, 0)
+        .setOrigin(0, 0)
+        .setDepth(38);
+      this.uiCam?.ignore(sp);
+      this.stayed.push(sp);
     }
   }
 
