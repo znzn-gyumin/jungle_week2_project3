@@ -224,3 +224,219 @@ body {
   margin-top: 0.3rem;
   font-size: 1.05rem;
 }
+
+/* ---- 시작 화면 세 장 */
+
+.boot__act {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 2rem;
+}
+
+.boot__act.is-on {
+  display: flex;
+  animation: boot-in 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.boot__act.is-out {
+  display: flex;
+  animation: boot-out 260ms ease-in forwards;
+}
+
+@keyframes boot-in {
+  0% {
+    opacity: 0;
+    transform: translateY(26px) scale(0.97);
+    filter: blur(8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes boot-out {
+  0% { opacity: 1; }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-18px) scale(1.03);
+    filter: blur(6px);
+  }
+}
+
+/* 장이 바뀔 때 치는 섬광 */
+.boot__flash {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: radial-gradient(60% 60% at 50% 50%, #fff, #ffd7e8 55%, transparent 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.boot__flash.is-on { animation: boot-flash 420ms ease-out; }
+
+@keyframes boot-flash {
+  0% { opacity: 0; }
+  18% { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+
+.boot__logo {
+  width: min(30rem, 62vw);
+  filter: drop-shadow(0 0 40px rgb(255 122 178 / 55%));
+  animation: boot-glow 3.6s ease-in-out infinite;
+}
+
+@keyframes boot-glow {
+  0%, 100% { filter: drop-shadow(0 0 34px rgb(255 122 178 / 45%)); }
+  50% { filter: drop-shadow(0 0 58px rgb(255 122 178 / 80%)); }
+}
+
+.boot__any {
+  margin-top: 1.4rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  color: #fff;
+  text-shadow: 0 1px 6px rgb(0 0 0 / 70%);
+  animation: boot-blink 2.4s ease-in-out infinite;
+}
+
+@keyframes boot-blink {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.95; }
+}
+
+.boot__step {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  color: #ffc2dc;
+  opacity: 0.8;
+}
+
+.boot__head {
+  margin: 0.3rem 0 0.2rem;
+  font-size: 1.5rem;
+  color: #fff;
+  text-shadow: 0 2px 10px rgb(0 0 0 / 60%);
+}
+
+/* 버튼 — 빛이 한 번 훑고 지나갑니다 */
+.boot__go {
+  position: relative;
+  overflow: hidden;
+}
+
+.boot__go::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 -40%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, #fff9, transparent);
+  animation: boot-sheen 2.8s ease-in-out infinite;
+}
+
+@keyframes boot-sheen {
+  0%, 62% { transform: translateX(0); }
+  100% { transform: translateX(360%); }
+}
+
+.boot__note {
+  position: absolute;
+  right: 1.2rem;
+  bottom: 1rem;
+  z-index: 3;
+  margin: 0;
+  font-size: 0.72rem;
+  color: #fff;
+  opacity: 0.4;
+}
+
+/* ---- 커서 */
+
+.has-cursor,
+.has-cursor * { cursor: none !important; }
+
+.cursor {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.cursor.is-idle { opacity: 0; }
+
+.cursor__dot,
+.cursor__ring {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cursor__dot {
+  left: var(--x);
+  top: var(--y);
+  width: 7px;
+  height: 7px;
+  background: #fff;
+  box-shadow: 0 0 10px rgb(255 122 178 / 90%);
+}
+
+.cursor__ring {
+  left: var(--rx);
+  top: var(--ry);
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgb(255 158 196 / 85%);
+  box-shadow: 0 0 14px rgb(255 122 178 / 45%);
+  transition: width 160ms ease, height 160ms ease, border-color 160ms ease;
+}
+
+.cursor.is-hot .cursor__ring {
+  width: 46px;
+  height: 46px;
+  border-color: #fff;
+}
+
+.cursor.is-down .cursor__ring {
+  width: 20px;
+  height: 20px;
+  border-color: #fff;
+}
+
+/* 클릭한 자리에 퍼지는 파문 */
+.cursor-ripple {
+  position: fixed;
+  z-index: 9998;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgb(255 158 196 / 90%);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: cursor-ripple 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cursor-ripple {
+  0% {
+    opacity: 0.9;
+    width: 12px;
+    height: 12px;
+  }
+
+  100% {
+    opacity: 0;
+    width: 86px;
+    height: 86px;
+  }
+}
