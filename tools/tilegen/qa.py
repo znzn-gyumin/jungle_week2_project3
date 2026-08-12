@@ -299,6 +299,47 @@ def check_maps():
             issues.append("[m1] 화이트보드 (%d,%d) 에서 연상 자리 (%d,%d) 가 그대로 보인다 "
                           "— 시선 위에 기둥이 없다" % (wx, wy, ox, oy))
 
+    # ★ 동갑이 화이트보드에서 가장 먼가 (WORLD_BIBLE 4-2-2)
+    #   「실력 1위가 맨 뒤에 앉는 게 이 배치의 핵심」이라 순서가 뒤집히면 안 된다.
+    if wb:
+        seat = {prop(o, "role"): (int(o["x"] // TS), int(o["y"] // TS))
+                for o in objs(m1, "npc")
+                if str(prop(o, "role", "")).startswith("heroine_")}
+        if len(seat) == 3:
+            d = {r: abs(x - wx) + abs(y - wy) for r, (x, y) in seat.items()}
+            far = max(d, key=d.get)
+            if far != "heroine_sameage":
+                issues.append("[m1] 화이트보드에서 가장 먼 자리가 동갑이 아니라 %s 다 (%s)"
+                              % (far.replace("heroine_", ""),
+                                 " ".join("%s %d" % (k.replace("heroine_", ""), v)
+                                          for k, v in sorted(d.items(), key=lambda x: -x[1]))))
+
+    # ★ 문1 로 나가면 연하를 지나치지 않는가 (WORLD_BIBLE 4-2-2)
+    #   「마주치기 싫으면 다른 문으로 나갈 수 있다」가 회피를 물리적으로 보장한다.
+    doors = sorted((int(o["x"] // TS), int(o["y"] // TS))
+                   for o in objs(m1, "trigger") if prop(o, "kind") == "door")
+    player = next((o for o in objs(m1, "npc") if prop(o, "role") == "player"), None)
+    younger = next((o for o in objs(m1, "npc") if prop(o, "role") == "heroine_younger"), None)
+    if player and younger and len(doors) >= 1:
+        W, H, walk = walkable_grid(m1)
+        yx, yy = int(younger["x"] // TS), int(younger["y"] // TS)
+        block = {(yx + dx, yy + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1)}
+        px, py = int(player["x"] // TS), int(player["y"] // TS)
+        d1 = doors[0]
+        seen, dq = {(px, py)}, collections.deque([(px, py)])
+        reached = False
+        while dq:
+            x, y = dq.popleft()
+            if (x, y) == d1:
+                reached = True; break
+            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                nx, ny = x + dx, y + dy
+                if (0 <= nx < W and 0 <= ny < H and walk[ny * W + nx]
+                        and (nx, ny) not in seen and (nx, ny) not in block):
+                    seen.add((nx, ny)); dq.append((nx, ny))
+        if not reached:
+            issues.append("[m1] 연하 자리를 피해서는 문1 (%d,%d) 에 못 간다" % d1)
+
     extras = [o for o in objs(m1, "npc") if prop(o, "role") == "extra"]
     return summary, issues, dict(
         m1_room_seats=len([o for o in objs(m1, "npc") if prop(o, "role") != "coach"]),
