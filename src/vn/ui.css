@@ -782,13 +782,16 @@
   pointer-events: none;
 }
 
+/* **덮은 뒤에 바뀌어야 합니다.** 0 에서 시작해 서서히 덮으면 그 사이에
+   다음 씬이 이미 그려져 있어, 새 화면이 잠깐 보였다가 검어지는 것처럼
+   보입니다. 씬 교체는 wipe 를 건 그 자리에서 곧바로 일어나므로 막을
+   처음부터 덮어 두고 걷어내야 순서가 맞습니다. */
 .vn__veil.is-on {
-  animation: vn-wipe 620ms ease-in-out;
+  animation: vn-wipe 560ms ease-out backwards;
 }
 
 @keyframes vn-wipe {
-  0% { opacity: 0; }
-  38% { opacity: 0.82; }
+  0%, 26% { opacity: 1; }
   100% { opacity: 0; }
 }
 
