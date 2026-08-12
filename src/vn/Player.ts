@@ -9,7 +9,7 @@
  */
 import { applyEffects, endingTier, testCond } from '../core/state';
 import { roleName, substitute } from '../core/tokens';
-import { FACE_FILE, HEROINE_BY_NAME, HEROINE_GENDER, NAME_BY_HEROINE, THEME } from '../core/types';
+import { FACE_FILE, HEROINE_BY_NAME, HEROINE_GENDER, NAME_BY_HEROINE, THEME, label } from '../core/types';
 import type { ChoiceOption, GameState, Line, Scene, ScriptData } from '../core/types';
 import type { TimeOfDay } from '../config/lighting';
 import { Backdrop } from '../map/Backdrop';
@@ -172,7 +172,7 @@ export class Player {
         case 'narr': {
           if (!testCond(line.cond, this.state)) continue;
           const who = line.t === 'say' ? this.whoName(line.who) : '';
-          this.nameEl.textContent = who === ME ? ME : who;
+          this.nameEl.textContent = who === ME ? ME : label(who);
           this.nameEl.hidden = !who;
           this.boxEl.hidden = false;
           this.textEl.classList.toggle('vn__text--narr', line.t === 'narr');

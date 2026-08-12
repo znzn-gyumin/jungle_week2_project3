@@ -75,6 +75,17 @@ export const THEME: Record<RouteId, string> = {
 };
 
 /** 히로인 풀네임 */
+/**
+ * 화면에 띄울 이름. 대본에서는 짧은 이름으로 부르고 여기서만 붙입니다 —
+ * 대사 줄의 화자 자리는 공백을 못 받습니다.
+ */
+const LABEL: Record<string, string> = { 명진혁: '명진혁 코치' };
+
+/** 이 사람을 화면에 뭐라고 적을지 */
+export function label(who: string): string {
+  return LABEL[who] ?? who;
+}
+
 export const FULL_NAME: Record<RouteId, string> = {
   minah: '김민아',
   seunghee: '이승희',

@@ -9,7 +9,7 @@
 import Phaser from 'phaser';
 
 import { LightingOverlay, type TimeOfDay } from '../config/lighting';
-import { HEROINE_BY_NAME, THEME } from '../core/types';
+import { HEROINE_BY_NAME, THEME , label } from '../core/types';
 import type { FreeroamNpc, MapId } from '../core/types';
 import { CAST, CELL, DIR_ROW, HEAD_OVERHANG, PLAYER_DOT, type Dir } from './sprites';
 
@@ -545,7 +545,7 @@ export class CampusScene extends Phaser.Scene {
     this.near = near ? near.npc.who : null;
     if (near) {
       near.mark.setVisible(true).setText('스페이스').setColor('#ffffff').setFontSize(13);
-      this.hint.setText(`${near.npc.who} 에게 말을 겁니다 — 스페이스`);
+      this.hint.setText(`${label(near.npc.who)} 에게 말을 겁니다 — 스페이스`);
       this.hint.setPosition(16, this.cameras.main.height - 34);
       if (Phaser.Input.Keyboard.JustDown(this.interactKey)) {
         this.setPaused(true);

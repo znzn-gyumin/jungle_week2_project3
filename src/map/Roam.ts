@@ -11,7 +11,7 @@ import Phaser from 'phaser';
 import type { TimeOfDay } from '../config/lighting';
 import { HEROINE_GENDER, type FreeroamNpc, type GameState, type Line } from '../core/types';
 import { CampusScene, type MiniData } from './CampusScene';
-import { HEROINE_BY_NAME, THEME } from '../core/types';
+import { HEROINE_BY_NAME, THEME, label } from '../core/types';
 import { MAP_DESIGN, scoutName } from './sprites';
 
 type Block = Extract<Line, { t: 'freeroam' }>;
@@ -311,7 +311,7 @@ export class Roam {
     const rest = this.usable();
     const left = rest.map((n) => {
       const id = HEROINE_BY_NAME[n.who];
-      return { who: n.who, color: id ? THEME[id] : '#b4485a' };
+      return { who: label(n.who), color: id ? THEME[id] : '#b4485a' };
     });
     const done = this.left <= 0 || !rest.length;
     this.guideEl.innerHTML = `
