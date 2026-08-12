@@ -5,6 +5,7 @@
 // p_night 의 루트 선택지 여섯도 같은 규칙으로 셋만 남습니다.
 
 === p_arrival ===
+@map  m3_basecamp_1f 12,6
 @bgm  day
 
 * 8월 첫째 주 월요일. 오후 두 시.
@@ -20,6 +21,7 @@
 -> p_orientation
 
 === p_orientation ===
+@map  m4_basecamp_b1 12,12
 @bgm  session
 
 * 세 시. B1 정글스테이지.
@@ -39,6 +41,7 @@
 -> p_friend
 
 === p_friend ===
+@map  m1_basecamp_4f 15,16
 @bgm  day
 
 * 네 시. 4층 교육장 403.
@@ -71,6 +74,7 @@
   after -> p_night
 
 === p_meet_minah ===
+@map  m1_basecamp_4f 27,24
 @char 민아 center
 
 * 뒷줄 창가. 창틀에 아이스 아메리카노가 올라가 있었다.
@@ -87,6 +91,7 @@
 -> back
 
 === p_meet_seunghee ===
+@map  m1_basecamp_4f 5,24
 @char 승희 center
 
 * 뒷줄 기둥 뒤. 시선이 잘 안 닿는 자리였다.
@@ -103,6 +108,7 @@
 -> back
 
 === p_meet_yunjung ===
+@map  m1_basecamp_4f 22,12
 @char 윤정 center
 
 * 앞줄 문 옆. 오가는 사람이 다 보이는 자리였다.
@@ -118,6 +124,7 @@
 -> back
 
 === p_meet_mingyu ===
+@map  m1_basecamp_4f 27,24
 @char 민규 center
 
 * 뒷줄 창가. 이미 노트북이 열려 있었다.
@@ -133,6 +140,7 @@
 -> back
 
 === p_meet_seungmin ===
+@map  m1_basecamp_4f 15,12
 @char 승민 center
 
 * 앞쪽에서 누가 이름을 불렀다. 내 이름이었다.
@@ -148,6 +156,7 @@
 -> back
 
 === p_meet_yunho ===
+@map  m1_basecamp_4f 22,12
 @char 윤호 center
 
 * 교육장 문이 무거웠다. 밀고 들어가는데 누가 잡아줬다.
@@ -163,6 +172,7 @@
 -> back
 
 === p_night ===
+@map  m5_connect_garden 15,20
 @bgm  night
 
 * 열한 시. 짐을 풀고 숙소동으로 건너가는 길이었다.

@@ -128,6 +128,11 @@ export function compileVns(src: string, file: string): Scene[] {
       continue;
     }
 
+    // `@map 맵 x,y` — 캠퍼스 안 씬이 어느 자리를 비추는가
+    if ((m = /^@map\s+(\S+)\s+(\d+),(\d+)$/.exec(s))) {
+      cur.lines.push({ t: 'map', id: m[1] as MapId, x: Number(m[2]), y: Number(m[3]) });
+      continue;
+    }
     if ((m = /^@(bg|bgm|se|cg)\s+(\S+)$/.exec(s))) {
       cur.lines.push({ t: m[1] as 'bg' | 'bgm' | 'se' | 'cg', id: m[2] });
       continue;

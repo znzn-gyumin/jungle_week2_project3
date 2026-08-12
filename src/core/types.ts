@@ -73,6 +73,8 @@ export type Line =
   | { t: 'say'; who: string; face?: string; text: string; cond?: string }
   | { t: 'narr'; text: string; cond?: string }
   | { t: 'bg' | 'bgm' | 'se' | 'cg'; id: string }
+  /** 캠퍼스 안 씬의 무대 — 그 맵을 대사창 뒤에 깝니다 (TECH_DESIGN 1절 모드 표) */
+  | { t: 'map'; id: MapId; x: number; y: number }
   | { t: 'char'; who: string; pos: 'left' | 'center' | 'right' }
   | { t: 'charOut' }
   | { t: 'choice'; options: ChoiceOption[] }

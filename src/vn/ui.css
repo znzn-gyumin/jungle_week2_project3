@@ -1,4 +1,6 @@
-/* VN 레이어 — 순수 DOM/CSS (TECH_DESIGN 1절). 톤은 WORLD_BIBLE 11절. */
+/* VN 레이어 — 순수 DOM/CSS (TECH_DESIGN 1절). 톤은 WORLD_BIBLE 11절.
+   배치는 반신을 왼쪽 아래로 내려 대사창에 걸치는 형태입니다 — 흉상 CG 라
+   얼굴이 크게 보이고, 남는 가운데로 타일맵이 드러납니다. */
 
 .vn {
   position: relative;
@@ -13,33 +15,45 @@
   position: relative;
 }
 
-/* 배경·CG 는 구현 6번. 그때까지 어느 지시가 걸렸는지만 구석에 적어 둡니다. */
 .vn__stage::after {
   content: attr(data-note);
   position: absolute;
   top: 0.75rem;
   right: 1rem;
   font-size: 0.7rem;
-  letter-spacing: 0.04em;
   color: var(--ink-dim);
   opacity: 0.5;
 }
 
+/* 대사창 — 하단 30% · 반투명 다크 (WORLD_BIBLE 11) */
 .vn__box {
-  min-height: 8.5rem;
-  padding: 1.25rem clamp(1rem, 6vw, 5rem) 1.75rem;
-  background: linear-gradient(to top, rgb(8 9 18 / 96%), rgb(8 9 18 / 82%));
-  border-top: 1px solid rgb(242 237 228 / 10%);
+  position: relative;
+  z-index: 4;
+  min-height: 30vh;
+  margin: 0 clamp(0.5rem, 2vw, 1.5rem) clamp(0.5rem, 2vw, 1.25rem);
+  padding: 1.5rem clamp(1rem, 4vw, 3rem) 1.5rem clamp(9rem, 26vw, 22rem);
+  background: #12141acc;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  backdrop-filter: blur(2px);
   cursor: pointer;
   user-select: none;
 }
 
+/* 이름표 — 대사창 좌상단에 붙는 형태 */
 .vn__name {
-  margin: 0 0 0.4rem;
-  font-size: 0.9rem;
+  position: absolute;
+  top: -0.85rem;
+  left: clamp(9rem, 26vw, 22rem);
+  margin: 0;
+  padding: 0.15rem 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  letter-spacing: 0.03em;
-  color: var(--accent);
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  background: #12141aee;
+  border: 1px solid var(--accent);
+  border-radius: 2px;
 }
 
 .vn__name[hidden] {
@@ -48,25 +62,28 @@
 
 .vn__text {
   margin: 0;
-  max-width: 46rem;
-  font-size: clamp(1rem, 1.9vw, 1.2rem);
-  line-height: 1.75;
-  min-height: 3.5rem;
+  max-width: 44rem;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  line-height: 1.8;
+  min-height: 3.6rem;
 }
 
-/* 내레이션은 인물 대사와 온도를 다르게 둡니다 (WORLD_BIBLE 9-1) */
 .vn__text--narr {
   color: var(--ink-dim);
 }
 
+/* 선택지 — 화면 중앙, 3개 이하 (WORLD_BIBLE 11) */
 .vn__choices {
   position: absolute;
-  inset: auto 0 9.5rem;
+  inset: 0 0 34vh;
+  z-index: 5;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 0.6rem;
   padding: 0 1rem;
+  pointer-events: none;
 }
 
 .vn__choices[hidden] {
@@ -74,23 +91,25 @@
 }
 
 .vn__choice {
+  pointer-events: auto;
   width: min(34rem, 100%);
   padding: 0.8rem 1.2rem;
   font: inherit;
   font-size: clamp(0.9rem, 1.7vw, 1.05rem);
   color: var(--ink);
   text-align: left;
-  background: rgb(16 18 32 / 92%);
-  border: 1px solid rgb(242 237 228 / 18%);
+  background: #12141ae6;
+  border: 1px solid rgb(242 237 228 / 22%);
   border-radius: 2px;
   cursor: pointer;
-  transition: border-color 120ms, background 120ms;
+  transition: border-color 120ms, background 120ms, transform 120ms;
 }
 
 .vn__choice:hover,
 .vn__choice:focus-visible {
-  background: rgb(26 29 48 / 96%);
+  background: #1a1d30f2;
   border-color: var(--accent);
+  transform: translateX(3px);
   outline: none;
 }
 
@@ -134,20 +153,27 @@
   opacity: 0.2;
 }
 
+/* 반신은 왼쪽 아래에 흉상으로 섭니다 — 대사창 위로 걸쳐 얼굴이 크게 보입니다.
+   무대(.vn__stage)를 넘어 아래로 내려가야 하므로 높이를 넉넉히 잡습니다. */
 .stage__char {
+  top: auto;
+  bottom: -34vh;
+  left: clamp(-3rem, -2vw, 0rem);
+  right: auto;
+  width: clamp(16rem, 34vw, 30rem);
+  height: auto;
+  max-height: 96vh;
   object-fit: contain;
-  object-position: bottom center;
+  object-position: bottom left;
   opacity: 0;
-  z-index: 1;
-}
-
-/* 반신은 화면 높이의 88% 로 서고, 위치는 씬이 정합니다 */
-.vn__stage[data-pos='left'] .stage__char {
-  object-position: bottom 0 left 12%;
+  z-index: 3;
+  filter: drop-shadow(0 0 18px rgb(0 0 0 / 55%));
 }
 
 .vn__stage[data-pos='right'] .stage__char {
-  object-position: bottom 0 right 12%;
+  left: auto;
+  right: clamp(-3rem, -2vw, 0rem);
+  object-position: bottom right;
 }
 
 /* 밤 배경 위에서는 인물만 대낮이면 붙여넣은 것처럼 보입니다 */
@@ -155,7 +181,7 @@
   filter: brightness(0.86) saturate(0.92) hue-rotate(-4deg);
 }
 
-/* `@cg` 가 뜨면 반신은 뒤로 숨습니다 */
+/* 스틸은 화면을 가득 채웁니다 — 대사창 위에 놓지 않습니다 */
 .stage__char--behind {
   opacity: 0 !important;
 }

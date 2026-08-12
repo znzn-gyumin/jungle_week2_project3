@@ -28,6 +28,8 @@ export type RoamSetup = {
   npcs: FreeroamNpc[];
   triggers: { map: MapId; target: string }[];
   gender: 'male' | 'female';
+  /** 대사 씬의 배경으로만 씁니다 — 주인공도 조작도 없습니다 */
+  still?: boolean;
   time: TimeOfDay;
   /** 말을 걸었을 때 — 재생기가 씬을 틉니다 */
   onTalk: (npc: FreeroamNpc) => void;
@@ -102,6 +104,10 @@ export class CampusScene extends Phaser.Scene {
     this.cursors = this.input.keyboard!.createCursorKeys();
     this.interactKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+    if (this.setup.still) {
+      this.loadMap(this.setup.map, this.setup.x, this.setup.y);
+      return;
+    }
     this.player = this.physics.add
       .sprite(0, 0, `dot_${dot}`, 0)
       .setOrigin(0, 0)
@@ -219,7 +225,7 @@ export class CampusScene extends Phaser.Scene {
   }
 
   update(_t: number, dt: number): void {
-    if (this.paused) return;
+    if (this.paused || this.setup.still) return;
     if (this.portalCooldown > 0) this.portalCooldown -= dt;
     const c = this.cursors;
     let vx = 0;

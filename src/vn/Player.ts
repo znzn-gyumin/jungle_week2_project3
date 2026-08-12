@@ -11,12 +11,20 @@ import { applyEffects, endingTier, testCond } from '../core/state';
 import { substitute } from '../core/tokens';
 import { HEROINE_GENDER, NAME_BY_HEROINE } from '../core/types';
 import type { ChoiceOption, GameState, Line, Scene, ScriptData } from '../core/types';
+import type { TimeOfDay } from '../config/lighting';
+import { Backdrop } from '../map/Backdrop';
 import { Roam } from '../map/Roam';
 import { Stage } from './Stage';
 import { Typewriter } from './Typewriter';
 
 /** 주인공 이름표는 언제나 `나` 입니다 (WORLD_BIBLE 11) */
 const ME = '나';
+
+/** 씬의 시간대는 그 씬이 켠 BGM 이 말해줍니다 (WORLD_BIBLE 10-1 · lighting.ts) */
+const TIME_BY_BGM: Record<string, TimeOfDay> = {
+  day: 'day', session: 'day', tension: 'day',
+  swell: 'evening', night: 'night', midnight: 'deepnight', epilogue: 'night',
+};
 
 export class Player {
   private state: GameState;
@@ -32,6 +40,8 @@ export class Player {
   private stage: Stage;
   private mapEl: HTMLElement;
   private roam: Roam | null = null;
+  private backdrop: Backdrop;
+  private bgm = 'day';
 
   constructor(root: HTMLElement, script: ScriptData, state: GameState) {
     this.script = script;
@@ -42,6 +52,7 @@ export class Player {
     root.innerHTML = `
       <div class="vn">
         <div class="vn__stage" id="vn-stage"></div>
+        <div class="vn__map" id="vn-back" hidden></div>
         <div class="vn__map" id="vn-map" hidden></div>
         <div class="vn__box" id="vn-box">
           <p class="vn__name" id="vn-name"></p>
@@ -54,6 +65,7 @@ export class Player {
     this.textEl = root.querySelector('#vn-text')!;
     this.choiceEl = root.querySelector('#vn-choices')!;
     this.mapEl = root.querySelector('#vn-map')!;
+    this.backdrop = new Backdrop(root.querySelector('#vn-back')!);
     this.stage = new Stage(this.stageEl);
     this.typer = new Typewriter(this.textEl);
 
@@ -132,7 +144,12 @@ export class Player {
         case 'freeroam':
           return this.enterRoam(line);
         case 'bg':
+          this.backdrop.hide();
           this.stage.setBackground(line.id);
+          continue;
+        case 'map':
+          this.stage.clearBackground();
+          this.backdrop.show(line.id, line.x, line.y, TIME_BY_BGM[this.bgm] ?? 'day');
           continue;
         case 'cg':
           this.stage.setCg(line.id);
@@ -147,7 +164,8 @@ export class Player {
           this.stage.clearChar();
           continue;
         default:
-          // bgm · se — 오디오는 아직 없습니다 (BGM 8곡 미확보)
+          if (line.t === 'bgm') this.bgm = line.id;
+          // 오디오는 아직 없습니다 (BGM 8곡 미확보)
           this.stageEl.dataset.note = describe(line);
           continue;
       }
@@ -181,6 +199,7 @@ export class Player {
     this.textEl.textContent = '';
     this.nameEl.hidden = true;
     this.stage.clearChar();
+    this.backdrop.hide();
     this.roam = new Roam(
       this.mapEl,
       line,
