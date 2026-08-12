@@ -186,23 +186,53 @@ body {
   pointer-events: none;
 }
 
+/* 고른 것과 안 고른 것이 **한눈에 갈라져야** 합니다. 색만 바꾸면
+   흘깃 봐서는 둘 다 버튼으로 보입니다 — 안 고른 쪽은 눌러 놓은 것처럼
+   가라앉히고, 고른 쪽은 떠오르게 합니다. */
 .boot__seg span {
+  position: relative;
   display: block;
-  padding: 0.5rem 0;
+  padding: 0.55rem 0;
   font-size: 0.98rem;
+  font-weight: 500;
   text-align: center;
-  color: #fff;
-  background: rgb(24 20 32 / 46%);
-  border: 1px solid rgb(255 255 255 / 24%);
+  color: rgb(255 255 255 / 62%);
+  background: rgb(16 12 20 / 62%);
+  border: 1px solid rgb(255 255 255 / 16%);
   border-radius: 999px;
-  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 30%) inset;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.boot__seg label:hover span {
+  color: #fff;
+  border-color: rgb(255 194 220 / 55%);
 }
 
 .boot__seg input:checked + span {
-  color: #2a2632;
-  background: #ffc2dc;
+  z-index: 1;
+  font-weight: 800;
+  color: #2a1a24;
+  background: linear-gradient(180deg, #fff, #ffc2dc 60%, #ff9ec4);
   border-color: #fff;
-  box-shadow: 0 0 18px rgb(255 122 178 / 55%);
+  box-shadow:
+    0 0 0 3px rgb(255 122 178 / 35%),
+    0 10px 26px rgb(255 122 178 / 45%),
+    0 1px 0 #fff inset;
+  transform: translateY(-3px) scale(1.06);
+}
+
+/* 고른 쪽에만 체크가 붙습니다 */
+.boot__seg input:checked + span::before {
+  content: '✓';
+  margin-right: 0.35rem;
+  font-size: 0.85em;
+  color: #c2436f;
 }
 
 .boot__hint {
@@ -599,9 +629,27 @@ body {
 
 /* 아직 못 누르는 버튼 — 빛도 안 훑습니다 */
 .boot__go[disabled] {
-  opacity: 0.42;
+  color: rgb(255 255 255 / 45%);
+  background: rgb(16 12 20 / 55%);
+  border-color: rgb(255 255 255 / 14%);
+  box-shadow: none;
   cursor: not-allowed;
-  filter: grayscale(0.5);
+  transform: none;
+}
+
+.boot__go:not([disabled]) {
+  color: #2a1a24;
+  background: linear-gradient(180deg, #fff, #ffc2dc 60%, #ff9ec4);
+  border-color: #fff;
+  box-shadow:
+    0 0 0 3px rgb(255 122 178 / 30%),
+    0 12px 30px rgb(255 122 178 / 45%);
+  animation: boot-ready 1.8s ease-in-out infinite;
+}
+
+@keyframes boot-ready {
+  0%, 100% { box-shadow: 0 0 0 3px rgb(255 122 178 / 25%), 0 12px 30px rgb(255 122 178 / 38%); }
+  50% { box-shadow: 0 0 0 6px rgb(255 122 178 / 40%), 0 12px 38px rgb(255 122 178 / 62%); }
 }
 
 .boot__go[disabled]::after { display: none; }
