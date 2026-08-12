@@ -9,7 +9,7 @@
 import Phaser from 'phaser';
 
 import { LightingOverlay, type TimeOfDay } from '../config/lighting';
-import { HEROINE_BY_NAME, THEME  } from '../core/types';
+import { HEROINE_BY_NAME, SUB_THEME, THEME  } from '../core/types';
 import type { FreeroamNpc, MapId } from '../core/types';
 import { backLine, openLine } from './chatter';
 import { CAST, CELL, DIR_ROW, HEAD_OVERHANG, PLAYER_DOT, type Dir } from './sprites';
@@ -71,7 +71,9 @@ export type RoamSetup = {
 /** 그 인물의 테마 컬러 — 히로인이 아니면 중립색 */
 function npcTheme(who: string): string {
   const id = HEROINE_BY_NAME[who];
-  return id ? THEME[id] : '#c9b8a8';
+  if (id) return THEME[id];
+  // 히로인이 아닌 사람도 자기 색이 있습니다 — 옷에서 뽑은 값입니다
+  return SUB_THEME[who] ?? '#c9b8a8';
 }
 
 export type MiniData = {

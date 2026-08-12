@@ -81,6 +81,26 @@ export const MAP_NAME: Record<string, string> = {
   m7_gate: '정문',
 };
 
+/**
+ * 히로인이 아닌 사람들의 색. [CHARACTERS 6절] 의 **옷 설명에서 뽑았습니다** —
+ * 이들에게는 원래 테마색이 없어서 다 같은 회베이지로 떨어지고 있었습니다.
+ *
+ *   명진혁  전신 무채색 · 혼자 셔츠와 구두
+ *   조민    짙은 회색 후드를 뒤집어씀 · 얼굴이 늘 그늘
+ *   태윤·태연  남색 니트 조끼 · 여섯 조 통틀어 가장 단정
+ *   지오·지아  겉옷 없는 반팔 · 격식이 제일 없음
+ *   여사님  분홍 앞치마 · B1 에서만 보임
+ */
+export const SUB_THEME: Record<string, string> = {
+  명진혁: '#3A3742',
+  조민: '#5A5560',
+  태윤: '#3F4E7A',
+  태연: '#3F4E7A',
+  한지오: '#7FA88C',
+  한지아: '#7FA88C',
+  여사님: '#D98BA6',
+};
+
 export const PLAYER_THEME = '#1E1B26';
 
 export const THEME: Record<RouteId, string> = {

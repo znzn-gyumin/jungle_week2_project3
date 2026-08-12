@@ -9,7 +9,7 @@
  */
 import { applyEffects, endingTier, testCond } from '../core/state';
 import { roleName, substitute } from '../core/tokens';
-import { FACE_FILE, FRIEND_NAME, HEROINE_BY_NAME, HEROINE_GENDER, NAME_BY_HEROINE, THEME, label } from '../core/types';
+import { FACE_FILE, FRIEND_NAME, HEROINE_BY_NAME, HEROINE_GENDER, NAME_BY_HEROINE, SUB_THEME, THEME, label } from '../core/types';
 import type { ChoiceOption, GameState, Line, Scene, ScriptData } from '../core/types';
 import type { TimeOfDay } from '../config/lighting';
 import { Backdrop } from '../map/Backdrop';
@@ -343,7 +343,7 @@ export class Player {
    */
   private setTheme(who: string | null): void {
     const id = who ? HEROINE_BY_NAME[who] : undefined;
-    const c = id ? THEME[id] : '#e0567b';
+    const c = id ? THEME[id] : (who ? (SUB_THEME[who] ?? '#e0567b') : '#e0567b');
     this.root.style.setProperty('--theme', c);
   }
 
