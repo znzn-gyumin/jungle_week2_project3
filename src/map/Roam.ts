@@ -34,9 +34,9 @@ const TIME: Record<string, TimeOfDay> = {
  * D5 밤 열한 시, 마지막 저녁은 D8 저녁입니다.
  */
 const WHEN: Record<string, string> = {
-  prologue: "12일 중 1일째 · 오후",
-  midproject: "12일 중 5일째 · 밤",
-  finalprep: "12일 중 8일째 · 저녁",
+  prologue: "Day 1 · 오후",
+  midproject: "Day 5 · 밤",
+  finalprep: "Day 8 · 저녁",
 };
 
 export class Roam {

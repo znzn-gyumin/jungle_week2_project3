@@ -928,3 +928,26 @@
   text-shadow: 0 1px 4px rgb(0 0 0 / 70%);
   pointer-events: none;
 }
+
+
+/* CG 컷에서도 며칠째 몇 때인지 — 도트맵의 .roam-when 과 같은 자리 */
+.vn__when {
+  position: absolute;
+  right: 1.6rem;
+  bottom: 1.5rem;
+  z-index: 6;
+  margin: 0;
+  padding: 0.4rem 1.1rem;
+  font-size: 0.84rem;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  color: #fff;
+  background: rgb(24 20 32 / 42%);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 999px;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 70%);
+  pointer-events: none;
+}
+
+.vn__when[hidden] { display: none; }
