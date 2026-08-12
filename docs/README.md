@@ -11,7 +11,7 @@
 | [GAME_DESIGN.md](./GAME_DESIGN.md) | **무엇을 만드는가** — 구조, 시스템, 스탯, 판정, 분량 예산, 에셋 | 확정 |
 | [CHARACTERS.md](./CHARACTERS.md) | **누가 나오는가** — 6인 전체 시트, 조 안의 관계, 조연 | 확정 |
 | [WORLD_BIBLE.md](./WORLD_BIBLE.md) | **어떤 세계인가** — 캠프 설정, 일정, 공간, 용어, 톤, 사운드, UI | 확정 |
-| [SCENARIO_OUTLINE.md](./SCENARIO_OUTLINE.md) | **어떤 순서로** — 90씬 구성, 6인 병행 집필 절차 | 확정 |
+| [SCENARIO_OUTLINE.md](./SCENARIO_OUTLINE.md) | **어떤 순서로** — 씬 구성, 선택지 총람, 6인 병행 집필 절차 | 확정 |
 | [TECH_DESIGN.md](./TECH_DESIGN.md) | **어떻게 구현하는가** — 스택, DSL, 상태, **인증·저장·방명록**, 배포 | 확정 |
 | [reference/jungle_campus.png](./reference/jungle_campus.png) | 공간 설정의 1차 자료 (안내도) | — |
 | [../assets/bg/campus/](../assets/bg/campus/README.md) | 캠퍼스 사진 17장 — 타일맵의 근거 | — |
@@ -21,7 +21,7 @@
 | [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 — 사양은 [WORLD_BIBLE 11](./WORLD_BIBLE.md#11-ui-톤) · 에셋은 [assets/README](../assets/README.md#ui) | **확정** |
 | [reference/character/preview_cg.html](./reference/character/preview_cg.html) | CG 90장 눈으로 대조 | — |
 | [reference/character/preview_dot.html](./reference/character/preview_dot.html) | 도트 18종 · 아바타 36컷 대조 | — |
-| `../src/script/*.vns` | 실제 대사 | **2단계에서 작성** |
+| [`../src/script/`](../src/script) | **실제 대사** — 102씬 2,100줄 | **확정** |
 
 ---
 
@@ -31,7 +31,7 @@
 
 2. **바꿀 때마다 전 파일을 직접 읽어 확인합니다.** 목록이나 색인에 의존하지 않습니다. 값(숫자·고유명사)은 `grep`으로 잡히지만 **행동 묘사·설정 서술은 안 잡히므로**, 관련 절을 눈으로 읽어야 합니다.
 
-   확인 대상은 **일곱 문서**입니다 — 이 `README.md`와 `GAME_DESIGN.md` · `CHARACTERS.md` · `WORLD_BIBLE.md` · `SCENARIO_OUTLINE.md` · `TECH_DESIGN.md`, 그리고 값을 담은 `reference/character/README.md`. README에도 씬 수·줄 수가 적히므로 검사 대상입니다. 2단계에 들어가면 `src/script/*.vns`가 추가됩니다
+   확인 대상은 **일곱 문서**입니다 — 이 `README.md`와 `GAME_DESIGN.md` · `CHARACTERS.md` · `WORLD_BIBLE.md` · `SCENARIO_OUTLINE.md` · `TECH_DESIGN.md`, 그리고 값을 담은 `reference/character/README.md`. README에도 씬 수·줄 수가 적히므로 검사 대상입니다. `src/script/*.vns` 도 검사 대상입니다 — 씬 수·줄 수·호칭 구간이 여기에 그대로 실립니다
 
    **[루트 README.md](../README.md) · [assets/README.md](../assets/README.md) · [TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) · [bg/campus/README.md](../assets/bg/campus/README.md)는 일곱에 들어가지 않습니다.** 위 문서들에서 값을 모아 뽑은 **파생 문서**라, 값이 바뀌면 대조하는 게 아니라 **다시 뽑습니다.** 여기에만 있는 값은 없어야 합니다
 
@@ -108,13 +108,13 @@
 | 16 | **방명록** | 화이트보드 커뮤니티. **자유 이동 구간에 작성**, 인게임 날짜로 해금 | ✅ |
 | 17 | **프로젝트명 · 로고 · 프로필** | `jungLover` 확정, 히로인 6인 외형 확정 | ✅ |
 
-### 2단계 — 시나리오 (틀이 다 닫힌 뒤)
+### 2단계 — 시나리오
 
-| # | 대상 | 비고 |
+| # | 대상 | 상태 |
 |---|---|---|
-| 18 | **SO 6인 내용 표** | 배치 12개 × 6인. 사건을 한 줄씩 |
-| 19 | **`.vns` MVP 세로** | 장윤정 27씬 477줄 — 공통 15 + 루트 9 + 엔딩 3 |
-| 20 | **`.vns` 배치 1~12 가로** | 씬 1개씩 6인분 |
+| 18 | **SO 6인 내용 표** | ✅ 배치별 사건이 각 루트 `.vns` 에 직접 들어감 |
+| 19 | **`.vns` MVP 세로** | ✅ 장윤정 27씬 |
+| 20 | **`.vns` 배치 1~14 가로** | ✅ **102씬 2,100줄** — 자유 이동 대화 2종이 배치에 추가됨 |
 
 ---
 
@@ -122,11 +122,13 @@
 
 **절 번호 순서가 곧 파장 순서**입니다. WB 1절을 고치면 아래 전부가 흔들리지만, WB 8절을 고치면 아무것도 안 흔들립니다.
 
-**1단계는 닫혔습니다.** 히로인은 묶음 라벨 없이 **여섯 각자**로 설계되어 있고, 키워드·자리·모티프·선호·호칭·어미 규칙·테마 컬러가 전부 6열입니다. 계정·방명록도 설계가 끝났고 **에셋도 전부 나왔습니다.** 남은 건 **Firebase 프로젝트 생성**뿐이고, 대사 집필과 병행할 수 있습니다.
+**1·2단계가 닫혔습니다.** 히로인은 묶음 라벨 없이 **여섯 각자**로 설계되어 있고, 키워드·자리·모티프·선호·호칭·어미 규칙·테마 컬러가 전부 6열입니다. 에셋도 대사도 다 나왔습니다. 남은 건 **구현**이고, 그중 **Firebase 프로젝트 생성**만 콘솔 작업이라 직접 해야 합니다.
 
-### 대사는 2단계에 씁니다
+### 대사는 틀이 닫힌 뒤에 썼습니다
 
-`src/`는 아직 비어 있습니다. 틀이 열려 있는 동안 대사를 쓰면 설정이 바뀔 때마다 재작업이 되므로, **1단계가 다 닫힌 뒤 확정값으로 한 번에** 씁니다. DSL 포맷은 [TECH_DESIGN 3절](./TECH_DESIGN.md#3-씬-스크립트-dsl), 디렉터리 구조는 [TECH_DESIGN 2절](./TECH_DESIGN.md#2-프로젝트-구조)에 있습니다.
+**틀이 다 닫힌 뒤에 썼습니다.** 설정이 흔들리는 동안 대사를 쓰면 재작업이 되므로 확정값으로 한 번에 갔습니다. DSL 포맷은 [TECH_DESIGN 3절](./TECH_DESIGN.md#3-씬-스크립트-dsl), 디렉터리 구조는 [TECH_DESIGN 2절](./TECH_DESIGN.md#2-프로젝트-구조)에 있습니다.
+
+`python tools/check_vns.py` 가 표정·BGM·`@cg`·`@bg`·점프 대상을 에셋과 대조하고 배치 진행률을 셉니다.
 
 ## 변경 시 확인 목록
 
@@ -190,10 +192,8 @@ grep -rn "옛이름" docs/ assets/ src/ tools/ README.md
 
 ## 다음 작업
 
-**2단계에 들어갑니다.**
+**3단계 구현입니다.** 설계·에셋·대사가 다 닫혔고, `src/` 에 [`config/lighting.ts`](../src/config/lighting.ts) 하나뿐입니다.
 
-1. **SO 6인 내용 표** — 배치 12개 × 6인, 사건을 한 줄씩 (#18)
-2. **`.vns` MVP 세로** — 장윤정 27씬 477줄 (#19)
-3. **배치 1~12 가로** — 씬 1개씩 6인분 (#20)
+순서는 [TECH_DESIGN 7절](./TECH_DESIGN.md#7-구현-순서)이 정본입니다. 1번이 **Vite 스캐폴딩과 배포를 먼저 뚫는 것**이고, 2번 **Firebase 프로젝트 생성**은 콘솔 작업이라 직접 해야 합니다.
 
-**에셋은 전부 완성됐습니다** ([`assets/`](../assets/README.md)). 2단계는 대사만 쓰면 됩니다.
+**대사 2,100줄을 아직 한 줄도 못 돌려봤습니다.** `check_vns.py` 가 정적 검사는 통과시켰지만 파서를 붙이면 더 나올 수 있습니다.
