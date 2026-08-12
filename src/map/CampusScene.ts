@@ -475,7 +475,8 @@ export class CampusScene extends Phaser.Scene {
           strokeThickness: 4,
         })
         .setOrigin(0.5, 1)
-        .setDepth(60);
+        .setDepth(60)
+        .setVisible(false);
       this.uiCam?.ignore(mark);
       this.npcSprites.push({
         npc: { who, map: id, target: '' } as FreeroamNpc,
@@ -605,13 +606,14 @@ export class CampusScene extends Phaser.Scene {
     // 매 프레임 초기화합니다. 안 지우면 한 번 가까이 갔던 사람 머리 위에
     // 「스페이스」 가 그대로 남습니다.
     for (const { npc, mark, met } of this.npcSprites) {
-      // 느낌표는 **CG 컷이 남은 사람만**. 나머지는 원 — 말은 걸리지만
-      // 이야기가 아니라 한 마디만 나온다는 표시입니다.
-      mark
-        .setVisible(true)
-        .setText(met ? '○' : '!')
-        .setColor(npcTheme(npc.who))
-        .setFontSize(met ? 15 : 20);
+      // **도트맵에는 느낌표만.** CG 컷이 남은 사람만 머리 위에 뜹니다 —
+      // 예순 넘는 사람이 다 동그라미를 이고 있으면 화면이 표시로 덮여
+      // 정작 가야 할 곳이 안 보입니다. 원은 미니맵에서만 씁니다.
+      if (met) {
+        mark.setVisible(false);
+        continue;
+      }
+      mark.setVisible(true).setText('!').setColor(npcTheme(npc.who)).setFontSize(20);
     }
     // 왼쪽 아래 안내는 안 씁니다 — 머리 위에 「스페이스」 가 이미 떠
     // 있어 같은 말을 두 번 하는 셈이고, 미니맵·튜토리얼과도 겹칩니다.
