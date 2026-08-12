@@ -374,6 +374,10 @@ body {
   pointer-events: none;
 }
 
+.cursor {
+  transition: opacity 300ms ease;
+}
+
 .cursor.is-idle { opacity: 0; }
 
 .cursor__dot,
@@ -395,22 +399,22 @@ body {
 .cursor__ring {
   left: var(--rx);
   top: var(--ry);
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 22px;
   border: 2px solid rgb(255 158 196 / 85%);
   box-shadow: 0 0 14px rgb(255 122 178 / 45%);
   transition: width 160ms ease, height 160ms ease, border-color 160ms ease;
 }
 
 .cursor.is-hot .cursor__ring {
-  width: 46px;
-  height: 46px;
+  width: 34px;
+  height: 34px;
   border-color: #fff;
 }
 
 .cursor.is-down .cursor__ring {
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   border-color: #fff;
 }
 
@@ -440,3 +444,41 @@ body {
     height: 86px;
   }
 }
+
+
+/* 설정에서 게임으로 — 막이 다 덮인 뒤에 무대를 갈아 끼웁니다.
+   화면 안에서 섬광만 치면 무대가 지워질 때 그 섬광도 같이 사라져
+   툭 끊겨 보입니다. */
+.boot-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  background: radial-gradient(70% 70% at 50% 50%, #fff, #ffd7e8 45%, #0b0710 100%);
+  opacity: 0;
+  pointer-events: none;
+  animation: boot-veil-in 480ms ease-in forwards;
+}
+
+.boot-veil.is-out {
+  animation: boot-veil-out 700ms ease-out forwards;
+}
+
+@keyframes boot-veil-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes boot-veil-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+
+/* 아직 못 누르는 버튼 — 빛도 안 훑습니다 */
+.boot__go[disabled] {
+  opacity: 0.42;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+
+.boot__go[disabled]::after { display: none; }

@@ -47,7 +47,7 @@ function titleScreen(app: HTMLElement): void {
 
   app.innerHTML = `
     <main class="boot">
-      <img class="boot__bg" src="${asset('ui/intro_large.webp')}" alt="" />
+      <img class="boot__bg" src="${asset('ui/intro_blank.webp')}" alt="" />
       <div class="boot__flash" id="boot-flash"></div>
 
       <section class="boot__act is-on" data-act="0">
@@ -60,19 +60,19 @@ function titleScreen(app: HTMLElement): void {
         <div class="boot__panel">
           <p class="boot__step">1 / 2</p>
           <h2 class="boot__head">이름을 정해 주세요</h2>
-          <p class="boot__hint">비워 두면 이도윤 · 이도아 로 시작합니다.</p>
+          <p class="boot__hint">12일 동안 이 이름으로 불립니다.</p>
           <form class="boot__form" id="boot-name" autocomplete="off">
             <div class="boot__row">
               <label class="boot__field">
                 <span>성</span>
-                <input name="family" maxlength="2" placeholder="이" />
+                <input name="family" maxlength="2" placeholder="이" required />
               </label>
               <label class="boot__field">
                 <span>이름</span>
-                <input name="given" maxlength="4" placeholder="도윤" />
+                <input name="given" maxlength="4" placeholder="도윤" required />
               </label>
             </div>
-            <button class="vn__choice boot__go" type="submit">다음</button>
+            <button class="vn__choice boot__go" id="boot-next" type="submit" disabled>다음</button>
           </form>
         </div>
       </section>
@@ -84,16 +84,16 @@ function titleScreen(app: HTMLElement): void {
           <form class="boot__form" id="boot-who" autocomplete="off">
             <fieldset class="boot__seg">
               <legend>성별</legend>
-              <label><input type="radio" name="gender" value="male" checked /><span>남자</span></label>
+              <label><input type="radio" name="gender" value="male" /><span>남자</span></label>
               <label><input type="radio" name="gender" value="female" /><span>여자</span></label>
             </fieldset>
             <fieldset class="boot__seg">
               <legend>반</legend>
-              <label><input type="radio" name="room" value="403" checked /><span>403호</span></label>
+              <label><input type="radio" name="room" value="403" /><span>403호</span></label>
               <label><input type="radio" name="room" value="405" /><span>405호</span></label>
             </fieldset>
             <p class="boot__hint" id="boot-cast"></p>
-            <button class="vn__choice boot__go" type="submit">정글 들어가기</button>
+            <button class="vn__choice boot__go" id="boot-start" type="submit" disabled>정글 들어가기</button>
           </form>
         </div>
       </section>
@@ -134,33 +134,58 @@ function titleScreen(app: HTMLElement): void {
   const field = (f: HTMLFormElement, n: string): string =>
     (f.elements.namedItem(n) as RadioNodeList | HTMLInputElement).value;
 
+  const nextBtn = app.querySelector<HTMLButtonElement>('#boot-next')!;
+  const startBtn = app.querySelector<HTMLButtonElement>('#boot-start')!;
+
+  /** 성과 이름을 다 넣어야 넘어갑니다 */
+  const checkName = (): void => {
+    nextBtn.disabled =
+      !field(nameForm, 'family').trim() || !field(nameForm, 'given').trim();
+  };
+  nameForm.addEventListener('input', checkName);
+  checkName();
+
   nameForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    if (nextBtn.disabled) return;
     goTo(2);
   });
 
-  /** 고른 성별이 무엇을 바꾸는지 그 자리에서 보여줍니다 */
+  /**
+   * 고른 성별이 무엇을 바꾸는지 그 자리에서 보여줍니다. 둘 다 골라야
+   * 시작 버튼이 열립니다 — 기본값을 박아 두면 안 보고 지나칩니다.
+   */
   const sync = (): void => {
-    cast.textContent =
-      field(whoForm, 'gender') === 'male'
+    const g = field(whoForm, 'gender');
+    const room = field(whoForm, 'room');
+    cast.textContent = !g
+      ? '성별을 고르면 만날 사람이 정해집니다.'
+      : g === 'male'
         ? '조원은 민아 · 승희 · 윤정, 룸메는 한지오입니다.'
         : '조원은 민규 · 승민 · 윤호, 룸메는 한지아입니다.';
+    startBtn.disabled = !g || !room;
   };
   whoForm.addEventListener('change', sync);
   sync();
 
   whoForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    if (startBtn.disabled) return;
     const state = newGame(
       field(whoForm, 'gender') as 'male' | 'female',
       field(nameForm, 'family').trim(),
       field(nameForm, 'given').trim(),
       field(whoForm, 'room') as '403' | '405',
     );
-    flash.classList.remove('is-on');
-    void flash.offsetWidth;
-    flash.classList.add('is-on');
-    setTimeout(() => new Player(app, script, state).start(), 260);
+    const veil = document.createElement('div');
+    veil.className = 'boot-veil';
+    document.body.append(veil);
+    // 막이 다 덮인 뒤에 갈아 끼웁니다 — 무대가 바뀌는 순간이 안 보입니다
+    setTimeout(() => {
+      new Player(app, script, state).start();
+      veil.classList.add('is-out');
+      setTimeout(() => veil.remove(), 700);
+    }, 480);
   });
 }
 

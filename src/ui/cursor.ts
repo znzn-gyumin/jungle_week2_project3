@@ -20,10 +20,14 @@ export function mountCursor(): void {
   let rx = x;
   let ry = y;
 
+  // 멈춰 있으면 사라집니다 — 화면에 계속 떠 있으면 그림을 가립니다
+  let idle = 0;
   window.addEventListener('mousemove', (e) => {
     x = e.clientX;
     y = e.clientY;
     el.classList.remove('is-idle');
+    window.clearTimeout(idle);
+    idle = window.setTimeout(() => el.classList.add('is-idle'), 1200);
   });
   window.addEventListener('mouseleave', () => el.classList.add('is-idle'));
   window.addEventListener('mousedown', (e) => {
@@ -32,10 +36,11 @@ export function mountCursor(): void {
   });
   window.addEventListener('mouseup', () => el.classList.remove('is-down'));
 
-  // 링은 조금 늦게 따라옵니다 — 그 지연이 손맛을 만듭니다
+  // 링은 살짝만 늦습니다. 많이 늦으면 원이 따로 노는 것처럼 보여
+  // 정신이 사납습니다.
   const loop = (): void => {
-    rx += (x - rx) * 0.22;
-    ry += (y - ry) * 0.22;
+    rx += (x - rx) * 0.55;
+    ry += (y - ry) * 0.55;
     el.style.setProperty('--x', `${x}px`);
     el.style.setProperty('--y', `${y}px`);
     el.style.setProperty('--rx', `${rx}px`);
