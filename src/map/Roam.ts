@@ -225,7 +225,12 @@ export class Roam {
    */
   private idleScene(n: FreeroamNpc): string {
     const id = HEROINE_BY_NAME[n.who];
-    if (id) return `idle_${id}_${this.block.id}`;
+    if (id) {
+      // **같은 사람에게 다시 걸면 다른 말이 나옵니다.** 히로인 여섯은
+      // 상황마다 세 마디를 준비해 뒀고, 건 횟수로 돌려 씁니다.
+      const turn = ['', '_b', '_c'][this.retalks % 3];
+      return `idle_${id}_${this.block.id}${turn}`;
+    }
     if (n.who === "명진혁") return `idle_coach_${this.block.id}`;
     // 4조 정찰은 마지막 날의 그 장면 전용입니다
     if (n.who === "태윤" || n.who === "태연") {
