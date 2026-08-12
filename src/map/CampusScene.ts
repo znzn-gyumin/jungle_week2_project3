@@ -46,6 +46,9 @@ export class CampusScene extends Phaser.Scene {
   private portals: { rect: Phaser.Geom.Rectangle; to: MapId; sx: number; sy: number }[] = [];
   /** 맵을 막 옮긴 직후에는 되돌아가는 포탈을 한 박자 무시합니다 */
   private portalCooldown = 0;
+  /** 맵을 옮길 때 지워야 합니다 — 안 지우면 두 맵이 겹쳐 쌓이고 충돌체가 둘이 됩니다 */
+  private layers: Phaser.Tilemaps.TilemapLayer[] = [];
+  private collider: Phaser.Physics.Arcade.Collider | null = null;
 
   constructor() {
     super('campus');
@@ -123,6 +126,11 @@ export class CampusScene extends Phaser.Scene {
   }
 
   private loadMap(id: MapId, tx: number, ty: number): void {
+    this.collider?.destroy();
+    this.collider = null;
+    for (const l of this.layers) l.destroy();
+    this.layers = [];
+
     this.currentMap = id;
     const map = this.make.tilemap({ key: id });
     const sets = map.tilesets.map((ts) => map.addTilesetImage(ts.name, ts.name)!);
@@ -133,7 +141,8 @@ export class CampusScene extends Phaser.Scene {
     ground.setDepth(0);
     objects.setDepth(10);
 
-    this.physics.add.collider(this.player, collision);
+    this.layers = [ground, objects, collision];
+    this.collider = this.physics.add.collider(this.player, collision);
     this.player.setPosition(tx * TS, ty * TS - HEAD_OVERHANG);
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.player.setCollideWorldBounds(true);

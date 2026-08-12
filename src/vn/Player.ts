@@ -59,6 +59,8 @@ export class Player {
 
     root.querySelector<HTMLElement>('#vn-box')!.addEventListener('click', () => this.advance());
     window.addEventListener('keydown', (e) => {
+      // 자유 이동 중에는 맵이 키를 갖습니다 — 스페이스가 「말 걸기」와 겹칩니다
+      if (this.roam) return;
       if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
         this.advance();
