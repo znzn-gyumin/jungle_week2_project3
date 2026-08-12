@@ -108,7 +108,9 @@
   min-width: 0;
   flex: 1;
   display: flex;
-  align-items: baseline;
+  /* 이름과 대사를 **위아래 가운데**로 맞춥니다. baseline 으로 두면
+     대사가 두 줄일 때 이름만 첫 줄에 붙어 창이 기울어 보입니다. */
+  align-items: center;
 }
 
 /* 얼굴 자리는 **항상** 비워 둡니다. CG 대화에서도 자리를 남기므로
@@ -125,7 +127,7 @@
 
 .vn__name {
   font-weight: 700;
-  margin: 0 0 0.45rem;
+  margin: 0;
   display: inline-block;
   padding: 0.1rem 0.75rem;
   font-size: 1.25rem;
@@ -784,4 +786,22 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+
+/* 진행 안내는 **창 밖 바로 밑**입니다. 창 안에 두면 대사와 자리를
+   나눠 가져 글이 한쪽으로 쏠립니다. 색은 내레이션과 같은 것으로 둬서
+   읽을 것과 조작 설명이 눈에 갈라집니다. */
+.vn__hint {
+  position: absolute;
+  left: 50%;
+  bottom: -1.9rem;
+  margin: 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: #8d6a5e;
+  white-space: nowrap;
+  opacity: 0.85;
+  pointer-events: none;
+  transform: translateX(-50%);
 }
