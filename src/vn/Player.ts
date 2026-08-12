@@ -332,11 +332,14 @@ export class Player {
     if (this.script[t]) {
       this.scene = t;
       this.idx = 0;
-      // **씬이 바뀌면 무대를 비웁니다.** 앞 씬이 `@char none` 없이 끝나면
-      // 그 인물이 다음 화면에 그대로 서 있게 됩니다 — 맵 위에도 뜹니다.
-      this.setMode(false);
+      // 앞 씬이 `@char none` 없이 끝나면 그 인물이 다음 화면에 남습니다.
+      // 다만 **다음 씬이 곧바로 사람을 세우면 지우지 않습니다** — 지웠다
+      // 다시 켜면 선택 직후에 한 번 투명해졌다 돌아오는 게 보입니다.
       this.stage.setCg('none');
-      this.stage.clearChar();
+      if (!hasChar(this.script[t])) {
+        this.setMode(false);
+        this.stage.clearChar();
+      }
       if (!hasBg(this.script[t])) this.stage.clearBackground();
       return;
     }
@@ -371,4 +374,9 @@ function describe(line: Line): string {
 /** 그 씬이 스스로 배경을 거는가 — 아니면 캠퍼스 안(타일맵 자리)입니다 */
 function hasBg(scene: Scene): boolean {
   return scene.lines.some((l) => l.t === 'bg');
+}
+
+/** 그 씬이 사람을 세우는가 — 세운다면 지금 지울 이유가 없습니다 */
+function hasChar(scene: Scene): boolean {
+  return scene.lines.some((l) => l.t === 'char');
 }

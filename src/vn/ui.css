@@ -187,6 +187,7 @@
   box-shadow: 0 6px 20px rgb(90 60 70 / 22%), 0 2px 0 #fff inset;
   cursor: pointer;
   transition: border-color 120ms, background 120ms, transform 120ms;
+  will-change: transform;
 }
 
 .vn__choice:hover,
