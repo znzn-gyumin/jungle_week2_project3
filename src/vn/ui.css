@@ -218,6 +218,7 @@
   object-fit: contain;
   object-position: bottom right;
   opacity: 0;
+  /* 대사창(z-index 4)보다 뒤 — 오른쪽에서 창 뒤로 들어갑니다 */
   z-index: 3;
   filter: drop-shadow(0 0 18px rgb(0 0 0 / 55%));
 }

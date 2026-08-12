@@ -45,6 +45,14 @@ export class Player {
   private backdrop: Backdrop;
   private bgm = 'day';
   private lastFace = '기본';
+  /**
+   * 이 씬이 사진 배경 위에서 도는가.
+   *
+   * **명장면은 반신 CG 만, 맵 위 대화는 도트 얼굴만** 씁니다 — 둘을 같이
+   * 띄우면 같은 사람이 화면에 둘로 보입니다. `@bg`·`@cg` 가 걸린 씬이
+   * 명장면이고, `@map` 이나 자유 이동은 일반 씬입니다.
+   */
+  private cinematic = false;
 
   constructor(root: HTMLElement, script: ScriptData, state: GameState) {
     this.script = script;
@@ -131,8 +139,11 @@ export class Player {
           this.nameEl.hidden = !who;
           this.boxEl.hidden = false;
           this.textEl.classList.toggle('vn__text--narr', line.t === 'narr');
-          if (line.t === 'say') this.stage.setFace(line.who, line.face);
-          this.setAvatar(line.t === 'say' ? line.who : null, line.t === 'say' ? line.face : undefined);
+          if (line.t === 'say' && this.cinematic) this.stage.setFace(line.who, line.face);
+          this.setAvatar(
+            line.t === 'say' && !this.cinematic ? line.who : null,
+            line.t === 'say' ? line.face : undefined,
+          );
           this.typer.run(substitute(line.text, this.state));
           return;
         }
@@ -165,7 +176,8 @@ export class Player {
           this.stage.setCg(line.id);
           continue;
         case 'char': {
-          // `*` 는 현재 루트의 히로인 — 공용 씬은 이름을 적을 수 없습니다
+          // 반신은 명장면에서만 섭니다. 맵 위 대화는 도트 얼굴이 대신합니다.
+          if (!this.cinematic) continue;
           const who = line.who === '*' ? (this.state.route ? NAME_BY_HEROINE[this.state.route] : '') : line.who;
           if (who) this.stage.setChar(who, line.pos);
           continue;
@@ -228,6 +240,7 @@ export class Player {
     this.textEl.textContent = '';
     this.nameEl.hidden = true;
     this.stage.clearChar();
+    this.cinematic = false;
     this.backdrop.hide();
     this.roam = new Roam(
       this.mapEl,
