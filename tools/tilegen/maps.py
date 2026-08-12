@@ -658,7 +658,7 @@ def m5(TS_):
         m.open(x, H - 1)
         # 나가는 자리가 곧 들어오는 자리입니다. 위로 나가면 숙소동 문
         # 앞에, 아래로 나가면 교육동 후문 앞에 섭니다.
-        m.portal("m6_nestcamp", x, 0, 17 + (x % 4), 4, name="to_nestcamp")
+        m.portal("m6_nestcamp", x, 0, 17 + (x % 4), 45, name="to_nestcamp")
         m.portal("m3_basecamp_1f", x, H - 1, 8 + (x % 4), 2, name="to_basecamp_1f")
     m.trigger("garden_center", 13, 17, w=6, h=6, kind="scene",
               label="커넥트가든 중앙", note="감정 정점 씬 지점 · 여명 오버레이 전용 맵")
@@ -703,9 +703,12 @@ def m6(TS_):
     # ---- 커넥트가든 진입구 (북쪽)
     doorway_h(m, D, SPX0, SPX1, 0, "f_corridor")
     doorway_h(m, D, SPX0, SPX1, 1, "f_corridor")
-    # 아래로 내려가면 커넥트가든입니다
+    # 아래로 내려가면 커넥트가든입니다.
+    # **맨 아랫줄에 둡니다.** 안쪽에 있으면 복도 한가운데를 지나다 밟히고,
+    # 어디까지 가야 나가는 건지도 안 보입니다. 이미지 끝에 닿아야 넘어갑니다.
     for x in range(17, 21):
-        m.portal("m5_connect_garden", x, H - 3, 12 + (x - 17), 4, name="to_garden")
+        m.open(x, H - 1)
+        m.portal("m5_connect_garden", x, H - 1, 12 + (x - 17), 44, name="to_garden")
 
     # ---- 1F 체력단련실
     room(m, D, 2, 8, 14, 7, floor="f_gym")
