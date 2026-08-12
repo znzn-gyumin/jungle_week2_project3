@@ -98,6 +98,7 @@ export class Roam {
       onTalk: (n: FreeroamNpc) => this.talk(n),
       onTrigger: (t: string) => this.trigger(t),
     });
+    window.addEventListener('keydown', this.onKey);
     setTimeout(() => {
       this.updateGuide();
       this.scene?.bindMini(
@@ -147,10 +148,17 @@ export class Roam {
 
   /** 씬이 `-> back` 으로 끝나면 맵으로 돌아옵니다 */
   resume(): void {
-    if (this.left <= 0 || !this.usable().length) return this.finish();
     this.scene?.setPaused(false);
     this.updateGuide();
   }
+
+  /** 진행 키 — 할 일을 다 했을 때만 받습니다 */
+  private onKey = (e: KeyboardEvent): void => {
+    if (e.key !== 'Enter') return;
+    if (this.left > 0 && this.usable().length) return;
+    e.preventDefault();
+    this.finish();
+  };
 
   /**
    * 다시 말을 걸었을 때 쓸 씬. 상황에 맞아야 하므로 **자유 이동 구간별로**
@@ -182,8 +190,11 @@ export class Roam {
       window.removeEventListener('keydown', close);
       window.removeEventListener('mousedown', close);
     };
-    window.addEventListener('keydown', close);
-    window.addEventListener('mousedown', close);
+    // 여기까지 온 키(스페이스)가 그대로 닫기로 먹히면 한 프레임도 못 봅니다
+    setTimeout(() => {
+      window.addEventListener('keydown', close);
+      window.addEventListener('mousedown', close);
+    }, 600);
   }
 
   /** 미니맵을 DOM 캔버스에 그립니다 — 장치 픽셀 그대로라 또렷합니다 */
@@ -253,25 +264,35 @@ export class Roam {
   /** 남은 목표를 맵 위에 적어 둡니다 */
   updateGuide(): void {
     if (!this.guideEl) return;
-    const left = this.usable().map((n) => {
+    const rest = this.usable();
+    const left = rest.map((n) => {
       const id = HEROINE_BY_NAME[n.who];
       return { who: n.who, color: id ? THEME[id] : '#b4485a' };
     });
+    const done = this.left <= 0 || !rest.length;
     this.guideEl.innerHTML = `
-      <p class="roam-guide__goal"><b>${this.left}명</b>에게 더 말을 걸어요</p>
+      <p class="roam-guide__goal">${
+        done ? '이제 진행할 수 있어요' : `<b>${this.left}명</b>에게 더 말을 걸어요`
+      }</p>
       <p class="roam-guide__who">${left
         .map((w) => `<span style="color:${w.color};border-color:${w.color}">${w.who}</span>`)
         .join('')}</p>
-      <p class="roam-guide__keys">방향키 이동 · <b>스페이스</b> 말 걸기 · 청록은 계단</p>`;
+      <p class="roam-guide__keys">${
+        done
+          ? '<b>엔터</b> 로 다음으로 · 더 둘러봐도 됩니다'
+          : '방향키 이동 · <b>스페이스</b> 말 걸기 · 청록은 계단'
+      }</p>`;
   }
 
   private finish(): void {
+    window.removeEventListener('keydown', this.onKey);
     const after = this.block.after;
     this.destroy();
     this.onDone(after);
   }
 
   destroy(): void {
+    window.removeEventListener('keydown', this.onKey);
     this.game?.destroy(true);
     this.game = null;
     this.guideEl = null;
