@@ -13,6 +13,10 @@ import type { FreeroamNpc, MapId } from '../core/types';
 import { CAST, CELL, DIR_ROW, HEAD_OVERHANG, PLAYER_DOT, type Dir } from './sprites';
 
 const TS = 48;
+const ALL_MAPS: MapId[] = [
+  'm1_basecamp_4f', 'm2_basecamp_2f', 'm3_basecamp_1f', 'm4_basecamp_b1',
+  'm5_connect_garden', 'm6_nestcamp', 'm7_gate',
+];
 const SPEED = 190;
 /** 말을 걸 수 있는 거리 — 한 칸 반 */
 const REACH = TS * 1.5;
@@ -62,9 +66,10 @@ export class CampusScene extends Phaser.Scene {
     for (const t of ['edu_indoor', 'dorm_indoor', 'outdoor', 'meta']) {
       this.load.image(`tileset_${t}`, asset(`tilesets/tileset_${t}.png`));
     }
-    // 이 자유 이동에 나오는 맵만 읽습니다
-    const maps = new Set<MapId>([this.setup.map, ...this.setup.npcs.map((n) => n.map)]);
-    for (const m of maps) this.load.tilemapTiledJSON(m, asset(`map/${m}.json`));
+    // 일곱 맵을 다 읽습니다. 합쳐 164KB 이고, 안 읽은 맵으로 가는 계단은
+    // 조용히 무시되므로 — 프롤로그처럼 여섯이 다 4층에 있는 날에도
+    // 계단을 밟으면 실제로 내려갈 수 있어야 캠퍼스가 이어져 보입니다.
+    for (const m of ALL_MAPS) this.load.tilemapTiledJSON(m, asset(`map/${m}.json`));
 
     const dots = new Set<string>([PLAYER_DOT[this.setup.gender]]);
     for (const n of this.setup.npcs) if (CAST[n.who]) dots.add(CAST[n.who].dot);
