@@ -736,7 +736,11 @@
   padding: 0;
   font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  /* 자간을 크게 벌립니다 — 맵 위에 얹히는 한 줄이라 글자가 붙어
+     있으면 배경 타일에 묻힙니다. */
+  letter-spacing: 0.42em;
+  /* 마지막 글자 뒤 자간만큼 왼쪽으로 밀리는 걸 되돌립니다 */
+  text-indent: 0.42em;
   white-space: nowrap;
   color: #fff;
   text-shadow:
@@ -752,9 +756,9 @@
 /* 천천히 보였다 사라집니다. 양 끝에 머무는 구간을 둬서 깜빡이는 게
    아니라 숨쉬는 것처럼 보입니다. */
 @keyframes roam-go-blink {
-  0%, 12% { opacity: 0.12; }
-  50%, 62% { opacity: 0.92; }
-  100% { opacity: 0.12; }
+  0%, 10% { opacity: 0; }
+  50%, 62% { opacity: 0.95; }
+  100% { opacity: 0; }
 }
 
 
