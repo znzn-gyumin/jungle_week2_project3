@@ -53,8 +53,10 @@ export class Roam {
   private guideEl: HTMLElement | null = null;
   private miniEl: HTMLCanvasElement | null = null;
   private mini: MiniData | null = null;
-  /** 한 번이라도 말을 걸었는지 — 튜토리얼 마지막 단계가 봅니다 */
-  private talked = false;
+  /** 몇 번 말을 걸었는지 — 튜토리얼이 「한 번 더」 까지 봅니다 */
+  private talks = 0;
+  /** 그중 다시 건 횟수 — 마지막 단계가 이것만 봅니다 */
+  private retalks = 0;
   private me = { x: 0, y: 0 };
 
   start(): void {
@@ -129,11 +131,12 @@ export class Roam {
   }
 
   private talk(n: FreeroamNpc): void {
-    this.talked = true;
+    this.talks++;
     // 이미 만났거나 **할 이야기를 다 했으면** 한 마디만 하고 횟수를 안 씁니다.
     // 다음 장면으로 넘어가기 전까지는 누구에게든 몇 번이든 걸 수 있습니다.
     const met = this.met.includes(n.who === '태연' ? '태윤' : n.who);
     if (met || this.left <= 0) {
+      this.retalks++;
       this.scene?.setPaused(true);
       this.onTalk(met ? n.target : this.idleScene(n));
       return;
@@ -185,20 +188,45 @@ export class Roam {
   }
 
   /**
-   * 첫 자유 이동에서 한 번만. **읽고 닫는 창이 아니라 직접 해보는 4단계**
-   * 입니다 — 시켜본 뒤에야 다음으로 넘어가므로 조작이 손에 남습니다.
-   * 게임을 막지 않으므로 그냥 걸어다녀도 알아서 진행됩니다.
+   * 프롤로그 첫 자유 이동에서 한 번만.
+   *
+   * **읽고 닫는 창이 아닙니다.** 하나 시키고 → 해내면 그게 무슨 뜻이었는지
+   * 한 줄로 알려주는 식으로, 조작과 규칙을 같이 익힙니다. 게임을 막지
+   * 않으므로 그냥 돌아다녀도 알아서 진행됩니다.
    */
   private showTutorial(): void {
     const STEPS = [
-      { key: '방향키', ask: '한 번 걸어 보세요' },
-      { key: '시프트 + 방향키', ask: '누른 채로 뛰어 보세요' },
-      { key: '느낌표', ask: '아직 말 안 걸어 본 사람에게 다가가 보세요' },
-      { key: '스페이스', ask: '말을 걸어 보세요' },
+      {
+        key: '방향키',
+        ask: '복도를 걸어 보세요',
+        got: '앞으로 12일. 여기서 마주치는 사람이 곧 이야기가 됩니다.',
+      },
+      {
+        key: '시프트',
+        ask: '누른 채로 뛰어 보세요',
+        got: '정글은 넓습니다. 지하 편의점까지는 뛰는 편이 낫습니다.',
+      },
+      {
+        key: '느낌표',
+        ask: '머리에 ! 가 뜬 사람에게 다가가 보세요',
+        got: '! 는 아직 말 안 걸어 본 사람. 오른쪽 위 미니맵에도 같이 뜹니다.',
+      },
+      {
+        key: '스페이스',
+        ask: '말을 걸어 보세요',
+        got: '선택지가 나오면 고른 대로 호감이 움직입니다. 되돌릴 수 없습니다.',
+      },
+      {
+        key: '한 번 더',
+        ask: '이미 만난 사람에게 다시 말을 걸어 보세요',
+        got: '다시 거는 말은 그냥 한마디입니다. 이야기는 안 변하니 편하게 걸어도 됩니다.',
+      },
     ];
     const el = document.createElement('div');
     el.className = 'roam-tutorial';
-    this.host.append(el);
+    const learn = document.createElement('p');
+    learn.className = 'roam-learn';
+    this.host.append(learn, el);
 
     let step = 0;
     let from: { x: number; y: number } | null = null;
@@ -209,12 +237,20 @@ export class Roam {
     window.addEventListener('keydown', onShift);
 
     const paint = (): void => {
+      const over = step >= STEPS.length;
       el.innerHTML = `
-        <p class="roam-tutorial__title">${step >= STEPS.length ? '준비 끝!' : '해보면서 익혀요'}</p>
+        <p class="roam-tutorial__title">${over ? '이제 다 알아요' : `조작 ${step + 1} / ${STEPS.length}`}</p>
         <ol class="roam-tutorial__steps">${STEPS.map(
           (s2, i) => `<li class="${i < step ? 'is-done' : i === step ? 'is-now' : ''}">
               <b>${s2.key}</b><span>${s2.ask}</span></li>`,
         ).join('')}</ol>`;
+    };
+    /** 해낸 것이 무슨 뜻이었는지 한 줄로 남깁니다 */
+    const teach = (text: string): void => {
+      learn.textContent = text;
+      learn.classList.remove('is-on');
+      void learn.offsetWidth;
+      learn.classList.add('is-on');
     };
     paint();
 
@@ -228,16 +264,24 @@ export class Roam {
         step === 0 ? moved >= 2
         : step === 1 ? ranWhile && moved >= 5
         : step === 2 ? sc.nearWho !== null
-        : this.talked;
+        : step === 3 ? this.talks >= 1
+        : this.retalks >= 1;
       if (!ok) return;
+      teach(STEPS[step].got);
       step++;
       if (step === 1) from = at; // 뛰기는 걸은 자리에서 다시 잽니다
       paint();
       if (step < STEPS.length) return;
       window.clearInterval(tick);
       window.removeEventListener('keydown', onShift);
-      el.classList.add('is-over');
-      setTimeout(() => el.remove(), 1600);
+      setTimeout(() => {
+        el.classList.add('is-over');
+        learn.classList.remove('is-on');
+        setTimeout(() => {
+          el.remove();
+          learn.remove();
+        }, 1600);
+      }, 4200);
     }, 120);
   }
 
