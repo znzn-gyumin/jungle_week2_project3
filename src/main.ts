@@ -194,12 +194,16 @@ function titleScreen(app: HTMLElement): void {
     }, 260);
   };
 
-  // 1장 — 아무 키나 클릭
-  const leaveLogo = (): void => {
+  // 1장 — 엔터 또는 클릭. **아무 키나 받으면 안 됩니다** — 안내대로
+  // F11 을 누르는 순간 전체화면이 되면서 이 장이 같이 넘어갑니다.
+  const enterLogo = (e: KeyboardEvent): void => {
+    if (act === 0 && e.key === "Enter") goTo(1);
+  };
+  const clickLogo = (): void => {
     if (act === 0) goTo(1);
   };
-  window.addEventListener("keydown", leaveLogo);
-  window.addEventListener("mousedown", leaveLogo);
+  window.addEventListener("keydown", enterLogo);
+  window.addEventListener("mousedown", clickLogo);
 
   const nameForm = app.querySelector<HTMLFormElement>("#boot-name")!;
   const whoForm = app.querySelector<HTMLFormElement>("#boot-who")!;
