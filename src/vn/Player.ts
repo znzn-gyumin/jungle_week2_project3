@@ -289,6 +289,35 @@ export class Player {
     this.root.style.setProperty('--theme', c);
   }
 
+  /**
+   * 표정에 맞는 짧은 이펙트. **매 줄 흔들면 읽기가 힘들어지므로**
+   * 놀람·화남에만 진동을 걸고 나머지는 작게 둡니다.
+   */
+  private fx(face: string | undefined): void {
+    const el = this.cinematic
+      ? this.stageEl.querySelector<HTMLElement>('.stage__char:not([hidden])')
+      : this.faceEl;
+    const cls =
+      face === '놀람' || face === '화남'
+        ? 'fx-shake'
+        : face === '기쁨'
+          ? 'fx-bob'
+          : face === '부끄러움'
+            ? 'fx-sway'
+            : '';
+    for (const c of ['fx-shake', 'fx-bob', 'fx-sway']) el?.classList.remove(c);
+    if (cls && el) {
+      void el.offsetWidth; // 같은 표정이 이어져도 다시 재생되게 리플로를 한 번
+      el.classList.add(cls);
+    }
+    // 놀람·화남은 대사창도 아주 살짝 밉니다
+    this.boxEl.classList.remove('fx-nudge');
+    if (cls === 'fx-shake') {
+      void this.boxEl.offsetWidth;
+      this.boxEl.classList.add('fx-nudge');
+    }
+  }
+
   /** `*` 는 현재 루트, `동갑`·`연상`·`연하` 는 이 회차의 그 역할입니다 */
   private whoName(raw: string): string {
     if (raw === '*') return this.state.route ? NAME_BY_HEROINE[this.state.route] : '';
