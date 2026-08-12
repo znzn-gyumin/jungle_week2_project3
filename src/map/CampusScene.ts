@@ -19,8 +19,8 @@ const ALL_MAPS: MapId[] = [
   'm1_basecamp_4f', 'm2_basecamp_2f', 'm3_basecamp_1f', 'm4_basecamp_b1',
   'm5_connect_garden', 'm6_nestcamp', 'm7_gate',
 ];
-const SPEED = 190;
-const RUN = 1.4; // 시프트를 누르고 있을 때
+const SPEED = 228; // 걷기
+const RUN = 1.2; // 시프트를 누르고 있을 때 — 걷기의 1.2배
 /**
  * 도트가 48px 이라 1배는 시야가 너무 넓습니다.
  *
