@@ -200,6 +200,28 @@ export class CampusScene extends Phaser.Scene {
     this.loadMap(this.setup.map, this.setup.x, this.setup.y);
   }
 
+  /**
+   * 할 이야기를 다 했습니다. 남은 사람들의 느낌표를 내립니다 —
+   * 말은 계속 걸 수 있지만 이제 스토리가 아니라 한 마디씩입니다.
+   */
+  exhaust(): void {
+    for (const n of this.npcSprites) {
+      if (n.met) continue;
+      n.met = true;
+      n.mark.setVisible(false);
+      this.metMarks.push({
+        x: n.sprite.x / TS,
+        y: n.sprite.y / TS,
+        theme: npcTheme(n.npc.who),
+        met: true,
+      });
+    }
+    if (this.lastMini) {
+      this.lastMini = { ...this.lastMini, npcs: [...this.metMarks] };
+      this.onMini?.(this.lastMini);
+    }
+  }
+
   /** 지금 무엇을 하면 이야기가 진행되는지 */
   setGuide(lines: string[]): void {
     this.onGuide?.(lines);

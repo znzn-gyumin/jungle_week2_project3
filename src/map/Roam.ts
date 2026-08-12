@@ -127,15 +127,20 @@ export class Roam {
   }
 
   private talk(n: FreeroamNpc): void {
-    // 이미 만난 사람이면 한 마디만 하고 횟수를 안 씁니다
-    if (this.met.includes(n.who === '태연' ? '태윤' : n.who)) {
+    // 이미 만났거나 **할 이야기를 다 했으면** 한 마디만 하고 횟수를 안 씁니다.
+    // 다음 장면으로 넘어가기 전까지는 누구에게든 몇 번이든 걸 수 있습니다.
+    const met = this.met.includes(n.who === '태연' ? '태윤' : n.who);
+    if (met || this.left <= 0) {
       this.scene?.setPaused(true);
-      this.onTalk(n.target);
+      this.onTalk(met ? n.target : this.idleScene(n));
       return;
     }
     this.left--;
     this.met.push(n.who === '태연' ? '태윤' : n.who);
     this.scene?.removeNpc(n.who, this.idleScene(n));
+    // 마지막 한 명을 만났으면 남은 사람들의 느낌표도 내립니다 —
+    // 이제 그들도 스토리가 아니라 한 마디만 합니다.
+    if (this.left <= 0) this.scene?.exhaust();
     // 맵을 숨기지 않습니다 — 걷다가 말을 건 자리에서 그대로 대화합니다
     this.scene?.setPaused(true);
     this.onTalk(n.target);

@@ -182,6 +182,7 @@ export class Player {
             line.t === 'say' && !this.cinematic ? who : null,
             line.t === 'say' ? line.face : undefined,
           );
+          if (line.t === 'say') this.fx(line.face);
           this.typer.run(substitute(line.text, this.state));
           return;
         }
@@ -273,6 +274,9 @@ export class Player {
     this.faceEl.src = `${import.meta.env.BASE_URL}assets/dot/face/${id}_${file}.webp`;
     this.faceEl.hidden = false;
     this.boxEl.classList.add('vn__box--face');
+    this.faceEl.classList.remove('fx-pop');
+    void this.faceEl.offsetWidth;
+    this.faceEl.classList.add('fx-pop');
   }
 
   /**

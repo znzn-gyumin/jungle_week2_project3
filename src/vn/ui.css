@@ -457,3 +457,51 @@
   color: #a98a9a;
   animation: vn-blink 1.8s ease-in-out infinite;
 }
+
+
+/* ---- 감정 이펙트
+   표정에 맞춰 아주 짧게만 겁니다. 매 줄 흔들면 읽기가 힘들어지므로
+   놀람·화남에만 진동을, 기쁨·부끄러움에는 작은 흔들림을 줍니다. */
+
+@keyframes vn-shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-9px); }
+  30% { transform: translateX(8px); }
+  45% { transform: translateX(-6px); }
+  60% { transform: translateX(4px); }
+  80% { transform: translateX(-2px); }
+}
+
+@keyframes vn-bob {
+  0%, 100% { transform: translateY(0); }
+  35% { transform: translateY(-10px); }
+  70% { transform: translateY(-3px); }
+}
+
+@keyframes vn-sway {
+  0%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(-1.1deg); }
+  70% { transform: rotate(0.8deg); }
+}
+
+@keyframes vn-pop {
+  0% { transform: scale(0.86); }
+  60% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+.fx-shake { animation: vn-shake 380ms ease-out; }
+.fx-bob { animation: vn-bob 420ms ease-out; }
+.fx-sway { animation: vn-sway 520ms ease-in-out; }
+
+/* 대사창은 아주 살짝만 — 글이 흔들리면 읽기가 힘듭니다 */
+@keyframes vn-nudge {
+  0%, 100% { transform: translateX(-50%); }
+  25% { transform: translateX(calc(-50% - 5px)); }
+  60% { transform: translateX(calc(-50% + 3px)); }
+}
+
+.vn__box.fx-nudge { animation: vn-nudge 300ms ease-out; }
+
+/* 얼굴이 바뀔 때 톡 */
+.vn__face.fx-pop { animation: vn-pop 260ms ease-out; }
