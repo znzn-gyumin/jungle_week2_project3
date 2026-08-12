@@ -29,29 +29,6 @@ function isCine(sc?: Scene): boolean {
 /** 주인공 이름표는 언제나 `나` 입니다 (WORLD_BIBLE 11) */
 const ME = '나';
 
-/**
- * 며칠째인가. 씬 이름에서 읽습니다 — 일정표가 [SCENARIO_OUTLINE 1절] 에
- * 고정돼 있어 씬 이름만 보면 날짜가 정해집니다.
- */
-function dayOf(scene: string): string {
-  if (scene.startsWith('p_')) return 'Day 1';
-  if (scene.includes('_c1_pair')) return 'Day 3';
-  if (scene.includes('_c1_review') || scene.startsWith('c2_ranking')) return 'Day 4';
-  if (scene.includes('_c2_') || scene.startsWith('c2_')) return 'Day 5';
-  if (scene.includes('_c3_') || scene.startsWith('c3_')) return 'Day 7';
-  if (scene.includes('_c4_talk') || scene.startsWith('c4_')) return 'Day 8';
-  if (scene.includes('_c4_classroom')) return 'Day 9';
-  if (scene.includes('_c4_lastnight')) return 'Day 11';
-  if (scene.startsWith('e_')) return 'Day 12';
-  return '';
-}
-
-/** 그 시간대를 한 단어로 */
-const WHEN_WORD: Record<string, string> = {
-  day: '낮', session: '낮', tension: '저녁',
-  swell: '저녁', night: '밤', midnight: '새벽',
-};
-
 /** 씬의 시간대는 그 씬이 켠 BGM 이 말해줍니다 (WORLD_BIBLE 10-1 · lighting.ts) */
 const TIME_BY_BGM: Record<string, TimeOfDay> = {
   day: 'day', session: 'day', tension: 'day',
@@ -81,8 +58,6 @@ export class Player {
   private lastFace = '기본';
   /** 키보드로 고르는 중인 선택지 */
   private veilEl!: HTMLElement;
-  /** 오른쪽 아래 날짜와 때 — 12일이 얼마나 남았는지가 늘 보여야 합니다 */
-  private whenEl!: HTMLElement;
   private pick = 0;
   /** 화살표나 마우스를 한 번은 써야 결정할 수 있습니다 */
   private armed = false;
@@ -131,7 +106,6 @@ export class Player {
           <p class="vn__hint">스페이스바 · 클릭 — 대화 진행</p>
         </div>
         <div class="vn__choices" id="vn-choices" hidden></div>
-        <p class="vn__when" id="vn-when"></p>
         <div class="vn__veil" id="vn-veil"></div>
       </div>`;
     this.root = root;
@@ -142,7 +116,6 @@ export class Player {
     this.textEl = root.querySelector('#vn-text')!;
     this.choiceEl = root.querySelector('#vn-choices')!;
     this.veilEl = root.querySelector('#vn-veil')!;
-    this.whenEl = root.querySelector('#vn-when')!;
     this.mapEl = root.querySelector('#vn-map')!;
     this.backdrop = new Backdrop(root.querySelector('#vn-back')!);
     this.stage = new Stage(this.stageEl);
@@ -249,12 +222,6 @@ export class Player {
             line.t === 'say' ? line.face : undefined,
           );
           if (line.t === 'say') this.fx(line.face);
-          const d = dayOf(this.scene);
-          const w = WHEN_WORD[this.bgm] ?? '';
-          this.whenEl.textContent = d && w ? `${d} · ${w}` : d;
-          // **자유 이동 중에는 안 띄웁니다.** 도트맵에도 같은 자리에
-          // 같은 표기가 있어 둘이 겹쳐 보입니다.
-          this.whenEl.hidden = !d || this.bgm === 'epilogue' || Boolean(this.roam);
           const said = substitute(line.text, this.state);
           // 이름과 바는 그대로 두고 **대사만** 올라옵니다. 통째로
           // 움직이면 기준선이 같이 흔들려 자리를 찾는 느낌이 안 납니다.

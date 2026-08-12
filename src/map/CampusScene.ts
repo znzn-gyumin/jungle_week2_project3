@@ -534,10 +534,11 @@ export class CampusScene extends Phaser.Scene {
       // 무명은 이 맵 몫만큼만 세웁니다 — 캠퍼스 전체로 열일곱입니다
       if (!named && mobs >= quota) continue;
       if (!named) mobs++;
-      // **이름이 있는 사람은 교육장에만 세웁니다.** 같은 사람 자리가
-      // 4층과 2층에 다 적혀 있어서(그날 어디 있느냐로 갈리는 자리라)
-      // 그대로 그리면 조민이 두 층에 동시에 서 있게 됩니다.
-      if (named && id !== 'm1_basecamp_4f') continue;
+      // **2층의 이름 있는 자리는 건너뜁니다.** 조민 자리가 4층과 2층에
+      // 다 적혀 있어서(그날 어디 있느냐로 갈리는 자리라) 그대로 그리면
+      // 같은 사람이 두 층에 동시에 서 있게 됩니다. 4층 쪽을 씁니다.
+      // 여사님(B1)처럼 한 곳에만 있는 사람은 그 자리에 그대로 섭니다.
+      if (named && id === 'm2_basecamp_2f') continue;
       const who = named ? text : '무명';
       // 이름이 없으면 말을 못 겁니다 — 대신 저희끼리 잡담을 합니다
       const chatOnly = !named;

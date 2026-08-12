@@ -474,6 +474,10 @@ def m4(TS_):
     m.trigger("convenience", 31, 24, w=8, h=2, kind="room", room="convenience")
     m.trigger("grab_and_go", 41, 22, w=1, h=1, kind="interact", label="그랩앤고")
 
+    # 여사님 — B1 카페테리아 (CHARACTERS 688행). 학생이 아닙니다.
+    m.npc("yeosanim", 36, 9, role="staff", label="여사님",
+          note="배식 시간 외엔 냉장고만 · 야식 회복 이벤트")
+
     # ---- 계단 — **네 층이 같은 자리를 씁니다** (WORLD_BIBLE 3절)
     #   올라가는 계단  (20,3)  · 위쪽 벽을 등진다 · 아래에서만 · 앞칸 (20,5)
     #   내려가는 계단  (15,25) · 아래쪽 벽을 등진다 · 위에서만 · 앞칸 (15,24)
