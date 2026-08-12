@@ -59,16 +59,21 @@
      위에서 들어오는 빛, 말하는 사람 쪽의 테마색 기운, 아래로 가라앉는
      그늘. 색이 아니라 밝기만 건드려서 글자는 그대로 읽힙니다. */
   background:
-    linear-gradient(180deg, #ffffff55 0%, transparent 22%, transparent 72%, #a67b6a26 100%),
-    radial-gradient(80% 120% at 8% 100%, color-mix(in srgb, var(--theme, #e0567b) 14%, transparent) 0%, transparent 62%),
+    linear-gradient(180deg, #ffffff77 0%, transparent 20%, transparent 62%, #6b40382e 100%),
+    radial-gradient(90% 130% at 6% 100%, color-mix(in srgb, var(--theme, #e0567b) 30%, transparent) 0%, transparent 66%),
+    radial-gradient(70% 110% at 96% 4%, color-mix(in srgb, var(--theme, #e0567b) 16%, transparent) 0%, transparent 58%),
     radial-gradient(120% 160% at 12% 0%, #fffdf8 0%, #fdf6ec 45%, #fbeee0 100%);
-  border: 1px solid var(--theme, #f0d9c8);
+  /* 틀을 두껍게 둬서 말하는 사람의 색이 한눈에 읽힙니다 */
+  border: 3px solid var(--theme, #e0567b);
   border-radius: 48px;
   box-shadow:
-    0 10px 34px rgb(90 60 70 / 28%),
+    0 10px 34px rgb(90 60 70 / 30%),
     0 2px 0 #ffffff inset,
-    0 0 0 5px #ffffff88 inset,
-    0 0 34px #ffd9e488;
+    0 0 0 5px #ffffffaa inset,
+    /* 안쪽으로 한 겹 더 — 위는 밝고 아래는 테마색이 배어 나옵니다 */
+    0 -18px 26px -18px color-mix(in srgb, var(--theme, #e0567b) 55%, transparent) inset,
+    0 22px 30px -26px rgb(80 45 55 / 45%) inset,
+    0 0 30px color-mix(in srgb, var(--theme, #e0567b) 45%, transparent);
   cursor: pointer;
   user-select: none;
 }
