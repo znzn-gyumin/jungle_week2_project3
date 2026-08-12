@@ -435,8 +435,15 @@ body {
   }
 }
 
+/* 그림 가운데 문구 바로 아래. 오림(50% 46% · 높이 26%)의 아래끝이
+   대략 화면 59% 지점이라 그보다 조금 밑에 둡니다. */
+.boot__act[data-act='0'] {
+  justify-content: flex-start;
+  padding-top: 63vh;
+}
+
 .boot__any {
-  margin-top: 1.4rem;
+  margin-top: 0;
   font-size: 0.95rem;
   letter-spacing: 0.14em;
   color: #fff;
@@ -724,6 +731,6 @@ body {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(60% 60% at 50% 50%, rgb(12 8 16 / 72%), rgb(12 8 16 / 42%));
-  backdrop-filter: blur(2px);
+  background: radial-gradient(65% 65% at 50% 50%, rgb(10 7 14 / 88%), rgb(10 7 14 / 68%));
+  backdrop-filter: blur(4px);
 }

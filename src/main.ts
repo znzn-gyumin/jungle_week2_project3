@@ -78,7 +78,6 @@ function titleScreen(app: HTMLElement): void {
       </div>
 
       <section class="boot__act is-on" data-act="0">
-        <p class="boot__line">11박 12일, 연애는 커리큘럼에 없었다</p>
         <p class="boot__any">아무 키나 눌러 시작</p>
       </section>
 
