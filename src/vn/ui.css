@@ -751,6 +751,19 @@
   animation: roam-go-blink 4.2s ease-in-out infinite;
 }
 
+/* 맵에서 머리 위에 뜨는 그 느낌표. 글자보다 한 뼘 크고 진합니다. */
+.roam-go i {
+  font-size: 1.5em;
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: 0;
+  color: #ff9ec4;
+  text-shadow:
+    0 0 10px rgb(255 122 178 / 95%),
+    0 0 24px rgb(255 122 178 / 70%),
+    0 1px 4px rgb(0 0 0 / 85%);
+}
+
 .roam-go[hidden] { display: none; }
 
 /* 천천히 보였다 사라집니다. 양 끝에 머무는 구간을 둬서 깜빡이는 게
