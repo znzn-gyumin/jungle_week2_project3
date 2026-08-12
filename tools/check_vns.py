@@ -4,7 +4,7 @@
     python tools/check_vns.py
 
 검사  표정 6종 · BGM 8곡 · @cg/@bg 실존 · 점프 대상 · 씬 ID 중복
-진행  배치 12개 × 6인 + 공통 18씬 (docs/SCENARIO_OUTLINE.md 8-2)
+진행  배치 12개 × 6인 + 자유 이동 대화 2종 × 6인 + 공통 21씬
 
 아직 안 쓴 씬으로 가는 점프는 오류가 아니라 `미작성`으로 셉니다.
 가로 작업에서는 다음 배치를 쓰기 전까지 항상 그 상태입니다.
@@ -22,8 +22,8 @@ BATCH = ['c1_pair', 'c1_review', 'c2_talk', 'c2_allnighter', 'c2_garden',
 COMMON = ['p_arrival', 'p_orientation', 'p_friend', 'p_freeroam', 'p_night',
           'p_meet_minah', 'p_meet_seunghee', 'p_meet_yunjung',
           'p_meet_mingyu', 'p_meet_seungmin', 'p_meet_yunho',
-          'c2_ranking', 'c2_freeroam', 'c3_outing', 'c3_bus', 'c4_freeroam',
-          'e_ceremony', 'e_solo']
+          'c2_ranking', 'c2_freeroam', 'c2_coach', 'c3_outing', 'c3_bus',
+          'c4_freeroam', 'c4_scout', 'e_ceremony', 'e_epilogue_branch', 'e_solo']
 PLANNED = {'r_%s_%s' % (r, b) for r in ROUTES for b in BATCH} | set(COMMON)
 
 CG = {os.path.splitext(os.path.basename(f))[0] for f in glob.glob('assets/cg/event/*.webp')}
@@ -58,7 +58,7 @@ for f in files:
         if m and m.group(1) not in BGM:
             bad.append('%s  BGM 없음 %s' % (loc, m.group(1)))
         m = re.match(r'^@cg\s+(\S+)', s)
-        if m and m.group(1) not in CG:
+        if m and m.group(1) != 'none' and m.group(1) not in CG:
             bad.append('%s  스틸 CG 없음 %s' % (loc, m.group(1)))
         m = re.match(r'^@bg\s+(\S+)', s)
         if m and m.group(1) not in BG:
@@ -93,7 +93,7 @@ for b in BATCH:
     print('  %-16s %s' % (b, '  '.join('%-8s' % ('O' if c else '.') for c in cells)))
 done_c = sum(1 for c in COMMON if c in scenes)
 print()
-print('  루트 %d/%d · 공통 %d/18 · 합계 %d씬' % (done_r, len(BATCH)*6, done_c, done_r + done_c))
+print('  루트 %d/%d · 공통 %d/%d · 합계 %d씬' % (done_r, len(BATCH)*6, done_c, len(COMMON), done_r + done_c))
 
 print()
 if bad:

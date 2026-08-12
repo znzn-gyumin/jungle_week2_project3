@@ -229,9 +229,10 @@
 -> dawn
 
 --- sit ---
-@cg seungmin_garden
+@cg   seungmin_garden
 * 옆에 앉았다. 아무것도 안 물었다.
 * 승민이 먼저 말했다.
+@cg   none
 승민 [기본] "나 진로가 없어."
 승민 [기본] "4학년인데. 다들 어디 붙었다고 하는데."
 승민 [슬픔] "여기 와서도 남 진도만 봐주고 있고."
@@ -254,6 +255,7 @@
 
 === r_seungmin_c3_folkvillage ===
 @bgm  day
+@bg   folkvillage
 @char 승민 center
 
 * 한국민속촌. 버스에서 내리니 매표소부터 나무 그늘이었다.
@@ -304,6 +306,7 @@
 
 === r_seungmin_c3_everland ===
 @bgm  day
+@bg   everland
 @char 승민 center
 
 * 에버랜드. 정문을 지나자 오르막 끝에 뾰족한 지붕들이 보였다.
@@ -356,6 +359,7 @@
 
 === r_seungmin_c3_collegetown ===
 @bgm  day
+@bg   collegetown
 @char 승민 center
 
 * 명지대 대학가. 정문에서 그대로 이어지는 골목이었다.
@@ -429,8 +433,9 @@
 * 저녁에 승민이 쓰러졌다.
 * 회의실에서 일어서다가 그대로 주저앉았다.
 * 다들 놀랐고 승민은 웃으면서 괜찮다고 했다.
+@cg   seungmin_classroom
 * 심야에 403에 왔더니 혼자 앉아 있었다.
-@cg seungmin_classroom
+@cg   none
 승민 [슬픔] "…아까는 미안."
 나 "선배가 왜 미안해요."
 승민 [슬픔] "분위기 망쳐서."
@@ -519,47 +524,45 @@
 
 === r_seungmin_end_true ===
 @bgm  epilogue
-@cg seungmin_ending
-@char 승민 center
+@bg   office
 
 * 5년이 지났다. 스물아홉.
 * 새것 티가 나는 정장. 넥타이가 조금 삐뚤고 소매가 길다.
 * 여섯 중 유일하게 자기 색이 없다. 제일 늦게 시작한 사람의 표시다.
 * 첫 출근날 아침이었다.
-승민 [기쁨] "야, 나 넥타이 이거 맞아?"
+승민 "야, 나 넥타이 이거 맞아?"
 나 "삐뚤어요."
 * 고쳐줬다.
 * 가방에 젤리를 하나 넣어줬다.
-승민 [놀람] "…"
+승민 "…"
 나 "반대라고 했잖아요."
-승민 [기본] "…그랬지."
+승민 "…그랬지."
 * 오피스 창밖으로 아침 햇빛이 들어왔다.
-승민 [기쁨] "…다녀올게, 우리 {P}."
-@char none
+승민 "…다녀올게, 우리 {P}."
+@cg   seungmin_ending
 
 === r_seungmin_end_good ===
 @bgm  epilogue
-@cg seungmin_ending
-@char 승민 center
+@bg   office
 
 * 5년이 지났다. 스물아홉.
 * 각자 자리를 잡았다. 연락은 아직 한다.
 * 승민이 이직한다는 걸 제일 먼저 들었다.
-승민 [기쁨] "너한테 제일 먼저 말하는 거야."
+승민 "너한테 제일 먼저 말하는 거야."
 나 "저도 다음 달에 옮겨요."
-승민 [기쁨] "야, 그걸 왜 이제 말해!"
+승민 "야, 그걸 왜 이제 말해!"
 * 서로의 이직을 제일 먼저 아는 사이가 됐다.
 * 그 이상은 아니다.
 * 오피스 로비에서 커피를 한 잔씩 마셨다.
-승민 [기본] "…그때 정글캠에서."
+승민 "…그때 정글캠에서."
 나 "네?"
-승민 [기쁨] "아니다. 잘 가라."
+승민 "아니다. 잘 가라."
 * 하려던 말은 안 했다. 5년째 그렇다.
-@char none
+@cg   seungmin_ending
 
 === r_seungmin_end_normal ===
 @bgm  epilogue
-@bg night_window
+@bg   night_window
 
 * 5년이 지났다. 스물일곱.
 * 야근이 끝나고 모니터만 켜둔 채 앉아 있었다.

@@ -21,7 +21,7 @@
 | [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 — 사양은 [WORLD_BIBLE 11](./WORLD_BIBLE.md#11-ui-톤) · 에셋은 [assets/README](../assets/README.md#ui) | **확정** |
 | [reference/character/preview_cg.html](./reference/character/preview_cg.html) | CG 90장 눈으로 대조 | — |
 | [reference/character/preview_dot.html](./reference/character/preview_dot.html) | 도트 18종 · 아바타 36컷 대조 | — |
-| [`../src/script/`](../src/script) | **실제 대사** — 102씬 2,100줄 | **확정** |
+| [`../src/script/`](../src/script) | **실제 대사** — 105씬 2,115줄 | **확정** |
 
 ---
 
@@ -114,7 +114,7 @@
 |---|---|---|
 | 18 | **SO 6인 내용 표** | ✅ 배치별 사건이 각 루트 `.vns` 에 직접 들어감 |
 | 19 | **`.vns` MVP 세로** | ✅ 장윤정 27씬 |
-| 20 | **`.vns` 배치 1~14 가로** | ✅ **102씬 2,100줄** — 자유 이동 대화 2종이 배치에 추가됨 |
+| 20 | **`.vns` 배치 1~14 가로** | ✅ **105씬 2,115줄** — 자유 이동 대화 2종과 공용 씬 3개가 예산 밖에서 더해짐 |
 
 ---
 
@@ -197,4 +197,4 @@ grep -rn "옛이름" docs/ assets/ src/ tools/ README.md
 
 순서는 [TECH_DESIGN 7절](./TECH_DESIGN.md#7-구현-순서)이 정본입니다. 1번이 **Vite 스캐폴딩과 배포를 먼저 뚫는 것**이고, 2번 **Firebase 프로젝트 생성**은 콘솔 작업이라 직접 해야 합니다.
 
-**대사 2,100줄을 아직 한 줄도 못 돌려봤습니다.** `check_vns.py` 가 정적 검사는 통과시켰지만 파서를 붙이면 더 나올 수 있습니다.
+**대사 2,115줄을 아직 한 줄도 못 돌려봤습니다.** `check_vns.py` 가 정적 검사는 통과시켰지만 파서를 붙이면 더 나올 수 있습니다.
