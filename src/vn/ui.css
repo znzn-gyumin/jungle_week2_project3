@@ -79,11 +79,6 @@
 /* flex 항목으로 두고 align-items: center 로 세로 가운데를 잡습니다.
    절대 위치 + translateY 는 창 높이가 내용에 따라 변할 때 미묘하게 어긋납니다. */
 .vn__face {
-  position: absolute;
-  left: -3.4rem;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
   flex: none;
   width: 148px;
   height: 148px;
@@ -106,7 +101,7 @@
 }
 
 .vn__box--cine .vn__face {
-  display: none;
+  visibility: hidden;
 }
 
 .vn__said {
@@ -116,15 +111,16 @@
   align-items: baseline;
 }
 
-/* 얼굴은 흐름에서 빼고 창 왼쪽 모서리에 걸칩니다. 자리를 차지하면
-   맵 대화만 글이 오른쪽으로 밀려 CG 대화와 시작 자리가 어긋납니다. */
+/* 얼굴 자리는 **항상** 비워 둡니다. CG 대화에서도 자리를 남기므로
+   세로 바와 글 시작 자리가 두 모드에서 똑같습니다. */
 .vn__said {
   padding-left: 0;
 }
 
-/* 명장면에는 얼굴이 안 뜨므로 비워둘 이유가 없습니다 */
-.vn__box--cine .vn__said {
-  padding-left: 0;
+/* 세로 바 = 기준선. 얼굴을 안 가리도록 오른쪽에 세우고, 두 모드가
+   같은 폭을 써서 바가 늘 같은 자리에 옵니다. */
+.vn__name {
+  min-width: 6.5rem;
 }
 
 .vn__name {
@@ -134,7 +130,6 @@
   padding: 0.1rem 0.75rem;
   font-size: 1.25rem;
   flex: none;
-  min-width: 5.2rem;
   text-align: right;
   letter-spacing: 0.04em;
   color: var(--theme, #e0567b);
