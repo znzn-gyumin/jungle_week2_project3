@@ -9,7 +9,7 @@
   [ ] 맵 간 portal 좌표가 서로 맞는가
 """
 from __future__ import annotations
-import json, os, collections
+import json, os, collections, glob, io, re
 from PIL import Image
 
 from .paths import ROOT, OUT, TSDIR, MAPDIR
@@ -178,6 +178,33 @@ def check_maps():
                             trigger=len(objs(doc, "trigger")),
                             lighting=next(p["value"] for p in doc["properties"]
                                           if p["name"] == "lighting")))
+
+    # ★ 자유 이동이 세우는 사람이 그 맵에 자리를 갖고 있는가
+    #   @freeroam 의 npc 줄에는 좌표가 없다. 자리는 맵이 준다 — 없으면
+    #   그 인물을 어디에 세울지 아무도 모른다.
+    ROLE = {"민아": "heroine_sameage", "민규": "heroine_sameage",
+            "승희": "heroine_older",   "승민": "heroine_older",
+            "윤정": "heroine_younger", "윤호": "heroine_younger",
+            "명진혁": "coach", "태윤": "team4_lead", "태연": "team4_lead"}
+    want = collections.defaultdict(set)
+    for vf in sorted(glob.glob(os.path.join(ROOT, "src", "script", "**", "*.vns"),
+                               recursive=True)):
+        for line in io.open(vf, encoding="utf-8"):
+            mm = re.match(r"^\s*npc\s+(\S+)\s+at\s+(\S+)\s*->", line)
+            if mm:
+                want[mm.group(2)].add(mm.group(1))
+    for mp, whos in sorted(want.items()):
+        if mp not in docs:
+            issues.append("[%s] .vns 가 NPC 를 세우는데 맵 파일이 없다" % mp)
+            continue
+        have = {prop(o, "role") for o in objs(docs[mp], "npc")}
+        for who in sorted(whos):
+            r = ROLE.get(who)
+            if r is None:
+                issues.append("[%s] '%s' 의 자리 역할을 모른다 — ROLE 표에 없다" % (mp, who))
+            elif r not in have:
+                issues.append("[%s] 자유 이동이 %s 를 세우는데 role=%s 자리가 없다"
+                              % (mp, who, r))
 
     # ★ 숙소동 3F 남 / 4F 여가 계단참 하나로만 이어지는가 (WORLD_BIBLE 4-2)
     #   「남자층과 여자층이 갈리는 지점」이 계단참 하나라는 게 숙소 설정의 전부다.

@@ -283,6 +283,26 @@ def m2(TS_):
     m.place(E, "plant_big", 30, 3)
     m.set_obj(26, 5, E, "trash", 0)
 
+    # ---- 방 (WORLD_BIBLE 4-2)
+    m.trigger("opendesk", 3, 9, w=20, h=14, kind="room", room="opendesk")
+    m.trigger("lounge_2f", 26, 2, w=6, h=4, kind="room", room="lounge_2f")
+
+    # ---- NPC — 자유 이동에서 2층에 있는 사람들 (WORLD_BIBLE 4-2-1)
+    #   누가 내려오는지가 그 사람을 말한다. 민아·민규는 안 내려오므로
+    #   여기 heroine_sameage 자리는 없다.
+    m.npc("older", 10, 22, role="heroine_older", label="이승희",
+          seat="뒷줄 · 기둥(13,22) 옆",
+          note="사람을 피해 내려온다. 두 문에서 가장 먼 자리 — M1 지정석과 같은 성격")
+    m.npc("younger", 6, 9, role="heroine_younger", label="장윤정 / 장윤호",
+          seat="앞줄 · 문1 옆",
+          note="윤정은 작업 모드일 때만, 윤호는 자주 짧게. 둘 다 오가는 자리")
+    # 4조 = M1 과 같은 넷. D8 밤에 가운데 줄을 통째로 잡는다 (c4_scout)
+    TEAM4_2F = ["강태윤 / 강태연", "한지오 / 한지아", "조민", "무명"]
+    for i, cx in enumerate((5, 10, 16, 21)):
+        m.npc(f"team4_{i+1}", cx, 17, role="team4_lead" if i == 0 else "team4",
+              label=TEAM4_2F[i], named=(TEAM4_2F[i] != "무명"),
+              seat="가운데 줄 · 넷이 나란히", note="화면 넷이 다 켜져 있다")
+
     # 계단 — 위(4F) / 아래(B1)
     m.place(E, "stairs_up", 20, 3)
     m.portal("m1_basecamp_4f", 20, 4, 31, 26, name="stairs_to_4f")
