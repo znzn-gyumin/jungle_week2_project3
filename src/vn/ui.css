@@ -618,9 +618,24 @@
 }
 
 .roam-tutorial__steps .is-now::before {
-  content: '▸';
+  content: '●';
+  display: inline-block;
   color: #ff9ec4;
-  animation: vn-bob 900ms ease-in-out infinite;
+  /* 튀지 않고 제자리에서 커졌다 작아집니다 — 자리가 안 흔들려야
+     옆 글자와 밑선이 맞습니다. */
+  animation: tut-pulse 1.3s ease-in-out infinite;
+}
+
+@keyframes tut-pulse {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.65;
+  }
+
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
 }
 
 .roam-tutorial__steps .is-now b { color: #ffc2dc; }
