@@ -299,7 +299,9 @@ export class CampusScene extends Phaser.Scene {
    */
   removeNpc(who: string): void {
     const found = this.npcSprites.find((x) => x.npc.who === who);
-    if (found) { found.sprite.setAlpha(0.55); this.stayed.push(found.sprite); }
+    // 흐리게 하지 않습니다 — 말을 걸었다고 사람이 반투명해질 이유가 없습니다.
+    // 말을 못 걸게 되는 것은 목록에서 빠지는 것으로 충분합니다.
+    if (found) this.stayed.push(found.sprite);
     this.npcSprites = this.npcSprites.filter((x) => x.npc.who !== who);
     this.setup.npcs = this.setup.npcs.filter((n) => n.who !== who);
   }
