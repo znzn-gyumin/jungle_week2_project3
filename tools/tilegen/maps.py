@@ -406,10 +406,13 @@ def m3(TS_):
     m.trigger("back_gate", 8, 1, w=4, h=1, kind="door", label="후문 · 커넥트가든")
     for x in range(8, 12):
         m.portal("m5_connect_garden", x, 1, 14 + (x - 8), 43, name="to_garden")
-    # 오른쪽 벽(x=43) 바로 안쪽입니다. 더 붙이면 벽이라 못 밟습니다.
-    m.trigger("front_gate", 42, 20, w=1, h=4, kind="door", label="정문")
+    # **바깥 벽(x=43) 자체를 뚫습니다.** 그 안쪽에 두면 벽을 앞에 두고
+    # 넘어가는 꼴이라, 문이 화면 끝에 있어야 나가는 느낌이 납니다.
     for y in range(20, 24):
-        m.portal("m7_gate", 42, y, 1, 8 + (y - 20), name="to_gate")
+        m.open(43, y)
+    m.trigger("front_gate", 43, 20, w=1, h=4, kind="door", label="정문")
+    for y in range(20, 24):
+        m.portal("m7_gate", 43, y, 1, 4 + (y - 20), name="to_gate")
     m.set_ground(42, 21, E, "f_lightpool"); m.set_ground(42, 22, E, "f_lightpool")
     m.trigger("spawn_default", 12, 4, kind="spawn")
 
@@ -920,10 +923,10 @@ def m7(TS_):
 
     # 캠퍼스(M3 로비)로 — 로비의 정문이 오른쪽 벽이라 이쪽은 왼쪽 끝입니다.
     # 타일 맨 왼쪽(x=0)에 붙여 화면 끝까지 걸어가야 넘어가게 합니다.
-    for y in range(8, 12):
+    for y in range(4, 8):
         m.open(0, y)
-        m.portal("m3_basecamp_1f", 0, y, 41, 20 + (y - 8), name="to_basecamp_1f")
-    m.trigger("front_gate", 0, 8, w=1, h=4, kind="door", label="정문")
+        m.portal("m3_basecamp_1f", 0, y, 42, 20 + (y - 4), name="to_basecamp_1f")
+    m.trigger("front_gate", 0, 4, w=1, h=4, kind="door", label="정문")
     m.trigger("spawn_default", 20, 6, kind="spawn")
 
     # ---- 배경 인물 — 정문
