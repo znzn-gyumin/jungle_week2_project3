@@ -27,6 +27,8 @@ export class Stage {
   private tintSprite = false;
   private who: string | null = null;
   private face = '기본';
+  /** `@char` 로 세워 둔 사람들과 그 자리 — 말하는 사람만 켜고 끕니다 */
+  private cast = new Map<string, 'left' | 'center' | 'right'>();
 
   constructor(private root: HTMLElement) {
     root.innerHTML = `
@@ -82,6 +84,7 @@ export class Stage {
   /** `@char 이름 위치` — 히로인 6인만 반신이 있습니다 */
   setChar(who: string, pos: 'left' | 'center' | 'right'): void {
     if (!HEROINE_BY_NAME[who]) return;
+    this.cast.set(who, pos);
     this.who = who;
     this.root.dataset.pos = pos;
     this.refreshChar();
@@ -102,7 +105,27 @@ export class Stage {
 
   clearChar(): void {
     this.who = null;
+    this.cast.clear();
     for (const el of this.chars) el.style.opacity = '0';
+  }
+
+  /**
+   * **말하는 사람만 세웁니다.** 한 씬에 둘을 세워 놓고 계속 띄워 두면
+   * 누가 말하는지가 안 보입니다. 지금 말하는 사람이 이 씬에 선 사람
+   * 이면 그쪽으로 갈아 세우고, 내레이션이거나 다른 사람이면 내립니다.
+   */
+  speaker(who: string | null): void {
+    const pos = who ? this.cast.get(who) : undefined;
+    if (!pos) {
+      for (const el of this.chars) el.style.opacity = '0';
+      return;
+    }
+    this.root.dataset.pos = pos;
+    if (this.who !== who) {
+      this.who = who;
+      this.face = '기본';
+    }
+    this.refreshChar();
   }
 
   /** `@cg` — 스틸이 인물을 이미 품고 있어 반신을 가립니다 */

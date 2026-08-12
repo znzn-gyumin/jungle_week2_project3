@@ -210,7 +210,11 @@ export class Player {
           this.boxEl.hidden = false;
           this.textEl.classList.toggle('vn__text--narr', line.t === 'narr');
           this.setTheme(line.t === 'say' ? who : null);
-          if (line.t === 'say' && this.cinematic) this.stage.setFace(who, line.face);
+          // 명장면에서는 **말하는 사람만** 반신이 선다
+          if (this.cinematic) {
+            this.stage.speaker(line.t === 'say' ? who : null);
+            if (line.t === 'say') this.stage.setFace(who, line.face);
+          }
           this.setAvatar(
             line.t === 'say' && !this.cinematic ? who : null,
             line.t === 'say' ? line.face : undefined,
