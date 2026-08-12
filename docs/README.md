@@ -142,6 +142,7 @@
 | **캐릭터 (나이·학년·설정)** | **CHARACTERS** → WORLD_BIBLE 4-2-1·4-2-2(좌석)·5-1-2(티켓) → GAME_DESIGN 4(선호 수치)·6-2(CG) → SCENARIO_OUTLINE 6인 표 전부 |
 | **에셋 (CG·도트·배경 물량)** | GAME_DESIGN 6 → WORLD_BIBLE 7-3(명찰)·8(비주얼) → **assets/README 다시 뽑기** |
 | **파일명·폴더·ID 개명** | 위 표에서 해당 줄 → **`tools/`의 docstring·상수·출력 경로** → `src/config/*.ts` → 루트 README ([원칙 3](#문서-작성-원칙)) |
+| **무언가를 끝냈을 때** | 값이 아니라 **상태**가 낡습니다. 트래커 다섯 곳을 함께 엽니다 — [루트 README](../README.md) 상태표 · 이 문서의 **색인표** · **1·2단계 표** · **다음 작업** · [SCENARIO_OUTLINE 8-4](./SCENARIO_OUTLINE.md#8-4-진행-상황) |
 | **스탯 수치** | GAME_DESIGN 2-1·2-2·2-3·**2-4(구간 도달 시점)** → SCENARIO_OUTLINE 7(선택지 총람) → CHARACTERS(모티프 단계가 걸린 구간) |
 | **씬 추가·삭제** | SCENARIO_OUTLINE → GAME_DESIGN 7(씬 수·줄 수) → 집필 순서 |
 | **호칭 단계** | GAME_DESIGN 2-4(구간 규칙) → CHARACTERS(인물별 4단계) → TECH_DESIGN 3-2(치환 토큰) |
