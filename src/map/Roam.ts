@@ -16,7 +16,7 @@ import {
   type Line,
 } from "../core/types";
 import { CampusScene, type MiniData } from "./CampusScene";
-import { HEROINE_BY_NAME, PLAYER_THEME, THEME, label } from "../core/types";
+import { HEROINE_BY_NAME, MAP_NAME, PLAYER_THEME, THEME, label } from "../core/types";
 import { MAP_DESIGN, scoutName } from "./sprites";
 
 type Block = Extract<Line, { t: "freeroam" }>;
@@ -68,6 +68,8 @@ export class Roam {
   private goEl!: HTMLElement;
   /** 튜토리얼과 진행 안내를 담는 화면 위 세로줄 */
   private topEl!: HTMLElement;
+  /** 오른쪽 위 장소 이름 */
+  private whereEl!: HTMLElement;
   /** 방금 배운 것 한 줄 */
   private learned = "";
   private me = { x: 0, y: 0 };
@@ -95,7 +97,11 @@ export class Roam {
       '<i>!</i>&nbsp; ENTER를 눌러 스토리를 진행하세요 &nbsp;<i>!</i>';
     this.goEl.hidden = true;
     this.topEl.append(this.goEl);
-    this.host.append(hud, this.topEl);
+    // 오른쪽 위에 지금 어디인지 늘 띄웁니다 — 층을 오가다 보면 금방
+    // 헷갈립니다.
+    this.whereEl = document.createElement("p");
+    this.whereEl.className = "roam-where";
+    this.host.append(hud, this.topEl, this.whereEl);
 
     // 처음 걷는 자리에서 조작을 한 번 알려줍니다. 아무 키나 누르면 닫힙니다.
     if (this.block.id === "prologue") this.showTutorial();
@@ -427,6 +433,7 @@ export class Roam {
     // **튜토리얼이 떠 있는 동안은 안 띄웁니다.** 마지막 칸이 이미
     // 「Enter — 다음 장면」 이라 같은 말이 두 줄로 겹칩니다.
     this.goEl.hidden = !done || Boolean(this.tutorialEl);
+    if (here) this.whereEl.textContent = MAP_NAME[here] ?? "";
     this.guideEl.innerHTML = `
       <p class="roam-guide__goal">${
         done
@@ -451,6 +458,7 @@ export class Roam {
     this.tutorialEl?.remove();
     this.tutorialEl = null;
     this.topEl.remove();
+    this.whereEl.remove();
     const after = this.block.after;
     this.destroy();
     this.onDone(after);

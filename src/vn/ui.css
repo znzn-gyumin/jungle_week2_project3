@@ -54,8 +54,13 @@
   align-items: center;
   gap: var(--face-gap);
   padding: 1.5rem clamp(1.6rem, 3.5vw, 2.6rem);
-  /* 크림색 둥근 창 — 도트와 웹툰풍 CG 사이에서 화면을 밝게 잡아 줍니다 */
+  /* 크림색 둥근 창 — 도트와 웹툰풍 CG 사이에서 화면을 밝게 잡아 줍니다.
+     **음영을 세 겹 겹칩니다.** 평평한 단색이면 종이 한 장처럼 보입니다 —
+     위에서 들어오는 빛, 말하는 사람 쪽의 테마색 기운, 아래로 가라앉는
+     그늘. 색이 아니라 밝기만 건드려서 글자는 그대로 읽힙니다. */
   background:
+    linear-gradient(180deg, #ffffff55 0%, transparent 22%, transparent 72%, #a67b6a26 100%),
+    radial-gradient(80% 120% at 8% 100%, color-mix(in srgb, var(--theme, #e0567b) 14%, transparent) 0%, transparent 62%),
     radial-gradient(120% 160% at 12% 0%, #fffdf8 0%, #fdf6ec 45%, #fbeee0 100%);
   border: 1px solid var(--theme, #f0d9c8);
   border-radius: 48px;
@@ -706,15 +711,31 @@
   transform: scale(1.035);
 }
 
+/* **세로 가운데.** 맥박 애니메이션이 transform 을 통째로 덮으므로
+   보정값을 키프레임 안에 같이 넣어야 합니다 — 안 그러면 화살표가
+   칸 아래쪽으로 내려갑니다. */
 .vn__choice--on::before {
   content: '▶';
   position: absolute;
   left: 0.9rem;
   top: 50%;
-  transform: translateY(-50%);
   font-size: 0.85rem;
+  line-height: 1;
   color: var(--theme, #e0567b);
-  animation: tut-pulse 1.3s ease-in-out infinite;
+  transform: translateY(-50%);
+  animation: choice-pulse 1.3s ease-in-out infinite;
+}
+
+@keyframes choice-pulse {
+  0%, 100% {
+    transform: translateY(-50%) scale(0.8);
+    opacity: 0.65;
+  }
+
+  50% {
+    transform: translateY(-50%) scale(1.25);
+    opacity: 1;
+  }
 }
 
 /* 이미 만난 사람도 목록에 남습니다 — 다시 말을 걸 수 있다는 표시입니다 */
@@ -857,5 +878,26 @@
   align-items: center;
   gap: 1.15rem;
   transform: translateX(-50%);
+  pointer-events: none;
+}
+
+
+/* 지금 어디인지 — 오른쪽 위. 층을 오가다 보면 금방 헷갈립니다. */
+.roam-where {
+  position: absolute;
+  right: 1.6rem;
+  top: 1.6rem;
+  z-index: 7;
+  margin: 0;
+  padding: 0.4rem 1.1rem;
+  font-size: 0.86rem;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  color: #fff;
+  background: rgb(24 20 32 / 42%);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 999px;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 70%);
   pointer-events: none;
 }

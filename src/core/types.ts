@@ -70,6 +70,17 @@ export const ROLE_CAST: Record<string, { male: RouteId; female: RouteId }> = {
  * 미니맵의 계단도 같은 계열(#2a2632)이지만 계단은 네모, 주인공은 흰 테두리
  * 동그라미라 모양으로 갈라집니다.
  */
+/** 도트맵 오른쪽 위에 띄우는 장소 이름 (WORLD_BIBLE 3절) */
+export const MAP_NAME: Record<string, string> = {
+  m1_basecamp_4f: '교육동 4F · 교육장',
+  m2_basecamp_2f: '교육동 2F · 오픈데스크',
+  m3_basecamp_1f: '교육동 1F · 로비',
+  m4_basecamp_b1: '교육동 B1 · 정글스테이지',
+  m5_connect_garden: '커넥트가든',
+  m6_nestcamp: '숙소동 · 네스트캠프',
+  m7_gate: '정문',
+};
+
 export const PLAYER_THEME = '#1E1B26';
 
 export const THEME: Record<RouteId, string> = {
