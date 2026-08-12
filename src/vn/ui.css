@@ -58,7 +58,7 @@
   background:
     radial-gradient(120% 160% at 12% 0%, #fffdf8 0%, #fdf6ec 45%, #fbeee0 100%);
   border: 1px solid var(--theme, #f0d9c8);
-  border-radius: 34px;
+  border-radius: 48px;
   box-shadow:
     0 10px 34px rgb(90 60 70 / 28%),
     0 2px 0 #ffffff inset,
@@ -285,7 +285,7 @@
   max-width: 100%;
   /* **아래를 기준으로 잡습니다.** top 과 height 를 같이 주면 bottom 이
      무시돼 인물이 화면 중간에 뜬 채로 섭니다. */
-  height: 57%;
+  height: 82%;
   top: auto;
   bottom: 0;
   object-fit: contain;
