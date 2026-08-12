@@ -69,6 +69,10 @@ export const ROLE_CAST: Record<string, { male: RouteId; female: RouteId }> = {
  * 주인공의 테마색. **도트 스프라이트에서 실측했습니다** — 상반신이
  * 이도윤 #2B2B2B · 이도아 #3A3839 인 짙은 무채색입니다. 옷 표에 주인공
  * 행이 없어 그림에서 직접 뽑았습니다.
+ *
+ * **성별에 따라 나누지 않고 둘의 중간값 하나로 씁니다.** 주인공 색은
+ * 미니맵 점 하나에 쓰이는데, 회차마다 달라지면 같은 표시가 같은 뜻으로
+ * 안 읽힙니다.
  * 미니맵의 계단도 같은 계열(#2a2632)이지만 계단은 네모, 주인공은 흰 테두리
  * 동그라미라 모양으로 갈라집니다.
  */
@@ -106,7 +110,7 @@ export const SUB_THEME: Record<string, string> = {
   여사님: '#D98BA6',
 };
 
-export const PLAYER_THEME = '#2E2B2C';
+export const PLAYER_THEME = '#333132';
 
 export const THEME: Record<RouteId, string> = {
   minah: '#3A9B96',    // 고양이 · 청록
