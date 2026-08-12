@@ -423,7 +423,10 @@ export class Roam {
     const done = this.left <= 0 || !rest.length;
     // 넘어갈 수 있게 되면 화면 위에 한 줄 띄웁니다 — 안내를 안 보고
     // 걷는 사람이 여기서 멈춰 있는 일이 잦습니다.
-    this.goEl.hidden = !done;
+    //
+    // **튜토리얼이 떠 있는 동안은 안 띄웁니다.** 마지막 칸이 이미
+    // 「Enter — 다음 장면」 이라 같은 말이 두 줄로 겹칩니다.
+    this.goEl.hidden = !done || Boolean(this.tutorialEl);
     this.guideEl.innerHTML = `
       <p class="roam-guide__goal">${
         done
