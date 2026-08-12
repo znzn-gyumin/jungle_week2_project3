@@ -34,7 +34,7 @@
      대사창 자체는 흔들리지 않습니다. */
   left: 50%;
   transform: translateX(-50%);
-  width: min(46rem, 68vw);
+  width: min(64rem, 88vw);
   bottom: clamp(1rem, 3vh, 2rem);
   min-height: 22vh;
   max-height: 30vh;
@@ -59,7 +59,7 @@
    픽셀 보간은 끄지 않습니다. */
 .vn__face {
   position: absolute;
-  left: clamp(0.6rem, 2vw, 1.4rem);
+  left: 0;
   bottom: calc(100% - clamp(1.4rem, 3vh, 2.2rem));
   z-index: 1;
   width: clamp(3.6rem, 7.5vw, 5.6rem);
@@ -78,9 +78,10 @@
   min-width: 0;
 }
 
-/* 얼굴이 떠 있는 동안에는 이름표를 그 오른쪽에서 시작합니다 */
-.vn__box--face .vn__said {
-  padding-left: clamp(4.6rem, 9.5vw, 7rem);
+/* 얼굴 자리는 **항상** 비워 둡니다. 얼굴이 없다고 본문이 왼쪽으로
+   당겨지면 화자가 바뀔 때마다 글이 흔들립니다. */
+.vn__said {
+  padding-left: clamp(4.2rem, 8.5vw, 6.4rem);
 }
 
 .vn__name {

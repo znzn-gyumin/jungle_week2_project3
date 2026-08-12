@@ -19,7 +19,7 @@ const ALL_MAPS: MapId[] = [
 ];
 const SPEED = 190;
 /** 도트가 48px 이라 1배로는 시야가 너무 넓습니다 */
-const ZOOM = 2.2;
+const ZOOM = 1.7;
 /** 말을 걸 수 있는 거리 — 한 칸 반 */
 const REACH = TS * 1.5;
 

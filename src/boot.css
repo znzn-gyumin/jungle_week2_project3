@@ -1,3 +1,15 @@
+/* 화면 폰트 — 파일을 `src/fonts/` 에 넣으면 켜집니다 (src/fonts/README.md).
+   Vite 가 번들하며 경로와 해시를 붙여줘서 개발·배포 양쪽에서 그대로 돕니다.
+   파일이 없으면 이 블록은 조용히 무시되고 아래 대체 목록으로 물러납니다. */
+@font-face {
+  font-family: 'Junglover';
+  src:
+    url('./fonts/junglover.woff2') format('woff2'),
+    url('./fonts/junglover.woff') format('woff');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
 /* 부트 화면 — 톤은 WORLD_BIBLE 11절(UI 톤)을 따릅니다. */
 
 :root {
@@ -21,7 +33,7 @@ body {
   color: var(--ink);
   /* 둥근 고딕 계열을 앞에 둡니다 (WORLD_BIBLE 11 · UI 는 둥근모꼴).
      설치돼 있지 않으면 순서대로 물러납니다. */
-  font-family: 'DungGeunMo', 'Galmuri11', 'NeoDunggeunmo', 'Pretendard',
+  font-family: 'Junglover', 'DungGeunMo', 'Galmuri11', 'NeoDunggeunmo', 'Pretendard',
     'NanumSquareRound', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
   font-weight: 500;
   -webkit-font-smoothing: antialiased;
