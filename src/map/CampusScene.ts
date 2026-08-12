@@ -69,6 +69,8 @@ export class CampusScene extends Phaser.Scene {
   /** 미니맵은 DOM 캔버스가 그립니다 — 게임 캔버스에 그리면 확대돼 뭉갭니다 */
   private onMini?: (d: MiniData) => void;
   private onWhere?: (x: number, y: number) => void;
+  /** 연결되기 전에 만들어진 자료 — 붙는 순간 바로 넘깁니다 */
+  private lastMini: MiniData | null = null;
   /** UI 전용 카메라 — 본 카메라의 줌을 안 따라갑니다 */
   private uiCam!: Phaser.Cameras.Scene2D.Camera;
   /** 안내는 DOM 으로 옮겼습니다 — Phaser Text 로는 요즘 UI 가 안 나옵니다 */
@@ -170,6 +172,8 @@ export class CampusScene extends Phaser.Scene {
   bindMini(mini: (d: MiniData) => void, where: (x: number, y: number) => void): void {
     this.onMini = mini;
     this.onWhere = where;
+    // loadMap 은 create() 안에서 이미 끝났습니다. 들고 있던 자료를 지금 넘깁니다.
+    if (this.lastMini) mini(this.lastMini);
   }
 
   /** 미니맵이 그릴 자료 — 막힌 칸 · 계단 · 아직 안 만난 사람 */
@@ -181,13 +185,14 @@ export class CampusScene extends Phaser.Scene {
         blocked.push((col?.getTileAt(x, y)?.index ?? 0) > 0);
       }
     }
-    this.onMini?.({
+    this.lastMini = {
       w: map.width,
       h: map.height,
       blocked,
       stairs: this.portals.map((p) => ({ x: p.rect.x / TS, y: p.rect.y / TS })),
       npcs: this.npcSprites.map((n) => ({ x: n.sprite.x / TS, y: n.sprite.y / TS })),
-    });
+    };
+    this.onMini?.(this.lastMini);
   }
 
   /** 씬 재생 중에는 맵을 멈춥니다 */

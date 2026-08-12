@@ -147,7 +147,7 @@ export class Roam {
     const el = this.miniEl;
     const d = this.mini;
     if (!el || !d) return;
-    const CSS = 210;
+    const CSS = 266;
     const dpr = window.devicePixelRatio || 1;
     const s = Math.min(CSS / d.w, (CSS * 0.78) / d.h);
     const w = Math.round(d.w * s);

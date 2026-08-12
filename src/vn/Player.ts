@@ -196,8 +196,10 @@ export class Player {
           const who = line.who === '*' ? (this.state.route ? NAME_BY_HEROINE[this.state.route] : '') : line.who;
           if (who) {
             this.setMode(true);
-            // 타일맵을 내리고 그 자리의 실사 사진을 깝니다
+            // 타일맵을 **둘 다** 내려야 사진이 보입니다 — 맵 캔버스가
+            // 무대(.vn__stage) 뒤가 아니라 위에 깔려 있습니다.
             this.backdrop.hide();
+            this.mapEl.hidden = true;
             if (this.atMap) this.stage.setMapPhoto(this.atMap);
             this.stage.setChar(who, line.pos);
           }
@@ -208,7 +210,9 @@ export class Player {
           this.setMode(false);
           this.stage.clearChar();
           this.stage.clearBackground();
-          if (this.atMap) {
+          // 자유 이동 중이면 맵 캔버스를 다시 켭니다
+          if (this.roam) this.mapEl.hidden = false;
+          if (!this.roam && this.atMap) {
             this.backdrop.show(
               this.atMap as never, 0, 0, TIME_BY_BGM[this.bgm] ?? 'day',
             );
