@@ -473,13 +473,20 @@ export class CampusScene extends Phaser.Scene {
 
       // **이 사람들도 말은 걸립니다.** 원 표시는 「대화 불가」 가 아니라
       // 「맵 대화만 된다」 는 뜻입니다 — 느낌표는 CG 컷이 남은 사람만.
+      // **성별로 갈리는 자리는 배경으로 안 세웁니다.**
+      // 「장윤정 / 장윤호」 처럼 적힌 자리는 이 회차에 누가 나오는지가
+      // 정해져 있는데, 라벨의 앞뒤 순서가 남녀로 일정하지 않아 그냥
+      // 앞의 이름을 쓰면 안 나오는 성별이 화면에 서 버립니다. 이런
+      // 사람은 말을 걸 수 있는 쪽(setup.npcs)으로만 등장합니다.
+      if (text.includes(' / ')) continue;
+      // 주인공 자리는 비워 둡니다 — 안 그러면 자기 자신이 앉아 있습니다
+      if (text.includes('주인공')) continue;
       const named = Boolean(text) && text !== '무명';
       // **이름이 있는 사람은 교육장에만 세웁니다.** 같은 사람 자리가
       // 4층과 2층에 다 적혀 있어서(그날 어디 있느냐로 갈리는 자리라)
-      // 그대로 그리면 조민이 두 층에 동시에 서 있게 됩니다. 다른 층에
-      // 서는 건 말을 걸 수 있는 사람뿐입니다.
+      // 그대로 그리면 조민이 두 층에 동시에 서 있게 됩니다.
       if (named && id !== 'm1_basecamp_4f') continue;
-      const who = named ? text.split(' / ')[0] : '무명';
+      const who = named ? text : '무명';
       // 이름이 없으면 말을 못 겁니다 — 대신 저희끼리 잡담을 합니다
       const chatOnly = !named;
       const mark = this.add
