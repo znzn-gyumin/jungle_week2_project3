@@ -169,7 +169,12 @@ export class Roam {
           // **여기서도 봅니다.** 미니맵 자료만 보고 갱신했더니 계단을
           // 타도 이름이 그대로였습니다 — 그 콜백이 항상 오지는 않습니다.
           const here = this.scene?.mapId;
-          if (here) this.whereEl.textContent = MAP_NAME[here] ?? "";
+          if (here) {
+            const zone = this.scene?.zone;
+            this.whereEl.textContent = zone
+              ? `${MAP_NAME[here] ?? ""} · ${zone}`
+              : (MAP_NAME[here] ?? "");
+          }
         },
       );
     }, 300);
@@ -445,18 +450,19 @@ export class Roam {
     const rest = this.usable();
     // **만난 사람도 목록에 남깁니다.** 사라지면 이 맵에 누가 있었는지
     // 알 수 없게 되고, 다시 말을 걸 수 있다는 것도 안 보입니다.
-    // **지금 층에 있는 사람만.** 다른 층 사람까지 적으면 이 목록을 보고
-    // 찾아다닐 수가 없습니다.
+    // **층을 안 가립니다.** 이 시간에 만나야 할 사람은 어디에 서 있든
+    // 그대로 보여야 합니다 — 다른 층에 있다고 목록에서 사라지면 누가
+    // 남았는지를 알 수가 없습니다. 어디로 가야 하는지는 층 이름으로
+    // 알려 줍니다.
     const here = this.scene?.mapId;
-    const left = this.cast()
-      .filter((n) => !here || n.map === here)
-      .map((n) => {
-        return {
-          who: label(n.who),
-          color: themeOf(n.who),
-          met: !rest.some((r) => r.who === n.who),
-        };
-      });
+    const left = this.cast().map((n) => {
+      return {
+        who: label(n.who),
+        color: themeOf(n.who),
+        met: !rest.some((r) => r.who === n.who),
+        far: Boolean(here) && n.map !== here,
+      };
+    });
     const done = this.left <= 0 || !rest.length;
     // 넘어갈 수 있게 되면 화면 위에 한 줄 띄웁니다 — 안내를 안 보고
     // 걷는 사람이 여기서 멈춰 있는 일이 잦습니다.

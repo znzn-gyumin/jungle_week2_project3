@@ -951,3 +951,10 @@
 }
 
 .vn__when[hidden] { display: none; }
+
+
+/* 다른 층에 있는 사람 — 목록에는 남되 지금 여기 없다는 게 보여야 합니다 */
+.roam-guide__who .is-far {
+  opacity: 0.5;
+  border-style: dotted;
+}

@@ -119,6 +119,8 @@ export class CampusScene extends Phaser.Scene {
   private paused = false;
   /** 지금 사정거리 안에 있는 사람 */
   private near: string | null = null;
+  /** 이름이 붙은 구역들 — 같은 층 안에서도 어디인지 갈라 줍니다 */
+  private zones: { rect: Phaser.Geom.Rectangle; label: string }[] = [];
   /** 지금 떠 있는 말풍선 — 겹쳐 뜨지 않게 셉니다 */
   private bubbles: Phaser.GameObjects.Text[] = [];
   /** 잡담 차례. 매번 다른 말이 나오게 씨앗으로 씁니다. */
@@ -408,6 +410,18 @@ export class CampusScene extends Phaser.Scene {
     this.npcSprites = [];
     this.stayed = [];
     this.metMarks = [];
+    // 라벨이 붙은 구역을 담아 둡니다 — 택배보관소 · 그랩앤고 · 버스정류장
+    this.zones = [];
+    for (const o of map.getObjectLayer('trigger')?.objects ?? []) {
+      const props = (o.properties ?? []) as { name: string; value: string }[];
+      const lab = props.find((x) => x.name === 'label')?.value;
+      if (!lab) continue;
+      this.zones.push({
+        rect: new Phaser.Geom.Rectangle(o.x ?? 0, o.y ?? 0, o.width || TS, o.height || TS),
+        label: String(lab),
+      });
+    }
+
     const layer = map.getObjectLayer('npc');
     if (!layer) return;
     /** 말을 걸 수 있는 사람이 이미 앉은 자리 — 배경 인물은 여기를 피합니다 */
@@ -724,6 +738,17 @@ export class CampusScene extends Phaser.Scene {
   /** 지금 말을 걸 수 있는 사람 — 튜토리얼이 「다가가기」 를 확인합니다 */
   get nearWho(): string | null {
     return this.near;
+  }
+
+  /**
+   * 지금 서 있는 구역 이름. 같은 층 안에서도 자리마다 다릅니다 —
+   * 「교육동 1F · 로비」 가 아니라 「교육동 1F · 택배보관소」 처럼요.
+   */
+  get zone(): string {
+    const px = this.player.x + TS / 2;
+    const py = this.player.y + HEAD_OVERHANG + TS / 2;
+    const z = this.zones.find((v) => Phaser.Geom.Rectangle.Contains(v.rect, px, py));
+    return z ? z.label : '';
   }
 
   /** 지금 서 있는 칸 — 튜토리얼이 「걷기」 를 확인합니다 */
