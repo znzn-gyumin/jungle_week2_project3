@@ -301,7 +301,10 @@ export class Player {
     this.boxEl.hidden = true;
     this.textEl.textContent = '';
     this.nameEl.hidden = true;
+    this.setMode(false);
     this.stage.clearChar();
+    this.stage.clearBackground();
+    this.mapEl.hidden = false;
     this.roam!.resume();
   }
 
@@ -329,8 +332,11 @@ export class Player {
     if (this.script[t]) {
       this.scene = t;
       this.idx = 0;
-      // 씬이 바뀌면 스틸이 내려가고 배경도 그 씬이 다시 정합니다
+      // **씬이 바뀌면 무대를 비웁니다.** 앞 씬이 `@char none` 없이 끝나면
+      // 그 인물이 다음 화면에 그대로 서 있게 됩니다 — 맵 위에도 뜹니다.
+      this.setMode(false);
       this.stage.setCg('none');
+      this.stage.clearChar();
       if (!hasBg(this.script[t])) this.stage.clearBackground();
       return;
     }
