@@ -57,7 +57,7 @@ export const HEAD_OVERHANG = 16;
 export function fitSize(host: HTMLElement): { width: number; height: number } {
   const r = host.getBoundingClientRect();
   const ratio = (r.width || 16) / (r.height || 9);
-  const base = 560; // 짧은 쪽 기준 — 48px 타일이 약 11~12칸 보입니다
+  const base = 840; // 짧은 쪽 기준 — 48px 타일이 약 17~18칸 보입니다
   return ratio >= 1
     ? { width: Math.round(base * ratio), height: base }
     : { width: base, height: Math.round(base / ratio) };

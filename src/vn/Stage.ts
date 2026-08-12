@@ -8,7 +8,7 @@
  *   반신   `@char` — **표정마다 파일이 따로**라 갈아 끼우고 크로스페이드합니다
  *   스틸   `@cg` — 뜨면 반신을 가리고, `@cg none`·다음 `@bg`·씬 전환에서 돌아옵니다
  */
-import { BACKGROUNDS, type Outfit } from '../core/backgrounds';
+import { BACKGROUNDS, MAP_PHOTO, type Background, type Outfit } from '../core/backgrounds';
 import { FACE_FILE, HEROINE_BY_NAME } from '../core/types';
 
 /** 표정을 바꿀 때 크로스페이드 120~150ms (assets/README#cg) */
@@ -41,6 +41,12 @@ export class Stage {
     for (const el of this.chars) el.style.transition = `opacity ${FADE_MS}ms ease`;
   }
 
+  /** 맵 자리의 실사 사진 — 반신이 서는 장면에서 타일맵 대신 깝니다 */
+  setMapPhoto(mapId: string): void {
+    const bg = MAP_PHOTO[mapId];
+    if (bg) this.paint(bg);
+  }
+
   /** `@bg` — 배경이 바뀌면 스틸이 내려가고 반신이 돌아옵니다 */
   setBackground(id: string): void {
     const bg = BACKGROUNDS[id];
@@ -48,6 +54,10 @@ export class Stage {
       this.root.dataset.note = `배경 없음: ${id}`;
       return;
     }
+    this.paint(bg);
+  }
+
+  private paint(bg: Background): void {
     this.outfit = bg.outfit;
     this.tintSprite = bg.tintSprite === true;
     this.bgEl.src = asset(bg.path);

@@ -57,12 +57,6 @@
   user-select: none;
 }
 
-/* 명장면 창은 화면 폭을 더 쓰고 모서리를 둥글게 (참고한 미연시 배치) */
-.vn__box--cine {
-  width: min(84rem, 94vw);
-  min-height: 15vh;
-}
-
 /* 대사가 없으면 창 자체를 없앱니다 — 자유 이동 중에는 맵만 보입니다 */
 .vn__box[hidden] {
   display: none;
@@ -251,8 +245,11 @@
   bottom: 0;
   left: 0;
   right: 0;
+  /* 대사창 위에서 끝납니다 — 창 아래로 내려가면 다리만 보입니다 */
   width: 100%;
-  height: 100%;
+  height: 72%;
+  top: 2%;
+  bottom: auto;
   object-fit: contain;
   object-position: bottom center;
   opacity: 0;

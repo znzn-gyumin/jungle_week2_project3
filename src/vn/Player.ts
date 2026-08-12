@@ -44,6 +44,7 @@ export class Player {
   private roam: Roam | null = null;
   private backdrop: Backdrop;
   private bgm = 'day';
+  private atMap = '';
   private lastFace = '기본';
   /**
    * 이 씬이 사진 배경 위에서 도는가.
@@ -182,6 +183,7 @@ export class Player {
           this.setMode(false);
           this.stage.clearChar();
           this.stage.clearBackground();
+          this.atMap = line.id;
           this.backdrop.show(line.id, line.x, line.y, TIME_BY_BGM[this.bgm] ?? 'day');
           continue;
         case 'cg':
@@ -194,6 +196,9 @@ export class Player {
           const who = line.who === '*' ? (this.state.route ? NAME_BY_HEROINE[this.state.route] : '') : line.who;
           if (who) {
             this.setMode(true);
+            // 타일맵을 내리고 그 자리의 실사 사진을 깝니다
+            this.backdrop.hide();
+            if (this.atMap) this.stage.setMapPhoto(this.atMap);
             this.stage.setChar(who, line.pos);
           }
           continue;
@@ -202,6 +207,12 @@ export class Player {
           // 인물이 나가면 다시 맵 위 대화로 돌아옵니다
           this.setMode(false);
           this.stage.clearChar();
+          this.stage.clearBackground();
+          if (this.atMap) {
+            this.backdrop.show(
+              this.atMap as never, 0, 0, TIME_BY_BGM[this.bgm] ?? 'day',
+            );
+          }
           continue;
         default:
           if (line.t === 'bgm') this.bgm = line.id;

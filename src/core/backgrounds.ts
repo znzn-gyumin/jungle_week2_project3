@@ -47,3 +47,21 @@ export const BACKGROUNDS: Record<string, Background> = {
     outfit: 'outing',
   },
 };
+
+/**
+ * 맵 → 그 자리의 실사 사진.
+ *
+ * 반신 CG 가 서는 장면은 타일맵 대신 사진을 깝니다 — 인물이 웹툰풍이라
+ * 도트 위에 세우면 화풍이 튑니다. 사진은 회화풍 보정을 거칩니다.
+ */
+export const MAP_PHOTO: Record<string, Background> = {
+  m1_basecamp_4f: { path: 'bg/campus/indoor/classroom_1.webp', tone: 'day', outfit: 'campus' },
+  m2_basecamp_2f: { path: 'bg/campus/indoor/opendesk.webp', tone: 'day', outfit: 'campus' },
+  m3_basecamp_1f: { path: 'bg/campus/indoor/lobby.webp', tone: 'day', outfit: 'campus' },
+  m4_basecamp_b1: { path: 'bg/campus/indoor/jungle_stage.webp', tone: 'day', outfit: 'campus' },
+  m5_connect_garden: {
+    path: 'bg/campus/outdoor/connect_garden.webp', tone: 'night', outfit: 'campus',
+  },
+  m6_nestcamp: { path: 'bg/campus/indoor/dormitory_room.webp', tone: 'night', outfit: 'campus' },
+  m7_gate: { path: 'bg/campus/outdoor/aerial_view_1.webp', tone: 'day', outfit: 'campus' },
+};
