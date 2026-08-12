@@ -83,11 +83,17 @@ export class Roam {
     this.guideEl = document.createElement("div");
     this.guideEl.className = "roam-guide";
     hud.append(this.miniEl, this.guideEl);
+    // 화면 위 가운데 한 세로줄. **맵 위에 뜨는 겹입니다** — 흐름에 두면
+    // 캔버스를 아래로 밀어 맵이 잘립니다. 튜토리얼이 있으면 그 아래에
+    // 안내가 붙고, 튜토리얼이 걷히면 안내가 그 자리로 올라옵니다.
+    this.topEl = document.createElement("div");
+    this.topEl.className = "roam-top";
     this.goEl = document.createElement("p");
     this.goEl.className = "roam-go";
-    this.goEl.textContent = "엔터 — 다음으로";
+    this.goEl.textContent = "ENTER를 눌러 스토리를 진행하세요";
     this.goEl.hidden = true;
-    this.host.append(hud, this.goEl);
+    this.topEl.append(this.goEl);
+    this.host.append(hud, this.topEl);
 
     // 처음 걷는 자리에서 조작을 한 번 알려줍니다. 아무 키나 누르면 닫힙니다.
     if (this.block.id === "prologue") this.showTutorial();
@@ -266,7 +272,7 @@ export class Roam {
     const el = document.createElement("div");
     el.className = "roam-tutorial";
     this.tutorialEl = el;
-    this.host.append(el);
+    this.topEl.prepend(el);
 
     // **순서를 안 따집니다.** 해낸 것부터 하나씩 체크되고, 지금 볼
     // 설명은 아직 안 한 것 중 첫 번째를 보여줍니다.
