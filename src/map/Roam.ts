@@ -53,6 +53,8 @@ export class Roam {
   private guideEl: HTMLElement | null = null;
   private miniEl: HTMLCanvasElement | null = null;
   private mini: MiniData | null = null;
+  /** 한 번이라도 말을 걸었는지 — 튜토리얼 마지막 단계가 봅니다 */
+  private talked = false;
   private me = { x: 0, y: 0 };
 
   start(): void {
@@ -127,6 +129,7 @@ export class Roam {
   }
 
   private talk(n: FreeroamNpc): void {
+    this.talked = true;
     // 이미 만났거나 **할 이야기를 다 했으면** 한 마디만 하고 횟수를 안 씁니다.
     // 다음 장면으로 넘어가기 전까지는 누구에게든 몇 번이든 걸 수 있습니다.
     const met = this.met.includes(n.who === '태연' ? '태윤' : n.who);
@@ -181,30 +184,61 @@ export class Roam {
     return `idle_team_${this.block.id}`;
   }
 
-  /** 첫 자유 이동에서 한 번만 — 조작을 모르면 아무 데도 못 갑니다 */
+  /**
+   * 첫 자유 이동에서 한 번만. **읽고 닫는 창이 아니라 직접 해보는 4단계**
+   * 입니다 — 시켜본 뒤에야 다음으로 넘어가므로 조작이 손에 남습니다.
+   * 게임을 막지 않으므로 그냥 걸어다녀도 알아서 진행됩니다.
+   */
   private showTutorial(): void {
+    const STEPS = [
+      { key: '방향키', ask: '한 번 걸어 보세요' },
+      { key: '시프트 + 방향키', ask: '누른 채로 뛰어 보세요' },
+      { key: '느낌표', ask: '아직 말 안 걸어 본 사람에게 다가가 보세요' },
+      { key: '스페이스', ask: '말을 걸어 보세요' },
+    ];
     const el = document.createElement('div');
     el.className = 'roam-tutorial';
-    el.innerHTML = `
-      <p class="roam-tutorial__title">움직여 볼까요</p>
-      <dl>
-        <dt>방향키</dt><dd>걸어다니기</dd>
-        <dt>스페이스</dt><dd>사람에게 말 걸기 · 대사 넘기기</dd>
-        <dt>느낌표</dt><dd>아직 말 안 걸어 본 사람</dd>
-        <dt>화살표</dt><dd>계단 — 표시된 방향으로만 지나갑니다</dd>
-      </dl>
-      <p class="roam-tutorial__close">아무 키나 눌러서 시작</p>`;
     this.host.append(el);
-    const close = () => {
-      el.remove();
-      window.removeEventListener('keydown', close);
-      window.removeEventListener('mousedown', close);
+
+    let step = 0;
+    let from: { x: number; y: number } | null = null;
+    let ranWhile = false;
+    const onShift = (e: KeyboardEvent): void => {
+      if (e.shiftKey) ranWhile = true;
     };
-    // 여기까지 온 키(스페이스)가 그대로 닫기로 먹히면 한 프레임도 못 봅니다
-    setTimeout(() => {
-      window.addEventListener('keydown', close);
-      window.addEventListener('mousedown', close);
-    }, 600);
+    window.addEventListener('keydown', onShift);
+
+    const paint = (): void => {
+      el.innerHTML = `
+        <p class="roam-tutorial__title">${step >= STEPS.length ? '준비 끝!' : '해보면서 익혀요'}</p>
+        <ol class="roam-tutorial__steps">${STEPS.map(
+          (s2, i) => `<li class="${i < step ? 'is-done' : i === step ? 'is-now' : ''}">
+              <b>${s2.key}</b><span>${s2.ask}</span></li>`,
+        ).join('')}</ol>`;
+    };
+    paint();
+
+    const tick = window.setInterval(() => {
+      const sc = this.scene;
+      if (!sc) return;
+      const at = sc.tile;
+      from ??= at;
+      const moved = Math.abs(at.x - from.x) + Math.abs(at.y - from.y);
+      const ok =
+        step === 0 ? moved >= 2
+        : step === 1 ? ranWhile && moved >= 5
+        : step === 2 ? sc.nearWho !== null
+        : this.talked;
+      if (!ok) return;
+      step++;
+      if (step === 1) from = at; // 뛰기는 걸은 자리에서 다시 잽니다
+      paint();
+      if (step < STEPS.length) return;
+      window.clearInterval(tick);
+      window.removeEventListener('keydown', onShift);
+      el.classList.add('is-over');
+      setTimeout(() => el.remove(), 1600);
+    }, 120);
   }
 
   /** 미니맵을 DOM 캔버스에 그립니다 — 장치 픽셀 그대로라 또렷합니다 */

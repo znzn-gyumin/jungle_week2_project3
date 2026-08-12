@@ -411,13 +411,12 @@
 
 .roam-tutorial {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  right: 2.2rem;
+  bottom: 2.2rem;
   z-index: 8;
-  width: min(30rem, 70%);
-  padding: 1.6rem 1.8rem;
-  text-align: center;
+  width: 22rem;
+  padding: 1.1rem 1.3rem;
+  transition: opacity 500ms ease, transform 500ms ease;
   color: #6b4038;
   background: linear-gradient(180deg, #fffdf9f7, #fdf1e6f7);
   border: 1px solid var(--theme, #f0d9c8);
@@ -425,9 +424,14 @@
   box-shadow: 0 14px 40px rgb(60 40 50 / 40%), 0 2px 0 #fff inset;
 }
 
+.roam-tutorial.is-over {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
 .roam-tutorial__title {
-  margin: 0 0 1rem;
-  font-size: 1.3rem;
+  margin: 0 0 0.8rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--theme, #e0567b);
 }
@@ -513,3 +517,62 @@
 
 /* CG 는 화면 바닥에 붙입니다. 조금이라도 뜨면 공중에 선 것처럼 보입니다. */
 .stage__char { bottom: 0 !important; }
+
+
+/* 해본 것에 체크가 들어갑니다 — 지금 할 일만 또렷하게 둡니다 */
+.roam-tutorial__steps {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: tut;
+}
+
+.roam-tutorial__steps li {
+  display: grid;
+  grid-template-columns: 1.4rem auto 1fr;
+  align-items: baseline;
+  gap: 0 0.6rem;
+  font-size: 0.9rem;
+  color: #a08d86;
+  opacity: 0.55;
+  transition: opacity 240ms ease;
+}
+
+.roam-tutorial__steps li::before {
+  content: '○';
+  font-size: 0.8rem;
+  color: #c7b6ae;
+}
+
+.roam-tutorial__steps li b {
+  white-space: nowrap;
+  color: inherit;
+}
+
+.roam-tutorial__steps .is-now {
+  opacity: 1;
+  color: #6b4038;
+}
+
+.roam-tutorial__steps .is-now::before {
+  content: '▸';
+  color: var(--theme, #e0567b);
+  animation: vn-bob 900ms ease-in-out infinite;
+}
+
+.roam-tutorial__steps .is-now b { color: var(--theme, #b4485a); }
+
+.roam-tutorial__steps .is-done {
+  opacity: 0.75;
+  color: #9a8b84;
+  text-decoration: line-through;
+  text-decoration-color: #d8c8c0;
+}
+
+.roam-tutorial__steps .is-done::before {
+  content: '✓';
+  color: #7fbf8f;
+  text-decoration: none;
+}

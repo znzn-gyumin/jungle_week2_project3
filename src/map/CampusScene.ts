@@ -100,6 +100,8 @@ export class CampusScene extends Phaser.Scene {
   private onGuide?: (lines: string[]) => void;
   private currentMap!: MapId;
   private paused = false;
+  /** 지금 사정거리 안에 있는 사람 */
+  private near: string | null = null;
   private portals: {
     rect: Phaser.Geom.Rectangle;
     to: MapId;
@@ -540,6 +542,7 @@ export class CampusScene extends Phaser.Scene {
       else mark.setVisible(true).setText('!').setColor(npcTheme(npc.who)).setFontSize(20);
     }
     this.hint.setVisible(Boolean(near));
+    this.near = near ? near.npc.who : null;
     if (near) {
       near.mark.setVisible(true).setText('스페이스').setColor('#ffffff').setFontSize(13);
       this.hint.setText(`${near.npc.who} 에게 말을 겁니다 — 스페이스`);
@@ -554,5 +557,15 @@ export class CampusScene extends Phaser.Scene {
 
   get mapId(): MapId {
     return this.currentMap;
+  }
+
+  /** 지금 말을 걸 수 있는 사람 — 튜토리얼이 「다가가기」 를 확인합니다 */
+  get nearWho(): string | null {
+    return this.near;
+  }
+
+  /** 지금 서 있는 칸 — 튜토리얼이 「걷기」 를 확인합니다 */
+  get tile(): { x: number; y: number } {
+    return { x: Math.round(this.player.x / TS), y: Math.round(this.player.y / TS) };
   }
 }
