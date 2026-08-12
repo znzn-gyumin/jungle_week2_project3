@@ -471,7 +471,7 @@ body {
 .boot__act[data-act='0'] {
   justify-content: flex-end;
   padding-top: 0;
-  padding-bottom: 4.5vh;
+  padding-bottom: 12vh;
 }
 
 .boot__any {
