@@ -179,6 +179,61 @@ def check_maps():
                             lighting=next(p["value"] for p in doc["properties"]
                                           if p["name"] == "lighting")))
 
+    # ★ 숙소동 3F 남 / 4F 여가 계단참 하나로만 이어지는가 (WORLD_BIBLE 4-2)
+    #   「남자층과 여자층이 갈리는 지점」이 계단참 하나라는 게 숙소 설정의 전부다.
+    #   계단참을 막았을 때 두 복도가 끊기지 않으면 뒤로 도는 길이 있다는 뜻이다.
+    m6 = docs["m6_nestcamp"]
+    t6 = {o["name"]: o for o in objs(m6, "trigger")}
+    need = ("stair_landing", "corridor_3f", "corridor_4f")
+    if not all(k in t6 for k in need):
+        issues.append("[m6] %s 중 없는 트리거가 있다"
+                      % " / ".join(k for k in need if k not in t6))
+    else:
+        def rect(o):
+            x, y = int(o["x"] // TS), int(o["y"] // TS)
+            return {(x + i, y + j)
+                    for i in range(max(1, int(o.get("width", TS) // TS)))
+                    for j in range(max(1, int(o.get("height", TS) // TS)))}
+        W6, H6, w6 = walkable_grid(m6)
+        block = rect(t6["stair_landing"])
+        c3 = [t for t in sorted(rect(t6["corridor_3f"])) if w6[t[1] * W6 + t[0]]]
+        c4 = {t for t in rect(t6["corridor_4f"]) if w6[t[1] * W6 + t[0]]}
+        if not c3 or not c4:
+            issues.append("[m6] 3F/4F 복도에 통행 가능한 칸이 없다")
+        else:
+            seen6, dq = {c3[0]}, collections.deque([c3[0]])
+            while dq:
+                x, y = dq.popleft()
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    n = (x + dx, y + dy)
+                    if (0 <= n[0] < W6 and 0 <= n[1] < H6 and w6[n[1] * W6 + n[0]]
+                            and n not in seen6 and n not in block):
+                        seen6.add(n); dq.append(n)
+            leak = sorted(c4 & seen6)
+            if leak:
+                issues.append("[m6] 계단참을 막아도 3F 에서 4F 복도로 간다 "
+                              "(%s 등 %d칸) — 층을 가르는 지점이 계단참 하나가 아니다"
+                              % (leak[0], len(leak)))
+
+    # ★ 커넥트가든을 지나지 않고 숙소동에 갈 수 있는가 (WORLD_BIBLE 4-3)
+    #   「건너간다 = 오늘은 잔다」가 성립하려면 필로티 통로가 유일한 길이어야 한다.
+    #   맵 하나를 빼고 포탈 그래프를 다시 이어 본다.
+    edges = collections.defaultdict(set)
+    for name, doc in docs.items():
+        for o in objs(doc, "portal"):
+            if prop(o, "to") in docs:
+                edges[name].add(prop(o, "to"))
+    for cut, frm, to, why in (("m5_connect_garden", "m3_basecamp_1f", "m6_nestcamp",
+                               "커넥트가든을 지나지 않고도 숙소동에 갈 수 있다"),):
+        seen_g, dq = {frm}, collections.deque([frm])
+        while dq:
+            n = dq.popleft()
+            for nx in edges[n]:
+                if nx != cut and nx not in seen_g:
+                    seen_g.add(nx); dq.append(nx)
+        if to in seen_g:
+            issues.append("[map] %s — 필로티 통로를 건너지 않는 우회 경로가 있다" % why)
+
     # ---- M1 전용 (WORLD_BIBLE 4-2-2)
     m1 = docs["m1_basecamp_4f"]
     W, H, walk = walkable_grid(m1)

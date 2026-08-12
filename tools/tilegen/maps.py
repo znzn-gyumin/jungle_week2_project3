@@ -670,7 +670,7 @@ def m6(TS_):
     m.trigger("dorm_room_3f", 26, 25, w=4, h=2, kind="room", room="twin_room_3f")
     # 왼쪽 객실군 — 문만 보이고 내부는 들어가지 않는 덩어리
     for y in range(23, 31):
-        for x in list(range(1, 16)) + [38]:
+        for x in list(range(1, 17)) + [21, 38]:   # x16·x21 을 막아 계단참을 스파인 폭에 맞춘다
             m.set_obj(x, y, D, "w_cap", 0)
 
     # ---- 3F ↔ 4F 계단참 (WORLD_BIBLE 4-2)
@@ -719,7 +719,7 @@ def m6(TS_):
     m.open(28, 37, 28, 38)                          # 428호(2인실) 문 통로
     m.trigger("dorm_room_4f", 26, 41, w=4, h=2, kind="room", room="twin_room_4f")
     for y in range(39, 46):
-        for x in list(range(1, 16)) + [38]:
+        for x in list(range(1, 17)) + [21, 38]:   # x16·x21 을 막아 계단참을 스파인 폭에 맞춘다
             m.set_obj(x, y, D, "w_cap", 0)
     for y in range(38, 46):
         for x in range(SPX0, SPX1 + 1):
