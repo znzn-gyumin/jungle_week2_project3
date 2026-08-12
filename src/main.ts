@@ -26,8 +26,11 @@ function setFavicon(): void {
 }
 
 /**
- * 성별을 먼저 고릅니다. 만나는 히로인 셋이 여기서 갈리고(반대 성별),
- * 절친도 같이 갈립니다 (TECH_DESIGN 3-1).
+ * 시작 전 설정. 성·이름·성별·반을 정합니다.
+ *
+ * 성별은 그냥 취향이 아닙니다 — 만나는 히로인 셋이 여기서 갈리고(반대
+ * 성별) 절친도 같이 갈립니다 (TECH_DESIGN 3-1). 반은 4층의 403 · 405
+ * 중 하나입니다.
  */
 function titleScreen(app: HTMLElement): void {
   const k = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
@@ -41,19 +44,66 @@ function titleScreen(app: HTMLElement): void {
       <img class="boot__bg" src="${asset('ui/intro_large.webp')}" alt="" />
       <div class="boot__panel">
         <p class="boot__line">11박 12일, 연애는 커리큘럼에 없었다</p>
-        <div class="boot__pick">
-          <button class="vn__choice" data-g="male">남자로 시작 — 이도윤</button>
-          <button class="vn__choice" data-g="female">여자로 시작 — 이도아</button>
-        </div>
+
+        <form class="boot__form" id="boot-form" autocomplete="off">
+          <div class="boot__row">
+            <label class="boot__field">
+              <span>성</span>
+              <input name="family" maxlength="2" placeholder="이" />
+            </label>
+            <label class="boot__field boot__field--wide">
+              <span>이름</span>
+              <input name="given" maxlength="4" placeholder="도윤" />
+            </label>
+          </div>
+
+          <fieldset class="boot__seg">
+            <legend>성별</legend>
+            <label><input type="radio" name="gender" value="male" checked /><span>남자</span></label>
+            <label><input type="radio" name="gender" value="female" /><span>여자</span></label>
+          </fieldset>
+
+          <fieldset class="boot__seg">
+            <legend>반</legend>
+            <label><input type="radio" name="room" value="403" checked /><span>403호</span></label>
+            <label><input type="radio" name="room" value="405" /><span>405호</span></label>
+          </fieldset>
+
+          <p class="boot__hint" id="boot-hint"></p>
+          <button class="vn__choice boot__go" type="submit">정글 들어가기</button>
+        </form>
+
         <p class="boot__note">씬 ${Object.keys(script).length}개 컴파일됨</p>
       </div>
     </main>`;
-  for (const b of app.querySelectorAll<HTMLButtonElement>('[data-g]')) {
-    b.addEventListener('click', () => {
-      const state = newGame(b.dataset.g as 'male' | 'female');
-      new Player(app, script, state).start();
-    });
-  }
+
+  const form = app.querySelector<HTMLFormElement>('#boot-form')!;
+  const hint = app.querySelector<HTMLElement>('#boot-hint')!;
+  const val = (n: string): string =>
+    (form.elements.namedItem(n) as RadioNodeList | HTMLInputElement).value;
+
+  /** 성별을 바꾸면 기본 이름과 만날 사람이 같이 바뀝니다 */
+  const sync = (): void => {
+    const male = val('gender') === 'male';
+    const given = form.querySelector<HTMLInputElement>('[name="given"]')!;
+    given.placeholder = male ? '도윤' : '도아';
+    hint.textContent = male
+      ? '조원은 민아 · 승희 · 윤정, 룸메는 한지오입니다.'
+      : '조원은 민규 · 승민 · 윤호, 룸메는 한지아입니다.';
+  };
+  form.addEventListener('change', sync);
+  sync();
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const state = newGame(
+      val('gender') as 'male' | 'female',
+      val('family').trim(),
+      val('given').trim(),
+      val('room') as '403' | '405',
+    );
+    new Player(app, script, state).start();
+  });
 }
 
 function boot(): void {

@@ -63,6 +63,8 @@ export function substitute(text: string, s: GameState): string {
     '{P:호격}': 호격(given),
     '{P:접미}': 접미(given),
     '{P:호칭}': 호칭(s),
+    // 시작 설정에서 고른 교육장 — 403 · 405
+    '{반}': s.playerRoom,
   };
   // {동갑} {연상:성명} 같은 역할 토큰을 먼저 풉니다
   text = text.replace(/\{(동갑|연상|연하)(:성명)?\}/g, (_w, r, full) =>

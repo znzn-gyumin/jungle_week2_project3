@@ -163,6 +163,8 @@ export type GameState = {
   playerGender: 'male' | 'female';
   playerFamilyName: string;
   playerGivenName: string;
+  /** 배정받은 교육장. 4층에 403 · 405 두 개가 있습니다 (WORLD_BIBLE 3절) */
+  playerRoom: '403' | '405';
 
   route: RouteId | null;
   affection: number;

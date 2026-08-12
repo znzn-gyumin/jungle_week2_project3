@@ -6,11 +6,17 @@
  */
 import type { GameState } from './types';
 
-export function newGame(gender: 'male' | 'female'): GameState {
+export function newGame(
+  gender: 'male' | 'female',
+  familyName = '이',
+  givenName = '',
+  room: '403' | '405' = '403',
+): GameState {
   return {
     playerGender: gender,
-    playerFamilyName: '이',
-    playerGivenName: gender === 'male' ? '도윤' : '도아',
+    playerFamilyName: familyName || '이',
+    playerGivenName: givenName || (gender === 'male' ? '도윤' : '도아'),
+    playerRoom: room,
     route: null,
     affection: 10, // 시작 10 (GAME_DESIGN 2-1)
     skill: 0,
