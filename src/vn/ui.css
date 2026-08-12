@@ -119,13 +119,11 @@
   padding-left: 0;
 }
 
-/* 세로 바 = 기준선. 얼굴을 안 가리도록 오른쪽에 세우고, 두 모드가
-   같은 폭을 써서 바가 늘 같은 자리에 옵니다. */
+/* 세로 바 = 기준선. 얼굴을 안 가리도록 오른쪽에 세우고, 맵·CG 두
+   모드와 대사·내레이션 네 경우가 모두 같은 폭을 써서 바가 늘 같은
+   자리에 옵니다. */
 .vn__name {
   min-width: 6.5rem;
-}
-
-.vn__name {
   font-weight: 700;
   margin: 0;
   display: inline-block;
@@ -144,8 +142,11 @@
   margin: 0 1rem 0 0;
 }
 
+/* **자리는 남깁니다.** display: none 으로 지우면 이름칸(6.5rem)과
+   양쪽 여백만큼 내레이션이 왼쪽으로 당겨져, 대사와 시작 자리가
+   8rem 가까이 어긋납니다. 세로 바도 같이 숨습니다. */
 .vn__name[hidden] {
-  display: none;
+  visibility: hidden;
 }
 
 .vn__text {
