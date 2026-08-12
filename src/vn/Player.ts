@@ -229,6 +229,8 @@ export class Player {
         testCond(o.cond, this.state) &&
         (!o.heroine || HEROINE_GENDER[o.heroine] !== this.state.playerGender),
     );
+    // 선택지 동안에는 대사창을 없앱니다 — 화면 가운데를 선택지가 씁니다
+    this.boxEl.hidden = true;
     this.choiceEl.hidden = false;
     this.choiceEl.innerHTML = '';
     for (const o of usable) {
@@ -237,6 +239,7 @@ export class Player {
       b.textContent = substitute(o.text, this.state);
       b.addEventListener('click', () => {
         this.choiceEl.hidden = true;
+        this.boxEl.hidden = false;
         applyEffects(this.state, o.effects);
         this.goto(o.target);
         this.step();

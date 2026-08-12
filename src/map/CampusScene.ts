@@ -20,10 +20,13 @@ const ALL_MAPS: MapId[] = [
 const SPEED = 190;
 /**
  * 도트가 48px 이라 1배는 시야가 너무 넓습니다.
- * 어중간한 값은 타일 경계가 화면 픽셀 사이에
- * 걸려 이음매가 벌어지므로 카메라와 렌더러 양쪽에 roundPixels 를 겁니다.
+ *
+ * **정수여야 합니다.** 1.5 처럼 어중간하면 타일 한 칸이 화면에서 72px 이
+ * 되어 경계가 픽셀 사이에 걸리고, 카메라가 움직일 때마다 이음매가 벌어집니다.
+ * 배경으로만 쓰는 맵(still)도 같은 값을 씁니다 — 자유 이동과 배율이 다르면
+ * 대화로 넘어갈 때 화면이 확 바뀝니다.
  */
-const ZOOM = 1.5;
+const ZOOM = 2;
 /** 말을 걸 수 있는 거리 — 한 칸 반 */
 const REACH = TS * 1.5;
 
@@ -52,6 +55,8 @@ export class CampusScene extends Phaser.Scene {
   private interactKey!: Phaser.Input.Keyboard.Key;
   private lighting!: LightingOverlay;
   private npcSprites: { npc: FreeroamNpc; sprite: Phaser.GameObjects.Image }[] = [];
+  /** 이미 만난 사람 — 자리에는 남지만 말은 못 겁니다 */
+  private stayed: Phaser.GameObjects.Image[] = [];
   private hint!: Phaser.GameObjects.Text;
   private mini!: Phaser.GameObjects.Graphics;
   private guide!: Phaser.GameObjects.Text;
@@ -263,7 +268,9 @@ export class CampusScene extends Phaser.Scene {
   /** 자리는 맵의 `npc` 오브젝트가 `role` 로 갖고 있습니다 */
   private placeNpcs(map: Phaser.Tilemaps.Tilemap, id: MapId): void {
     for (const { sprite } of this.npcSprites) sprite.destroy();
+    for (const sp of this.stayed) sp.destroy();
     this.npcSprites = [];
+    this.stayed = [];
     const layer = map.getObjectLayer('npc');
     if (!layer) return;
 
@@ -285,13 +292,15 @@ export class CampusScene extends Phaser.Scene {
     }
   }
 
-  /** 이 맵에서 아직 안 만난 NPC 를 지웁니다 */
+  /**
+   * 이미 만난 사람은 **말을 못 걸게만** 합니다.
+   * 사라지게 하면 대화할 때마다 사람이 하나씩 없어져 교육장이 비어 갑니다 —
+   * 사양도 「상호작용 아이콘이 사라진다」이지 사람이 사라진다가 아닙니다.
+   */
   removeNpc(who: string): void {
-    const i = this.npcSprites.findIndex((x) => x.npc.who === who);
-    if (i >= 0) {
-      this.npcSprites[i].sprite.destroy();
-      this.npcSprites.splice(i, 1);
-    }
+    const found = this.npcSprites.find((x) => x.npc.who === who);
+    if (found) { found.sprite.setAlpha(0.55); this.stayed.push(found.sprite); }
+    this.npcSprites = this.npcSprites.filter((x) => x.npc.who !== who);
     this.setup.npcs = this.setup.npcs.filter((n) => n.who !== who);
   }
 

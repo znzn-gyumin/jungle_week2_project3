@@ -146,13 +146,13 @@
 /* 선택지 — 화면 중앙, 3개 이하 (WORLD_BIBLE 11) */
 .vn__choices {
   position: absolute;
-  inset: 0 0 32vh;
+  inset: 0;
   z-index: 5;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
+  gap: 1.1rem;
   padding: 0 1rem;
   pointer-events: none;
 }
@@ -163,12 +163,12 @@
 
 .vn__choice {
   pointer-events: auto;
-  width: min(34rem, 100%);
-  padding: 0.8rem 1.2rem;
+  width: min(52rem, 88%);
+  padding: 1.1rem 2rem;
+  text-align: center;
   font: inherit;
-  font-size: clamp(1rem, 1.9vw, 1.2rem);
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
   color: #6b4038;
-  text-align: left;
   word-break: keep-all;
   background: #fdfaf0f2;
   border: 1px solid #d9c89a;
@@ -181,7 +181,7 @@
 .vn__choice:focus-visible {
   background: #fffdf6;
   border-color: #b4485a;
-  transform: translateX(3px);
+  transform: scale(1.02);
   outline: none;
 }
 
