@@ -90,7 +90,7 @@ export class Roam {
     this.topEl.className = "roam-top";
     this.goEl = document.createElement("p");
     this.goEl.className = "roam-go";
-    this.goEl.textContent = "ENTER를 눌러 스토리를 진행하세요";
+    this.goEl.textContent = "ENTER를 눌러 스토리를 진행하세요!";
     this.goEl.hidden = true;
     this.topEl.append(this.goEl);
     this.host.append(hud, this.topEl);
