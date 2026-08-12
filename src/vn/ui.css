@@ -426,9 +426,9 @@
 /* ---- 첫 자유 이동의 조작 안내 */
 
 .roam-tutorial {
-  position: absolute;
-  /* **중앙 상단.** 걸으면서 눈을 거의 안 떼도 되고, 아래쪽 대사창·안내와
-     안 겹칩니다. 뒤가 비치므로 맵을 가리지 않습니다. */
+  /* **흐름 안에 둡니다.** absolute 로 두면 자리를 안 차지해 세로줄 폭이
+     0 이 되고, 그 0 을 기준으로 가운데를 잡느라 왼쪽으로 쏠립니다. */
+  position: relative;
   order: 1;
   z-index: 8;
   width: max-content;
@@ -839,7 +839,7 @@
 .roam-top {
   position: absolute;
   left: 50%;
-  top: 1.6rem;
+  top: 3.4rem;
   z-index: 8;
   display: flex;
   flex-direction: column;

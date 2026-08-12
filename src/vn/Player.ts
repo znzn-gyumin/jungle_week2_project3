@@ -470,7 +470,10 @@ export class Player {
       this.idx = this.lines().length; // 씬 끝으로 — backToRoam 이 받습니다
       return;
     }
-    this.wipe();
+    // **맵 대화에서는 안 겹니다.** 걷다가 말을 건 것뿐인데 화면이
+    // 검게 넘어가면 장면이 바뀐 것처럼 보입니다. 암전은 명장면끼리
+    // 넘어갈 때의 연출입니다.
+    if (!this.roam) this.wipe();
     this.clearAvatar();
     let t = target;
     if (t.startsWith('r_*_')) {
