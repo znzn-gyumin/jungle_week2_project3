@@ -97,24 +97,8 @@ body {
   letter-spacing: 0.02em;
 }
 
-.boot__note {
-  margin: 0;
-  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
-  color: var(--ink-dim);
-  font-variant-numeric: tabular-nums;
-}
 
-.boot__note--bad {
-  color: var(--bad);
-}
 
-.boot__pick {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: center;
-  margin: 1.25rem 0 0.75rem;
-}
 
 /* ---- 시작 설정 — 성 · 이름 · 성별 · 반 */
 
@@ -456,6 +440,15 @@ body {
   50% { opacity: 0.95; }
 }
 
+.boot__tip {
+  margin: 0.55rem 0 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  opacity: 0.5;
+  text-shadow: 0 1px 5px rgb(0 0 0 / 75%);
+}
+
 .boot__step {
   margin: 0;
   font-size: 0.75rem;
@@ -491,16 +484,6 @@ body {
   100% { transform: translateX(360%); }
 }
 
-.boot__note {
-  position: absolute;
-  right: 1.2rem;
-  bottom: 1rem;
-  z-index: 3;
-  margin: 0;
-  font-size: 0.72rem;
-  color: #fff;
-  opacity: 0.4;
-}
 
 /* ---- 커서 */
 

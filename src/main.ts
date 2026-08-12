@@ -59,26 +59,75 @@ function titleScreen(app: HTMLElement): void {
         </div>
       <div class="boot__flash" id="boot-flash"></div>
       <div class="boot__sky" aria-hidden="true">
-        <i class="boot__dust" style="--l:6%; --t:18%; --s:1.0; --d:0.0s"></i>
-        <i class="boot__dust" style="--l:14%; --t:72%; --s:0.7; --d:2.4s"></i>
-        <i class="boot__dust" style="--l:22%; --t:34%; --s:1.3; --d:1.1s"></i>
-        <i class="boot__dust" style="--l:29%; --t:88%; --s:0.8; --d:3.6s"></i>
-        <i class="boot__dust" style="--l:37%; --t:12%; --s:1.1; --d:0.6s"></i>
-        <i class="boot__dust" style="--l:44%; --t:58%; --s:0.6; --d:4.2s"></i>
-        <i class="boot__dust" style="--l:52%; --t:26%; --s:1.4; --d:1.8s"></i>
-        <i class="boot__dust" style="--l:60%; --t:80%; --s:0.9; --d:2.9s"></i>
-        <i class="boot__dust" style="--l:67%; --t:42%; --s:1.2; --d:0.3s"></i>
-        <i class="boot__dust" style="--l:74%; --t:16%; --s:0.7; --d:3.1s"></i>
-        <i class="boot__dust" style="--l:81%; --t:66%; --s:1.5; --d:1.5s"></i>
-        <i class="boot__dust" style="--l:88%; --t:30%; --s:0.8; --d:4.6s"></i>
-        <i class="boot__dust" style="--l:94%; --t:84%; --s:1.1; --d:2.1s"></i>
-        <i class="boot__dust" style="--l:10%; --t:50%; --s:0.9; --d:5.2s"></i>
-        <i class="boot__dust" style="--l:48%; --t:94%; --s:1.0; --d:3.9s"></i>
-        <i class="boot__dust" style="--l:70%; --t:6%; --s:1.3; --d:0.9s"></i>
+        <i class="boot__dust" style="--l:4%; --t:6%; --s:1.0; --d:0.0s"></i>
+        <i class="boot__dust" style="--l:12%; --t:9%; --s:0.7; --d:0.37s"></i>
+        <i class="boot__dust" style="--l:20%; --t:6%; --s:1.3; --d:0.74s"></i>
+        <i class="boot__dust" style="--l:28%; --t:9%; --s:0.85; --d:1.11s"></i>
+        <i class="boot__dust" style="--l:36%; --t:6%; --s:1.15; --d:1.48s"></i>
+        <i class="boot__dust" style="--l:44%; --t:9%; --s:0.6; --d:1.85s"></i>
+        <i class="boot__dust" style="--l:52%; --t:6%; --s:1.45; --d:2.22s"></i>
+        <i class="boot__dust" style="--l:60%; --t:9%; --s:0.95; --d:2.59s"></i>
+        <i class="boot__dust" style="--l:68%; --t:6%; --s:1.0; --d:2.96s"></i>
+        <i class="boot__dust" style="--l:76%; --t:9%; --s:0.7; --d:3.33s"></i>
+        <i class="boot__dust" style="--l:84%; --t:6%; --s:1.3; --d:3.7s"></i>
+        <i class="boot__dust" style="--l:92%; --t:9%; --s:0.85; --d:4.07s"></i>
+        <i class="boot__dust" style="--l:9%; --t:17%; --s:1.15; --d:4.44s"></i>
+        <i class="boot__dust" style="--l:17%; --t:20%; --s:0.6; --d:4.81s"></i>
+        <i class="boot__dust" style="--l:25%; --t:17%; --s:1.45; --d:5.18s"></i>
+        <i class="boot__dust" style="--l:73%; --t:17%; --s:0.95; --d:0.05s"></i>
+        <i class="boot__dust" style="--l:81%; --t:20%; --s:1.0; --d:0.42s"></i>
+        <i class="boot__dust" style="--l:89%; --t:17%; --s:0.7; --d:0.79s"></i>
+        <i class="boot__dust" style="--l:97%; --t:20%; --s:1.3; --d:1.16s"></i>
+        <i class="boot__dust" style="--l:4%; --t:28%; --s:0.85; --d:1.53s"></i>
+        <i class="boot__dust" style="--l:12%; --t:31%; --s:1.15; --d:1.9s"></i>
+        <i class="boot__dust" style="--l:84%; --t:28%; --s:0.6; --d:2.27s"></i>
+        <i class="boot__dust" style="--l:92%; --t:31%; --s:1.45; --d:2.64s"></i>
+        <i class="boot__dust" style="--l:9%; --t:39%; --s:0.95; --d:3.01s"></i>
+        <i class="boot__dust" style="--l:89%; --t:39%; --s:1.0; --d:3.38s"></i>
+        <i class="boot__dust" style="--l:97%; --t:42%; --s:0.7; --d:3.75s"></i>
+        <i class="boot__dust" style="--l:4%; --t:50%; --s:1.3; --d:4.12s"></i>
+        <i class="boot__dust" style="--l:12%; --t:53%; --s:0.85; --d:4.49s"></i>
+        <i class="boot__dust" style="--l:92%; --t:53%; --s:1.15; --d:4.86s"></i>
+        <i class="boot__dust" style="--l:9%; --t:61%; --s:0.6; --d:5.23s"></i>
+        <i class="boot__dust" style="--l:17%; --t:64%; --s:1.45; --d:0.1s"></i>
+        <i class="boot__dust" style="--l:89%; --t:61%; --s:0.95; --d:0.47s"></i>
+        <i class="boot__dust" style="--l:97%; --t:64%; --s:1.0; --d:0.84s"></i>
+        <i class="boot__dust" style="--l:4%; --t:72%; --s:0.7; --d:1.21s"></i>
+        <i class="boot__dust" style="--l:12%; --t:75%; --s:1.3; --d:1.58s"></i>
+        <i class="boot__dust" style="--l:20%; --t:72%; --s:0.85; --d:1.95s"></i>
+        <i class="boot__dust" style="--l:28%; --t:75%; --s:1.15; --d:2.32s"></i>
+        <i class="boot__dust" style="--l:76%; --t:75%; --s:0.6; --d:2.69s"></i>
+        <i class="boot__dust" style="--l:84%; --t:72%; --s:1.45; --d:3.06s"></i>
+        <i class="boot__dust" style="--l:92%; --t:75%; --s:0.95; --d:3.43s"></i>
+        <i class="boot__dust" style="--l:9%; --t:83%; --s:1.0; --d:3.8s"></i>
+        <i class="boot__dust" style="--l:17%; --t:86%; --s:0.7; --d:4.17s"></i>
+        <i class="boot__dust" style="--l:25%; --t:83%; --s:1.3; --d:4.54s"></i>
+        <i class="boot__dust" style="--l:33%; --t:86%; --s:0.85; --d:4.91s"></i>
+        <i class="boot__dust" style="--l:41%; --t:83%; --s:1.15; --d:5.28s"></i>
+        <i class="boot__dust" style="--l:49%; --t:86%; --s:0.6; --d:0.15s"></i>
+        <i class="boot__dust" style="--l:57%; --t:83%; --s:1.45; --d:0.52s"></i>
+        <i class="boot__dust" style="--l:65%; --t:86%; --s:0.95; --d:0.89s"></i>
+        <i class="boot__dust" style="--l:73%; --t:83%; --s:1.0; --d:1.26s"></i>
+        <i class="boot__dust" style="--l:81%; --t:86%; --s:0.7; --d:1.63s"></i>
+        <i class="boot__dust" style="--l:89%; --t:83%; --s:1.3; --d:2.0s"></i>
+        <i class="boot__dust" style="--l:97%; --t:86%; --s:0.85; --d:2.37s"></i>
+        <i class="boot__dust" style="--l:4%; --t:94%; --s:1.15; --d:2.74s"></i>
+        <i class="boot__dust" style="--l:12%; --t:97%; --s:0.6; --d:3.11s"></i>
+        <i class="boot__dust" style="--l:20%; --t:94%; --s:1.45; --d:3.48s"></i>
+        <i class="boot__dust" style="--l:28%; --t:97%; --s:0.95; --d:3.85s"></i>
+        <i class="boot__dust" style="--l:36%; --t:94%; --s:1.0; --d:4.22s"></i>
+        <i class="boot__dust" style="--l:44%; --t:97%; --s:0.7; --d:4.59s"></i>
+        <i class="boot__dust" style="--l:52%; --t:94%; --s:1.3; --d:4.96s"></i>
+        <i class="boot__dust" style="--l:60%; --t:97%; --s:0.85; --d:5.33s"></i>
+        <i class="boot__dust" style="--l:68%; --t:94%; --s:1.15; --d:0.2s"></i>
+        <i class="boot__dust" style="--l:76%; --t:97%; --s:0.6; --d:0.57s"></i>
+        <i class="boot__dust" style="--l:84%; --t:94%; --s:1.45; --d:0.94s"></i>
+        <i class="boot__dust" style="--l:92%; --t:97%; --s:0.95; --d:1.31s"></i>
       </div>
 
       <section class="boot__act is-on" data-act="0">
         <p class="boot__any">아무 키나 눌러 시작</p>
+        <p class="boot__tip">F11 을 눌러 전체화면으로 하시길 권합니다</p>
       </section>
 
       <section class="boot__act" data-act="1">
@@ -123,7 +172,6 @@ function titleScreen(app: HTMLElement): void {
         </div>
       </section>
 
-      <p class="boot__note">씬 ${Object.keys(script).length}개 컴파일됨</p>
     </main>`;
 
   const acts = [...app.querySelectorAll<HTMLElement>(".boot__act")];
