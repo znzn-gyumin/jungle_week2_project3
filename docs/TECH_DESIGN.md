@@ -577,6 +577,7 @@ match /guestbook/{uid} {
 - 레이어: 타일 `ground` / `objects` / `collision` · 오브젝트 `npc` / `portal` / `trigger`
 - 타일셋 3종 — **교육동 실내 / 숙소동 실내 / 야외**
 - 주인공: 4방향 × 4프레임(정지 1 + 걷기 3), 방향키/WASD
+- **텍스처 필터가 둘로 갈립니다.** 전역 `pixelArt: true`(타일용 NEAREST)로 두고, **도트 스프라이트만 `LINEAR`**를 겁니다 — 도트는 안티에일리어싱된 그림이라 NEAREST로 확대하면 흐린 픽셀이 각집니다 ([assets/README](../assets/README.md#도트는-진짜-픽셀-아트가-아닙니다))
 
 ### 5-2. 맵 전환
 
