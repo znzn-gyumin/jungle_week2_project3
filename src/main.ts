@@ -222,6 +222,18 @@ function titleScreen(app: HTMLElement): void {
   nameForm.addEventListener("input", checkName);
   checkName();
 
+  // 성을 치고 스페이스를 누르면 이름칸으로 넘어갑니다. 이름에 공백이
+  // 들어갈 일이 없으므로 스페이스를 탭처럼 씁니다.
+  const family = nameForm.querySelector<HTMLInputElement>('[name="family"]')!;
+  const given = nameForm.querySelector<HTMLInputElement>('[name="given"]')!;
+  for (const box of [family, given]) {
+    box.addEventListener("keydown", (e) => {
+      if (e.key !== " ") return;
+      e.preventDefault();
+      if (box === family && box.value.trim()) given.focus();
+    });
+  }
+
   nameForm.addEventListener("submit", (e) => {
     e.preventDefault();
     if (nextBtn.disabled) return;
