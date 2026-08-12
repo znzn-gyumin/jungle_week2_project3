@@ -62,6 +62,8 @@ export class CampusScene extends Phaser.Scene {
   private guide!: Phaser.GameObjects.Text;
   private miniDot!: Phaser.GameObjects.Graphics;
   private miniSize = { w: 0, h: 0, s: 1 };
+  /** 미니맵 위의 ! 표시 — 맵을 옮기거나 만나면 지웁니다 */
+  private miniMarks: Phaser.GameObjects.Text[] = [];
   /** UI 전용 카메라 — 본 카메라의 줌을 안 따라갑니다 */
   private uiCam!: Phaser.Cameras.Scene2D.Camera;
   private currentMap!: MapId;
@@ -240,10 +242,25 @@ export class CampusScene extends Phaser.Scene {
     for (const p of this.portals) {
       g.fillRect(pad + (p.rect.x / TS) * s - 1, pad + (p.rect.y / TS) * s - 1, s + 2, s + 2);
     }
-    // NPC
-    g.fillStyle(0xf2d9a0, 1);
+    // 아직 안 만난 사람 — 미니맵에도 ! 를 찍습니다
+    for (const m of this.miniMarks) m.destroy();
+    this.miniMarks = [];
     for (const { sprite } of this.npcSprites) {
-      g.fillCircle(pad + (sprite.x / TS) * s, pad + (sprite.y / TS) * s, 2.5);
+      const mx = pad + (sprite.x / TS) * s;
+      const my = pad + (sprite.y / TS) * s;
+      g.fillStyle(0xffd45e, 1).fillCircle(mx, my, 3);
+      const t = this.add
+        .text(mx, my - 4, '!', {
+          fontSize: '11px',
+          color: '#ffd45e',
+          stroke: '#0b0c17',
+          strokeThickness: 3,
+        })
+        .setOrigin(0.5, 1)
+        .setScrollFactor(0)
+        .setDepth(302);
+      this.cameras.main.ignore(t);
+      this.miniMarks.push(t);
     }
   }
 
@@ -328,6 +345,9 @@ export class CampusScene extends Phaser.Scene {
       found.mark.destroy();
       this.stayed.push(found.sprite);
     }
+    // 미니맵 표시도 같이 줄입니다
+    const last = this.miniMarks.pop();
+    last?.destroy();
     this.npcSprites = this.npcSprites.filter((x) => x.npc.who !== who);
     this.setup.npcs = this.setup.npcs.filter((n) => n.who !== who);
   }

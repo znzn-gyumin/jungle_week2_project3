@@ -77,7 +77,7 @@ export class Player {
             <p class="vn__name" id="vn-name"></p>
             <p class="vn__text" id="vn-text"></p>
           </div>
-          <p class="vn__hint">스페이스 · 클릭 — 다음</p>
+          <p class="vn__hint">스페이스바 · 클릭 — 대화 진행</p>
         </div>
         <div class="vn__choices" id="vn-choices" hidden></div>
       </div>`;
