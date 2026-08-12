@@ -399,9 +399,13 @@ def m3(TS_):
     # 나가는 문 두 개 — **방향이 곧 목적지입니다.**
     #   위    커넥트가든 (건물 뒤 정원)
     #   오른쪽 정문
-    m.trigger("back_gate", 18, 2, w=4, h=1, kind="door", label="후문 · 커넥트가든")
-    for x in range(18, 22):
-        m.portal("m5_connect_garden", x, 2, 12 + (x - 18), 42, name="to_garden")
+    # 계단(20,3) 과 겹치지 않게 왼쪽으로 옮기고, 벽에 닿으면 넘어가도록
+    # 맨 윗줄 바로 아래(y=1)에 둡니다.
+    for x in range(8, 12):
+        m.open(x, 1)
+    m.trigger("back_gate", 8, 1, w=4, h=1, kind="door", label="후문 · 커넥트가든")
+    for x in range(8, 12):
+        m.portal("m5_connect_garden", x, 1, 14 + (x - 8), 43, name="to_garden")
     m.trigger("front_gate", 41, 20, w=1, h=4, kind="door", label="정문")
     for y in range(20, 24):
         m.portal("m7_gate", 41, y, 3, 12 + (y - 20), name="to_gate")
