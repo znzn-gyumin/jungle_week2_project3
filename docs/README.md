@@ -18,6 +18,7 @@
 | [reference/character/](./reference/character/README.md) | **히로인 6인 확정 프로필** — 외형·의상의 기준 | **확정** |
 | [../assets/README.md](../assets/README.md) | **에셋 규격** — 폴더·이름·CG·도트 규격 | **파생** |
 | [reference/TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) | 타일 구현 인수인계 — 산출물·생성기 사용법 | **구현** |
+| [reference/TILESET_RESTYLE.md](./reference/TILESET_RESTYLE.md) | 타일 화풍을 도트 인물에 맞추는 작업 지시 — 결과는 `assets/temp/` 로 | 시도 |
 | [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 — 사양은 [WORLD_BIBLE 11](./WORLD_BIBLE.md#11-ui-톤) · 에셋은 [assets/README](../assets/README.md#ui) | **확정** |
 | [reference/character/preview_cg.html](./reference/character/preview_cg.html) | CG 90장 눈으로 대조 | — |
 | [reference/character/preview_dot.html](./reference/character/preview_dot.html) | 도트 18종 · 아바타 36컷 대조 | — |
