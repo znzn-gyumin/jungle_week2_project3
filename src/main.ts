@@ -256,29 +256,38 @@ function titleScreen(app: HTMLElement): void {
         : "조원은 민규 · 승민 · 윤호, 룸메는 한지아입니다.";
     startBtn.disabled = !g || !room;
   };
-  app.querySelector<HTMLButtonElement>("#boot-back")!.addEventListener("click", () => {
-    goTo(1);
-  });
+  const backBtn = app.querySelector<HTMLButtonElement>("#boot-back")!;
+  backBtn.addEventListener("click", () => goTo(1));
 
   /**
-   * 위아래로 성별 ↔ 반을 오갑니다. 브라우저 기본값은 네 방향이 모두
-   * **같은 무리 안에서만** 움직여서, 반으로 내려가려면 탭을 눌러야
-   * 했습니다. 좌우는 기본대로 두어 그 무리의 값을 고릅니다.
+   * 이 장은 네 줄입니다 — 성별 · 반 · 정글 들어가기 · 이름 다시 정하기.
+   * 위아래로 네 줄을 자유롭게 오가고, 좌우로 그 줄의 값을 고릅니다.
    *
-   * 옮길 때는 focus 만 줍니다 — 화살표로 고르면 값이 잡히지만 focus
-   * 는 안 잡히므로, 지나가기만 한 무리가 저절로 정해지지 않습니다.
+   * 브라우저 기본값은 네 방향이 모두 **같은 무리 안에서만** 움직여서
+   * 아래로 내려가려면 탭을 눌러야 했습니다. 못 누르는 시작 버튼은
+   * 건너뜁니다.
    */
-  const rows = ["gender", "room"].map((n) => [
-    ...whoForm.querySelectorAll<HTMLInputElement>(`[name="${n}"]`),
-  ]);
+  const rowsOf = (): HTMLElement[][] => {
+    const r: HTMLElement[][] = [
+      [...whoForm.querySelectorAll<HTMLInputElement>('[name="gender"]')],
+      [...whoForm.querySelectorAll<HTMLInputElement>('[name="room"]')],
+    ];
+    if (!startBtn.disabled) r.push([startBtn]);
+    r.push([backBtn]);
+    return r;
+  };
   whoForm.addEventListener("keydown", (e) => {
     const step = e.key === "ArrowDown" ? 1 : e.key === "ArrowUp" ? -1 : 0;
     if (!step) return;
-    const at = rows.findIndex((r) => r.includes(document.activeElement as HTMLInputElement));
-    if (at < 0) return;
+    const rows = rowsOf();
+    const now = document.activeElement as HTMLElement;
+    let at = rows.findIndex((r) => r.includes(now));
+    // 못 누르는 시작 버튼이 빠져 줄 수가 달라져도 자리를 잃지 않습니다
+    if (at < 0) at = step > 0 ? -1 : 0;
     e.preventDefault();
     const next = rows[(at + step + rows.length) % rows.length];
-    (next.find((b) => b.checked) ?? next[0]).focus();
+    const box = next.find((b) => (b as HTMLInputElement).checked) ?? next[0];
+    box.focus();
   });
 
   whoForm.addEventListener("change", sync);
