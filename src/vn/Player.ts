@@ -212,6 +212,7 @@ export class Player {
   private setAvatar(who: string | null, face?: string): void {
     const id = who ? HEROINE_BY_NAME[who] : undefined;
     if (!id) {
+      // 자리는 남깁니다 — CSS 가 visibility 로 숨깁니다
       this.faceEl.hidden = true;
       this.boxEl.classList.remove('vn__box--face');
       return;

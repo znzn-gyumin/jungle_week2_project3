@@ -39,6 +39,9 @@
   min-height: 22vh;
   max-height: 30vh;
   --face-gap: clamp(0.8rem, 1.6vw, 1.2rem);
+  display: flex;
+  align-items: center;
+  gap: var(--face-gap);
   padding: 1.5rem clamp(1.6rem, 3.5vw, 2.6rem);
   /* 크림색 둥근 창 — 도트와 웹툰풍 CG 사이에서 화면을 밝게 잡아 줍니다 */
   background: linear-gradient(180deg, #fdfaf0f2, #f6efdcf2);
@@ -63,12 +66,10 @@
 /* 이름표 — 대사창 좌상단에 붙는 형태 */
 /* 얼굴은 대사창 왼쪽에 **원본 크기 그대로**(48×64) 놓고 위아래 여백을
    같게 둡니다. 늘리면 도트가 뭉개지고, 한쪽으로 붙으면 창이 기울어 보입니다. */
+/* flex 항목으로 두고 align-items: center 로 세로 가운데를 잡습니다.
+   절대 위치 + translateY 는 창 높이가 내용에 따라 변할 때 미묘하게 어긋납니다. */
 .vn__face {
-  position: absolute;
-  left: var(--face-gap);
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
+  flex: none;
   width: 96px;
   height: 96px;
   /* 원본이 48×64 라 정사각에 넣으면 위아래가 남습니다.
@@ -79,12 +80,19 @@
   background: #fdfaf0;
 }
 
+/* 얼굴이 없는 화자여도 자리는 남깁니다 (visibility). 명장면에서는
+   아예 안 쓰므로 자리째 없앱니다 (display). */
 .vn__face[hidden] {
+  visibility: hidden;
+}
+
+.vn__box--cine .vn__face {
   display: none;
 }
 
 .vn__said {
   min-width: 0;
+  flex: 1;
   display: flex;
   align-items: baseline;
 }
