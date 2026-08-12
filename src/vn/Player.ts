@@ -77,6 +77,7 @@ export class Player {
             <p class="vn__name" id="vn-name"></p>
             <p class="vn__text" id="vn-text"></p>
           </div>
+          <p class="vn__hint">스페이스 · 클릭 — 다음</p>
         </div>
         <div class="vn__choices" id="vn-choices" hidden></div>
       </div>`;
@@ -93,8 +94,9 @@ export class Player {
 
     this.boxEl.addEventListener('click', () => this.advance());
     window.addEventListener('keydown', (e) => {
-      // 자유 이동 중에는 맵이 키를 갖습니다 — 스페이스가 「말 걸기」와 겹칩니다
-      if (this.roam) return;
+      // 맵을 걷는 동안에만 맵이 키를 갖습니다. **대사창이 떠 있으면
+      // 스페이스는 대사를 넘깁니다** — 맵은 멈춰 있어 말 걸기와 안 겹칩니다.
+      if (this.roam && this.boxEl.hidden) return;
       if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
         this.advance();
