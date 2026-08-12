@@ -18,8 +18,12 @@ const ALL_MAPS: MapId[] = [
   'm5_connect_garden', 'm6_nestcamp', 'm7_gate',
 ];
 const SPEED = 190;
-/** 도트가 48px 이라 1배로는 시야가 너무 넓습니다 */
-const ZOOM = 1.7;
+/**
+ * 도트가 48px 이라 1배는 시야가 너무 넓습니다.
+ * **정수여야 합니다** — 1.7 처럼 어중간하면 타일 경계가 화면 픽셀 사이에
+ * 걸려서 움직일 때마다 이음매가 찢어져 보입니다.
+ */
+const ZOOM = 2;
 /** 말을 걸 수 있는 거리 — 한 칸 반 */
 const REACH = TS * 1.5;
 
@@ -52,6 +56,8 @@ export class CampusScene extends Phaser.Scene {
   private mini!: Phaser.GameObjects.Graphics;
   private miniDot!: Phaser.GameObjects.Graphics;
   private miniSize = { w: 0, h: 0, s: 1 };
+  /** UI 전용 카메라 — 본 카메라의 줌을 안 따라갑니다 */
+  private uiCam!: Phaser.Cameras.Scene2D.Camera;
   private currentMap!: MapId;
   private paused = false;
   private portals: { rect: Phaser.Geom.Rectangle; to: MapId; sx: number; sy: number }[] = [];
@@ -117,6 +123,7 @@ export class CampusScene extends Phaser.Scene {
       .sprite(0, 0, `dot_${dot}`, 0)
       .setOrigin(0, 0)
       .setDepth(50);
+    this.uiCam?.ignore(this.player);
     // 발이 서 있는 한 칸만 충돌합니다 — 머리는 위 칸을 침범해도 됩니다
     this.player.body!.setSize(TS - 8, TS - 8).setOffset(4, HEAD_OVERHANG + 4);
 
@@ -133,6 +140,14 @@ export class CampusScene extends Phaser.Scene {
 
     this.mini = this.add.graphics().setScrollFactor(0).setDepth(300);
     this.miniDot = this.add.graphics().setScrollFactor(0).setDepth(301);
+
+    // 미니맵과 안내를 본 카메라에서 떼어 냅니다 — 안 그러면 줌에 같이
+    // 확대돼 화면 밖으로 밀려납니다.
+    this.uiCam = this.cameras.add(0, 0, this.scale.width, this.scale.height);
+    this.uiCam.setName('ui');
+    this.cameras.main.ignore([this.mini, this.miniDot, this.hint]);
+    this.scale.on('resize', (g: Phaser.Structs.Size) => this.uiCam?.setSize(g.width, g.height));
+
     this.loadMap(this.setup.map, this.setup.x, this.setup.y);
   }
 
@@ -160,6 +175,7 @@ export class CampusScene extends Phaser.Scene {
     objects.setDepth(10);
 
     this.layers = [ground, objects, collision];
+    this.uiCam?.ignore(this.layers);
     this.collider = this.physics.add.collider(this.player, collision);
     this.player.setPosition(tx * TS, ty * TS - HEAD_OVERHANG);
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -167,6 +183,7 @@ export class CampusScene extends Phaser.Scene {
 
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.cameras.main.setZoom(ZOOM);
+    this.cameras.main.setRoundPixels(true);
     this.cameras.main.startFollow(this.player, true, 0.12, 0.12);
 
     this.collectPortals(map);
@@ -246,6 +263,7 @@ export class CampusScene extends Phaser.Scene {
         .image(obj.x ?? 0, (obj.y ?? 0) - HEAD_OVERHANG, `dot_${cast.dot}`, 0)
         .setOrigin(0, 0)
         .setDepth(40);
+      this.uiCam?.ignore(s);
       this.npcSprites.push({ npc: n, sprite: s });
     }
   }

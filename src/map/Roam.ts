@@ -56,6 +56,7 @@ export class Roam {
       parent: this.host,
       backgroundColor: '#0b0c17',
       pixelArt: true, // 타일은 NEAREST — 도트만 따로 LINEAR 로 겁니다
+      roundPixels: true, // 정수 좌표로 그립니다 — 안 그러면 타일 이음매가 벌어집니다
       scale: { mode: Phaser.Scale.RESIZE, autoCenter: Phaser.Scale.CENTER_BOTH },
       physics: { default: 'arcade', arcade: { gravity: { x: 0, y: 0 } } },
       scene: CampusScene,
