@@ -156,7 +156,8 @@ public/
 | `@bg` `@bgm` `@se` `@cg` | 연출 명령. `@bgm` 값은 [WORLD_BIBLE 10-1](./WORLD_BIBLE.md#10-1-bgm-8곡)의 여덟 `id` 중 하나 |
 | `@char 이름 위치` | 캐릭터 입장 (left/center/right) |
 | `이름 [표정] "대사"` | 대사 한 줄. 표정 생략 시 직전 표정 유지. 표정은 **여섯뿐**입니다 — `기본` `기쁨` `부끄러움` `슬픔` `놀람` `화남` ([assets/README](../assets/README.md#id)) |
-| `@cg` 값 | [`cg/event/`](../assets/README.md#cg)의 파일명에서 `.png`를 뗀 것 — `{루트ID}_{garden\|classroom\|ending}` |
+| `@cg` 값 | [`cg/event/`](../assets/README.md#cg)의 파일명에서 확장자를 뗀 것 — `{루트ID}_{garden\|classroom\|ending}` |
+| **`@cg`가 뜨면 반신 CG는 가려집니다** | 스틸이 인물을 이미 품고 있어서 겹치면 같은 사람이 둘이 됩니다. `@char`를 지우지 않아도 되고, 다음 `@bg`나 씬 전환에서 반신이 돌아옵니다 |
 | `* 텍스트` | 내레이션 |
 | `@choice` | 선택지 블록. 효과는 공백으로 나열(`skill+25 affection-2`), `if` 절은 선택 |
 | `--- label ---` | 분기 라벨 |
