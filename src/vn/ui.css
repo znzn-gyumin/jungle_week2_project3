@@ -70,11 +70,13 @@
    절대 위치 + translateY 는 창 높이가 내용에 따라 변할 때 미묘하게 어긋납니다. */
 .vn__face {
   flex: none;
-  width: 96px;
-  height: 96px;
-  /* 원본이 48×64 라 정사각에 넣으면 위아래가 남습니다.
-     contain 이라 인물이 잘리지 않고 통째로 들어갑니다. */
-  object-fit: contain;
+  width: 124px;
+  height: 124px;
+  /* 원본 48×64 는 얼굴 아바타라 위쪽에 얼굴이 몰려 있습니다.
+     cover 로 원을 꽉 채우고 위쪽을 잡아 표정이 크게 보이게 합니다 —
+     아래(어깨)만 조금 잘립니다. */
+  object-fit: cover;
+  object-position: 50% 22%;
   border: 1px solid #d9c89a;
   border-radius: 50%;
   background: #fdfaf0;
