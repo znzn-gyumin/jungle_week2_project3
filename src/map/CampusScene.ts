@@ -88,11 +88,18 @@ export class CampusScene extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private interactKey!: Phaser.Input.Keyboard.Key;
   private lighting!: LightingOverlay;
+  /**
+   * 맵에 선 사람들. 표시가 곧 등급입니다.
+   *   `!`   CG 컷 대화가 남음        met=false
+   *   `○`   맵 대화만 됨             met=true  · chatOnly=false
+   *   없음  말은 못 걸고 잡담만 함    chatOnly=true (무명)
+   */
   private npcSprites: {
     npc: FreeroamNpc;
     sprite: Phaser.GameObjects.Image;
     mark: Phaser.GameObjects.Text;
     met: boolean;
+    chatOnly?: boolean;
   }[] = [];
   /** 이미 만난 사람 — 자리에는 남지만 말은 못 겁니다 */
   private stayed: Phaser.GameObjects.Image[] = [];
@@ -467,6 +474,8 @@ export class CampusScene extends Phaser.Scene {
       // **이 사람들도 말은 걸립니다.** 원 표시는 「대화 불가」 가 아니라
       // 「맵 대화만 된다」 는 뜻입니다 — 느낌표는 CG 컷이 남은 사람만.
       const who = text.split(' / ')[0] || '무명';
+      // 이름이 없으면 말을 못 겁니다 — 대신 저희끼리 잡담을 합니다
+      const chatOnly = who === '무명';
       const mark = this.add
         .text(sp.x + TS / 2, sp.y - 6, '○', {
           fontSize: '15px',
@@ -483,13 +492,12 @@ export class CampusScene extends Phaser.Scene {
         sprite: sp,
         mark,
         met: true,
+        chatOnly,
       });
-      this.metMarks.push({
-        x: sp.x / TS,
-        y: sp.y / TS,
-        theme: npcTheme(who),
-        met: true,
-      });
+      // 미니맵에도 말 걸 수 있는 사람만 찍습니다
+      if (!chatOnly) {
+        this.metMarks.push({ x: sp.x / TS, y: sp.y / TS, theme: npcTheme(who), met: true });
+      }
     }
   }
 
@@ -594,6 +602,7 @@ export class CampusScene extends Phaser.Scene {
 
     // 가까운 NPC 하나를 잡아 안내를 띄웁니다
     const near = this.npcSprites
+      .filter((x) => !x.chatOnly)
       .map((x) => ({
         ...x,
         d: Phaser.Math.Distance.Between(
@@ -638,7 +647,9 @@ export class CampusScene extends Phaser.Scene {
       callback: () => {
         if (this.paused || this.setup.still || this.bubbles.length) return;
         // 서로 가까운 짝을 찾습니다. 멀리 떨어져 소리치면 이상합니다.
-        const pool = this.npcSprites;
+        // 잡담은 무명끼리만 합니다. 말 걸 수 있는 사람이 혼자 떠들면
+        // 「말 안 걸어도 되는 사람」 처럼 보입니다.
+        const pool = this.npcSprites.filter((n) => n.chatOnly);
         const pairs: [number, number][] = [];
         for (let i = 0; i < pool.length; i++) {
           for (let j = i + 1; j < pool.length; j++) {
@@ -673,8 +684,11 @@ export class CampusScene extends Phaser.Scene {
       })
       .setOrigin(0.5, 1)
       .setDepth(62)
-      .setAlpha(0);
-    this.uiCam?.ignore(t);
+      .setAlpha(0)
+      // **월드에 박아 둡니다.** UI 카메라가 한 벌 더 그리면 화면에 붙어
+      // 주인공을 따라다닙니다 — 조명에서 이미 겪은 것과 같은 문제입니다.
+      .setScrollFactor(1);
+    this.uiCam.ignore(t);
     this.bubbles.push(t);
     this.tweens.add({ targets: t, alpha: 1, y: t.y - 6, duration: 220 });
     this.time.delayedCall(3000, () => {
