@@ -9,7 +9,7 @@
  */
 import { applyEffects, endingTier, testCond } from '../core/state';
 import { roleName, substitute } from '../core/tokens';
-import { FACE_FILE, FRIEND_NAME, HEROINE_BY_NAME, HEROINE_GENDER, NAME_BY_HEROINE, SUB_THEME, THEME, label } from '../core/types';
+import { FACE_FILE, FRIEND_NAME, HEROINE_BY_NAME, HEROINE_GENDER, NAME_BY_HEROINE, themeOf, label } from '../core/types';
 import type { ChoiceOption, GameState, Line, Scene, ScriptData } from '../core/types';
 import type { TimeOfDay } from '../config/lighting';
 import { Backdrop } from '../map/Backdrop';
@@ -342,9 +342,7 @@ export class Player {
    * 대사창 테두리·이름·얼굴 링·선택지·미니맵이 한 색을 봅니다.
    */
   private setTheme(who: string | null): void {
-    const id = who ? HEROINE_BY_NAME[who] : undefined;
-    const c = id ? THEME[id] : (who ? (SUB_THEME[who] ?? '#e0567b') : '#e0567b');
-    this.root.style.setProperty('--theme', c);
+    this.root.style.setProperty('--theme', themeOf(who));
   }
 
   /**

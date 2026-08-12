@@ -112,6 +112,21 @@ export const SUB_THEME: Record<string, string> = {
 
 export const PLAYER_THEME = '#333132';
 
+/**
+ * **이 사람의 색.** 대사창 틀·이름·세로 바, 미니맵의 느낌표·점·이름
+ * 카드, 도트맵 머리 위 표시가 전부 이 함수 하나를 봅니다 — 세 군데서
+ * 각자 고르면 같은 사람이 화면마다 다른 색으로 뜹니다.
+ *
+ * 이름을 못 찾으면 무명 색(내레이션과 같은 값)으로 떨어집니다.
+ */
+export function themeOf(who: string | null | undefined): string {
+  if (!who) return SUB_THEME.무명;
+  if (who === '나') return PLAYER_THEME;
+  const id = HEROINE_BY_NAME[who];
+  if (id) return THEME[id];
+  return SUB_THEME[who] ?? SUB_THEME.무명;
+}
+
 export const THEME: Record<RouteId, string> = {
   minah: '#3A9B96',    // 고양이 · 청록
   seunghee: '#B5806F', // 사슴 · 적갈

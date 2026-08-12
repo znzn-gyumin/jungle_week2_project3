@@ -74,6 +74,12 @@
     0 0 24px color-mix(in srgb, var(--theme, #e0567b) 32%, transparent);
   cursor: pointer;
   user-select: none;
+  /* **색이 넘어가는 걸 부드럽게.** 말하는 사람이 바뀌면 틀과 음영이
+     한꺼번에 갈리는데, 그대로 두면 툭 튀어 대사보다 눈에 먼저 띕니다. */
+  transition:
+    border-color 260ms ease,
+    background 260ms ease,
+    box-shadow 260ms ease;
 }
 
 /* 대사가 없으면 창 자체를 없앱니다 — 자유 이동 중에는 맵만 보입니다 */
@@ -87,6 +93,7 @@
 /* flex 항목으로 두고 align-items: center 로 세로 가운데를 잡습니다.
    절대 위치 + translateY 는 창 높이가 내용에 따라 변할 때 미묘하게 어긋납니다. */
 .vn__face {
+  transition: outline-color 260ms ease;
   flex: none;
   width: 148px;
   height: 148px;
@@ -128,6 +135,7 @@
    모드와 대사·내레이션 네 경우가 모두 같은 폭을 써서 바가 늘 같은
    자리에 옵니다. */
 .vn__name {
+  transition: color 260ms ease, border-color 260ms ease;
   /* **min-width 가 아니라 고정 폭.** 최소 폭으로 두면 「명진혁 코치」
      처럼 긴 이름에서 칸이 늘어 바가 오른쪽으로 밀리고, 그 줄만 글
      시작 자리가 달라집니다. */

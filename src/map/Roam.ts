@@ -16,7 +16,7 @@ import {
   type Line,
 } from "../core/types";
 import { CampusScene, type MiniData } from "./CampusScene";
-import { HEROINE_BY_NAME, SUB_THEME, MAP_NAME, PLAYER_THEME, THEME, label } from "../core/types";
+import { HEROINE_BY_NAME, MAP_NAME, PLAYER_THEME, label, themeOf } from "../core/types";
 import { MAP_DESIGN, scoutName } from "./sprites";
 
 type Block = Extract<Line, { t: "freeroam" }>;
@@ -421,10 +421,9 @@ export class Roam {
     const left = this.cast()
       .filter((n) => !here || n.map === here)
       .map((n) => {
-        const id = HEROINE_BY_NAME[n.who];
         return {
           who: label(n.who),
-          color: id ? THEME[id] : (SUB_THEME[n.who] ?? "#b4485a"),
+          color: themeOf(n.who),
           met: !rest.some((r) => r.who === n.who),
         };
       });
