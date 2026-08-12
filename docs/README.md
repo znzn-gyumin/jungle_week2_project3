@@ -24,7 +24,7 @@
 | [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 — 사양은 [WORLD_BIBLE 11](./WORLD_BIBLE.md#11-ui-톤) · 에셋은 [assets/README](../assets/README.md#ui) | **확정** |
 | [reference/character/preview_cg.html](./reference/character/preview_cg.html) | CG 90장 눈으로 대조 | — |
 | [reference/character/preview_dot.html](./reference/character/preview_dot.html) | 도트 18종 · 아바타 36컷 대조 | — |
-| [`../src/script/`](../src/script) | **실제 대사** — 105씬 2,115줄 | **확정** |
+| [`../src/script/`](../src/script) | **실제 대사** — 125씬 2,151줄 | **확정** |
 
 ---
 
@@ -202,4 +202,4 @@ grep -rn "옛이름" docs/ assets/ src/ tools/ README.md
 
 **BGM 8곡과 로그인 배경 1장이 아직 없습니다.** `public/audio/bgm/` 은 디렉터리부터 만들어야 합니다. 효과음은 `@se` 가 한 번도 안 쓰여서 필요 없습니다.
 
-**대사 2,115줄이 실제로 돕니다.** 파서가 105씬을 오류 없이 컴파일했고, 프롤로그부터 엔딩까지 걸어서 확인했습니다 — 성별 필터 · 호칭 4단계 · 줄 조건 · 엔딩 판정이 정본대로 움직입니다. 남은 건 배경·CG(6번)와 Phaser 맵(8번)이라, 지금 화면은 대사창뿐이고 자유 이동은 NPC 목록으로 대신합니다.
+**대사 2,151줄이 실제로 돕니다.** 파서가 105씬을 오류 없이 컴파일했고, 프롤로그부터 엔딩까지 걸어서 확인했습니다 — 성별 필터 · 호칭 4단계 · 줄 조건 · 엔딩 판정이 정본대로 움직입니다. 남은 건 배경·CG(6번)와 Phaser 맵(8번)이라, 지금 화면은 대사창뿐이고 자유 이동은 NPC 목록으로 대신합니다.

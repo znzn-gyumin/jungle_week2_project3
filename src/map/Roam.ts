@@ -123,9 +123,15 @@ export class Roam {
   }
 
   private talk(n: FreeroamNpc): void {
+    // 이미 만난 사람이면 한 마디만 하고 횟수를 안 씁니다
+    if (this.met.includes(n.who === '태연' ? '태윤' : n.who)) {
+      this.scene?.setPaused(true);
+      this.onTalk(n.target);
+      return;
+    }
     this.left--;
     this.met.push(n.who === '태연' ? '태윤' : n.who);
-    this.scene?.removeNpc(n.who);
+    this.scene?.removeNpc(n.who, this.idleScene(n));
     // 맵을 숨기지 않습니다 — 걷다가 말을 건 자리에서 그대로 대화합니다
     this.scene?.setPaused(true);
     this.onTalk(n.target);
@@ -141,6 +147,17 @@ export class Roam {
     if (this.left <= 0 || !this.usable().length) return this.finish();
     this.scene?.setPaused(false);
     this.updateGuide();
+  }
+
+  /**
+   * 다시 말을 걸었을 때 쓸 씬. 상황에 맞아야 하므로 **자유 이동 구간별로**
+   * 다릅니다 (src/script/common/idle.vns).
+   */
+  private idleScene(n: FreeroamNpc): string {
+    const id = HEROINE_BY_NAME[n.who];
+    if (id) return `idle_${id}_${this.block.id}`;
+    if (n.who === '명진혁') return 'idle_coach_midproject';
+    return 'idle_scout_finalprep';
   }
 
   /** 미니맵을 DOM 캔버스에 그립니다 — 장치 픽셀 그대로라 또렷합니다 */
@@ -180,13 +197,13 @@ export class Roam {
     // 아직 안 만난 사람은 `!`, 이미 만난 사람은 속 빈 동그라미입니다.
     for (const n of d.npcs) {
       if (n.met) {
+        // 속은 그 사람 테마색, 테두리는 검정 — 어느 바닥색 위에서도 보입니다
         g.beginPath();
-        g.arc(n.x * s, n.y * s, 4, 0, Math.PI * 2);
-        g.lineWidth = 2.4;
-        g.strokeStyle = '#ffffff';
-        g.stroke();
-        g.lineWidth = 1.6;
-        g.strokeStyle = n.theme;
+        g.arc(n.x * s, n.y * s, 4.2, 0, Math.PI * 2);
+        g.fillStyle = n.theme;
+        g.fill();
+        g.lineWidth = 1.8;
+        g.strokeStyle = '#2a2632';
         g.stroke();
         continue;
       }

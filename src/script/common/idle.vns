@@ -1,0 +1,88 @@
+// 이미 만난 사람에게 다시 말을 걸었을 때 · 한 마디씩
+// 씬 ID = idle_<루트ID>_<자유이동ID>. 재생기가 만난 사람에게 이걸 겁니다.
+//
+// **상황에 안 맞는 말을 하면 안 됩니다.** 자유 이동 셋은 시각도 상태도 다릅니다 —
+//   prologue    D1 16:30 · 배정 직후, 아직 아무 일도 없음
+//   midproject  D5 23:00 · 미니 프로젝트 밤샘 중
+//   finalprep   D8 저녁  · 파이널 팀 빌딩이 막 끝남
+// 어미 규칙은 docs/CHARACTERS.md 2절을 그대로 따릅니다.
+
+=== idle_minah_prologue ===
+민아 [기본] "…또 뭐."
+-> back
+
+=== idle_minah_midproject ===
+민아 [화남] "…아직 안 끝났어."
+-> back
+
+=== idle_minah_finalprep ===
+민아 [기본] "…할 말 없으면 가."
+-> back
+
+=== idle_seunghee_prologue ===
+승희 [부끄러움] "…아, 네. 저는 괜찮아요."
+-> back
+
+=== idle_seunghee_midproject ===
+승희 [부끄러움] "…저는 좀 더 있다 갈게요."
+-> back
+
+=== idle_seunghee_finalprep ===
+승희 [슬픔] "…내일 봬요."
+-> back
+
+=== idle_yunjung_prologue ===
+윤정 [기쁨] "어? 아직 안 가셨어요~?"
+-> back
+
+=== idle_yunjung_midproject ===
+윤정 [기본] "저 지금 집중 모드라서요. 이따 불러주세요!"
+-> back
+
+=== idle_yunjung_finalprep ===
+윤정 [기쁨] "발표 자료 보고 있었어요~"
+-> back
+
+=== idle_mingyu_prologue ===
+민규 [기본] "어."
+-> back
+
+=== idle_mingyu_midproject ===
+민규 [기본] "…하고 있어."
+-> back
+
+=== idle_mingyu_finalprep ===
+민규 [기본] "아직 안 정했어."
+-> back
+
+=== idle_seungmin_prologue ===
+승민 [기쁨] "필요한 거 있으면 언제든 말해요."
+-> back
+
+=== idle_seungmin_midproject ===
+승민 [기쁨] "커피 남았는데, 가져다 줄까요?"
+-> back
+
+=== idle_seungmin_finalprep ===
+승민 [기쁨] "무리하지 말고요. 나흘 남았어요."
+-> back
+
+=== idle_yunho_prologue ===
+윤호 [기쁨] "저 아직 정리 중이에요~"
+-> back
+
+=== idle_yunho_midproject ===
+윤호 [기쁨] "저쪽 도와주러 가는 길이었어요!"
+-> back
+
+=== idle_yunho_finalprep ===
+윤호 [기쁨] "내일 봬요~ 오늘은 일찍 자세요!"
+-> back
+
+=== idle_coach_midproject ===
+명진혁 "아직 안 자요?"
+-> back
+
+=== idle_scout_finalprep ===
+태윤 "구경은 다 했어요?"
+-> back

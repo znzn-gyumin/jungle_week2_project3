@@ -77,7 +77,12 @@ export class CampusScene extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private interactKey!: Phaser.Input.Keyboard.Key;
   private lighting!: LightingOverlay;
-  private npcSprites: { npc: FreeroamNpc; sprite: Phaser.GameObjects.Image; mark: Phaser.GameObjects.Text }[] = [];
+  private npcSprites: {
+    npc: FreeroamNpc;
+    sprite: Phaser.GameObjects.Image;
+    mark: Phaser.GameObjects.Text;
+    met: boolean;
+  }[] = [];
   /** 이미 만난 사람 — 자리에는 남지만 말은 못 겁니다 */
   private stayed: Phaser.GameObjects.Image[] = [];
   /** 미니맵에 동그라미로 남길 사람들 */
@@ -220,12 +225,14 @@ export class CampusScene extends Phaser.Scene {
       blocked,
       stairs: this.portals.map((p) => ({ x: p.rect.x / TS, y: p.rect.y / TS, dir: p.dir })),
       npcs: [
-        ...this.npcSprites.map((n) => ({
-          x: n.sprite.x / TS,
-          y: n.sprite.y / TS,
-          theme: npcTheme(n.npc.who),
-          met: false,
-        })),
+        ...this.npcSprites
+          .filter((n) => !n.met)
+          .map((n) => ({
+            x: n.sprite.x / TS,
+            y: n.sprite.y / TS,
+            theme: npcTheme(n.npc.who),
+            met: false,
+          })),
         ...this.metMarks,
       ],
     };
@@ -383,7 +390,7 @@ export class CampusScene extends Phaser.Scene {
         ease: 'Sine.inOut',
       });
       this.uiCam?.ignore([s, mark]);
-      this.npcSprites.push({ npc: n, sprite: s, mark });
+      this.npcSprites.push({ npc: n, sprite: s, mark, met: false });
     }
   }
 
@@ -392,13 +399,14 @@ export class CampusScene extends Phaser.Scene {
    * 사라지게 하면 대화할 때마다 사람이 하나씩 없어져 교육장이 비어 갑니다 —
    * 사양도 「상호작용 아이콘이 사라진다」이지 사람이 사라진다가 아닙니다.
    */
-  removeNpc(who: string): void {
+  removeNpc(who: string, idle: string): void {
     const found = this.npcSprites.find((x) => x.npc.who === who);
-    // 흐리게 하지 않습니다 — 말을 걸었다고 사람이 반투명해질 이유가 없습니다.
-    // 말을 못 걸게 되는 것은 목록에서 빠지는 것으로 충분합니다.
+    // 사람은 자리에 그대로 두고 **말 거는 곳만 바꿉니다** — 다시 걸면
+    // 그 상황에 맞는 한 마디를 합니다.
     if (found) {
-      found.mark.destroy();
-      this.stayed.push(found.sprite);
+      found.mark.setVisible(false);
+      found.npc = { who: found.npc.who, map: found.npc.map, target: idle };
+      found.met = true;
       this.metMarks.push({
         x: found.sprite.x / TS,
         y: found.sprite.y / TS,
@@ -406,7 +414,6 @@ export class CampusScene extends Phaser.Scene {
         met: true,
       });
     }
-    this.npcSprites = this.npcSprites.filter((x) => x.npc.who !== who);
     this.setup.npcs = this.setup.npcs.filter((n) => n.who !== who);
 
     // 미니맵 자료는 맵을 읽을 때 한 번 만들어집니다. 사람이 빠지면
@@ -490,12 +497,12 @@ export class CampusScene extends Phaser.Scene {
       .filter((x) => x.d < REACH)
       .sort((a, b) => a.d - b.d)[0];
 
-    for (const { npc, mark } of this.npcSprites) {
-      mark.setText('!').setColor(npcTheme(npc.who)).setFontSize(20);
+    for (const { npc, mark, met } of this.npcSprites) {
+      if (!met) mark.setText('!').setColor(npcTheme(npc.who)).setFontSize(20);
     }
     this.hint.setVisible(Boolean(near));
     if (near) {
-      near.mark.setText('스페이스').setColor('#ffffff').setFontSize(13);
+      near.mark.setVisible(true).setText('스페이스').setColor('#ffffff').setFontSize(13);
       this.hint.setText(`${near.npc.who} 에게 말을 겁니다 — 스페이스`);
       this.hint.setPosition(16, this.cameras.main.height - 34);
       if (Phaser.Input.Keyboard.JustDown(this.interactKey)) {
