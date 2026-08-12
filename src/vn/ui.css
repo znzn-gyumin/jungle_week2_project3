@@ -274,10 +274,9 @@
 }
 
 /* 반신은 왼쪽 아래에 흉상으로 섭니다 — 대사창 위로 걸쳐 얼굴이 크게 보입니다.
-   무대(.vn__stage)를 넘어 아래로 내려가야 하므로 높이를 넉넉히 잡습니다. */
-.stage__char {
-  top: 0;
-  bottom: 0;
+   **선택자에 img 를 붙입니다.** `.vn__stage > img` 가 (0,1,1) 이라 여기서
+   높이와 bottom 을 아무리 적어도 (0,1,0) 이면 눌립니다. */
+.vn__stage > img.stage__char {
   left: 0;
   right: 0;
   /* 대사창 위에서 끝납니다 — 창 아래로 내려가면 다리만 보입니다 */
@@ -413,29 +412,37 @@
 
 .roam-tutorial {
   position: absolute;
-  right: 2.2rem;
-  bottom: 2.2rem;
+  /* **중앙 하단.** 오른쪽 구석은 미니맵·안내와 겹치고, 가운데면 걸으면서
+     눈을 안 떼도 됩니다. 뒤가 비치므로 맵을 가리지 않습니다. */
+  left: 50%;
+  bottom: 2.4rem;
+  transform: translateX(-50%);
   z-index: 8;
-  width: 22rem;
-  padding: 1.1rem 1.3rem;
+  width: max-content;
+  max-width: 90%;
+  padding: 0.85rem 1.5rem;
   transition: opacity 500ms ease, transform 500ms ease;
-  color: #6b4038;
-  background: linear-gradient(180deg, #fffdf9f7, #fdf1e6f7);
-  border: 1px solid var(--theme, #f0d9c8);
-  border-radius: 26px;
-  box-shadow: 0 14px 40px rgb(60 40 50 / 40%), 0 2px 0 #fff inset;
+  color: #fff;
+  background: rgb(24 20 32 / 34%);
+  backdrop-filter: blur(9px) saturate(1.2);
+  border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 30%);
+  text-shadow: 0 1px 3px rgb(0 0 0 / 55%);
 }
 
 .roam-tutorial.is-over {
   opacity: 0;
-  transform: translateY(14px);
+  transform: translateX(-50%) translateY(14px);
 }
 
 .roam-tutorial__title {
-  margin: 0 0 0.8rem;
-  font-size: 1.05rem;
+  margin: 0 0 0.55rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  color: var(--theme, #e0567b);
+  letter-spacing: 0.06em;
+  color: #fff;
+  opacity: 0.7;
 }
 
 .roam-tutorial dl {
@@ -521,8 +528,10 @@
 
 /* 해본 것에 체크가 들어갑니다 — 지금 할 일만 또렷하게 둡니다 */
 .roam-tutorial__steps {
-  display: grid;
-  gap: 0.45rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1.4rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -530,20 +539,18 @@
 }
 
 .roam-tutorial__steps li {
-  display: grid;
-  grid-template-columns: 1.4rem auto 1fr;
+  display: flex;
   align-items: baseline;
-  gap: 0 0.6rem;
-  font-size: 0.9rem;
-  color: #a08d86;
-  opacity: 0.55;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  color: #fff;
+  opacity: 0.42;
   transition: opacity 240ms ease;
 }
 
 .roam-tutorial__steps li::before {
   content: '○';
-  font-size: 0.8rem;
-  color: #c7b6ae;
+  font-size: 0.75rem;
 }
 
 .roam-tutorial__steps li b {
@@ -553,26 +560,24 @@
 
 .roam-tutorial__steps .is-now {
   opacity: 1;
-  color: #6b4038;
 }
 
 .roam-tutorial__steps .is-now::before {
   content: '▸';
-  color: var(--theme, #e0567b);
+  color: var(--theme, #ffd166);
   animation: vn-bob 900ms ease-in-out infinite;
 }
 
-.roam-tutorial__steps .is-now b { color: var(--theme, #b4485a); }
+.roam-tutorial__steps .is-now b { color: var(--theme, #ffd166); }
 
 .roam-tutorial__steps .is-done {
-  opacity: 0.75;
-  color: #9a8b84;
+  opacity: 0.5;
   text-decoration: line-through;
-  text-decoration-color: #d8c8c0;
+  text-decoration-color: rgb(255 255 255 / 45%);
 }
 
 .roam-tutorial__steps .is-done::before {
   content: '✓';
-  color: #7fbf8f;
+  color: #8fe0a4;
   text-decoration: none;
 }
