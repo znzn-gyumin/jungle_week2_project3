@@ -778,18 +778,22 @@
 }
 
 /* 대사가 아래에서 자기 자리로 올라옵니다. 이름과 세로 바는 안
-   움직입니다 — 기준선까지 같이 흔들리면 자리를 찾는 느낌이 안 납니다. */
+   움직입니다 — 기준선까지 같이 흔들리면 자리를 찾는 느낌이 안 납니다.
+
+   **backwards 가 핵심입니다.** 이게 없으면 클래스를 붙인 프레임에
+   글이 제자리에 또렷하게 한 번 그려진 뒤 다음 프레임에 시작 위치로
+   내려갑니다 — 올라가다 뚝 떨어지는 것처럼 보이던 게 이것입니다. */
 .vn__text.is-in {
-  animation: vn-said-in 340ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: vn-said-in 300ms ease-out backwards;
 }
 
 @keyframes vn-said-in {
   0% {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(10px);
   }
 
-  60% { opacity: 1; }
+  55% { opacity: 1; }
 
   100% {
     opacity: 1;

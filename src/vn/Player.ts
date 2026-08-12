@@ -15,6 +15,7 @@ import type { TimeOfDay } from '../config/lighting';
 import { Backdrop } from '../map/Backdrop';
 import { Roam } from '../map/Roam';
 import { Stage } from './Stage';
+import { play as playBgm } from '../audio/bgm';
 import { Typewriter } from './Typewriter';
 
 /** 주인공 이름표는 언제나 `나` 입니다 (WORLD_BIBLE 11) */
@@ -276,8 +277,10 @@ export class Player {
           }
           continue;
         default:
-          if (line.t === 'bgm') this.bgm = line.id;
-          // 오디오는 아직 없습니다 (BGM 8곡 미확보)
+          if (line.t === 'bgm') {
+            this.bgm = line.id;
+            playBgm(line.id);
+          }
           this.stageEl.dataset.note = describe(line);
           continue;
       }

@@ -10,6 +10,7 @@ import "./vn/ui.css";
 
 import script from "virtual:script";
 import { newGame } from "./core/state";
+import { play as playBgm } from "./audio/bgm";
 import { mountCursor } from "./ui/cursor";
 import { Player } from "./vn/Player";
 
@@ -322,6 +323,8 @@ function titleScreen(app: HTMLElement): void {
 function boot(): void {
   setFavicon();
   mountCursor();
+  // 첫 화면 곡. 브라우저가 막으면 첫 입력 때 알아서 다시 겁니다.
+  playBgm('title');
   const app = document.querySelector<HTMLDivElement>("#app");
   if (!app) throw new Error("#app 이 없습니다");
   titleScreen(app);
