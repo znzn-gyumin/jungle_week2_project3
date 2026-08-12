@@ -403,3 +403,55 @@
 .roam-guide__keys b {
   color: #6b4038;
 }
+
+
+/* ---- 첫 자유 이동의 조작 안내 */
+
+.roam-tutorial {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 8;
+  width: min(30rem, 70%);
+  padding: 1.6rem 1.8rem;
+  text-align: center;
+  color: #6b4038;
+  background: linear-gradient(180deg, #fffdf9f7, #fdf1e6f7);
+  border: 1px solid var(--theme, #f0d9c8);
+  border-radius: 26px;
+  box-shadow: 0 14px 40px rgb(60 40 50 / 40%), 0 2px 0 #fff inset;
+}
+
+.roam-tutorial__title {
+  margin: 0 0 1rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--theme, #e0567b);
+}
+
+.roam-tutorial dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  text-align: left;
+}
+
+.roam-tutorial dt {
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--theme, #b4485a);
+}
+
+.roam-tutorial dd {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.roam-tutorial__close {
+  margin: 1.2rem 0 0;
+  font-size: 0.85rem;
+  color: #a98a9a;
+  animation: vn-blink 1.8s ease-in-out infinite;
+}

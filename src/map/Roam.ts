@@ -67,6 +67,9 @@ export class Roam {
     this.guideEl.className = 'roam-guide';
     hud.append(this.miniEl, this.guideEl);
     this.host.append(hud);
+
+    // 처음 걷는 자리에서 조작을 한 번 알려줍니다. 아무 키나 누르면 닫힙니다.
+    if (this.block.id === 'prologue') this.showTutorial();
     this.game = new Phaser.Game({
       type: Phaser.AUTO,
       parent: this.host,
@@ -160,6 +163,29 @@ export class Roam {
     return 'idle_scout_finalprep';
   }
 
+  /** 첫 자유 이동에서 한 번만 — 조작을 모르면 아무 데도 못 갑니다 */
+  private showTutorial(): void {
+    const el = document.createElement('div');
+    el.className = 'roam-tutorial';
+    el.innerHTML = `
+      <p class="roam-tutorial__title">움직여 볼까요</p>
+      <dl>
+        <dt>방향키</dt><dd>걸어다니기</dd>
+        <dt>스페이스</dt><dd>사람에게 말 걸기 · 대사 넘기기</dd>
+        <dt>느낌표</dt><dd>아직 말 안 걸어 본 사람</dd>
+        <dt>화살표</dt><dd>계단 — 표시된 방향으로만 지나갑니다</dd>
+      </dl>
+      <p class="roam-tutorial__close">아무 키나 눌러서 시작</p>`;
+    this.host.append(el);
+    const close = () => {
+      el.remove();
+      window.removeEventListener('keydown', close);
+      window.removeEventListener('mousedown', close);
+    };
+    window.addEventListener('keydown', close);
+    window.addEventListener('mousedown', close);
+  }
+
   /** 미니맵을 DOM 캔버스에 그립니다 — 장치 픽셀 그대로라 또렷합니다 */
   private drawMini(): void {
     const el = this.miniEl;
@@ -197,14 +223,14 @@ export class Roam {
     // 아직 안 만난 사람은 `!`, 이미 만난 사람은 속 빈 동그라미입니다.
     for (const n of d.npcs) {
       if (n.met) {
-        // 속은 그 사람 테마색, 테두리는 검정 — 어느 바닥색 위에서도 보입니다
+        // 느낌표와 같은 방식 — 흰 테두리를 먼저 두르고 테마색으로 채웁니다
         g.beginPath();
         g.arc(n.x * s, n.y * s, 4.2, 0, Math.PI * 2);
+        g.lineWidth = 3;
+        g.strokeStyle = '#ffffff';
+        g.stroke();
         g.fillStyle = n.theme;
         g.fill();
-        g.lineWidth = 1.8;
-        g.strokeStyle = '#2a2632';
-        g.stroke();
         continue;
       }
       g.lineWidth = 3;
