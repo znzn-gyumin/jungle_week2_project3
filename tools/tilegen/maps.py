@@ -226,14 +226,15 @@ def m1(TS_):
     m.place(E, "bookshelf", 31, 8)
 
     # ---- 계단 — **네 층이 같은 자리를 씁니다** (WORLD_BIBLE 3절)
-    #   올라가는 계단  (20,3)  · 아래에서만 들어간다 · 앞칸 (20,5)
-    #   내려가는 계단  (30,24) · 위에서만 들어간다  · 앞칸 (30,25)
+    #   올라가는 계단  (20,3)  · 위쪽 벽을 등진다 · 아래에서만 · 앞칸 (20,5)
+    #   내려가는 계단  (15,25) · 아래쪽 벽을 등진다 · 위에서만 · 앞칸 (15,24)
+    # 네 층에서 y 23~25 가 다 비어 있는 x 구간이 14~18 뿐이라 그 안에서 잡았다.
     # 올라가면 위층의 「내려가는 계단 앞」 에, 내려가면 아래층의
     # 「올라가는 계단 앞」 에 나온다 — 되돌아가려면 뒤로 한 발이면 된다.
     # 4F 는 꼭대기라 내려가는 계단만 있다 (3F 는 만들지 않는다)
-    m.place(E, "stairs_down", 30, 24)
-    m.portal("m2_basecamp_2f", 30, 24, 20, 5, name="stairs_to_2f")
-    m.portal("m2_basecamp_2f", 31, 24, 20, 5, name="stairs_to_2f")
+    m.place(E, "stairs_down", 15, 25)
+    m.portal("m2_basecamp_2f", 15, 25, 20, 5, name="stairs_to_2f")
+    m.portal("m2_basecamp_2f", 16, 25, 20, 5, name="stairs_to_2f")
     m.trigger("spawn_default", 14, 9, kind="spawn")
     return m
 
@@ -309,16 +310,17 @@ def m2(TS_):
               seat="가운데 줄 · 넷이 나란히", note="화면 넷이 다 켜져 있다")
 
     # ---- 계단 — **네 층이 같은 자리를 씁니다** (WORLD_BIBLE 3절)
-    #   올라가는 계단  (20,3)  · 아래에서만 들어간다 · 앞칸 (20,5)
-    #   내려가는 계단  (30,24) · 위에서만 들어간다  · 앞칸 (30,25)
+    #   올라가는 계단  (20,3)  · 위쪽 벽을 등진다 · 아래에서만 · 앞칸 (20,5)
+    #   내려가는 계단  (15,25) · 아래쪽 벽을 등진다 · 위에서만 · 앞칸 (15,24)
+    # 네 층에서 y 23~25 가 다 비어 있는 x 구간이 14~18 뿐이라 그 안에서 잡았다.
     # 올라가면 위층의 「내려가는 계단 앞」 에, 내려가면 아래층의
     # 「올라가는 계단 앞」 에 나온다 — 되돌아가려면 뒤로 한 발이면 된다.
     m.place(E, "stairs_up", 20, 3)
-    m.portal("m1_basecamp_4f", 20, 4, 30, 25, name="stairs_to_4f")
-    m.portal("m1_basecamp_4f", 21, 4, 30, 25, name="stairs_to_4f")
-    m.place(E, "stairs_down", 30, 24)
-    m.portal("m3_basecamp_1f", 30, 24, 20, 5, name="stairs_to_1f")
-    m.portal("m3_basecamp_1f", 31, 24, 20, 5, name="stairs_to_1f")
+    m.portal("m1_basecamp_4f", 20, 4, 15, 24, name="stairs_to_4f")
+    m.portal("m1_basecamp_4f", 21, 4, 15, 24, name="stairs_to_4f")
+    m.place(E, "stairs_down", 15, 25)
+    m.portal("m3_basecamp_1f", 15, 25, 20, 5, name="stairs_to_1f")
+    m.portal("m3_basecamp_1f", 16, 25, 20, 5, name="stairs_to_1f")
     m.trigger("spawn_default", 20, 5, kind="spawn")
     return m
 
@@ -379,16 +381,17 @@ def m3(TS_):
     m.trigger("parcel", 38, 13, w=3, h=1, kind="interact", label="택배보관소")
 
     # ---- 계단 — **네 층이 같은 자리를 씁니다** (WORLD_BIBLE 3절)
-    #   올라가는 계단  (20,3)  · 아래에서만 들어간다 · 앞칸 (20,5)
-    #   내려가는 계단  (30,24) · 위에서만 들어간다  · 앞칸 (30,25)
+    #   올라가는 계단  (20,3)  · 위쪽 벽을 등진다 · 아래에서만 · 앞칸 (20,5)
+    #   내려가는 계단  (15,25) · 아래쪽 벽을 등진다 · 위에서만 · 앞칸 (15,24)
+    # 네 층에서 y 23~25 가 다 비어 있는 x 구간이 14~18 뿐이라 그 안에서 잡았다.
     # 올라가면 위층의 「내려가는 계단 앞」 에, 내려가면 아래층의
     # 「올라가는 계단 앞」 에 나온다 — 되돌아가려면 뒤로 한 발이면 된다.
     m.place(E, "stairs_up", 20, 3)
-    m.portal("m2_basecamp_2f", 20, 4, 30, 25, name="stairs_to_2f")
-    m.portal("m2_basecamp_2f", 21, 4, 30, 25, name="stairs_to_2f")
-    m.place(E, "stairs_down", 30, 24)                # B1 (정글스테이지 · 카페테리아 · 편의점)
-    m.portal("m4_basecamp_b1", 30, 24, 20, 5, name="stairs_to_b1")
-    m.portal("m4_basecamp_b1", 31, 24, 20, 5, name="stairs_to_b1")
+    m.portal("m2_basecamp_2f", 20, 4, 15, 24, name="stairs_to_2f")
+    m.portal("m2_basecamp_2f", 21, 4, 15, 24, name="stairs_to_2f")
+    m.place(E, "stairs_down", 15, 25)                # B1 (정글스테이지 · 카페테리아 · 편의점)
+    m.portal("m4_basecamp_b1", 15, 25, 20, 5, name="stairs_to_b1")
+    m.portal("m4_basecamp_b1", 16, 25, 20, 5, name="stairs_to_b1")
     m.place(E, "vending", 24, 3)
     m.set_obj(25, 4, E, "water_cooler", 0)
 
@@ -456,14 +459,15 @@ def m4(TS_):
     m.trigger("grab_and_go", 41, 22, w=1, h=1, kind="interact", label="그랩앤고")
 
     # ---- 계단 — **네 층이 같은 자리를 씁니다** (WORLD_BIBLE 3절)
-    #   올라가는 계단  (20,3)  · 아래에서만 들어간다 · 앞칸 (20,5)
-    #   내려가는 계단  (30,24) · 위에서만 들어간다  · 앞칸 (30,25)
+    #   올라가는 계단  (20,3)  · 위쪽 벽을 등진다 · 아래에서만 · 앞칸 (20,5)
+    #   내려가는 계단  (15,25) · 아래쪽 벽을 등진다 · 위에서만 · 앞칸 (15,24)
+    # 네 층에서 y 23~25 가 다 비어 있는 x 구간이 14~18 뿐이라 그 안에서 잡았다.
     # 올라가면 위층의 「내려가는 계단 앞」 에, 내려가면 아래층의
     # 「올라가는 계단 앞」 에 나온다 — 되돌아가려면 뒤로 한 발이면 된다.
     # GAME_DESIGN 6-3 정본: M4 → M3. B1 은 1F 아래라 올라가는 계단만 있다.
     m.place(E, "stairs_up", 20, 3)
-    m.portal("m3_basecamp_1f", 20, 4, 30, 25, name="stairs_to_1f")
-    m.portal("m3_basecamp_1f", 21, 4, 30, 25, name="stairs_to_1f")
+    m.portal("m3_basecamp_1f", 20, 4, 15, 24, name="stairs_to_1f")
+    m.portal("m3_basecamp_1f", 21, 4, 15, 24, name="stairs_to_1f")
     m.trigger("spawn_default", 20, 5, kind="spawn")
     return m
 

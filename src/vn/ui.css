@@ -882,22 +882,16 @@
 }
 
 
-/* 지금 어디인지 — 오른쪽 위. 층을 오가다 보면 금방 헷갈립니다. */
+/* 지금 어디인지 — 미니맵 상자 맨 위. 지도 바로 위에 있어야 이 지도가
+   어디인지 눈으로 이어집니다. */
 .roam-where {
-  position: absolute;
-  right: 1.6rem;
-  top: 1.6rem;
-  z-index: 7;
-  margin: 0;
-  padding: 0.4rem 1.1rem;
-  font-size: 0.86rem;
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-  color: #fff;
-  background: rgb(24 20 32 / 42%);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgb(255 255 255 / 20%);
-  border-radius: 999px;
-  text-shadow: 0 1px 4px rgb(0 0 0 / 70%);
-  pointer-events: none;
+  margin: 0 0 0.55rem;
+  padding: 0 0 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: var(--theme, #b4485a);
+  border-bottom: 1px solid var(--theme, #f0d9c8);
 }
+
