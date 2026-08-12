@@ -347,8 +347,8 @@ BG_ENDING = {
     """),
 }
 BG_ENDING_KR = {"office": "오피스", "gallery": "전시장", "winebar": "와인바 테라스 (밤)"}
-BG_ENDING_FILE = {"office": "epilogue/office.png", "gallery": "epilogue/gallery.png",
-                  "winebar": "epilogue/winebar.png"}
+BG_ENDING_FILE = {"office": "epilogue/office.webp", "gallery": "epilogue/gallery.webp",
+                  "winebar": "epilogue/winebar.webp"}
 
 # 엔딩 다섯은 낮·실내라 어둠을 막지만 민아만 밤이다.
 NEG_NIGHT = "10대 같은 인상, 밤 장면, 어둠,"
@@ -406,7 +406,7 @@ def main() -> int:
         dict(
             key="garden", num="①",
             title="① D7 새벽 커넥트가든 → 여명",
-            bg=BG_GARDEN, bg_ref="connect_garden.png",
+            bg=BG_GARDEN, bg_ref="connect_garden.webp",
             tone="심야(먹빛 남색) → **여명(보라→파랑)**",
             light="광원은 발밑 조명과 건물 창 불빛뿐입니다. 그 외 광원은 두지 마세요.",
             neg=NEG_BASE + "\n" + NEG_DARK + "\n여러 명, 군중.",
@@ -423,7 +423,7 @@ def main() -> int:
         dict(
             key="classroom", num="②",
             title="② D9 클라이맥스 — 교육장 403 심야",
-            bg=BG_CLASSROOM, bg_ref="classroom_1.png",
+            bg=BG_CLASSROOM, bg_ref="classroom_1.webp",
             tone="심야(먹빛 남색 · 점광원만)",
             light="광원은 모니터 두세 대뿐입니다. 그 외 광원은 두지 마세요.",
             neg=NEG_BASE + "\n" + NEG_DARK.rstrip(","),
@@ -442,7 +442,7 @@ def main() -> int:
     idx = 1
     for sc in scenes:
         for h in HEROINES:
-            aux = ("\n\n    보조 참고로 `community_lounge_1.png` 도 함께 넣으세요 — "
+            aux = ("\n\n    보조 참고로 `community_lounge_1.webp` 도 함께 넣으세요 — "
                    "4F 라운지에서 시작해 가든으로 내려오는 씬입니다."
                    if sc["key"] == "garden" and h["id"] in ("seunghee", "seungmin") else "")
             attach = ATTACH_CAMPUS.format(bg=sc['bg_ref'], kr=h['kr'], face=h[sc['key'] + '_face']) + aux

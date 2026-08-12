@@ -26,9 +26,9 @@ COMMON = ['p_arrival', 'p_orientation', 'p_friend', 'p_freeroam', 'p_night',
           'e_ceremony', 'e_solo']
 PLANNED = {'r_%s_%s' % (r, b) for r in ROUTES for b in BATCH} | set(COMMON)
 
-CG = {os.path.splitext(os.path.basename(f))[0] for f in glob.glob('assets/cg/event/*.png')}
+CG = {os.path.splitext(os.path.basename(f))[0] for f in glob.glob('assets/cg/event/*.webp')}
 BG = {os.path.splitext(os.path.basename(f))[0]
-      for f in glob.glob('assets/bg/*/*.png') + glob.glob('assets/bg/campus/*/*.png')}
+      for f in glob.glob('assets/bg/*/*.webp') + glob.glob('assets/bg/campus/*/*.webp')}
 
 files = sorted(glob.glob('src/script/**/*.vns', recursive=True))
 scenes, labels, jumps, bad = {}, collections.defaultdict(set), [], []

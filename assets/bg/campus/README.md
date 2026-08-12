@@ -4,7 +4,7 @@
 
 **타일맵을 그릴 때 쓴 근거 자료**입니다. 캠퍼스 안은 게임에서 **도트 타일맵**으로 나오므로, 이 사진들이 배경으로 화면에 뜨지는 않습니다 ([GAME_DESIGN 6-3](../../../docs/GAME_DESIGN.md#6-3-맵과-배경)).
 
-**씬에 걸린 건 [`indoor/jungle_stage.png`](./indoor/jungle_stage.png) 하나뿐**입니다 — D12 수료식. 나머지 열여섯은 참고용이지만, 필요해질 때 바로 쓸 수 있게 여기 둡니다.
+**씬에 걸린 건 [`indoor/jungle_stage.webp`](./indoor/jungle_stage.webp) 하나뿐**입니다 — D12 수료식. 나머지 열여섯은 참고용이지만, 필요해질 때 바로 쓸 수 있게 여기 둡니다.
 
 ---
 

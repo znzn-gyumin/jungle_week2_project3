@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/ui/logo.png" alt="jungLover" width="220">
+<img src="assets/ui/logo.webp" alt="jungLover" width="220">
 
 # jungLover
 

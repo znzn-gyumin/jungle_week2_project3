@@ -412,11 +412,11 @@
 
 | 스틸 | 장소 · 시각 | 레퍼런스 | 팔레트 |
 |---|---|---|---|
-| ① D7 커넥트가든 | 카페 앞 데크 · 02시 → 여명 | [`connect_garden.png`](../assets/bg/campus/outdoor/connect_garden.png) | 심야 → **여명**(보라→파랑) |
-| ② D9 교육장 403 | 심야 | [`classroom_1.png`](../assets/bg/campus/indoor/classroom_1.png) · [`classroom_2.png`](../assets/bg/campus/indoor/classroom_2.png) | 심야(먹빛 남색 · 점광원) |
+| ① D7 커넥트가든 | 카페 앞 데크 · 02시 → 여명 | [`connect_garden.webp`](../assets/bg/campus/outdoor/connect_garden.webp) | 심야 → **여명**(보라→파랑) |
+| ② D9 교육장 403 | 심야 | [`classroom_1.webp`](../assets/bg/campus/indoor/classroom_1.webp) · [`classroom_2.webp`](../assets/bg/campus/indoor/classroom_2.webp) | 심야(먹빛 남색 · 점광원) |
 | ③ 엔딩 | 5년 후 · 캠퍼스 아님 | **없음** — 와인바 / 전시장 / 오피스 ([6-3](#6-3-맵과-배경) 배경 5·5b·6) | — |
 
-팔레트는 [WORLD_BIBLE 8-1](./WORLD_BIBLE.md#8-1-시간대별-팔레트). 승희·승민의 ①은 4F 라운지에서 시작해 가든으로 내려오는 씬이라 [`community_lounge_1.png`](../assets/bg/campus/indoor/community_lounge_1.png)를 보조 참고로 쓸 수 있습니다.
+팔레트는 [WORLD_BIBLE 8-1](./WORLD_BIBLE.md#8-1-시간대별-팔레트). 승희·승민의 ①은 4F 라운지에서 시작해 가든으로 내려오는 씬이라 [`community_lounge_1.webp`](../assets/bg/campus/indoor/community_lounge_1.webp)를 보조 참고로 쓸 수 있습니다.
 
 **D7 외출에는 스틸을 두지 않습니다.** 장소가 셋이라 스틸로 처리하면 6인 × 3장소 = **18장이 더** 필요해집니다. 대신 **외출복 몸통 + 일러스트 배경 3장**([6-3](#6-3-맵과-배경))으로 받습니다 — 몸통 2종 중 하나가 이 날을 위해 있는 이유입니다 ([WORLD_BIBLE 4-4](./WORLD_BIBLE.md#4-4-외출-3곳-d7)).
 
@@ -472,7 +472,7 @@
 
 - **캠퍼스 안은 도트**이므로 D7에 **도트 → 실사 기반 한 장 배경**으로 낙차가 커집니다. "밖에 나왔다"는 감각을 화면으로 만든다는 [1-2](#1-2-캠퍼스-안--도트-이동--캠퍼스-밖--이벤트-씬)의 의도가 강해집니다
 - **에필로그가 다른 층에 있다는 건 엔딩 스틸이 만듭니다** — 5년 후 배경 넷은 지금 실사풍이라 그 자체로는 층이 갈리지 않습니다. 대신 **시간대 색조를 걸지 않아** 캠프 쪽과 온도가 달라지고, 씬의 중심인 엔딩 스틸이 회화풍이라 층 차이가 거기서 납니다
-- **아홉 장 모두 조달돼 있습니다** — ⑧은 캠퍼스 사진 [`jungle_stage.png`](../assets/bg/campus/indoor/jungle_stage.png)를 그대로 쓰고, 나머지 여덟은 `bg/outing` · `bg/epilogue`에 있습니다 ([목록](../assets/README.md#배경))
+- **아홉 장 모두 조달돼 있습니다** — ⑧은 캠퍼스 사진 [`jungle_stage.webp`](../assets/bg/campus/indoor/jungle_stage.webp)를 그대로 쓰고, 나머지 여덟은 `bg/outing` · `bg/epilogue`에 있습니다 ([목록](../assets/README.md#배경))
 
 **아홉 장 전부 회화풍으로 보정해서 씁니다.** 웹툰풍 그림 옆에 실사가 그대로 놓이면 이질감이 크므로, 채도·대비를 낮추고 흐립니다. **색조는 캠프 다섯(①~④·⑧)에만** 시간대 팔레트로 얹고, **5년 후 넷(⑤·⑤b·⑥·⑦)은 시간대 계통 밖이라 회화풍만** 겁니다. 값은 [`assets/README` 배경 보정](../assets/README.md#배경-보정)에 있습니다.
 

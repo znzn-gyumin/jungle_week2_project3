@@ -7,11 +7,11 @@
 ```
 assets/
 ├─ cg/
-│    standing/      {id}_{campus|outing}_{expr}.png    72   立ち絵
-│    event/         {id}_{garden|classroom|ending}.png 18   イベントCG
+│    standing/      {id}_{campus|outing}_{expr}.webp   72   立ち絵
+│    event/         {id}_{garden|classroom|ending}.webp 18  イベントCG
 ├─ dot/
-│    walk/          {id}.png                           18   192×256 시트
-│    face/          {id}_{expr}.png                    36   48×64 감정 아바타
+│    walk/          {id}.webp                          18   192×256 시트
+│    face/          {id}_{expr}.webp                   36   48×64 감정 아바타
 ├─ bg/
 │    outing/        4    D7 캠퍼스 밖
 │    epilogue/      4    5년 후
@@ -39,7 +39,7 @@ assets/
 
 | | |
 |---|---|
-| **반신** 캔버스 | **1024 × 1280px 세로(4:5) · 투명 배경 PNG** |
+| **반신** 캔버스 | **1024 × 1280px 세로(4:5) · 투명 배경 WebP q90** |
 | 크롭 | **가슴 위 반신.** 전신이 아니라 흉상입니다 — 얼굴이 크게 보여야 표정 6종이 일을 합니다 |
 | 인물 배치 | 캔버스 가로 중앙, 머리 위에 여백 5~8% |
 | **스틸** 캔버스 | **가로 16:9 · 불투명.** 배경까지 한 장에 그립니다 |
@@ -179,10 +179,10 @@ this.textures.get('dot_minah').setFilter(Phaser.Textures.FilterMode.LINEAR);
 
 | 파일 | |
 |---|---|
-| `intro_blank.png` | 프레임만 — 금빛 장식 네 귀 · 1920×1080 |
-| `intro_small.png` | 로고 작게 · 1920×1080 |
-| `intro_large.png` | 로고 크게 · 1920×1080 |
-| `logo.png` | 로고 단독 · 1254×1254 |
+| `intro_blank.webp` | 프레임만 — 금빛 장식 네 귀 · 1920×1080 |
+| `intro_small.webp` | 로고 작게 · 1920×1080 |
+| `intro_large.webp` | 로고 크게 · 1920×1080 |
+| `logo.webp` | 로고 단독 · 1254×1254 |
 
 > **네 장 다 배경이 구워져 있습니다** — RGBA인데 알파가 전부 255라 투명 픽셀이 하나도 없습니다. 게다가 배경이 단색이 아니라 **그라데이션**이어서, `logo`(`#0B0C17`~`#0E0E1B`)를 `intro_blank`(`#0A0A16`~`#0C0D1A`) 위에 얹으면 **사각형 경계가 보입니다.** 다른 화면에 재활용하려면 투명 버전이 따로 필요합니다.
 
@@ -207,17 +207,21 @@ below it, generous whitespace, no other ui elements, 16:9
 
 ## 용량
 
-**전부 PNG라 `assets/`가 187MB입니다.**
+**WebP 로 변환해 `assets/` 가 1 MB 입니다.** PNG 였을 때는 186 MB 였습니다.
 
-| | |
-|---|---|
-| `cg/` 90장 | **119MB** — 반신 71 · 스틸 48 |
-| `bg/campus/` 17장 | 41MB |
-| `bg/` 나머지 9장 | 21MB |
-| `ui/` 4장 | 8MB |
-| `dot/` · `map/` · `tilesets/` | 4MB |
+| | 형식 | |
+|---|---|---|
+| `cg/` 90장 | **WebP q90** | 10.4 MB |
+| `bg/` 26장 | **WebP q90** | 2.4 MB |
+| `ui/` 4장 | **WebP q90** | 0.4 MB |
+| `dot/` 54장 | **WebP 무손실** | 0.8 MB |
+| `tilesets/` 4장 | **PNG 유지** | 0.1 MB |
 
-웹 배포 전에 **WebP 변환이 필요합니다** — CG는 q90이면 ~11MB로 내려갑니다. **도트는 무손실이어야 하므로 PNG를 유지합니다.**
+**도트와 타일셋만 무손실입니다.** 도트는 확대해 쓰고 타일셋은 27~32색 팔레트가 깨지면 안 됩니다.
+
+**타일셋은 WebP 로도 안 바꿉니다.** 맵 JSON 7개와 `.tsj` 4개가 파일명을 갖고 있고 `tools/tilegen/build.py` 가 PNG 로 재생성합니다. 0.07 MB 아끼자고 Tiled 파이프라인을 깨뜨릴 이유가 없습니다.
+
+**q90 을 고른 근거** — 반신 CG 를 1:1 로 놓고 q90·q95 를 비교했습니다. 눈으로 구분이 안 가고, 표정 여섯 장의 압축 오차가 서로 일치해(RMS 1.77 / 1.78) 크로스페이드에서 지글거리지 않습니다. q95 는 40% 더 무거운데 오차가 0.3 줄어들 뿐입니다.
 
 ### 원본은 저장소 밖 폴더에 있습니다
 

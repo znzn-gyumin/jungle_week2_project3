@@ -164,7 +164,6 @@ grep -rn "옛이름" docs/ assets/ src/ tools/ README.md
 |---|---|---|
 | **Firebase 프로젝트 생성** | 로그인·세이브·방명록 전부. 구현 순서 2번이라 **가장 먼저** ([TECH_DESIGN 7](./TECH_DESIGN.md#7-구현-순서)) | 구현 착수 시 |
 | **로그인 화면 그림** | 타이틀 진입. 시안은 [`ui/login.html`](./reference/ui/login.html), 생성 프롬프트는 [assets/README](../assets/README.md#로그인-배경--아직-없습니다) | 구현 착수 시 |
-| **WebP 변환** | 배포. 지금 `assets/`가 187MB라 그대로는 못 올립니다 ([assets/README](../assets/README.md#용량)) | 배포 전 |
 
 **에셋은 전부 나왔습니다** — CG 90 · 도트 324 · 배경 9 · 타일셋 3 · 타일맵 7 · 조명 5.
 
