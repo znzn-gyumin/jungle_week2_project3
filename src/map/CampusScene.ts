@@ -26,7 +26,7 @@ const SPEED = 190;
  * 배경으로만 쓰는 맵(still)도 같은 값을 씁니다 — 자유 이동과 배율이 다르면
  * 대화로 넘어갈 때 화면이 확 바뀝니다.
  */
-const ZOOM = 1.5;
+const ZOOM = 1;
 /** 말을 걸 수 있는 거리 — 한 칸 반 */
 const REACH = TS * 1.5;
 
@@ -66,6 +66,8 @@ export class CampusScene extends Phaser.Scene {
   private miniMarks: Phaser.GameObjects.Text[] = [];
   /** UI 전용 카메라 — 본 카메라의 줌을 안 따라갑니다 */
   private uiCam!: Phaser.Cameras.Scene2D.Camera;
+  /** 안내는 DOM 으로 옮겼습니다 — Phaser Text 로는 요즘 UI 가 안 나옵니다 */
+  private onGuide?: (lines: string[]) => void;
   private currentMap!: MapId;
   private paused = false;
   private portals: { rect: Phaser.Geom.Rectangle; to: MapId; sx: number; sy: number }[] = [];
@@ -146,7 +148,7 @@ export class CampusScene extends Phaser.Scene {
       .setVisible(false);
 
     this.guide = this.add
-      .text(258, 12, '', {
+      .text(-9999, -9999, '', {
         fontSize: '13px',
         color: '#f2ede4',
         lineSpacing: 5,
@@ -172,7 +174,11 @@ export class CampusScene extends Phaser.Scene {
 
   /** 지금 무엇을 하면 이야기가 진행되는지 */
   setGuide(lines: string[]): void {
-    this.guide?.setText(lines);
+    this.onGuide?.(lines);
+  }
+
+  bindGuide(fn: (lines: string[]) => void): void {
+    this.onGuide = fn;
   }
 
   /** 씬 재생 중에는 맵을 멈춥니다 */
@@ -226,7 +232,7 @@ export class CampusScene extends Phaser.Scene {
   private drawMinimap(map: Phaser.Tilemaps.Tilemap): void {
     if (!this.mini) return;
     const pad = 12;
-    const s = Math.min(230 / map.width, 180 / map.height);
+    const s = Math.min(150 / map.width, 118 / map.height);
     this.miniSize = { w: map.width * s, h: map.height * s, s };
     const g = this.mini.clear();
     g.fillStyle(0x0b0c17, 0.82).fillRect(pad - 4, pad - 4, this.miniSize.w + 8, this.miniSize.h + 8);

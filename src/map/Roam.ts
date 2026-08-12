@@ -48,16 +48,30 @@ export class Roam {
     this.left = block.limit;
   }
 
+  /** 안내는 DOM 으로 그립니다 — CSS 를 쓸 수 있어야 요즘 UI 가 나옵니다 */
+  private guideEl: HTMLElement | null = null;
+
   start(): void {
     const npcs = this.usable();
     this.host.hidden = false;
+    this.guideEl = document.createElement('div');
+    this.guideEl.className = 'roam-guide';
+    this.host.append(this.guideEl);
     this.game = new Phaser.Game({
       type: Phaser.AUTO,
       parent: this.host,
       backgroundColor: '#0b0c17',
       pixelArt: true, // 타일은 NEAREST — 도트만 따로 LINEAR 로 겁니다
       roundPixels: true, // 정수 좌표로 그립니다 — 안 그러면 타일 이음매가 벌어집니다
-      scale: { mode: Phaser.Scale.RESIZE, autoCenter: Phaser.Scale.CENTER_BOTH },
+      // **고정 해상도에 FIT.** 창 크기에 맞춰 캔버스를 늘리면 타일 한 칸이
+      // 소수 픽셀이 되어 걸어다닐 때 격자 이음매가 보입니다. 작게 그린 뒤
+      // 화면 전체를 한 장으로 확대하면 그 문제가 사라집니다.
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 640,
+        height: 360,
+      },
       physics: { default: 'arcade', arcade: { gravity: { x: 0, y: 0 } } },
       scene: CampusScene,
     });
@@ -72,8 +86,6 @@ export class Roam {
       onTalk: (n: FreeroamNpc) => this.talk(n),
       onTrigger: (t: string) => this.trigger(t),
     });
-    // 씬이 부팅된 뒤에 안내를 겁니다
-    this.game.events.once('poststep', () => this.updateGuide());
     setTimeout(() => this.updateGuide(), 300);
   }
 
@@ -112,12 +124,12 @@ export class Roam {
 
   /** 남은 목표를 맵 위에 적어 둡니다 */
   updateGuide(): void {
+    if (!this.guideEl) return;
     const left = this.usable().map((n) => n.who);
-    this.scene?.setGuide([
-      `${this.left}명에게 더 말을 걸면 진행됩니다`,
-      `남은 사람 — ${left.join(' · ')}`,
-      '방향키 이동 · 스페이스 말 걸기 · 청록은 계단',
-    ]);
+    this.guideEl.innerHTML = `
+      <p class="roam-guide__goal"><b>${this.left}명</b>에게 더 말을 걸어요</p>
+      <p class="roam-guide__who">${left.map((w) => `<span>${w}</span>`).join('')}</p>
+      <p class="roam-guide__keys">방향키 이동 · <b>스페이스</b> 말 걸기 · 청록은 계단</p>`;
   }
 
   private finish(): void {
@@ -129,6 +141,7 @@ export class Roam {
   destroy(): void {
     this.game?.destroy(true);
     this.game = null;
+    this.guideEl = null;
     this.host.hidden = true;
     this.host.replaceChildren();
   }

@@ -28,7 +28,12 @@ export class Backdrop {
       parent: this.host,
       backgroundColor: '#0b0c17',
       pixelArt: true,
-      scale: { mode: Phaser.Scale.RESIZE, autoCenter: Phaser.Scale.CENTER_BOTH },
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 640,
+        height: 360,
+      },
       scene: CampusScene,
     });
     this.game.scene.start('campus', {
