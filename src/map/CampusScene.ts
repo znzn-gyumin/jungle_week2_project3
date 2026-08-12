@@ -497,8 +497,11 @@ export class CampusScene extends Phaser.Scene {
       .filter((x) => x.d < REACH)
       .sort((a, b) => a.d - b.d)[0];
 
+    // 매 프레임 초기화합니다. 안 지우면 한 번 가까이 갔던 사람 머리 위에
+    // 「스페이스」 가 그대로 남습니다.
     for (const { npc, mark, met } of this.npcSprites) {
-      if (!met) mark.setText('!').setColor(npcTheme(npc.who)).setFontSize(20);
+      if (met) mark.setVisible(false);
+      else mark.setVisible(true).setText('!').setColor(npcTheme(npc.who)).setFontSize(20);
     }
     this.hint.setVisible(Boolean(near));
     if (near) {
