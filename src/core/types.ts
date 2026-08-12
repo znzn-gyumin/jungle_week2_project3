@@ -88,6 +88,9 @@ export const THEME: Record<RouteId, string> = {
  */
 const LABEL: Record<string, string> = { 명진혁: '명진혁 코치' };
 
+/** 룸메이트는 주인공과 같은 성별입니다 (WORLD_BIBLE 5-2) */
+export const FRIEND_NAME = { male: '한지오', female: '한지아' } as const;
+
 /** 이 사람을 화면에 뭐라고 적을지 */
 export function label(who: string): string {
   return LABEL[who] ?? who;

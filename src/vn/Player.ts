@@ -9,7 +9,7 @@
  */
 import { applyEffects, endingTier, testCond } from '../core/state';
 import { roleName, substitute } from '../core/tokens';
-import { FACE_FILE, HEROINE_BY_NAME, HEROINE_GENDER, NAME_BY_HEROINE, THEME, label } from '../core/types';
+import { FACE_FILE, FRIEND_NAME, HEROINE_BY_NAME, HEROINE_GENDER, NAME_BY_HEROINE, THEME, label } from '../core/types';
 import type { ChoiceOption, GameState, Line, Scene, ScriptData } from '../core/types';
 import type { TimeOfDay } from '../config/lighting';
 import { Backdrop } from '../map/Backdrop';
@@ -50,6 +50,8 @@ export class Player {
   private atMap = '';
   private lastFace = '기본';
   /** 키보드로 고르는 중인 선택지 */
+  private veilEl!: HTMLElement;
+  private saidEl!: HTMLElement;
   private pick = 0;
   /** 화살표나 마우스를 한 번은 써야 결정할 수 있습니다 */
   private armed = false;
@@ -91,6 +93,7 @@ export class Player {
           <p class="vn__hint">스페이스바 · 클릭 — 대화 진행</p>
         </div>
         <div class="vn__choices" id="vn-choices" hidden></div>
+        <div class="vn__veil" id="vn-veil"></div>
       </div>`;
     this.root = root;
     this.boxEl = root.querySelector('#vn-box')!;
@@ -99,6 +102,8 @@ export class Player {
     this.nameEl = root.querySelector('#vn-name')!;
     this.textEl = root.querySelector('#vn-text')!;
     this.choiceEl = root.querySelector('#vn-choices')!;
+    this.veilEl = root.querySelector('#vn-veil')!;
+    this.saidEl = root.querySelector('.vn__said')!;
     this.mapEl = root.querySelector('#vn-map')!;
     this.backdrop = new Backdrop(root.querySelector('#vn-back')!);
     this.stage = new Stage(this.stageEl);
@@ -205,6 +210,9 @@ export class Player {
           );
           if (line.t === 'say') this.fx(line.face);
           const said = substitute(line.text, this.state);
+          this.saidEl.classList.remove('is-in');
+          void this.saidEl.offsetWidth;
+          this.saidEl.classList.add('is-in');
           this.typer.run(said);
           this.hud.push(who === ME ? ME : who ? label(who) : '', said);
           this.hud.meter(this.state);
@@ -350,6 +358,8 @@ export class Player {
   /** `*` 는 현재 루트, `동갑`·`연상`·`연하` 는 이 회차의 그 역할입니다 */
   private whoName(raw: string): string {
     if (raw === '*') return this.state.route ? NAME_BY_HEROINE[this.state.route] : '';
+    // 절친은 주인공과 같은 성별이라 회차마다 이름이 갈립니다
+    if (raw === '절친') return FRIEND_NAME[this.state.playerGender];
     return roleName(raw, this.state) || raw;
   }
 
@@ -445,12 +455,20 @@ export class Player {
   }
 
   /** 라벨 · 씬 id · `r_*_이름` · `r_*_end_{tier}` · `back` */
+  /** 장면이 바뀔 때 한 번 스치는 암전 — 툭 끊기는 느낌을 지웁니다 */
+  private wipe(): void {
+    this.veilEl.classList.remove('is-on');
+    void this.veilEl.offsetWidth;
+    this.veilEl.classList.add('is-on');
+  }
+
   private goto(target: string): void {
     if (target === 'back') {
       if (!this.roam) return this.finish('돌아갈 자유 이동이 없습니다');
       this.idx = this.lines().length; // 씬 끝으로 — backToRoam 이 받습니다
       return;
     }
+    this.wipe();
     let t = target;
     if (t.startsWith('r_*_')) {
       if (!this.state.route) {

@@ -844,3 +844,46 @@
   0%, 100% { opacity: 0.34; }
   50% { opacity: 0.92; }
 }
+
+
+/* ---- 장면 연출
+
+   프롤로그처럼 CG 가 없는 구간은 화면이 통 안 움직여 심심합니다.
+   장면이 바뀔 때 한 번 스치는 암전과, 대사가 한 줄씩 떠오르는 정도만
+   겁니다 — 더 넣으면 읽는 데 방해가 됩니다. */
+
+.vn__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  background: #0b0710;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vn__veil.is-on {
+  animation: vn-wipe 620ms ease-in-out;
+}
+
+@keyframes vn-wipe {
+  0% { opacity: 0; }
+  38% { opacity: 0.82; }
+  100% { opacity: 0; }
+}
+
+/* 대사 한 줄이 아주 살짝 떠오릅니다 */
+.vn__said.is-in {
+  animation: vn-said-in 260ms ease-out;
+}
+
+@keyframes vn-said-in {
+  0% {
+    opacity: 0.25;
+    transform: translateY(6px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
