@@ -66,10 +66,11 @@ export const ROLE_CAST: Record<string, { male: RouteId; female: RouteId }> = {
  * 어두운 색은 묻히기 때문입니다. 그대로 씁니다.
  */
 /**
- * 주인공의 테마색. 히로인 여섯의 어느 색과도 안 겹치는 보라로 둡니다 —
- * 미니맵에서 내가 어느 점인지 한눈에 갈라져야 합니다.
+ * 주인공의 테마색. 히로인 여섯 중 검정을 쓰는 인물이 없어 겹치지 않습니다.
+ * 미니맵의 계단도 같은 계열(#2a2632)이지만 계단은 네모, 주인공은 흰 테두리
+ * 동그라미라 모양으로 갈라집니다.
  */
-export const PLAYER_THEME = '#8A6BC4';
+export const PLAYER_THEME = '#1E1B26';
 
 export const THEME: Record<RouteId, string> = {
   minah: '#3A9B96',    // 고양이 · 청록

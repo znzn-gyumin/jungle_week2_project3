@@ -57,6 +57,10 @@ export class Roam {
   private talks = 0;
   /** 그중 다시 건 횟수 — 마지막 단계가 이것만 봅니다 */
   private retalks = 0;
+  /** 튜토리얼 — 엔터로 화면이 넘어갈 때 같이 걷습니다 */
+  private tutorialEl: HTMLElement | null = null;
+  /** 방금 배운 것 한 줄 */
+  private learned = '';
   private me = { x: 0, y: 0 };
 
   start(): void {
@@ -191,42 +195,52 @@ export class Roam {
    * 프롤로그 첫 자유 이동에서 한 번만.
    *
    * **읽고 닫는 창이 아닙니다.** 하나 시키고 → 해내면 그게 무슨 뜻이었는지
-   * 한 줄로 알려주는 식으로, 조작과 규칙을 같이 익힙니다. 게임을 막지
-   * 않으므로 그냥 돌아다녀도 알아서 진행됩니다.
+   * 알려주는 식으로 조작과 규칙을 같이 익힙니다. 게임을 막지 않으므로 그냥
+   * 돌아다녀도 진행되고, **엔터로 화면이 넘어갈 때까지** 남아 있습니다.
    */
   private showTutorial(): void {
     const STEPS = [
       {
-        key: '방향키',
+        key: '← → ↑ ↓',
         ask: '복도를 걸어 보세요',
-        got: '앞으로 12일. 여기서 마주치는 사람이 곧 이야기가 됩니다.',
+        tip: '네 방향으로 움직입니다. 벽과 책상은 못 지나갑니다.',
+        got: '앞으로 12일. 여기서 마주치는 사람이 그대로 이야기가 됩니다.',
       },
       {
-        key: '시프트',
+        key: 'Shift + 방향키',
         ask: '누른 채로 뛰어 보세요',
-        got: '정글은 넓습니다. 지하 편의점까지는 뛰는 편이 낫습니다.',
+        tip: '누르고 있는 동안만 1.4배로 빨라집니다.',
+        got: '정글은 넓습니다. 4층에서 지하 편의점까지는 뛰는 편이 낫습니다.',
       },
       {
-        key: '느낌표',
-        ask: '머리에 ! 가 뜬 사람에게 다가가 보세요',
-        got: '! 는 아직 말 안 걸어 본 사람. 오른쪽 위 미니맵에도 같이 뜹니다.',
+        key: '머리 위 !',
+        ask: '! 가 뜬 사람 곁으로 가 보세요',
+        tip: '가까워지면 머리 위 표시가 「스페이스」 로 바뀝니다.',
+        got: '! 는 아직 말 안 걸어 본 사람. 오른쪽 위 미니맵에도 같은 색으로 뜹니다.',
       },
       {
-        key: '스페이스',
+        key: 'Space',
         ask: '말을 걸어 보세요',
-        got: '선택지가 나오면 고른 대로 호감이 움직입니다. 되돌릴 수 없습니다.',
+        tip: '대사를 넘길 때도 같은 키입니다. 마우스 클릭도 됩니다.',
+        got: '선택지가 나오면 고른 대로 호감이 움직입니다. 무를 수 없습니다.',
       },
       {
         key: '한 번 더',
         ask: '이미 만난 사람에게 다시 말을 걸어 보세요',
-        got: '다시 거는 말은 그냥 한마디입니다. 이야기는 안 변하니 편하게 걸어도 됩니다.',
+        tip: '만난 사람은 !가 동그라미로 바뀝니다. 몇 번이든 걸립니다.',
+        got: '다시 거는 말은 그냥 한마디입니다. 이야기를 안 바꾸니 편하게 걸어도 됩니다.',
+      },
+      {
+        key: 'Enter',
+        ask: '할 일을 마쳤으면 엔터로 다음 장면',
+        tip: '왼쪽 위 안내가 「이제 진행할 수 있어요」 로 바뀌면 눌러도 됩니다.',
+        got: '',
       },
     ];
     const el = document.createElement('div');
     el.className = 'roam-tutorial';
-    const learn = document.createElement('p');
-    learn.className = 'roam-learn';
-    this.host.append(learn, el);
+    this.tutorialEl = el;
+    this.host.append(el);
 
     let step = 0;
     let from: { x: number; y: number } | null = null;
@@ -237,20 +251,15 @@ export class Roam {
     window.addEventListener('keydown', onShift);
 
     const paint = (): void => {
-      const over = step >= STEPS.length;
+      const now = STEPS[Math.min(step, STEPS.length - 1)];
       el.innerHTML = `
-        <p class="roam-tutorial__title">${over ? '이제 다 알아요' : `조작 ${step + 1} / ${STEPS.length}`}</p>
+        <p class="roam-tutorial__title">조작 익히기 ${Math.min(step + 1, STEPS.length)} / ${STEPS.length}</p>
         <ol class="roam-tutorial__steps">${STEPS.map(
           (s2, i) => `<li class="${i < step ? 'is-done' : i === step ? 'is-now' : ''}">
               <b>${s2.key}</b><span>${s2.ask}</span></li>`,
-        ).join('')}</ol>`;
-    };
-    /** 해낸 것이 무슨 뜻이었는지 한 줄로 남깁니다 */
-    const teach = (text: string): void => {
-      learn.textContent = text;
-      learn.classList.remove('is-on');
-      void learn.offsetWidth;
-      learn.classList.add('is-on');
+        ).join('')}</ol>
+        <p class="roam-tutorial__tip">${now.tip}</p>
+        ${this.learned ? `<p class="roam-tutorial__got">${this.learned}</p>` : ''}`;
     };
     paint();
 
@@ -265,23 +274,17 @@ export class Roam {
         : step === 1 ? ranWhile && moved >= 5
         : step === 2 ? sc.nearWho !== null
         : step === 3 ? this.talks >= 1
-        : this.retalks >= 1;
+        : step === 4 ? this.retalks >= 1
+        : false; // 마지막 칸은 엔터로 화면이 넘어가면서 끝납니다
       if (!ok) return;
-      teach(STEPS[step].got);
+      this.learned = STEPS[step].got;
       step++;
       if (step === 1) from = at; // 뛰기는 걸은 자리에서 다시 잽니다
       paint();
-      if (step < STEPS.length) return;
-      window.clearInterval(tick);
-      window.removeEventListener('keydown', onShift);
-      setTimeout(() => {
-        el.classList.add('is-over');
-        learn.classList.remove('is-on');
-        setTimeout(() => {
-          el.remove();
-          learn.remove();
-        }, 1600);
-      }, 4200);
+      if (step >= STEPS.length - 1) {
+        window.clearInterval(tick);
+        window.removeEventListener('keydown', onShift);
+      }
     }, 120);
   }
 
@@ -374,6 +377,8 @@ export class Roam {
 
   private finish(): void {
     window.removeEventListener('keydown', this.onKey);
+    this.tutorialEl?.remove();
+    this.tutorialEl = null;
     const after = this.block.after;
     this.destroy();
     this.onDone(after);

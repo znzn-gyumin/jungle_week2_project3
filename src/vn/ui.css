@@ -412,37 +412,85 @@
 
 .roam-tutorial {
   position: absolute;
-  /* **중앙 하단.** 오른쪽 구석은 미니맵·안내와 겹치고, 가운데면 걸으면서
-     눈을 안 떼도 됩니다. 뒤가 비치므로 맵을 가리지 않습니다. */
+  /* **중앙 상단.** 걸으면서 눈을 거의 안 떼도 되고, 아래쪽 대사창·안내와
+     안 겹칩니다. 뒤가 비치므로 맵을 가리지 않습니다. */
   left: 50%;
-  bottom: 2.4rem;
-  transform: translateX(-50%);
+  top: 1.8rem;
   z-index: 8;
   width: max-content;
-  max-width: 90%;
-  padding: 0.85rem 1.5rem;
-  transition: opacity 500ms ease, transform 500ms ease;
+  max-width: 88%;
+  padding: 0.9rem 1.7rem 0.8rem;
+  text-align: center;
+  transition: opacity 500ms ease;
+  /* 살아 있는 느낌으로 아주 조금씩 커졌다 작아집니다 — 크게 흔들면
+     읽는 데 방해가 되므로 3% 안쪽으로 둡니다. */
+  animation: tut-breathe 3.4s ease-in-out infinite;
   color: #fff;
-  background: rgb(24 20 32 / 34%);
-  backdrop-filter: blur(9px) saturate(1.2);
-  border: 1px solid rgb(255 255 255 / 22%);
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgb(0 0 0 / 30%);
+  background: rgb(28 18 30 / 42%);
+  backdrop-filter: blur(10px) saturate(1.25);
+  border: 1px solid rgb(255 200 224 / 38%);
+  border-radius: 24px;
+  /* 분홍 백라이트 — 창 뒤에서 번지듯 새어 나옵니다 */
+  box-shadow:
+    0 0 34px rgb(255 122 178 / 55%),
+    0 0 90px rgb(255 122 178 / 30%),
+    0 10px 30px rgb(0 0 0 / 32%),
+    0 0 0 1px rgb(255 160 200 / 20%) inset;
   text-shadow: 0 1px 3px rgb(0 0 0 / 55%);
+}
+
+@keyframes tut-breathe {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    box-shadow:
+      0 0 34px rgb(255 122 178 / 55%),
+      0 0 90px rgb(255 122 178 / 30%),
+      0 10px 30px rgb(0 0 0 / 32%),
+      0 0 0 1px rgb(255 160 200 / 20%) inset;
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.028);
+    box-shadow:
+      0 0 46px rgb(255 122 178 / 78%),
+      0 0 120px rgb(255 122 178 / 46%),
+      0 10px 30px rgb(0 0 0 / 32%),
+      0 0 0 1px rgb(255 160 200 / 34%) inset;
+  }
+}
+
+/* 지금 단계를 어떻게 하는지 한 줄 더 */
+.roam-tutorial__tip {
+  margin: 0.55rem 0 0;
+  font-size: 0.82rem;
+  color: rgb(255 214 232 / 92%);
+}
+
+/* 방금 배운 것 — 다음 단계로 넘어가도 남습니다 */
+.roam-tutorial__got {
+  margin: 0.5rem 0 0;
+  padding-top: 0.5rem;
+  font-size: 0.84rem;
+  color: #fff;
+  border-top: 1px solid rgb(255 255 255 / 18%);
+}
+
+.roam-tutorial__got::before {
+  content: '✓ ';
+  color: #8fe0a4;
 }
 
 .roam-tutorial.is-over {
   opacity: 0;
-  transform: translateX(-50%) translateY(14px);
 }
 
 .roam-tutorial__title {
   margin: 0 0 0.55rem;
   font-size: 0.95rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  color: #fff;
-  opacity: 0.7;
+  letter-spacing: 0.08em;
+  color: #ffc2dc;
+  opacity: 0.85;
 }
 
 .roam-tutorial dl {
@@ -564,11 +612,11 @@
 
 .roam-tutorial__steps .is-now::before {
   content: '▸';
-  color: var(--theme, #ffd166);
+  color: #ff9ec4;
   animation: vn-bob 900ms ease-in-out infinite;
 }
 
-.roam-tutorial__steps .is-now b { color: var(--theme, #ffd166); }
+.roam-tutorial__steps .is-now b { color: #ffc2dc; }
 
 .roam-tutorial__steps .is-done {
   opacity: 0.5;
@@ -580,41 +628,4 @@
   content: '✓';
   color: #8fe0a4;
   text-decoration: none;
-}
-
-
-/* 해낸 것이 무슨 뜻이었는지 한 줄. 체크리스트 바로 위에 떴다 사라집니다. */
-.roam-learn {
-  position: absolute;
-  left: 50%;
-  bottom: 8.4rem;
-  z-index: 8;
-  max-width: 60%;
-  margin: 0;
-  padding: 0.6rem 1.4rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  text-align: center;
-  color: #fff;
-  background: rgb(24 20 32 / 42%);
-  backdrop-filter: blur(9px) saturate(1.2);
-  border: 1px solid rgb(255 255 255 / 20%);
-  border-left: 3px solid var(--theme, #ffd166);
-  border-radius: 16px;
-  text-shadow: 0 1px 3px rgb(0 0 0 / 55%);
-  opacity: 0;
-  transform: translateX(-50%) translateY(10px);
-  transition: opacity 320ms ease, transform 320ms ease;
-  pointer-events: none;
-}
-
-.roam-learn.is-on {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-  animation: vn-learn 5.6s ease forwards;
-}
-
-@keyframes vn-learn {
-  0%, 78% { opacity: 1; }
-  100% { opacity: 0; }
 }
