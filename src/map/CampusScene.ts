@@ -54,6 +54,7 @@ export class CampusScene extends Phaser.Scene {
   private npcSprites: { npc: FreeroamNpc; sprite: Phaser.GameObjects.Image }[] = [];
   private hint!: Phaser.GameObjects.Text;
   private mini!: Phaser.GameObjects.Graphics;
+  private guide!: Phaser.GameObjects.Text;
   private miniDot!: Phaser.GameObjects.Graphics;
   private miniSize = { w: 0, h: 0, s: 1 };
   /** UI 전용 카메라 — 본 카메라의 줌을 안 따라갑니다 */
@@ -123,7 +124,6 @@ export class CampusScene extends Phaser.Scene {
       .sprite(0, 0, `dot_${dot}`, 0)
       .setOrigin(0, 0)
       .setDepth(50);
-    this.uiCam?.ignore(this.player);
     // 발이 서 있는 한 칸만 충돌합니다 — 머리는 위 칸을 침범해도 됩니다
     this.player.body!.setSize(TS - 8, TS - 8).setOffset(4, HEAD_OVERHANG + 4);
 
@@ -138,6 +138,18 @@ export class CampusScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setVisible(false);
 
+    this.guide = this.add
+      .text(168, 12, '방향키 이동
+스페이스 말 걸기
+청록 = 계단', {
+        fontSize: '13px',
+        color: '#f2ede4',
+        lineSpacing: 5,
+        backgroundColor: 'rgba(11,12,23,.82)',
+        padding: { x: 8, y: 6 },
+      })
+      .setScrollFactor(0)
+      .setDepth(300);
     this.mini = this.add.graphics().setScrollFactor(0).setDepth(300);
     this.miniDot = this.add.graphics().setScrollFactor(0).setDepth(301);
 
@@ -145,7 +157,9 @@ export class CampusScene extends Phaser.Scene {
     // 확대돼 화면 밖으로 밀려납니다.
     this.uiCam = this.cameras.add(0, 0, this.scale.width, this.scale.height);
     this.uiCam.setName('ui');
-    this.cameras.main.ignore([this.mini, this.miniDot, this.hint]);
+    this.cameras.main.ignore([this.mini, this.miniDot, this.hint, this.guide]);
+    // 주인공을 UI 카메라에서 빼야 합니다 — 안 그러면 화면에 둘로 보입니다
+    this.uiCam.ignore(this.player);
     this.scale.on('resize', (g: Phaser.Structs.Size) => this.uiCam?.setSize(g.width, g.height));
 
     this.loadMap(this.setup.map, this.setup.x, this.setup.y);
