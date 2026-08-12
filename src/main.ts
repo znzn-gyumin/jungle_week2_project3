@@ -126,8 +126,8 @@ function titleScreen(app: HTMLElement): void {
       </div>
 
       <section class="boot__act is-on" data-act="0">
-        <p class="boot__any">아무 키나 눌러 시작</p>
-        <p class="boot__tip">F11 을 눌러 전체화면으로 하시길 권합니다</p>
+        <p class="boot__any">Enter 를 눌러 시작</p>
+        <p class="boot__tip">전체화면(F11)으로 플레이하시는 것을 권장합니다</p>
       </section>
 
       <section class="boot__act" data-act="1">
