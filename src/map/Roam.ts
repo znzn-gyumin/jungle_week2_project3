@@ -231,14 +231,15 @@ export class Roam {
       const turn = ['', '_b', '_c'][this.retalks % 3];
       return `idle_${id}_${this.block.id}${turn}`;
     }
-    if (n.who === "명진혁") return `idle_coach_${this.block.id}`;
-    // 4조 정찰은 마지막 날의 그 장면 전용입니다
+    // 서브 인물도 셋씩 돌립니다 — 히로인과 같은 규칙입니다
+    const turn = ["", "_b", "_c"][this.retalks % 3];
+    if (n.who === "명진혁") return `idle_coach_${this.block.id}${turn}`;
+    if (n.who === "조민") return `idle_jomin_${this.block.id}${turn}`;
+    // 4조 대표는 이름이 갈리지만 대사는 한 벌만 씁니다
     if (n.who === "태윤" || n.who === "태연") {
-      return this.block.id === "finalprep"
-        ? "idle_scout_finalprep"
-        : `idle_team_${this.block.id}`;
+      return `idle_scout_${this.block.id}${turn}`;
     }
-    // 히로인도 코치도 아닌 사람 — 이름을 안 부르는 공용 대사
+    // 이름이 없는 사람 — 아무에게나 걸어도 어색하지 않은 공용 대사
     return `idle_team_${this.block.id}`;
   }
 
