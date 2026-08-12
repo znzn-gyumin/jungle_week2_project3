@@ -49,6 +49,13 @@
   user-select: none;
 }
 
+/* 명장면 창은 화면 폭을 더 쓰고 모서리를 둥글게 (참고한 미연시 배치) */
+.vn__box--cine {
+  width: min(84rem, 94vw);
+  min-height: 17vh;
+  border-radius: 22px;
+}
+
 /* 대사가 없으면 창 자체를 없앱니다 — 자유 이동 중에는 맵만 보입니다 */
 .vn__box[hidden] {
   display: none;
@@ -85,6 +92,11 @@
    당겨지면 화자가 바뀔 때마다 글이 흔들립니다. */
 .vn__said {
   padding-left: calc(96px + var(--face-gap));
+}
+
+/* 명장면에는 얼굴이 안 뜨므로 비워둘 이유가 없습니다 */
+.vn__box--cine .vn__said {
+  padding-left: 0;
 }
 
 .vn__name {
@@ -208,25 +220,26 @@
 /* 반신은 왼쪽 아래에 흉상으로 섭니다 — 대사창 위로 걸쳐 얼굴이 크게 보입니다.
    무대(.vn__stage)를 넘어 아래로 내려가야 하므로 높이를 넉넉히 잡습니다. */
 .stage__char {
-  top: auto;
-  bottom: -6vh;
-  right: clamp(-2rem, -1vw, 0rem);
-  left: auto;
-  width: clamp(11rem, 22vw, 19rem);
-  height: auto;
-  max-height: 68vh;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  object-position: bottom right;
+  object-position: bottom center;
   opacity: 0;
-  /* 대사창(z-index 4)보다 뒤 — 오른쪽에서 창 뒤로 들어갑니다 */
+  /* 대사창(z-index 4)보다 뒤 — 창이 가슴 아래를 덮습니다 */
   z-index: 3;
-  filter: drop-shadow(0 0 18px rgb(0 0 0 / 55%));
+  filter: drop-shadow(0 6px 24px rgb(0 0 0 / 45%));
 }
 
 .vn__stage[data-pos='left'] .stage__char {
-  right: auto;
-  left: clamp(-2rem, -1vw, 0rem);
-  object-position: bottom left;
+  object-position: bottom 0 left 18%;
+}
+
+.vn__stage[data-pos='right'] .stage__char {
+  object-position: bottom 0 right 18%;
 }
 
 /* 밤 배경 위에서는 인물만 대낮이면 붙여넣은 것처럼 보입니다 */

@@ -54,6 +54,12 @@ export class Player {
    */
   private cinematic = false;
 
+  /** 명장면과 맵 대화는 배치가 다릅니다 — CSS 가 클래스로 갈라 봅니다 */
+  private setMode(on: boolean): void {
+    this.cinematic = on;
+    this.boxEl.classList.toggle('vn__box--cine', on);
+  }
+
   constructor(root: HTMLElement, script: ScriptData, state: GameState) {
     this.script = script;
     this.state = state;
@@ -165,14 +171,19 @@ export class Player {
         case 'freeroam':
           return this.enterRoam(line);
         case 'bg':
+          this.setMode(true);
           this.backdrop.hide();
           this.stage.setBackground(line.id);
           continue;
         case 'map':
+          // 맵 위 대화 — 반신은 내리고 도트 얼굴로 갑니다
+          this.setMode(false);
+          this.stage.clearChar();
           this.stage.clearBackground();
           this.backdrop.show(line.id, line.x, line.y, TIME_BY_BGM[this.bgm] ?? 'day');
           continue;
         case 'cg':
+          this.setMode(true);
           this.stage.setCg(line.id);
           continue;
         case 'char': {
@@ -240,7 +251,7 @@ export class Player {
     this.textEl.textContent = '';
     this.nameEl.hidden = true;
     this.stage.clearChar();
-    this.cinematic = false;
+    this.setMode(false);
     this.backdrop.hide();
     this.roam = new Roam(
       this.mapEl,
