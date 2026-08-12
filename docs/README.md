@@ -35,7 +35,19 @@
 
    **[루트 README.md](../README.md) · [assets/README.md](../assets/README.md) · [TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) · [bg/campus/README.md](../assets/bg/campus/README.md)는 일곱에 들어가지 않습니다.** 위 문서들에서 값을 모아 뽑은 **파생 문서**라, 값이 바뀌면 대조하는 게 아니라 **다시 뽑습니다.** 여기에만 있는 값은 없어야 합니다
 
-3. **점검은 두 층입니다.**
+3. **이름·경로를 바꿨으면 `tools/`와 `src/`도 같이 엽니다.** 문서만 훑으면 **반드시 놓칩니다** — 코드에는 옛 이름이 세 군데에 남습니다.
+
+   | 어디에 | 무엇이 |
+   |---|---|
+   | 모듈 최상단 docstring | 근거 문서 이름 · 근거 사진 파일명 |
+   | 상수와 변수 이름 | 개명 전 용어 (`BG_CLIMAX` 같은) |
+   | **생성기가 뱉는 문자열** | 출력 경로 · 산출물 파일명 |
+
+   **셋째가 제일 위험합니다.** 문서는 틀려도 읽는 사람이 눈치채지만, 생성기가 옛 파일명을 찍어내면 **그 이름으로 에셋이 만들어집니다.**
+
+   `grep`으로 옛 이름을 훑되 **확장자와 폴더까지** 봅니다. 사진을 `.jpg`에서 `.png`로 바꾸면 코드 주석의 `근거 사진: lobby.jpg`가 남고, 폴더를 옮기면 스크립트의 출력 경로가 없는 자리를 가리킵니다.
+
+4. **점검은 두 층입니다.**
    - **값**: 숫자·이름·장소·시각이 일곱 파일에서 같은가 (`grep`으로 보조)
    - **서술**: 그 설명이 **지금 설정에 맞는가**. 인물의 행동·심리 묘사는 이름만 바꿔서는 안 맞습니다
 
@@ -124,9 +136,10 @@
 |---|---|
 | **플레이 타임 / 분량** | GAME_DESIGN 상단·1-2·2-1·2-2·7·8 → TECH_DESIGN 3 도입부, 6 에셋 용량 |
 | **인증 · 저장 · 방명록** | TECH_DESIGN 1·2·4-1~4-3·6·7 → GAME_DESIGN 0-1·1·2-5·6-4 → WORLD_BIBLE 7-2·11 → SCENARIO_OUTLINE 6절 |
-| **공간 (장소 추가·삭제·개명)** | WORLD_BIBLE 2·4·6·7·8·10 → CHARACTERS(자리·명장면) → GAME_DESIGN 6-3(배경 목록) → SCENARIO_OUTLINE 전 씬의 장소 칸 → TECH_DESIGN 1·2·5(맵 파일명) → `.vns`의 `@bg` |
+| **공간 (장소 추가·삭제·개명)** | WORLD_BIBLE 2·4·6·7·8·10 → CHARACTERS(자리·명장면) → GAME_DESIGN 6-3(배경 목록) → SCENARIO_OUTLINE 전 씬의 장소 칸 → TECH_DESIGN 1·2·5(맵 파일명) → `tools/tilegen/maps.py` → `.vns`의 `@bg` |
 | **캐릭터 (나이·학년·설정)** | **CHARACTERS** → WORLD_BIBLE 4-2-1·4-2-2(좌석)·5-1-2(티켓) → GAME_DESIGN 4(선호 수치)·6-2(CG) → SCENARIO_OUTLINE 6인 표 전부 |
 | **에셋 (CG·도트·배경 물량)** | GAME_DESIGN 6 → WORLD_BIBLE 7-3(명찰)·8(비주얼) → **assets/README 다시 뽑기** |
+| **파일명·폴더·ID 개명** | 위 표에서 해당 줄 → **`tools/`의 docstring·상수·출력 경로** → `src/config/*.ts` → 루트 README ([원칙 3](#문서-작성-원칙)) |
 | **스탯 수치** | GAME_DESIGN 2-1·2-2·2-3·**2-4(구간 도달 시점)** → SCENARIO_OUTLINE 7(선택지 총람) → CHARACTERS(모티프 단계가 걸린 구간) |
 | **씬 추가·삭제** | SCENARIO_OUTLINE → GAME_DESIGN 7(씬 수·줄 수) → 집필 순서 |
 | **호칭 단계** | GAME_DESIGN 2-4(구간 규칙) → CHARACTERS(인물별 4단계) → TECH_DESIGN 3-2(치환 토큰) |
@@ -136,8 +149,10 @@
 이름·숫자를 바꿨을 때 **빠뜨린 곳을 찾는 용도**로만 씁니다.
 
 ```bash
-grep -rn "옛이름" docs/ src/ --include="*.md" --include="*.vns"
+grep -rn "옛이름" docs/ assets/ src/ tools/ README.md
 ```
+
+**`--include`로 `.md`만 거르지 마세요.** 옛 이름은 `.py` 주석과 `.ts` 상수에 남습니다.
 
 **여기서 아무것도 안 나와도 끝난 게 아닙니다.** 인물의 행동이나 심리를 설명하는 문장은 이름이 바뀌어도 내용이 그대로 남습니다. 캐릭터 설정을 건드렸다면 **관련 절을 직접 읽어 "이 서술이 지금 성격에 맞는가"를 확인**해야 합니다.
 
