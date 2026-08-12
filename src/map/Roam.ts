@@ -146,6 +146,10 @@ export class Roam {
         (x, y) => {
           this.me = { x, y };
           this.drawMini();
+          // **여기서도 봅니다.** 미니맵 자료만 보고 갱신했더니 계단을
+          // 타도 이름이 그대로였습니다 — 그 콜백이 항상 오지는 않습니다.
+          const here = this.scene?.mapId;
+          if (here) this.whereEl.textContent = MAP_NAME[here] ?? "";
         },
       );
     }, 300);

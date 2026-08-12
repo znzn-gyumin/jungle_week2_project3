@@ -400,10 +400,10 @@ def m3(TS_):
     # 정문(M7) · 후문(M5)
     m.trigger("front_gate", 10, 2, w=4, h=1, kind="door", label="정문")
     for x in range(10, 14):
-        m.portal("m7_gate", x, 1, 20 + (x - 10), 6, name="to_gate")
+        m.portal("m7_gate", x, 2, 20 + (x - 10), 6, name="to_gate")
     m.trigger("back_gate", 40, 20, w=1, h=4, kind="door", label="후문")
     for y in range(20, 24):
-        m.portal("m5_connect_garden", 43, y, 3, 20 + (y - 20), name="to_garden")
+        m.portal("m5_connect_garden", 42, y, 3, 20 + (y - 20), name="to_garden")
     m.set_ground(42, 21, E, "f_lightpool"); m.set_ground(42, 22, E, "f_lightpool")
     m.trigger("spawn_default", 12, 4, kind="spawn")
 
@@ -642,7 +642,7 @@ def m5(TS_):
         m.portal("m3_basecamp_1f", 0, y, 41, 20 + (y - 20), name="to_basecamp_1f")
         m.portal("m3_basecamp_1f", 1, y, 41, 20 + (y - 20), name="to_basecamp_1f")
     for x in range(12, 20):
-        m.portal("m6_nestcamp", x, H - 1, 17 + (x - 12) % 4, 3, name="to_nestcamp")
+        m.portal("m6_nestcamp", x, H - 3, 17 + (x - 12) % 4, 3, name="to_nestcamp")
     m.trigger("garden_center", 13, 17, w=6, h=6, kind="scene",
               label="커넥트가든 중앙", note="감정 정점 씬 지점 · 여명 오버레이 전용 맵")
     m.trigger("spawn_default", 15, 24, kind="spawn")

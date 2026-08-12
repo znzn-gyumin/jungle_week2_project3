@@ -66,6 +66,9 @@ export function substitute(text: string, s: GameState): string {
     // 시작 설정에서 고른 교육장 — 403 · 405
     '{반}': s.playerRoom,
   };
+  // {반} 은 {P...} 규칙 밖이라 따로 풉니다 — 표에만 넣어 두면 아래
+  // 정규식이 안 잡아서 화면에 「{반}」 이 그대로 나옵니다
+  text = text.replace(/\{반\}/g, s.playerRoom);
   // {동갑} {연상:성명} 같은 역할 토큰을 먼저 풉니다
   text = text.replace(/\{(동갑|연상|연하)(:성명)?\}/g, (_w, r, full) =>
     roleName(r, s, Boolean(full)));
