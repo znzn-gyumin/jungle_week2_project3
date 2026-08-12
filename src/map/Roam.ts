@@ -182,7 +182,7 @@ export class Roam {
     if (met || this.left <= 0) {
       this.retalks++;
       this.scene?.setPaused(true);
-      this.onTalk(met ? n.target : this.idleScene(n));
+      this.onTalk(met && n.target ? n.target : this.idleScene(n));
       return;
     }
     this.left--;
