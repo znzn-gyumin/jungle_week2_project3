@@ -7,6 +7,7 @@
 // 모티프  — 스케치북. 과정 1 은 빈 페이지에서 캠퍼스 스케치로 넘어가는 단계
 
 === r_seunghee_c1_pair ===
+@map  m1_basecamp_4f 15,16
 @bgm  session
 @char 승희 center
 
@@ -60,6 +61,7 @@
 -> r_seunghee_c1_review
 
 === r_seunghee_c1_review ===
+@map  m1_basecamp_4f 15,16
 @bgm  tension
 @char 승희 center
 
@@ -114,6 +116,7 @@
 -> c2_ranking
 
 === r_seunghee_c2_talk ===
+@map  m1_basecamp_4f 15,16
 @char 승희 center
 * 2층 오픈데스크. 사람이 셋뿐이었다.
 * 구석 자리에 승희가 있었다. 403에서 내려온 모양이었다.
@@ -127,6 +130,7 @@
 -> back
 
 === r_seunghee_c2_allnighter ===
+@map  m1_basecamp_4f 15,16
 @bgm  tension
 @char 승희 center
 @char 민아 left
@@ -197,6 +201,7 @@
 -> r_seunghee_c2_garden
 
 === r_seunghee_c2_garden ===
+@map  m5_connect_garden 15,20
 @bgm  midnight
 @char 승희 center
 
@@ -413,6 +418,7 @@
 -> c3_bus
 
 === r_seunghee_c4_talk ===
+@map  m1_basecamp_4f 15,16
 @char 승희 center
 * 2층 오픈데스크. 오늘은 구석이 아니라 가운데 자리였다.
 승희 [부끄러움] "아, {P:호칭}."
@@ -426,6 +432,7 @@
 -> back
 
 === r_seunghee_c4_classroom ===
+@map  m1_basecamp_4f 15,16
 @bgm  midnight
 @char 승희 center
 
@@ -474,6 +481,7 @@
 -> r_seunghee_c4_lastnight
 
 === r_seunghee_c4_lastnight ===
+@map  m5_connect_garden 15,20
 @bgm  swell
 @char 승희 center
 

@@ -7,6 +7,7 @@
 // 모티프  — 에코백 속 간식. 과정 1 은 젤리 단계
 
 === r_seungmin_c1_pair ===
+@map  m1_basecamp_4f 15,16
 @bgm  session
 @char 승민 center
 
@@ -58,6 +59,7 @@
 -> r_seungmin_c1_review
 
 === r_seungmin_c1_review ===
+@map  m1_basecamp_4f 15,16
 @bgm  tension
 @char 승민 center
 
@@ -112,6 +114,7 @@
 -> c2_ranking
 
 === r_seungmin_c2_talk ===
+@map  m1_basecamp_4f 15,16
 @char 승민 center
 * 403 뒷줄. 조원 셋을 다 보내고 혼자 남아 있었다.
 승민 [기쁨] "{P:호칭}! 아직 안 갔네."
@@ -125,6 +128,7 @@
 -> back
 
 === r_seungmin_c2_allnighter ===
+@map  m1_basecamp_4f 15,16
 @bgm  tension
 @char 승민 center
 
@@ -194,6 +198,7 @@
 -> r_seungmin_c2_garden
 
 === r_seungmin_c2_garden ===
+@map  m5_connect_garden 15,20
 @bgm  midnight
 @char 승민 center
 
@@ -411,6 +416,7 @@
 -> c3_bus
 
 === r_seungmin_c4_talk ===
+@map  m1_basecamp_4f 15,16
 @char 승민 center
 * 403 뒷줄. 조원들 자리를 다 봐주고 마지막에 앉았다.
 * 에코백이 옆에 있었다. 열려 있었고 아무것도 없었다.
@@ -425,6 +431,7 @@
 -> back
 
 === r_seungmin_c4_classroom ===
+@map  m1_basecamp_4f 15,16
 @bgm  midnight
 @char 승민 center
 
@@ -474,6 +481,7 @@
 -> r_seungmin_c4_lastnight
 
 === r_seungmin_c4_lastnight ===
+@map  m5_connect_garden 15,20
 @bgm  swell
 @char 승민 center
 

@@ -8,6 +8,7 @@
 // 모티프  — 헤드폰. 윤정과 같은 사물인데 이쪽은 늘 목에만 걸려 있습니다
 
 === r_yunho_c1_pair ===
+@map  m1_basecamp_4f 15,16
 @bgm  session
 @char 윤호 center
 
@@ -62,6 +63,7 @@
 -> r_yunho_c1_review
 
 === r_yunho_c1_review ===
+@map  m1_basecamp_4f 15,16
 @bgm  tension
 @char 윤호 center
 
@@ -116,6 +118,7 @@
 -> c2_ranking
 
 === r_yunho_c2_talk ===
+@map  m1_basecamp_4f 15,16
 @char 윤호 center
 * 2층 오픈데스크. 윤호가 남의 자리에 앉아 뭘 고치고 있었다.
 윤호 [기쁨] "{P:호칭}! 여기 웬일이세요?"
@@ -129,6 +132,7 @@
 -> back
 
 === r_yunho_c2_allnighter ===
+@map  m1_basecamp_4f 15,16
 @bgm  tension
 @char 윤호 center
 @char 승민 left
@@ -197,6 +201,7 @@
 -> r_yunho_c2_garden
 
 === r_yunho_c2_garden ===
+@map  m5_connect_garden 15,20
 @bgm  midnight
 @char 윤호 center
 
@@ -418,6 +423,7 @@
 -> c3_bus
 
 === r_yunho_c4_talk ===
+@map  m1_basecamp_4f 15,16
 @char 윤호 center
 * 2층 오픈데스크. 오늘은 남의 자리가 아니라 자기 자리에 앉아 있었다.
 * 헤드폰을 쓰고 있었다. 처음이었다.
@@ -431,6 +437,7 @@
 -> back
 
 === r_yunho_c4_classroom ===
+@map  m1_basecamp_4f 15,16
 @bgm  midnight
 @char 윤호 center
 
@@ -481,6 +488,7 @@
 -> r_yunho_c4_lastnight
 
 === r_yunho_c4_lastnight ===
+@map  m5_connect_garden 15,20
 @bgm  swell
 @char 윤호 center
 

@@ -8,6 +8,7 @@
 // 헤드폰  — 목에만 → 혼자 씀 → 한쪽 내밈(50) → 같이 씀 → 자기 도트를 보여줌(80)
 
 === r_yunjung_c1_pair ===
+@map  m1_basecamp_4f 15,16
 @bgm  session
 @char 윤정 center
 
@@ -57,6 +58,7 @@
 -> r_yunjung_c1_review
 
 === r_yunjung_c1_review ===
+@map  m1_basecamp_4f 15,16
 @bgm  tension
 @char 윤정 center
 
@@ -103,6 +105,7 @@
 -> c2_ranking
 
 === r_yunjung_c2_allnighter ===
+@map  m1_basecamp_4f 15,16
 @bgm  tension
 @char 민아 left
 @char 윤정 right
@@ -170,6 +173,7 @@
 -> r_yunjung_c2_garden
 
 === r_yunjung_c2_garden ===
+@map  m5_connect_garden 15,20
 @bgm  midnight
 @char 윤정 center
 
@@ -367,6 +371,7 @@
 -> c3_bus
 
 === r_yunjung_c4_classroom ===
+@map  m1_basecamp_4f 15,16
 @bgm  midnight
 @char 윤정 center
 
@@ -416,6 +421,7 @@
 -> r_yunjung_c4_lastnight
 
 === r_yunjung_c4_lastnight ===
+@map  m5_connect_garden 15,20
 @bgm  swell
 @char 윤정 center
 
@@ -529,6 +535,7 @@
 * 마지막 장면에 교육장이 나왔다.
 
 === r_yunjung_c2_talk ===
+@map  m1_basecamp_4f 15,16
 @char 윤정 center
 * 2층 오픈데스크. 윤정이 혼자 헤드폰을 쓰고 앉아 있었다.
 * 작업 모드였다. 말을 걸면 안 되는 상태라고 조에서 알려줬었다.
@@ -542,6 +549,7 @@
 -> back
 
 === r_yunjung_c4_talk ===
+@map  m1_basecamp_4f 15,16
 @char 윤정 center
 * 윤정은 화이트보드 앞에 서 있었다.
 * 자기가 그린 캐릭터 낙서 옆에 하나를 더 그리는 중이었다.

@@ -9,6 +9,7 @@
 // 모티프  — 아이스 아메리카노. 민아와 같은 사물인데 이쪽은 식사 대용입니다
 
 === r_mingyu_c1_pair ===
+@map  m1_basecamp_4f 15,16
 @bgm  session
 @char 민규 center
 
@@ -63,6 +64,7 @@
 -> r_mingyu_c1_review
 
 === r_mingyu_c1_review ===
+@map  m1_basecamp_4f 15,16
 @bgm  tension
 @char 민규 center
 
@@ -119,6 +121,7 @@
 -> c2_ranking
 
 === r_mingyu_c2_talk ===
+@map  m1_basecamp_4f 15,16
 @char 민규 center
 * 뒷줄 창가. 불을 반쯤 꺼놓고 있었다.
 * 옆에 앉았는데 아무 말이 없었다.
@@ -135,6 +138,7 @@
 -> back
 
 === r_mingyu_c2_allnighter ===
+@map  m1_basecamp_4f 15,16
 @bgm  tension
 @char 민규 center
 @char 승민 left
@@ -204,6 +208,7 @@
 -> r_mingyu_c2_garden
 
 === r_mingyu_c2_garden ===
+@map  m5_connect_garden 15,20
 @bgm  midnight
 @char 민규 center
 
@@ -420,6 +425,7 @@
 -> c3_bus
 
 === r_mingyu_c4_talk ===
+@map  m1_basecamp_4f 15,16
 @char 민규 center
 * 뒷줄 창가. 화면 셋을 띄워놓고 있었다.
 * B1에서 사온 아이스 아메리카노를 옆에 놨다.
@@ -434,6 +440,7 @@
 -> back
 
 === r_mingyu_c4_classroom ===
+@map  m1_basecamp_4f 15,16
 @bgm  midnight
 @char 민규 center
 
@@ -484,6 +491,7 @@
 -> r_mingyu_c4_lastnight
 
 === r_mingyu_c4_lastnight ===
+@map  m5_connect_garden 15,20
 @bgm  swell
 @char 민규 center
 

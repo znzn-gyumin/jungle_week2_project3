@@ -19,6 +19,7 @@ const ALL_MAPS: MapId[] = [
   'm5_connect_garden', 'm6_nestcamp', 'm7_gate',
 ];
 const SPEED = 190;
+const RUN = 1.85; // 시프트를 누르고 있을 때
 /**
  * 도트가 48px 이라 1배는 시야가 너무 넓습니다.
  *
@@ -338,13 +339,15 @@ export class CampusScene extends Phaser.Scene {
       let mark: Phaser.GameObjects.Text | undefined;
       if (dir) {
         mark = this.add
-          .text(rect.centerX, rect.y - 6, dir === 'down' ? '▼' : '▲', {
+          // 들어가는 쪽에 답니다. 내려가는 계단은 위에서, 올라가는 계단은
+          // 아래에서 들어가므로 ▲ 는 칸 아래에 붙습니다.
+          .text(rect.centerX, dir === 'down' ? rect.y - 6 : rect.bottom + 6, dir === 'down' ? '▼' : '▲', {
             fontSize: '18px',
             color: '#7fe3d6',
             stroke: '#2a2632',
             strokeThickness: 4,
           })
-          .setOrigin(0.5, 1)
+          .setOrigin(0.5, dir === 'down' ? 1 : 0)
           .setDepth(60);
         this.tweens.add({
           targets: mark,
@@ -465,12 +468,13 @@ export class CampusScene extends Phaser.Scene {
     if (this.paused || this.setup.still) return;
     if (this.portalCooldown > 0) this.portalCooldown -= dt;
     const c = this.cursors;
+    const sp = c.shift.isDown ? SPEED * RUN : SPEED;
     let vx = 0;
     let vy = 0;
-    if (c.left.isDown) vx = -SPEED;
-    else if (c.right.isDown) vx = SPEED;
-    if (c.up.isDown) vy = -SPEED;
-    else if (c.down.isDown) vy = SPEED;
+    if (c.left.isDown) vx = -sp;
+    else if (c.right.isDown) vx = sp;
+    if (c.up.isDown) vy = -sp;
+    else if (c.down.isDown) vy = sp;
     this.player.setVelocity(vx, vy);
 
     let dir: Dir | null = null;
@@ -478,7 +482,10 @@ export class CampusScene extends Phaser.Scene {
     else if (vx > 0) dir = 'right';
     else if (vy < 0) dir = 'up';
     else if (vy > 0) dir = 'down';
-    if (dir) this.player.anims.play(`walk_${dir}`, true);
+    if (dir) {
+      this.player.anims.play(`walk_${dir}`, true);
+      this.player.anims.timeScale = c.shift.isDown ? RUN : 1;
+    }
     else if (this.player.anims.isPlaying) {
       const row = DIR_ROW[(this.player.anims.currentAnim?.key.slice(5) as Dir) ?? 'down'];
       this.player.anims.stop();
@@ -493,13 +500,16 @@ export class CampusScene extends Phaser.Scene {
       const on = this.portals.find((p) => Phaser.Geom.Rectangle.ContainsPoint(p.rect, feet));
       // 내려가는 계단은 **위에서만**, 올라가는 계단은 **아래에서만** 들어갑니다.
       // 반대쪽에서 오면 벽처럼 막습니다 — 그냥 지나가게 두면 계단이 통로가 됩니다.
+      // 화살표가 없는 세 면은 벽입니다. 직전 발 위치가 들어가는 면 **바깥**
+      // 이어야 통과합니다 — 옆이나 반대편에서 오면 여기서 걸립니다.
       const ok =
         !on ||
         !on.dir ||
-        (on.dir === 'down' ? this.lastFeet.y <= on.rect.y : this.lastFeet.y >= on.rect.bottom);
+        (on.dir === 'down' ? this.lastFeet.y < on.rect.y : this.lastFeet.y > on.rect.bottom);
       if (on && !ok) {
         this.player.setPosition(this.lastPos.x, this.lastPos.y);
         this.player.setVelocity(0, 0);
+        this.onWhere?.(this.player.x / TS, this.player.y / TS);
         return;
       }
       this.lastFeet = { x: feet.x, y: feet.y };

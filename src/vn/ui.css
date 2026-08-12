@@ -505,3 +505,11 @@
 
 /* 얼굴이 바뀔 때 톡 */
 .vn__face.fx-pop { animation: vn-pop 260ms ease-out; }
+
+
+/* 아직 안 온 글자. 자리는 잡되 보이지만 않습니다 —
+   이래야 한 줄이 두 줄 되는 순간 칸이 안 뜁니다. */
+.vn__ink--wait { color: transparent; }
+
+/* CG 는 화면 바닥에 붙입니다. 조금이라도 뜨면 공중에 선 것처럼 보입니다. */
+.stage__char { bottom: 0 !important; }

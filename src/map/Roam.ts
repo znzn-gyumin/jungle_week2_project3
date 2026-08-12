@@ -172,8 +172,13 @@ export class Roam {
   private idleScene(n: FreeroamNpc): string {
     const id = HEROINE_BY_NAME[n.who];
     if (id) return `idle_${id}_${this.block.id}`;
-    if (n.who === '명진혁') return 'idle_coach_midproject';
-    return 'idle_scout_finalprep';
+    if (n.who === '명진혁') return `idle_coach_${this.block.id}`;
+    // 4조 정찰은 마지막 날의 그 장면 전용입니다
+    if (n.who === '태윤' || n.who === '태연') {
+      return this.block.id === 'finalprep' ? 'idle_scout_finalprep' : `idle_team_${this.block.id}`;
+    }
+    // 히로인도 코치도 아닌 사람 — 이름을 안 부르는 공용 대사
+    return `idle_team_${this.block.id}`;
   }
 
   /** 첫 자유 이동에서 한 번만 — 조작을 모르면 아무 데도 못 갑니다 */

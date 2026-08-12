@@ -8,6 +8,7 @@
 // 모티프  — 아이스 아메리카노. 과정 1 은 얼음이 가득한 단계
 
 === r_minah_c1_pair ===
+@map  m1_basecamp_4f 15,16
 @bgm  session
 @char 민아 center
 
@@ -61,6 +62,7 @@
 -> r_minah_c1_review
 
 === r_minah_c1_review ===
+@map  m1_basecamp_4f 15,16
 @bgm  tension
 @char 민아 center
 
@@ -117,6 +119,7 @@
 -> c2_ranking
 
 === r_minah_c2_talk ===
+@map  m1_basecamp_4f 15,16
 @char 민아 center
 * 뒷줄 창가. 열여덟 시간째 같은 자리였다.
 * 창틀에 컵이 두 개 있었다. 하나는 얼음이 다 녹아 있었다.
@@ -130,6 +133,7 @@
 -> back
 
 === r_minah_c2_allnighter ===
+@map  m1_basecamp_4f 15,16
 @bgm  tension
 @char 민아 center
 @char 윤정 right
@@ -201,6 +205,7 @@
 -> r_minah_c2_garden
 
 === r_minah_c2_garden ===
+@map  m5_connect_garden 15,20
 @bgm  midnight
 @char 민아 center
 
@@ -421,6 +426,7 @@
 -> c3_bus
 
 === r_minah_c4_talk ===
+@map  m1_basecamp_4f 15,16
 @char 민아 center
 * 뒷줄 창가. 파이널 프로젝트 첫날인데 벌써 남아 있었다.
 * B1에 내려가서 아이스 아메리카노를 하나 사왔다.
@@ -435,6 +441,7 @@
 -> back
 
 === r_minah_c4_classroom ===
+@map  m1_basecamp_4f 15,16
 @bgm  midnight
 @char 민아 center
 
@@ -488,6 +495,7 @@
 -> r_minah_c4_lastnight
 
 === r_minah_c4_lastnight ===
+@map  m5_connect_garden 15,20
 @bgm  swell
 @char 민아 center
 
