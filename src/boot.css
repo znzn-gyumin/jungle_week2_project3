@@ -19,7 +19,11 @@ body {
   height: 100%;
   background: var(--ground);
   color: var(--ink);
-  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  /* 둥근 고딕 계열을 앞에 둡니다 (WORLD_BIBLE 11 · UI 는 둥근모꼴).
+     설치돼 있지 않으면 순서대로 물러납니다. */
+  font-family: 'DungGeunMo', 'Galmuri11', 'NeoDunggeunmo', 'Pretendard',
+    'NanumSquareRound', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  font-weight: 500;
   -webkit-font-smoothing: antialiased;
 }
 

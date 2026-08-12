@@ -9,7 +9,7 @@
  */
 import { applyEffects, endingTier, testCond } from '../core/state';
 import { substitute } from '../core/tokens';
-import { HEROINE_GENDER, NAME_BY_HEROINE } from '../core/types';
+import { FACE_FILE, HEROINE_BY_NAME, HEROINE_GENDER, NAME_BY_HEROINE } from '../core/types';
 import type { ChoiceOption, GameState, Line, Scene, ScriptData } from '../core/types';
 import type { TimeOfDay } from '../config/lighting';
 import { Backdrop } from '../map/Backdrop';
@@ -37,12 +37,14 @@ export class Player {
   private textEl: HTMLElement;
   private choiceEl: HTMLElement;
   private boxEl: HTMLElement;
+  private faceEl: HTMLImageElement;
   private stageEl: HTMLElement;
   private stage: Stage;
   private mapEl: HTMLElement;
   private roam: Roam | null = null;
   private backdrop: Backdrop;
   private bgm = 'day';
+  private lastFace = '기본';
 
   constructor(root: HTMLElement, script: ScriptData, state: GameState) {
     this.script = script;
@@ -56,12 +58,16 @@ export class Player {
         <div class="vn__map" id="vn-back" hidden></div>
         <div class="vn__map" id="vn-map" hidden></div>
         <div class="vn__box" id="vn-box">
-          <p class="vn__name" id="vn-name"></p>
-          <p class="vn__text" id="vn-text"></p>
+          <img class="vn__face" id="vn-face" alt="" hidden />
+          <div class="vn__said">
+            <p class="vn__name" id="vn-name"></p>
+            <p class="vn__text" id="vn-text"></p>
+          </div>
         </div>
         <div class="vn__choices" id="vn-choices" hidden></div>
       </div>`;
     this.boxEl = root.querySelector('#vn-box')!;
+    this.faceEl = root.querySelector('#vn-face')!;
     this.stageEl = root.querySelector('#vn-stage')!;
     this.nameEl = root.querySelector('#vn-name')!;
     this.textEl = root.querySelector('#vn-text')!;
@@ -126,6 +132,7 @@ export class Player {
           this.boxEl.hidden = false;
           this.textEl.classList.toggle('vn__text--narr', line.t === 'narr');
           if (line.t === 'say') this.stage.setFace(line.who, line.face);
+          this.setAvatar(line.t === 'say' ? line.who : null, line.t === 'say' ? line.face : undefined);
           this.typer.run(substitute(line.text, this.state));
           return;
         }
@@ -173,6 +180,24 @@ export class Player {
           continue;
       }
     }
+  }
+
+  /**
+   * 대사창 왼쪽 얼굴 — `dot/face/` 는 **히로인 6인만** 있습니다.
+   * 없는 사람이 말하면 아이콘 자리를 통째로 없앱니다.
+   */
+  private setAvatar(who: string | null, face?: string): void {
+    const id = who ? HEROINE_BY_NAME[who] : undefined;
+    if (!id) {
+      this.faceEl.hidden = true;
+      this.boxEl.classList.remove('vn__box--face');
+      return;
+    }
+    if (face) this.lastFace = face;
+    const file = FACE_FILE[this.lastFace] ?? 'normal';
+    this.faceEl.src = `${import.meta.env.BASE_URL}assets/dot/face/${id}_${file}.webp`;
+    this.faceEl.hidden = false;
+    this.boxEl.classList.add('vn__box--face');
   }
 
   private showChoices(options: ChoiceOption[]): void {

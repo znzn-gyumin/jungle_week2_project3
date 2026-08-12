@@ -30,11 +30,17 @@
 .vn__box {
   position: absolute;
   z-index: 4;
-  left: clamp(8rem, 24vw, 21rem);
-  right: clamp(1rem, 4vw, 4rem);
+  /* 항상 화면 하단 가운데. 좌우 여백이 같아야 반신이 어느 쪽에 서든
+     대사창 자체는 흔들리지 않습니다. */
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(46rem, 68vw);
   bottom: clamp(1rem, 3vh, 2rem);
   min-height: 22vh;
   max-height: 30vh;
+  display: flex;
+  gap: 1.1rem;
+  align-items: flex-start;
   padding: 1.4rem clamp(1.2rem, 3vw, 2.2rem);
   background: #12141acc;
   border: 1px solid var(--accent);
@@ -52,17 +58,35 @@
 }
 
 /* 이름표 — 대사창 좌상단에 붙는 형태 */
+/* 대사창 왼쪽 얼굴 — dot/face 는 48×64 라 그대로 키워 씁니다.
+   안티에일리어싱이 들어 있어 확대할 때 흐려지지 않게 픽셀 보간을 끄지 않습니다. */
+.vn__face {
+  flex: none;
+  width: clamp(3.4rem, 7vw, 5.2rem);
+  height: auto;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  background: #0b0c17cc;
+}
+
+.vn__face[hidden] {
+  display: none;
+}
+
+.vn__said {
+  min-width: 0;
+  flex: 1;
+}
+
 .vn__name {
-  position: absolute;
-  top: -0.85rem;
-  left: 1.2rem;
-  margin: 0;
-  padding: 0.15rem 0.9rem;
-  font-size: 0.85rem;
+  margin: 0 0 0.45rem;
+  display: inline-block;
+  padding: 0.1rem 0.75rem;
+  font-size: 1.05rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: var(--ink);
-  background: #12141aee;
+  color: var(--accent);
+  background: #0b0c17aa;
   border: 1px solid var(--accent);
   border-radius: 2px;
 }
@@ -74,9 +98,10 @@
 .vn__text {
   margin: 0;
   max-width: 44rem;
-  font-size: clamp(1rem, 1.8vw, 1.2rem);
-  line-height: 1.8;
+  font-size: clamp(1.15rem, 2.3vw, 1.6rem);
+  line-height: 1.75;
   min-height: 3.6rem;
+  letter-spacing: -0.01em;
 }
 
 .vn__text--narr {
@@ -106,7 +131,7 @@
   width: min(34rem, 100%);
   padding: 0.8rem 1.2rem;
   font: inherit;
-  font-size: clamp(0.9rem, 1.7vw, 1.05rem);
+  font-size: clamp(1rem, 1.9vw, 1.2rem);
   color: var(--ink);
   text-align: left;
   background: #12141ae6;
@@ -169,22 +194,22 @@
 .stage__char {
   top: auto;
   bottom: -34vh;
-  left: clamp(-3rem, -2vw, 0rem);
-  right: auto;
+  right: clamp(-2rem, -1vw, 0rem);
+  left: auto;
   width: clamp(16rem, 34vw, 30rem);
   height: auto;
   max-height: 96vh;
   object-fit: contain;
-  object-position: bottom left;
+  object-position: bottom right;
   opacity: 0;
   z-index: 3;
   filter: drop-shadow(0 0 18px rgb(0 0 0 / 55%));
 }
 
-.vn__stage[data-pos='right'] .stage__char {
-  left: auto;
-  right: clamp(-3rem, -2vw, 0rem);
-  object-position: bottom right;
+.vn__stage[data-pos='left'] .stage__char {
+  right: auto;
+  left: clamp(-2rem, -1vw, 0rem);
+  object-position: bottom left;
 }
 
 /* 밤 배경 위에서는 인물만 대낮이면 붙여넣은 것처럼 보입니다 */
