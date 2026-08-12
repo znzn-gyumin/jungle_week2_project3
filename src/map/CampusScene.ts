@@ -14,6 +14,26 @@ import type { FreeroamNpc, MapId } from '../core/types';
 import { backLine, openLine } from './chatter';
 import { CAST, CELL, DIR_ROW, HEAD_OVERHANG, PLAYER_DOT, type Dir } from './sprites';
 
+/**
+ * 한 시간대에 캠퍼스에 서는 **무명은 모두 합쳐 열일곱**입니다.
+ *
+ * 학생은 스물넷이고 그중 이름이 있는 사람이 일곱(주인공 · 히로인 셋 ·
+ * 절친 · 4조 대표 · 조민)이라, 남는 자리가 정확히 열일곱입니다. 맵마다
+ * 적힌 자리는 그보다 많은데(그날 어디 있느냐로 갈리는 자리라) 다 세우면
+ * 같은 시간에 학생이 예순 명이 됩니다.
+ *
+ * 코치와 여사님은 학생이 아니라 이 몫에서 빠집니다.
+ */
+const MOB_QUOTA: Partial<Record<MapId, number>> = {
+  m1_basecamp_4f: 6,
+  m2_basecamp_2f: 1,
+  m3_basecamp_1f: 3,
+  m4_basecamp_b1: 3,
+  m5_connect_garden: 2,
+  m6_nestcamp: 1,
+  m7_gate: 1,
+};
+
 /** 배경 인물 도트 — 이름이 붙은 셋과 무명 셋 */
 const EXTRA_DOTS = ['jomin', 'taeyun', 'taeyeon', 'mob_a', 'mob_b', 'mob_c'];
 
@@ -468,6 +488,8 @@ export class CampusScene extends Phaser.Scene {
 
     // ---- 배경 인물. 말은 못 걸지만 자리에는 있습니다.
     let i = 0;
+    let mobs = 0;
+    const quota = MOB_QUOTA[id] ?? 0;
     for (const o of layer.objects) {
       if (used.has(o)) continue;
       const props = o.properties as { name: string; value: string }[] | undefined;
@@ -496,6 +518,9 @@ export class CampusScene extends Phaser.Scene {
       // 주인공 자리는 비워 둡니다 — 안 그러면 자기 자신이 앉아 있습니다
       if (text.includes('주인공')) continue;
       const named = Boolean(text) && text !== '무명';
+      // 무명은 이 맵 몫만큼만 세웁니다 — 캠퍼스 전체로 열일곱입니다
+      if (!named && mobs >= quota) continue;
+      if (!named) mobs++;
       // **이름이 있는 사람은 교육장에만 세웁니다.** 같은 사람 자리가
       // 4층과 2층에 다 적혀 있어서(그날 어디 있느냐로 갈리는 자리라)
       // 그대로 그리면 조민이 두 층에 동시에 서 있게 됩니다.
