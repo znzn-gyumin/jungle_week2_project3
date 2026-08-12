@@ -168,6 +168,7 @@ function titleScreen(app: HTMLElement): void {
             </fieldset>
             <p class="boot__hint" id="boot-cast"></p>
             <button class="vn__choice boot__go" id="boot-start" type="submit" disabled>정글 들어가기</button>
+            <button class="boot__back" id="boot-back" type="button">← 이름 다시 정하기</button>
           </form>
         </div>
       </section>
@@ -190,7 +191,8 @@ function titleScreen(app: HTMLElement): void {
     setTimeout(() => {
       for (const el of acts) el.classList.remove("is-out");
       acts[act].classList.add("is-on");
-      acts[act].querySelector<HTMLInputElement>("input")?.focus();
+      // 라디오는 초점을 주면 값이 잡히므로 글자 칸일 때만 짚어 줍니다
+      acts[act].querySelector<HTMLInputElement>('input[type="text"], input:not([type])')?.focus();
     }, 260);
   };
 
@@ -254,6 +256,10 @@ function titleScreen(app: HTMLElement): void {
         : "조원은 민규 · 승민 · 윤호, 룸메는 한지아입니다.";
     startBtn.disabled = !g || !room;
   };
+  app.querySelector<HTMLButtonElement>("#boot-back")!.addEventListener("click", () => {
+    goTo(1);
+  });
+
   whoForm.addEventListener("change", sync);
   sync();
 

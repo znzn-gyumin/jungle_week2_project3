@@ -104,33 +104,35 @@
   visibility: hidden;
 }
 
+/* 얼굴 자리는 **항상** 비워 둡니다. CG 대화에서도 자리를 남기므로
+   세로 바와 글 시작 자리가 두 모드에서 똑같습니다. */
 .vn__said {
   min-width: 0;
   flex: 1;
   display: flex;
+  padding-left: 0;
   /* 이름과 대사를 **위아래 가운데**로 맞춥니다. baseline 으로 두면
      대사가 두 줄일 때 이름만 첫 줄에 붙어 창이 기울어 보입니다. */
   align-items: center;
-}
-
-/* 얼굴 자리는 **항상** 비워 둡니다. CG 대화에서도 자리를 남기므로
-   세로 바와 글 시작 자리가 두 모드에서 똑같습니다. */
-.vn__said {
-  padding-left: 0;
 }
 
 /* 세로 바 = 기준선. 얼굴을 안 가리도록 오른쪽에 세우고, 맵·CG 두
    모드와 대사·내레이션 네 경우가 모두 같은 폭을 써서 바가 늘 같은
    자리에 옵니다. */
 .vn__name {
-  min-width: 6.5rem;
-  font-weight: 700;
-  margin: 0;
-  display: inline-block;
-  padding: 0.1rem 0.75rem;
-  font-size: 1.25rem;
+  /* **min-width 가 아니라 고정 폭.** 최소 폭으로 두면 「명진혁 코치」
+     처럼 긴 이름에서 칸이 늘어 바가 오른쪽으로 밀리고, 그 줄만 글
+     시작 자리가 달라집니다. */
+  width: 8.6rem;
   flex: none;
+  display: block;
+  margin: 0 1rem 0 0;
+  padding: 0 1rem 0 0;
+  font-size: 1.18rem;
+  font-weight: 700;
+  line-height: 1.4;
   text-align: right;
+  white-space: nowrap;
   letter-spacing: 0.04em;
   color: var(--theme, #e0567b);
   text-shadow: 0 1px 0 #fff;
@@ -138,8 +140,6 @@
   border: 0;
   border-right: 1px solid var(--theme, #f0d9c8);
   border-radius: 0;
-  padding: 0 1rem 0 0;
-  margin: 0 1rem 0 0;
 }
 
 /* **자리는 남깁니다.** display: none 으로 지우면 이름칸(6.5rem)과
@@ -150,6 +150,11 @@
 }
 
 .vn__text {
+  /* **자기 칸 안에서도 가운데.** min-height 가 3.4rem 인데 한 줄짜리
+     대사는 2.8rem 이라, 그대로 두면 글이 칸 위쪽에 붙어 이름과 축이
+     안 맞습니다. */
+  display: grid;
+  align-content: center;
   margin: 0;
   max-width: 44rem;
   font-size: clamp(1.15rem, 2.3vw, 1.6rem);

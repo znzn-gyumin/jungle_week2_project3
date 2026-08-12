@@ -789,3 +789,26 @@ body {
   outline: 2px dashed #fff;
   outline-offset: 3px;
 }
+
+
+/* 앞 장으로 — 시작 버튼과 헷갈리지 않게 테두리도 채움도 없습니다 */
+.boot__back {
+  margin-top: 0.15rem;
+  padding: 0.35rem 0.9rem;
+  font: inherit;
+  font-size: 0.84rem;
+  color: rgb(255 255 255 / 68%);
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: 999px;
+  text-shadow: 0 1px 5px rgb(0 0 0 / 70%);
+  transition: color 160ms ease;
+}
+
+.boot__back:hover { color: #fff; }
+
+.boot__back:focus-visible {
+  outline: 2px dashed #fff;
+  outline-offset: 3px;
+}
