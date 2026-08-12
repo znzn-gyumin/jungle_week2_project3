@@ -62,10 +62,17 @@ export class Player {
    */
   private cinematic = false;
 
+  /** 얼굴을 내립니다 — 씬이 바뀌거나 명장면으로 갈 때 */
+  private clearAvatar(): void {
+    this.faceEl.hidden = true;
+    this.boxEl.classList.remove('vn__box--face');
+  }
+
   /** 명장면과 맵 대화는 배치가 다릅니다 — CSS 가 클래스로 갈라 봅니다 */
   private setMode(on: boolean): void {
     this.cinematic = on;
     this.boxEl.classList.toggle('vn__box--cine', on);
+    if (on) this.clearAvatar();
     // **맵 대화로 돌아가면 반신을 내립니다.** 안 내리면 앞 씬에서 섰던
     // 인물이 화면 바닥에 그대로 남아 도트 얼굴과 같이 뜹니다.
     if (!on) this.stage.clearChar();
@@ -294,8 +301,10 @@ export class Player {
   private setAvatar(who: string | null, face?: string): void {
     const id = who ? HEROINE_BY_NAME[who] : undefined;
     if (!id) {
-      // 자리는 남깁니다 — CSS 가 visibility 로 숨깁니다
-      this.faceEl.hidden = true;
+      // **말하던 사람의 얼굴은 그대로 둡니다.** 내레이션마다 껐다 켜면
+      // 대사와 내레이션이 오갈 때 얼굴이 매 줄 깜빡입니다. 씬이 바뀌거나
+      // 명장면으로 넘어갈 때 clearAvatar 가 내립니다.
+      if (!this.faceEl.hidden) return;
       this.boxEl.classList.remove('vn__box--face');
       return;
     }
@@ -462,6 +471,7 @@ export class Player {
       return;
     }
     this.wipe();
+    this.clearAvatar();
     let t = target;
     if (t.startsWith('r_*_')) {
       if (!this.state.route) {

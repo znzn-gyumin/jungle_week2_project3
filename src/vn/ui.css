@@ -159,14 +159,16 @@
   max-width: 44rem;
   font-size: clamp(1.15rem, 2.3vw, 1.6rem);
   line-height: 1.75;
-  min-height: 3.4rem;
+  /* **두 줄 높이로 고정합니다.** 한 줄짜리 대사는 칸이 작았다가 두 줄
+     짜리에서 커지는데, 가운데 정렬이라 그 차이의 절반만큼 글이 위아래로
+     튑니다. 늘 두 줄을 잡아 두면 어떤 대사가 와도 자리가 같습니다. */
+  min-height: 5.6rem;
   letter-spacing: -0.01em;
   color: #6b4038;
   /* 한국어는 어절 단위로 끊어야 읽힙니다. keep-all 이 없으면 단어
      한가운데서 줄이 넘어가 눈이 걸립니다. */
   word-break: keep-all;
   overflow-wrap: break-word;
-  text-wrap: pretty;
 }
 
 .vn__text--narr {
