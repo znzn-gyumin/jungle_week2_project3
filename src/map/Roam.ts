@@ -341,7 +341,7 @@ export class Roam {
       g.fillStyle = n.theme;
       g.fillText('!', n.x * s, n.y * s);
     }
-    // 나는 파란 점 — 계단(청록)·사람(분홍)과 안 겹치는 색입니다
+    // 나는 흰 테두리를 두른 검은 동그라미 — 계단은 네모라 모양으로 갈립니다
     g.beginPath();
     g.arc(this.me.x * s, this.me.y * s, 4.4, 0, Math.PI * 2);
     g.fillStyle = '#ffffff';
@@ -371,7 +371,7 @@ export class Roam {
       <p class="roam-guide__keys">${
         done
           ? '<b>엔터</b> 로 다음으로 · 더 둘러봐도 됩니다'
-          : '방향키 이동 · <b>스페이스</b> 말 걸기 · 청록은 계단'
+          : '방향키 이동 · <b>시프트</b> 뛰기 · <b>스페이스</b> 말 걸기'
       }</p>`;
   }
 
