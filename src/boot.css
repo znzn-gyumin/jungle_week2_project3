@@ -56,6 +56,8 @@ body {
 /* 1920 × 1080 무대 바깥은 검은색 레터박스입니다 */
 #app {
   position: relative;
+  /* 높이가 없으면 무대(.vn/.boot)가 0px 안에 갇혀 화면이 통째로 검어집니다 */
+  height: 100%;
   overflow: hidden;
   background: #000;
 }
