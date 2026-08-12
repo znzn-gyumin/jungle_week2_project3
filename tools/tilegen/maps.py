@@ -708,7 +708,9 @@ def m6(TS_):
     # 어디까지 가야 나가는 건지도 안 보입니다. 이미지 끝에 닿아야 넘어갑니다.
     for x in range(17, 21):
         m.open(x, H - 1)
-        m.portal("m5_connect_garden", x, H - 1, 12 + (x - 17), 44, name="to_garden")
+        # **가든의 위쪽 문 앞**에 섭니다. 숙소동은 가든 위에 있으므로
+        # 내려오면 가든 윗변으로 나와야 방향이 맞습니다.
+        m.portal("m5_connect_garden", x, H - 1, 14 + (x - 17), 1, name="to_garden")
 
     # ---- 1F 체력단련실
     room(m, D, 2, 8, 14, 7, floor="f_gym")
