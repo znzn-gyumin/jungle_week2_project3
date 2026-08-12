@@ -139,9 +139,7 @@ export class CampusScene extends Phaser.Scene {
       .setVisible(false);
 
     this.guide = this.add
-      .text(168, 12, '방향키 이동
-스페이스 말 걸기
-청록 = 계단', {
+      .text(168, 12, ['방향키 이동', '스페이스 말 걸기', '청록 = 계단'], {
         fontSize: '13px',
         color: '#f2ede4',
         lineSpacing: 5,
