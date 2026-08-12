@@ -139,7 +139,7 @@ export class CampusScene extends Phaser.Scene {
       .setVisible(false);
 
     this.guide = this.add
-      .text(168, 12, ['방향키 이동', '스페이스 말 걸기', '청록 = 계단'], {
+      .text(168, 12, '', {
         fontSize: '13px',
         color: '#f2ede4',
         lineSpacing: 5,
@@ -161,6 +161,11 @@ export class CampusScene extends Phaser.Scene {
     this.scale.on('resize', (g: Phaser.Structs.Size) => this.uiCam?.setSize(g.width, g.height));
 
     this.loadMap(this.setup.map, this.setup.x, this.setup.y);
+  }
+
+  /** 지금 무엇을 하면 이야기가 진행되는지 */
+  setGuide(lines: string[]): void {
+    this.guide?.setText(lines);
   }
 
   /** 씬 재생 중에는 맵을 멈춥니다 */

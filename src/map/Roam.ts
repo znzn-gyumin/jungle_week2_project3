@@ -72,6 +72,9 @@ export class Roam {
       onTalk: (n: FreeroamNpc) => this.talk(n),
       onTrigger: (t: string) => this.trigger(t),
     });
+    // 씬이 부팅된 뒤에 안내를 겁니다
+    this.game.events.once('poststep', () => this.updateGuide());
+    setTimeout(() => this.updateGuide(), 300);
   }
 
   /**
@@ -90,21 +93,31 @@ export class Roam {
     this.left--;
     this.met.push(n.who === '태연' ? '태윤' : n.who);
     this.scene?.removeNpc(n.who);
-    this.host.hidden = true;
+    // 맵을 숨기지 않습니다 — 걷다가 말을 건 자리에서 그대로 대화합니다
+    this.scene?.setPaused(true);
     this.onTalk(n.target);
   }
 
   private trigger(target: string): void {
     this.scene?.setPaused(true);
-    this.host.hidden = true;
     this.onTalk(target);
   }
 
   /** 씬이 `-> back` 으로 끝나면 맵으로 돌아옵니다 */
   resume(): void {
     if (this.left <= 0 || !this.usable().length) return this.finish();
-    this.host.hidden = false;
     this.scene?.setPaused(false);
+    this.updateGuide();
+  }
+
+  /** 남은 목표를 맵 위에 적어 둡니다 */
+  updateGuide(): void {
+    const left = this.usable().map((n) => n.who);
+    this.scene?.setGuide([
+      `${this.left}명에게 더 말을 걸면 진행됩니다`,
+      `남은 사람 — ${left.join(' · ')}`,
+      '방향키 이동 · 스페이스 말 걸기 · 청록은 계단',
+    ]);
   }
 
   private finish(): void {
