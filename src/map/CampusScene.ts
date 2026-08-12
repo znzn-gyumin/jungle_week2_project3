@@ -453,10 +453,15 @@ export class CampusScene extends Phaser.Scene {
       if (used.has(o)) continue;
       const props = o.properties as { name: string; value: string }[] | undefined;
       const text = String(props?.find((p) => p.name === 'label')?.value ?? '');
-      const key = `dot_${extraDot(text, i++)}`;
+      const key = `dot_${extraDot(text, i)}`;
       if (!this.textures.exists(key)) continue;
+      // **다들 아래만 보고 있으면 진열장 같습니다.** 맵에 적힌 dir 을
+      // 따르고, 없으면 자리 순서로 네 방향을 돌려 씁니다.
+      const face = String(props?.find((p) => p.name === 'dir')?.value ?? '') as Dir;
+      const row = DIR_ROW[face] ?? DIR_ROW[(['down', 'left', 'right', 'up'] as Dir[])[i % 4]];
+      i++;
       const sp = this.add
-        .image(o.x ?? 0, (o.y ?? 0) - HEAD_OVERHANG, key, 0)
+        .image(o.x ?? 0, (o.y ?? 0) - HEAD_OVERHANG, key, row * 4)
         .setOrigin(0, 0)
         .setDepth(38);
       this.uiCam?.ignore(sp);

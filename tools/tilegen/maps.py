@@ -406,6 +406,20 @@ def m3(TS_):
         m.portal("m5_connect_garden", 43, y, 3, 20 + (y - 20), name="to_garden")
     m.set_ground(42, 21, E, "f_lightpool"); m.set_ground(42, 22, E, "f_lightpool")
     m.trigger("spawn_default", 12, 4, kind="spawn")
+
+    # ---- 배경 인물 — 로비 · 게시판 · 택배보관소
+    # 스물넷이 하루 종일 교육장에만 앉아 있을 리가 없다. 말은 못 걸어도
+    # 사람이 있어야 캠퍼스가 산 것처럼 보인다. dir 로 보는 쪽을 흩는다.
+    m.npc("extra1", 23, 3, role="extra", label="무명", dir="down", note="자판기 앞")
+    m.npc("extra2", 3, 8, role="extra", label="무명", dir="right", note="게시판을 본다")
+    m.npc("extra3", 15, 8, role="extra", label="무명", dir="down", note="로비 소파")
+    m.npc("extra4", 31, 8, role="extra", label="무명", dir="left", note="계단 쪽에서 통화 중")
+    m.npc("extra5", 4, 11, role="extra", label="무명", dir="up", note="택배 상자를 뒤진다")
+    m.npc("extra6", 23, 13, role="extra", label="무명", dir="right", note="로비 소파")
+    m.npc("extra7", 23, 16, role="extra", label="무명", dir="up", note="소파 등받이에 기대")
+    m.npc("extra8", 34, 16, role="extra", label="무명", dir="left", note="창밖을 본다")
+    m.npc("extra9", 11, 19, role="extra", label="무명", dir="down", note="나가는 길")
+
     return m
 
 
@@ -471,6 +485,21 @@ def m4(TS_):
     m.portal("m3_basecamp_1f", 20, 4, 15, 24, name="stairs_to_1f")
     m.portal("m3_basecamp_1f", 21, 4, 15, 24, name="stairs_to_1f")
     m.trigger("spawn_default", 20, 5, kind="spawn")
+
+    # ---- 배경 인물 — B1 · 카페테리아 · 편의점 · 정글스테이지
+    # 스물넷이 하루 종일 교육장에만 앉아 있을 리가 없다. 말은 못 걸어도
+    # 사람이 있어야 캠퍼스가 산 것처럼 보인다. dir 로 보는 쪽을 흩는다.
+    m.npc("extra1", 26, 3, role="extra", label="무명", dir="down", note="편의점 앞")
+    m.npc("extra2", 6, 8, role="extra", label="무명", dir="right", note="배식 줄")
+    m.npc("extra3", 18, 8, role="extra", label="무명", dir="down", note="배식 줄")
+    m.npc("extra4", 9, 9, role="extra", label="무명", dir="up", note="배식대 앞")
+    m.npc("extra5", 29, 10, role="extra", label="무명", dir="left", note="정글스테이지 좌석")
+    m.npc("extra6", 25, 12, role="extra", label="무명", dir="down", note="정글스테이지 좌석")
+    m.npc("extra7", 20, 14, role="extra", label="무명", dir="up", note="무대 쪽을 본다")
+    m.npc("extra8", 6, 17, role="extra", label="무명", dir="right", note="컵라면 물을 받는다")
+    m.npc("extra9", 25, 19, role="extra", label="무명", dir="left", note="혼자 먹는다")
+    m.npc("extra10", 23, 22, role="extra", label="무명", dir="down", note="계단 앞")
+
     return m
 
 
@@ -617,6 +646,19 @@ def m5(TS_):
     m.trigger("garden_center", 13, 17, w=6, h=6, kind="scene",
               label="커넥트가든 중앙", note="감정 정점 씬 지점 · 여명 오버레이 전용 맵")
     m.trigger("spawn_default", 15, 24, kind="spawn")
+
+    # ---- 배경 인물 — 커넥트가든
+    # 스물넷이 하루 종일 교육장에만 앉아 있을 리가 없다. 말은 못 걸어도
+    # 사람이 있어야 캠퍼스가 산 것처럼 보인다. dir 로 보는 쪽을 흩는다.
+    m.npc("extra1", 10, 5, role="extra", label="무명", dir="down", note="데크 벤치")
+    m.npc("extra2", 22, 8, role="extra", label="무명", dir="left", note="난간에 기대")
+    m.npc("extra3", 17, 11, role="extra", label="무명", dir="up", note="하늘을 본다")
+    m.npc("extra4", 7, 13, role="extra", label="무명", dir="right", note="통화 중")
+    m.npc("extra5", 25, 17, role="extra", label="무명", dir="down", note="야외 테이블")
+    m.npc("extra6", 15, 20, role="extra", label="무명", dir="left", note="야외 테이블")
+    m.npc("extra7", 4, 24, role="extra", label="무명", dir="up", note="바람 쐬러 나왔다")
+    m.npc("extra8", 24, 26, role="extra", label="무명", dir="down", note="혼자 앉아 있다")
+
     return m
 
 
@@ -771,6 +813,20 @@ def m6(TS_):
             m.open(x, y)
 
     m.trigger("spawn_default", 18, 3, kind="spawn")
+
+    # ---- 배경 인물 — 숙소동 · 세탁실 · 계단실 · 라운지
+    # 스물넷이 하루 종일 교육장에만 앉아 있을 리가 없다. 말은 못 걸어도
+    # 사람이 있어야 캠퍼스가 산 것처럼 보인다. dir 로 보는 쪽을 흩는다.
+    m.npc("extra1", 17, 6, role="extra", label="무명", dir="down", note="세탁실 앞")
+    m.npc("extra2", 3, 10, role="extra", label="무명", dir="right", note="세탁기를 돌리고 나온다")
+    m.npc("extra3", 15, 11, role="extra", label="무명", dir="up", note="건조기를 기다린다")
+    m.npc("extra4", 35, 13, role="extra", label="무명", dir="left", note="복도 끝 창가")
+    m.npc("extra5", 12, 17, role="extra", label="무명", dir="down", note="방으로 돌아가는 길")
+    m.npc("extra6", 20, 24, role="extra", label="무명", dir="right", note="계단실 앞")
+    m.npc("extra7", 20, 27, role="extra", label="무명", dir="up", note="층계참에서 통화")
+    m.npc("extra8", 16, 33, role="extra", label="무명", dir="down", note="라운지")
+    m.npc("extra9", 33, 40, role="extra", label="무명", dir="left", note="자판기 앞")
+
     return m
 
 
@@ -844,6 +900,15 @@ def m7(TS_):
         m.portal("m3_basecamp_1f", x, 0, 10 + (x - 19), 3, name="to_basecamp_1f")
     m.trigger("front_gate", 19, 1, w=4, h=1, kind="door", label="정문")
     m.trigger("spawn_default", 20, 6, kind="spawn")
+
+    # ---- 배경 인물 — 정문
+    # 스물넷이 하루 종일 교육장에만 앉아 있을 리가 없다. 말은 못 걸어도
+    # 사람이 있어야 캠퍼스가 산 것처럼 보인다. dir 로 보는 쪽을 흩는다.
+    m.npc("extra1", 25, 6, role="extra", label="무명", dir="down", note="경비실 앞")
+    m.npc("extra2", 10, 10, role="extra", label="무명", dir="right", note="버스를 기다린다")
+    m.npc("extra3", 4, 19, role="extra", label="무명", dir="up", note="바람 쐬러 나왔다")
+    m.npc("extra4", 24, 23, role="extra", label="무명", dir="left", note="택시를 부른다")
+
     return m
 
 
