@@ -16,6 +16,9 @@
   display: flex;
   flex-direction: column;
   background: var(--ground);
+  /* 무대 밖으로 나간 것은 잘라 냅니다 — 반신이나 맵 캔버스가 삐져나오면
+     레터박스 위에 얹혀 보입니다. */
+  overflow: hidden;
 }
 
 .vn__stage {

@@ -30,6 +30,12 @@ function setFavicon(): void {
  * 절친도 같이 갈립니다 (TECH_DESIGN 3-1).
  */
 function titleScreen(app: HTMLElement): void {
+  const k = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  app.style.setProperty('--vn-scale', String(k));
+  window.addEventListener('resize', () => {
+    const n = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    app.style.setProperty('--vn-scale', String(n));
+  });
   app.innerHTML = `
     <main class="boot">
       <img class="boot__bg" src="${asset('ui/intro_large.webp')}" alt="" />
