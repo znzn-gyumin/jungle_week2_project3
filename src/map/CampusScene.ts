@@ -18,20 +18,30 @@ import { CAST, CELL, DIR_ROW, HEAD_OVERHANG, PLAYER_DOT, type Dir } from './spri
  * 한 시간대에 캠퍼스에 서는 **무명은 모두 합쳐 열일곱**입니다.
  *
  * 학생은 스물넷이고 그중 이름이 있는 사람이 일곱(주인공 · 히로인 셋 ·
- * 절친 · 4조 대표 · 조민)이라, 남는 자리가 정확히 열일곱입니다. 맵마다
- * 적힌 자리는 그보다 많은데(그날 어디 있느냐로 갈리는 자리라) 다 세우면
- * 같은 시간에 학생이 예순 명이 됩니다.
+ * 절친 · 4조 대표 · 조민)이라 남는 자리가 정확히 열일곱입니다. 코치와
+ * 여사님은 학생이 아니라 이 몫에서 빠집니다.
  *
- * 코치와 여사님은 학생이 아니라 이 몫에서 빠집니다.
+ * **시간대마다 어디에 몰려 있는지가 다릅니다.** 배정 직후 오후에는
+ * 다들 교육장과 로비에 있고, 밤샘 중에는 교육장·오픈데스크·편의점으로
+ * 갈리고, 마지막 저녁에는 숙소로 흩어지기 시작합니다. 어느 쪽이든
+ * 합은 열일곱입니다.
  */
-const MOB_QUOTA: Partial<Record<MapId, number>> = {
-  m1_basecamp_4f: 6,
-  m2_basecamp_2f: 1,
-  m3_basecamp_1f: 3,
-  m4_basecamp_b1: 3,
-  m5_connect_garden: 2,
-  m6_nestcamp: 1,
-  m7_gate: 1,
+const MOB_QUOTA: Record<string, Partial<Record<MapId, number>>> = {
+  // D1 오후 — 배정만 받고 일과가 없다. 아직 아무도 밖에 안 나간다.
+  day: {
+    m1_basecamp_4f: 9, m2_basecamp_2f: 1, m3_basecamp_1f: 4,
+    m4_basecamp_b1: 1, m5_connect_garden: 1, m6_nestcamp: 1, m7_gate: 0,
+  },
+  // D5 밤 — 미니 프로젝트 열다섯 시간째. 자는 사람이 없고 편의점이 붐빈다.
+  night: {
+    m1_basecamp_4f: 6, m2_basecamp_2f: 4, m3_basecamp_1f: 1,
+    m4_basecamp_b1: 4, m5_connect_garden: 2, m6_nestcamp: 0, m7_gate: 0,
+  },
+  // D8 저녁 — 팀 빌딩이 끝나고 흩어진다. 숙소로 올라가는 사람이 생긴다.
+  evening: {
+    m1_basecamp_4f: 5, m2_basecamp_2f: 2, m3_basecamp_1f: 3,
+    m4_basecamp_b1: 3, m5_connect_garden: 2, m6_nestcamp: 2, m7_gate: 0,
+  },
 };
 
 /** 배경 인물 도트 — 이름이 붙은 셋과 무명 셋 */
@@ -489,7 +499,7 @@ export class CampusScene extends Phaser.Scene {
     // ---- 배경 인물. 말은 못 걸지만 자리에는 있습니다.
     let i = 0;
     let mobs = 0;
-    const quota = MOB_QUOTA[id] ?? 0;
+    const quota = (MOB_QUOTA[this.setup.time] ?? MOB_QUOTA.day)[id] ?? 0;
     for (const o of layer.objects) {
       if (used.has(o)) continue;
       const props = o.properties as { name: string; value: string }[] | undefined;
