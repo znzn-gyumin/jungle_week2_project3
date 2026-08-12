@@ -252,7 +252,9 @@ export class Player {
           const d = dayOf(this.scene);
           const w = WHEN_WORD[this.bgm] ?? '';
           this.whenEl.textContent = d && w ? `${d} · ${w}` : d;
-          this.whenEl.hidden = !d || this.bgm === 'epilogue';
+          // **자유 이동 중에는 안 띄웁니다.** 도트맵에도 같은 자리에
+          // 같은 표기가 있어 둘이 겹쳐 보입니다.
+          this.whenEl.hidden = !d || this.bgm === 'epilogue' || Boolean(this.roam);
           const said = substitute(line.text, this.state);
           // 이름과 바는 그대로 두고 **대사만** 올라옵니다. 통째로
           // 움직이면 기준선이 같이 흔들려 자리를 찾는 느낌이 안 납니다.

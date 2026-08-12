@@ -21,6 +21,9 @@ import { CAST, CELL, DIR_ROW, HEAD_OVERHANG, PLAYER_DOT, type Dir } from './spri
  * 절친 · 4조 대표 · 조민)이라 남는 자리가 정확히 열일곱입니다. 코치와
  * 여사님은 학생이 아니라 이 몫에서 빠집니다.
  *
+ * 열일곱은 **상한**입니다. 그만큼 다 세우면 한 화면에 사람이 빽빽해
+ * 정작 말을 걸 사람이 안 보여서, 실제로는 열 명 안쪽으로 씁니다.
+ *
  * **시간대마다 어디에 몰려 있는지가 다릅니다.** 배정 직후 오후에는
  * 다들 교육장과 로비에 있고, 밤샘 중에는 교육장·오픈데스크·편의점으로
  * 갈리고, 마지막 저녁에는 숙소로 흩어지기 시작합니다. 어느 쪽이든
@@ -29,18 +32,18 @@ import { CAST, CELL, DIR_ROW, HEAD_OVERHANG, PLAYER_DOT, type Dir } from './spri
 const MOB_QUOTA: Record<string, Partial<Record<MapId, number>>> = {
   // D1 오후 — 배정만 받고 일과가 없다. 아직 아무도 밖에 안 나간다.
   day: {
-    m1_basecamp_4f: 9, m2_basecamp_2f: 1, m3_basecamp_1f: 4,
-    m4_basecamp_b1: 1, m5_connect_garden: 1, m6_nestcamp: 1, m7_gate: 0,
+    m1_basecamp_4f: 5, m2_basecamp_2f: 1, m3_basecamp_1f: 2,
+    m4_basecamp_b1: 1, m5_connect_garden: 1, m6_nestcamp: 0, m7_gate: 0,
   },
   // D5 밤 — 미니 프로젝트 열다섯 시간째. 자는 사람이 없고 편의점이 붐빈다.
   night: {
-    m1_basecamp_4f: 6, m2_basecamp_2f: 4, m3_basecamp_1f: 1,
-    m4_basecamp_b1: 4, m5_connect_garden: 2, m6_nestcamp: 0, m7_gate: 0,
+    m1_basecamp_4f: 3, m2_basecamp_2f: 2, m3_basecamp_1f: 1,
+    m4_basecamp_b1: 2, m5_connect_garden: 2, m6_nestcamp: 0, m7_gate: 0,
   },
   // D8 저녁 — 팀 빌딩이 끝나고 흩어진다. 숙소로 올라가는 사람이 생긴다.
   evening: {
-    m1_basecamp_4f: 5, m2_basecamp_2f: 2, m3_basecamp_1f: 3,
-    m4_basecamp_b1: 3, m5_connect_garden: 2, m6_nestcamp: 2, m7_gate: 0,
+    m1_basecamp_4f: 3, m2_basecamp_2f: 1, m3_basecamp_1f: 2,
+    m4_basecamp_b1: 2, m5_connect_garden: 1, m6_nestcamp: 1, m7_gate: 0,
   },
 };
 

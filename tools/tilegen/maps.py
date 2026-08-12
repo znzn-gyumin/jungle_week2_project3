@@ -372,7 +372,6 @@ def m3(TS_):
     m.place(E, "desk_long", 28, 10)
     m.set_obj(29, 12, E, "chair_down", 0)
     m.place(E, "cabinet", 32, 9)
-    m.npc("staff", 29, 12, role="staff", label="운영 매니저")
     m.trigger("office", 28, 10, w=3, h=2, kind="room", room="office")
 
     # 택배보관소
@@ -462,7 +461,6 @@ def m4(TS_):
         m.place(E, "lounge_table", tx, 11)
         m.set_obj(tx, 13, E, "chair_up", 0)
         m.set_obj(tx + 1, 10, E, "chair_down", 0)
-    m.npc("canteen_staff", 36, 9, role="staff", label="카페테리아 직원")
     m.trigger("canteen", 31, 11, w=10, h=3, kind="room", room="canteen")
 
     # ---- 편의점 + 그랩앤고
