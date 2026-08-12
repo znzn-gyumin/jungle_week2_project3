@@ -248,15 +248,16 @@ export class CampusScene extends Phaser.Scene {
     for (const { sprite } of this.npcSprites) {
       const mx = pad + (sprite.x / TS) * s;
       const my = pad + (sprite.y / TS) * s;
-      g.fillStyle(0xffd45e, 1).fillCircle(mx, my, 3);
+      // 점 없이 글리프만 찍습니다 — 점 위에 기호를 얹으면 둘 다 작아 안 읽힙니다
       const t = this.add
-        .text(mx, my - 4, '!', {
-          fontSize: '11px',
+        .text(mx, my, '!', {
+          fontSize: '15px',
+          fontStyle: 'bold',
           color: '#ffd45e',
           stroke: '#0b0c17',
-          strokeThickness: 3,
+          strokeThickness: 4,
         })
-        .setOrigin(0.5, 1)
+        .setOrigin(0.5, 0.5)
         .setScrollFactor(0)
         .setDepth(302);
       this.cameras.main.ignore(t);
