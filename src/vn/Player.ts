@@ -223,12 +223,16 @@ export class Player {
           this.stage.setBackground(line.id);
           continue;
         case 'map':
-          // 맵 위 대화 — 반신은 내리고 도트 얼굴로 갑니다
+          // 맵 위 대화 — 반신은 내리고 도트 얼굴로 갑니다.
+          // **배경은 그 장소의 캠퍼스 사진입니다.** 타일맵을 정지 화면으로
+          // 띄우면 검게 뜨는 일이 잦았습니다. 자유 이동에서는 진짜 맵을
+          // 걸으므로 사진은 대사 씬에만 씁니다.
           this.setMode(false);
           this.stage.clearChar();
-          this.stage.clearBackground();
           this.atMap = line.id;
-          this.backdrop.show(line.id, line.x, line.y, TIME_BY_BGM[this.bgm] ?? 'day');
+          this.backdrop.hide();
+          this.mapEl.hidden = true;
+          this.stage.setMapPhoto(line.id);
           continue;
         case 'cg':
           this.setMode(true);

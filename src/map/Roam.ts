@@ -242,7 +242,9 @@ export class Roam {
     this.tutorialEl = el;
     this.host.append(el);
 
-    let step = 0;
+    // **순서를 안 따집니다.** 해낸 것부터 하나씩 체크되고, 지금 볼
+    // 설명은 아직 안 한 것 중 첫 번째를 보여줍니다.
+    const done = STEPS.map(() => false);
     let from: { x: number; y: number } | null = null;
     let ranWhile = false;
     const onShift = (e: KeyboardEvent): void => {
@@ -251,11 +253,13 @@ export class Roam {
     window.addEventListener('keydown', onShift);
 
     const paint = (): void => {
-      const now = STEPS[Math.min(step, STEPS.length - 1)];
+      const cnt = done.filter(Boolean).length;
+      const next = done.indexOf(false);
+      const now = STEPS[next < 0 ? STEPS.length - 1 : next];
       el.innerHTML = `
-        <p class="roam-tutorial__title">조작 익히기 ${Math.min(step + 1, STEPS.length)} / ${STEPS.length}</p>
+        <p class="roam-tutorial__title">조작 익히기 ${cnt} / ${STEPS.length}</p>
         <ol class="roam-tutorial__steps">${STEPS.map(
-          (s2, i) => `<li class="${i < step ? 'is-done' : i === step ? 'is-now' : ''}">
+          (s2, i) => `<li class="${done[i] ? 'is-done' : i === next ? 'is-now' : ''}">
               <b>${s2.key}</b><span>${s2.ask}</span></li>`,
         ).join('')}</ol>
         <p class="roam-tutorial__tip">${now.tip}</p>
@@ -269,19 +273,25 @@ export class Roam {
       const at = sc.tile;
       from ??= at;
       const moved = Math.abs(at.x - from.x) + Math.abs(at.y - from.y);
-      const ok =
-        step === 0 ? moved >= 2
-        : step === 1 ? ranWhile && moved >= 5
-        : step === 2 ? sc.nearWho !== null
-        : step === 3 ? this.talks >= 1
-        : step === 4 ? this.retalks >= 1
-        : false; // 마지막 칸은 엔터로 화면이 넘어가면서 끝납니다
-      if (!ok) return;
-      this.learned = STEPS[step].got;
-      step++;
-      if (step === 1) from = at; // 뛰기는 걸은 자리에서 다시 잽니다
+      // 마지막 칸(엔터)은 화면이 넘어가면서 끝나므로 여기서 안 봅니다
+      const met = [
+        moved >= 2,
+        ranWhile && moved >= 3,
+        sc.nearWho !== null,
+        this.talks >= 1,
+        this.retalks >= 1,
+        false,
+      ];
+      let changed = false;
+      for (let i = 0; i < done.length; i++) {
+        if (done[i] || !met[i]) continue;
+        done[i] = true;
+        this.learned = STEPS[i].got;
+        changed = true;
+      }
+      if (!changed) return;
       paint();
-      if (step >= STEPS.length - 1) {
+      if (done.slice(0, -1).every(Boolean)) {
         window.clearInterval(tick);
         window.removeEventListener('keydown', onShift);
       }
