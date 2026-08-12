@@ -38,9 +38,6 @@
   bottom: clamp(1rem, 3vh, 2rem);
   min-height: 22vh;
   max-height: 30vh;
-  display: flex;
-  gap: 1.1rem;
-  align-items: flex-start;
   padding: 1.4rem clamp(1.2rem, 3vw, 2.2rem);
   background: #12141acc;
   border: 1px solid var(--accent);
@@ -49,7 +46,6 @@
   box-shadow: 0 6px 28px rgb(0 0 0 / 45%);
   cursor: pointer;
   user-select: none;
-  overflow: auto;
 }
 
 /* 대사가 없으면 창 자체를 없앱니다 — 자유 이동 중에는 맵만 보입니다 */
@@ -58,15 +54,20 @@
 }
 
 /* 이름표 — 대사창 좌상단에 붙는 형태 */
-/* 대사창 왼쪽 얼굴 — dot/face 는 48×64 라 그대로 키워 씁니다.
-   안티에일리어싱이 들어 있어 확대할 때 흐려지지 않게 픽셀 보간을 끄지 않습니다. */
+/* 얼굴은 대사창 **위로 올라앉습니다** — 옆에 끼지 않고 윗변을 타고 넘습니다.
+   dot/face 가 48×64 라 그대로 키워 쓰고, 안티에일리어싱이 들어 있어
+   픽셀 보간은 끄지 않습니다. */
 .vn__face {
-  flex: none;
-  width: clamp(3.4rem, 7vw, 5.2rem);
+  position: absolute;
+  left: clamp(0.6rem, 2vw, 1.4rem);
+  bottom: calc(100% - clamp(1.4rem, 3vh, 2.2rem));
+  z-index: 1;
+  width: clamp(3.6rem, 7.5vw, 5.6rem);
   height: auto;
   border: 1px solid var(--accent);
   border-radius: 3px;
-  background: #0b0c17cc;
+  background: #12141aee;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 45%);
 }
 
 .vn__face[hidden] {
@@ -75,7 +76,11 @@
 
 .vn__said {
   min-width: 0;
-  flex: 1;
+}
+
+/* 얼굴이 떠 있는 동안에는 이름표를 그 오른쪽에서 시작합니다 */
+.vn__box--face .vn__said {
+  padding-left: clamp(4.6rem, 9.5vw, 7rem);
 }
 
 .vn__name {
