@@ -906,3 +906,25 @@
   border-bottom: 1px solid var(--theme, #f0d9c8);
 }
 
+
+
+/* 며칠째 몇 때인지 — 오른쪽 아래. 12일이 얼마나 남았는지가 늘 보여야
+   「누구에게 시간을 쓸지」 가 선택으로 느껴집니다. */
+.roam-when {
+  position: absolute;
+  right: 1.6rem;
+  bottom: 1.5rem;
+  z-index: 7;
+  margin: 0;
+  padding: 0.4rem 1.1rem;
+  font-size: 0.84rem;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  color: #fff;
+  background: rgb(24 20 32 / 42%);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 999px;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 70%);
+  pointer-events: none;
+}

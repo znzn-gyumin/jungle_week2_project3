@@ -28,6 +28,17 @@ const TIME: Record<string, TimeOfDay> = {
   finalprep: "evening",
 };
 
+/**
+ * 오른쪽 아래에 띄우는 날짜와 때. 자유 이동 셋이 각각 며칠째 몇 시인지는
+ * [SCENARIO_OUTLINE] 이 정해 둡니다 — 프롤로그 D1 오후 네 시 반, 밤샘은
+ * D5 밤 열한 시, 마지막 저녁은 D8 저녁입니다.
+ */
+const WHEN: Record<string, string> = {
+  prologue: "12일 중 1일째 · 오후",
+  midproject: "12일 중 5일째 · 밤",
+  finalprep: "12일 중 8일째 · 저녁",
+};
+
 export class Roam {
   private game: Phaser.Game | null = null;
 
@@ -68,8 +79,10 @@ export class Roam {
   private goEl!: HTMLElement;
   /** 튜토리얼과 진행 안내를 담는 화면 위 세로줄 */
   private topEl!: HTMLElement;
-  /** 오른쪽 위 장소 이름 */
+  /** 미니맵 상자 맨 위 장소 이름 */
   private whereEl!: HTMLElement;
+  /** 오른쪽 아래 날짜와 때 */
+  private whenEl!: HTMLElement;
   /** 방금 배운 것 한 줄 */
   private learned = "";
   private me = { x: 0, y: 0 };
@@ -89,6 +102,13 @@ export class Roam {
     this.whereEl = document.createElement("p");
     this.whereEl.className = "roam-where";
     hud.append(this.whereEl, this.miniEl, this.guideEl);
+
+    // 오른쪽 아래에 며칠째 몇 때인지 — 12일이 얼마나 남았는지가 늘 보여야
+    // 「누구에게 시간을 쓸지」 가 선택으로 느껴집니다.
+    this.whenEl = document.createElement("p");
+    this.whenEl.className = "roam-when";
+    this.whenEl.textContent = WHEN[this.block.id] ?? "";
+    this.host.append(this.whenEl);
     // 화면 위 가운데 한 세로줄. **맵 위에 뜨는 겹입니다** — 흐름에 두면
     // 캔버스를 아래로 밀어 맵이 잘립니다. 튜토리얼이 있으면 그 아래에
     // 안내가 붙고, 튜토리얼이 걷히면 안내가 그 자리로 올라옵니다.
@@ -469,6 +489,7 @@ export class Roam {
     this.tutorialEl?.remove();
     this.tutorialEl = null;
     this.topEl.remove();
+    this.whenEl.remove();
     const after = this.block.after;
     this.destroy();
     this.onDone(after);
