@@ -85,6 +85,7 @@
 }
 
 .vn__name {
+  font-weight: 700;
   margin: 0 0 0.45rem;
   display: inline-block;
   padding: 0.1rem 0.75rem;

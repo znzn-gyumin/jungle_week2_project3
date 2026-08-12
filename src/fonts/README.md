@@ -1,6 +1,6 @@
 # 화면 폰트
 
-**`junglover.woff2` 하나만 여기 넣으면 켜집니다.** `src/boot.css` 의 `@font-face` 가
+**세 굵기(Light · Medium · Bold)의 WOFF2 가 들어 있습니다.** `src/boot.css` 의 `@font-face` 가
 이 폴더를 보고 있고, Vite 가 번들하며 경로와 해시를 붙입니다 — 개발 서버와
 GitHub Pages 양쪽에서 그대로 돕니다.
 

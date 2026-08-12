@@ -1,12 +1,25 @@
-/* 화면 폰트 — 파일을 `src/fonts/` 에 넣으면 켜집니다 (src/fonts/README.md).
-   Vite 가 번들하며 경로와 해시를 붙여줘서 개발·배포 양쪽에서 그대로 돕니다.
-   파일이 없으면 이 블록은 조용히 무시되고 아래 대체 목록으로 물러납니다. */
+/* 화면 폰트 — src/fonts/ 의 WOFF2 세 굵기.
+   Vite 가 번들하며 경로와 해시를 붙여 개발·배포 양쪽에서 그대로 돕니다.
+   OTF 판(junglover_OTF_*)은 같은 글꼴의 다른 아웃라인 형식이라 안 씁니다 —
+   참조하지 않으면 빌드에도 안 실립니다. */
 @font-face {
   font-family: 'Junglover';
-  src:
-    url('./fonts/junglover.woff2') format('woff2'),
-    url('./fonts/junglover.woff') format('woff');
-  font-weight: 400 700;
+  src: url('./fonts/junglover_Light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Junglover';
+  src: url('./fonts/junglover_Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Junglover';
+  src: url('./fonts/junglover_Bold.woff2') format('woff2');
+  font-weight: 700;
   font-display: swap;
 }
 
