@@ -18,6 +18,14 @@ import { Stage } from './Stage';
 import { play as playBgm } from '../audio/bgm';
 import { Typewriter } from './Typewriter';
 
+/**
+ * 명장면인가 — 배경·스틸·반신 중 하나라도 세우는 씬입니다.
+ * 맵 대화(도트 얼굴만 쓰는 씬)와 갈라 보는 기준입니다.
+ */
+function isCine(sc?: Scene): boolean {
+  return !!sc?.lines.some((l) => l.t === 'bg' || l.t === 'cg' || l.t === 'char');
+}
+
 /** 주인공 이름표는 언제나 `나` 입니다 (WORLD_BIBLE 11) */
 const ME = '나';
 
@@ -470,10 +478,6 @@ export class Player {
       this.idx = this.lines().length; // 씬 끝으로 — backToRoam 이 받습니다
       return;
     }
-    // **맵 대화에서는 안 겹니다.** 걷다가 말을 건 것뿐인데 화면이
-    // 검게 넘어가면 장면이 바뀐 것처럼 보입니다. 암전은 명장면끼리
-    // 넘어갈 때의 연출입니다.
-    if (!this.roam) this.wipe();
     this.clearAvatar();
     let t = target;
     if (t.startsWith('r_*_')) {
@@ -489,6 +493,10 @@ export class Player {
       this.idx = labels[t];
       return;
     }
+    // **암전은 장면이 바뀔 때만.** 걷다가 말을 건 것뿐이면 화면이
+    // 검어질 이유가 없습니다. 다만 맵에서 CG 컷으로 넘어가는 것은
+    // 진짜 장면 전환이라 그때는 겁니다.
+    if (!this.roam || isCine(this.script[t])) this.wipe();
     if (this.script[t]) {
       this.scene = t;
       this.idx = 0;

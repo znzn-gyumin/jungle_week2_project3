@@ -727,43 +727,34 @@
 /* 넘어갈 수 있게 됐다는 한 줄. 화면 위 가운데에서 천천히 깜빡입니다 —
    맵을 가리지 않게 옅게 두고, 빠르게 깜빡이면 눈이 아픕니다. */
 /* 「ENTER를 눌러 스토리를 진행하세요」 — 튜토리얼 상자 바로 아래.
-   **글씨는 늘 또렷합니다.** 통째로 흐려지면 읽으려는 순간 사라지는
-   글이 되므로, 옅어져도 78% 아래로는 안 내려갑니다. */
+   **상자 없이 글씨만.** 맵 위에 얹히는 안내라 판을 깔면 화면을 덮습니다.
+   글씨는 거의 비칠 만큼만 두고 뒤에서 분홍빛이 배어 나오게 해, 천천히
+   보였다 사라집니다. */
 .roam-go {
   order: 2;
   margin: 0;
-  padding: 0.55rem 1.5rem;
-  font-size: 1rem;
+  padding: 0;
+  font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   white-space: nowrap;
   color: #fff;
-  background: rgb(28 18 30 / 62%);
-  backdrop-filter: blur(10px) saturate(1.25);
-  border: 1px solid rgb(255 200 224 / 45%);
-  border-radius: 999px;
-  text-shadow: 0 1px 4px rgb(0 0 0 / 80%);
+  text-shadow:
+    0 0 12px rgb(255 122 178 / 85%),
+    0 0 26px rgb(255 122 178 / 55%),
+    0 1px 4px rgb(0 0 0 / 80%);
   pointer-events: none;
-  animation: roam-go-blink 2.8s ease-in-out infinite;
+  animation: roam-go-blink 4.2s ease-in-out infinite;
 }
 
 .roam-go[hidden] { display: none; }
 
-/* 튜토리얼 상자와 같은 분홍 백라이트 */
+/* 천천히 보였다 사라집니다. 양 끝에 머무는 구간을 둬서 깜빡이는 게
+   아니라 숨쉬는 것처럼 보입니다. */
 @keyframes roam-go-blink {
-  0%, 100% {
-    opacity: 0.78;
-    box-shadow:
-      0 0 22px rgb(255 122 178 / 40%),
-      0 0 60px rgb(255 122 178 / 20%);
-  }
-
-  50% {
-    opacity: 1;
-    box-shadow:
-      0 0 34px rgb(255 122 178 / 78%),
-      0 0 92px rgb(255 122 178 / 44%);
-  }
+  0%, 12% { opacity: 0.12; }
+  50%, 62% { opacity: 0.92; }
+  100% { opacity: 0.12; }
 }
 
 
