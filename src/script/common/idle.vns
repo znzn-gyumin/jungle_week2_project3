@@ -9,82 +9,102 @@
 
 === idle_minah_prologue ===
 민아 [기본] "…또 뭐."
+* 「또」 라는 건 아까 것도 세고 있었다는 뜻이다.
 -> back
 
 === idle_minah_midproject ===
 민아 [화남] "…아직 안 끝났어."
+* 컵은 아직 얼음이 가득했다.
 -> back
 
 === idle_minah_finalprep ===
 민아 [기본] "…할 말 없으면 가."
+* 가라면서 화면은 안 돌렸다.
 -> back
 
 === idle_seunghee_prologue ===
 승희 [부끄러움] "…아, 네. 저는 괜찮아요."
+* 뭐가 괜찮은지는 말 안 했다.
 -> back
 
 === idle_seunghee_midproject ===
 승희 [부끄러움] "…저는 좀 더 있다 갈게요."
+* 노트는 오늘도 무릎 위였다.
 -> back
 
 === idle_seunghee_finalprep ===
 승희 [슬픔] "…내일 봬요."
+* 그러고 뭔가 더 말하려다 그만뒀다.
 -> back
 
 === idle_yunjung_prologue ===
 윤정 [기쁨] "어? 아직 안 가셨어요~?"
+* 헤드폰은 목에 있었다. 물결표도 붙어 있었다.
 -> back
 
 === idle_yunjung_midproject ===
 윤정 [기본] "저 지금 집중 모드라서요. 이따 불러주세요!"
+* 헤드폰을 올려 썼다. 여기까지가 대화였다.
 -> back
 
 === idle_yunjung_finalprep ===
 윤정 [기쁨] "발표 자료 보고 있었어요~"
+* 화면에는 도트 그림이 떠 있었다.
 -> back
 
 === idle_mingyu_prologue ===
 민규 [기본] "어."
+* 한 글자로 끝났다. 평소보다 긴 편이었다.
 -> back
 
 === idle_mingyu_midproject ===
 민규 [기본] "…하고 있어."
+* 화면은 삼십 분째 같은 자리였다.
 -> back
 
 === idle_mingyu_finalprep ===
 민규 [기본] "아직 안 정했어."
+* 뭘 안 정했는지는 안 말했다.
 -> back
 
 === idle_seungmin_prologue ===
 승민 [기쁨] "필요한 거 있으면 언제든 말해요."
+* 본인이 필요한 건 안 말하는 사람이었다.
 -> back
 
 === idle_seungmin_midproject ===
 승민 [기쁨] "커피 남았는데, 가져다 줄까요?"
+* 자기 컵은 비어 있었다.
 -> back
 
 === idle_seungmin_finalprep ===
 승민 [기쁨] "무리하지 말고요. 나흘 남았어요."
+* 제일 무리하는 사람이 하는 말이었다.
 -> back
 
 === idle_yunho_prologue ===
 윤호 [기쁨] "저 아직 정리 중이에요~"
+* 남의 자리를 정리하고 있었다.
 -> back
 
 === idle_yunho_midproject ===
 윤호 [기쁨] "저쪽 도와주러 가는 길이었어요!"
+* 자기 것은 언제 하는지 안 물어봤다.
 -> back
 
 === idle_yunho_finalprep ===
 윤호 [기쁨] "내일 봬요~ 오늘은 일찍 자세요!"
+* 본인이 제일 늦게 갈 사람이었다.
 -> back
 
 === idle_coach_midproject ===
 명진혁 "아직 안 자요?"
+* 코치도 안 자고 있었다.
 -> back
 
 === idle_scout_finalprep ===
 태윤 "구경은 다 했어요?"
+* 웃고 있는데 눈이 우리 화면 쪽이었다.
 -> back
 
 // ── 조원·기타 인물 ──────────────────────────────────────────
