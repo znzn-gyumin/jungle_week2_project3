@@ -2,11 +2,19 @@
    배치는 반신을 왼쪽 아래로 내려 대사창에 걸치는 형태입니다 — 흉상 CG 라
    얼굴이 크게 보이고, 남는 가운데로 타일맵이 드러납니다. */
 
+/* **화면은 언제나 1920 × 1080 입니다.** 창에 맞춰 통째로 축소만 하므로
+   대사창·반신·미니맵의 비율이 어느 창에서나 같습니다. 사진은 cover 라
+   큰 그림은 잘려 들어갑니다 (assets/README 배경). */
 .vn {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1920px;
+  height: 1080px;
+  transform: translate(-50%, -50%) scale(var(--vn-scale, 1));
+  transform-origin: center;
   display: flex;
   flex-direction: column;
-  height: 100%;
   background: var(--ground);
 }
 

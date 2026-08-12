@@ -93,6 +93,14 @@ export class Player {
     this.stage = new Stage(this.stageEl);
     this.typer = new Typewriter(this.textEl);
 
+    // 1920 × 1080 무대를 창에 맞춰 축소합니다
+    const fit = () => {
+      const k = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      root.style.setProperty('--vn-scale', String(k));
+    };
+    fit();
+    window.addEventListener('resize', fit);
+
     this.boxEl.addEventListener('click', () => this.advance());
     window.addEventListener('keydown', (e) => {
       // 맵을 걷는 동안에만 맵이 키를 갖습니다. **대사창이 떠 있으면

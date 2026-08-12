@@ -57,6 +57,12 @@ body {
   height: 100%;
 }
 
+/* 1920 × 1080 무대 바깥은 바탕색으로 둡니다 */
+#app {
+  position: relative;
+  overflow: hidden;
+}
+
 .boot {
   position: relative;
   display: grid;
