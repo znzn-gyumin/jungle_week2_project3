@@ -49,6 +49,24 @@ function titleScreen(app: HTMLElement): void {
     <main class="boot">
       <img class="boot__bg" src="${asset('ui/intro_blank.webp')}" alt="" />
       <div class="boot__flash" id="boot-flash"></div>
+      <div class="boot__sky" aria-hidden="true">
+        <i class="boot__dust" style="--l:6%; --t:18%; --s:1.0; --d:0.0s"></i>
+        <i class="boot__dust" style="--l:14%; --t:72%; --s:0.7; --d:2.4s"></i>
+        <i class="boot__dust" style="--l:22%; --t:34%; --s:1.3; --d:1.1s"></i>
+        <i class="boot__dust" style="--l:29%; --t:88%; --s:0.8; --d:3.6s"></i>
+        <i class="boot__dust" style="--l:37%; --t:12%; --s:1.1; --d:0.6s"></i>
+        <i class="boot__dust" style="--l:44%; --t:58%; --s:0.6; --d:4.2s"></i>
+        <i class="boot__dust" style="--l:52%; --t:26%; --s:1.4; --d:1.8s"></i>
+        <i class="boot__dust" style="--l:60%; --t:80%; --s:0.9; --d:2.9s"></i>
+        <i class="boot__dust" style="--l:67%; --t:42%; --s:1.2; --d:0.3s"></i>
+        <i class="boot__dust" style="--l:74%; --t:16%; --s:0.7; --d:3.1s"></i>
+        <i class="boot__dust" style="--l:81%; --t:66%; --s:1.5; --d:1.5s"></i>
+        <i class="boot__dust" style="--l:88%; --t:30%; --s:0.8; --d:4.6s"></i>
+        <i class="boot__dust" style="--l:94%; --t:84%; --s:1.1; --d:2.1s"></i>
+        <i class="boot__dust" style="--l:10%; --t:50%; --s:0.9; --d:5.2s"></i>
+        <i class="boot__dust" style="--l:48%; --t:94%; --s:1.0; --d:3.9s"></i>
+        <i class="boot__dust" style="--l:70%; --t:6%; --s:1.3; --d:0.9s"></i>
+      </div>
 
       <section class="boot__act is-on" data-act="0">
         <div class="boot__logo-wrap">

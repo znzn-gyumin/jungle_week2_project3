@@ -599,3 +599,101 @@ body {
 }
 
 .boot__go[disabled]::after { display: none; }
+
+
+/* ---- 떠다니는 반짝임
+
+   설정 화면은 사람이 타이핑하는 동안 멈춰 있습니다. 그동안 화면이 통
+   죽어 있으면 심심하므로, 배경에 반짝임을 계속 돌립니다. 글자 뒤에서만
+   돌고 클릭을 안 가로챕니다. */
+
+.boot__sky {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.boot__dust {
+  position: absolute;
+  left: var(--l);
+  top: var(--t);
+  width: calc(12px * var(--s));
+  height: calc(12px * var(--s));
+  background:
+    linear-gradient(#fff, #fff) center / 100% 1.5px no-repeat,
+    linear-gradient(#fff, #fff) center / 1.5px 100% no-repeat;
+  filter: drop-shadow(0 0 5px #ffb8d6);
+  opacity: 0;
+  animation: boot-dust 5.5s ease-in-out var(--d) infinite;
+}
+
+/* 절반은 위로 흐르는 빛 알갱이로 둡니다 — 별만 있으면 규칙이 눈에 띕니다 */
+.boot__dust:nth-child(even) {
+  width: calc(5px * var(--s));
+  height: calc(5px * var(--s));
+  background: radial-gradient(circle, #fff 0%, rgb(255 184 214 / 70%) 45%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(0.4px) drop-shadow(0 0 7px rgb(255 122 178 / 80%));
+  animation: boot-drift 9s linear var(--d) infinite;
+}
+
+@keyframes boot-dust {
+  0%, 62% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+
+  74% {
+    opacity: 0.95;
+    transform: scale(1.2) rotate(40deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.35) rotate(80deg);
+  }
+}
+
+@keyframes boot-drift {
+  0% {
+    opacity: 0;
+    translate: 0 24px;
+  }
+
+  18% { opacity: 0.85; }
+  72% { opacity: 0.7; }
+
+  100% {
+    opacity: 0;
+    translate: 0 -120px;
+  }
+}
+
+/* 배경 위에 옅은 빛이 천천히 흐릅니다 */
+.boot__sky::after {
+  content: '';
+  position: absolute;
+  inset: -30%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgb(255 158 196 / 12%) 70deg,
+    transparent 150deg,
+    rgb(150 190 255 / 10%) 250deg,
+    transparent 330deg
+  );
+  filter: blur(60px);
+  animation: boot-halo 22s linear infinite;
+}
+
+/* 설정 창도 테두리가 은은하게 숨쉽니다 */
+.boot__panel {
+  animation: boot-breathe 4.2s ease-in-out infinite;
+}
+
+@keyframes boot-breathe {
+  0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+  50% { filter: drop-shadow(0 0 22px rgb(255 122 178 / 35%)); }
+}
