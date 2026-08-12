@@ -117,13 +117,18 @@ class TileMap:
             "properties": [_prop(k, v) for k, v in props.items()],
         })
 
-    def portal(self, to, tx, ty, spawn_tx, spawn_ty, name="portal", **props):
+    def portal(self, to, tx, ty, spawn_tx, spawn_ty, name="portal", nudge=0, **props):
+        """`nudge` 는 칸을 픽셀 단위로 미는 값입니다.
+
+        타일 0 이 맵의 왼쪽 끝이라 더 왼쪽에 둘 칸이 없을 때, 칸 자체를
+        왼쪽으로 밀어 **더 깊이 들어가야** 넘어가게 만듭니다.
+        """
         self._oid += 1
         p = {"to": to, "spawnX": spawn_tx * TS + TS // 2, "spawnY": spawn_ty * TS + TS // 2}
         p.update(props)
         self.portals.append({
             "id": self._oid, "name": name, "type": "portal", "class": "portal",
-            "x": tx * TS, "y": ty * TS, "width": TS, "height": TS,
+            "x": tx * TS + nudge, "y": ty * TS, "width": TS, "height": TS,
             "visible": True, "rotation": 0,
             "properties": [_prop(k, v) for k, v in p.items()],
         })
