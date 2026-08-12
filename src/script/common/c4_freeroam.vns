@@ -15,6 +15,9 @@
   npc 민아 at m1_basecamp_4f -> r_minah_c4_talk
   npc 윤정 at m1_basecamp_4f -> r_yunjung_c4_talk
   npc 승희 at m2_basecamp_2f -> r_seunghee_c4_talk
+  npc 민규 at m1_basecamp_4f -> r_mingyu_c4_talk
+  npc 승민 at m1_basecamp_4f -> r_seungmin_c4_talk
+  npc 윤호 at m2_basecamp_2f -> r_yunho_c4_talk
   npc 태윤 at m2_basecamp_2f -> c4_scout
   after -> r_*_c4_classroom
 
