@@ -66,7 +66,9 @@ export const ROLE_CAST: Record<string, { male: RouteId; female: RouteId }> = {
  * 어두운 색은 묻히기 때문입니다. 그대로 씁니다.
  */
 /**
- * 주인공의 테마색. 히로인 여섯 중 검정을 쓰는 인물이 없어 겹치지 않습니다.
+ * 주인공의 테마색. **도트 스프라이트에서 실측했습니다** — 상반신이
+ * 이도윤 #2B2B2B · 이도아 #3A3839 인 짙은 무채색입니다. 옷 표에 주인공
+ * 행이 없어 그림에서 직접 뽑았습니다.
  * 미니맵의 계단도 같은 계열(#2a2632)이지만 계단은 네모, 주인공은 흰 테두리
  * 동그라미라 모양으로 갈라집니다.
  */
@@ -96,12 +98,15 @@ export const SUB_THEME: Record<string, string> = {
   조민: '#5A5560',
   태윤: '#3F4E7A',
   태연: '#3F4E7A',
-  한지오: '#7FA88C',
-  한지아: '#7FA88C',
+  한지오: '#F97C68',
+  한지아: '#F97C68',
+  // 이름 없는 배경 인물은 내레이션과 같은 색입니다 — 읽을 것이 아니라
+  // 그냥 거기 있는 사람이라는 뜻입니다 (ui.css `.vn__text--narr`)
+  무명: '#8D6A5E',
   여사님: '#D98BA6',
 };
 
-export const PLAYER_THEME = '#1E1B26';
+export const PLAYER_THEME = '#2E2B2C';
 
 export const THEME: Record<RouteId, string> = {
   minah: '#3A9B96',    // 고양이 · 청록
