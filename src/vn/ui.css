@@ -57,7 +57,7 @@
   /* 크림색 둥근 창 — 도트와 웹툰풍 CG 사이에서 화면을 밝게 잡아 줍니다 */
   background:
     radial-gradient(120% 160% at 12% 0%, #fffdf8 0%, #fdf6ec 45%, #fbeee0 100%);
-  border: 1px solid #f0d9c8;
+  border: 1px solid var(--theme, #f0d9c8);
   border-radius: 34px;
   box-shadow:
     0 10px 34px rgb(90 60 70 / 28%),
@@ -89,8 +89,9 @@
   object-position: 50% 92%;
   border: 3px solid #ffffff;
   border-radius: 50%;
+  outline: 2px solid var(--theme, #f3c9d8);
   background: linear-gradient(160deg, #fff6fa, #ffe9f0);
-  box-shadow: 0 4px 14px rgb(120 70 90 / 25%), 0 0 0 1px #f3c9d8;
+  box-shadow: 0 4px 14px rgb(120 70 90 / 25%);
 }
 
 /* 얼굴이 없는 화자여도 자리는 남깁니다 (visibility). 명장면에서는
@@ -131,11 +132,11 @@
   min-width: 5.2rem;
   text-align: right;
   letter-spacing: 0.04em;
-  color: #e0567b;
+  color: var(--theme, #e0567b);
   text-shadow: 0 1px 0 #fff;
   background: transparent;
   border: 0;
-  border-right: 1px solid #f0d9c8;
+  border-right: 1px solid var(--theme, #f0d9c8);
   border-radius: 0;
   padding: 0 1rem 0 0;
   margin: 0 1rem 0 0;
@@ -202,12 +203,14 @@
   transition: border-color 140ms ease, box-shadow 140ms ease;
 }
 
+/* 배경은 양쪽 다 그라데이션으로 둡니다 — 단색으로 넘어가면 보간이 안 돼
+   한 번 툭 튑니다. 확대도 안 씁니다(무대가 이미 scale 로 축소돼 있습니다). */
 .vn__choice:hover,
-.vn__choice:focus-visible {
-  background: #fffdf9;
-  border-color: #e0567b;
-  box-shadow: 0 8px 24px rgb(224 86 123 / 28%), 0 2px 0 #fff inset;
-  transform: scale(1.02);
+.vn__choice:focus-visible,
+.vn__choice--on {
+  background: linear-gradient(180deg, #fffdfbf7, #fff4f7f7);
+  border-color: var(--theme, #e0567b);
+  box-shadow: 0 10px 26px rgb(0 0 0 / 22%), 0 2px 0 #fff inset;
   outline: none;
 }
 
@@ -344,7 +347,7 @@
   width: 300px;
   padding: 0.9rem;
   background: linear-gradient(180deg, #fffdf9f2, #fdf1e6f2);
-  border: 1px solid #f0d9c8;
+  border: 1px solid var(--theme, #f0d9c8);
   border-radius: 22px;
   box-shadow: 0 10px 28px rgb(90 60 70 / 28%), 0 2px 0 #fff inset;
   color: #6b4038;
@@ -371,7 +374,7 @@
 }
 
 .roam-guide__goal b {
-  color: #e0567b;
+  color: var(--theme, #e0567b);
   font-size: 1.15rem;
 }
 
@@ -385,9 +388,9 @@
 .roam-guide__who span {
   padding: 0.1rem 0.6rem;
   font-size: 0.85rem;
-  color: #b4485a;
-  background: #fff3f7;
-  border: 1px solid #f3c9d8;
+  color: var(--theme, #b4485a);
+  background: #fff8fa;
+  border: 1px solid var(--theme, #f3c9d8);
   border-radius: 999px;
 }
 

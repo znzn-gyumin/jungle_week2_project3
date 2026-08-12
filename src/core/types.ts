@@ -45,6 +45,45 @@ export const NAME_BY_HEROINE: Record<RouteId, string> = {
   yunho: '윤호',
 };
 
+/**
+ * 역할 예약 이름 — 공용 씬에서 씁니다.
+ *
+ * 히로인 3인은 `playerGender` 의 **반대 성별**입니다. 공용 씬에 인물
+ * 이름을 박으면 한쪽 성별 회차에 반대편 사람이 나옵니다 — `c2_ranking`
+ * 이 그랬습니다. `동갑` `연상` `연하` 로 적고 여기서 바꿉니다.
+ */
+export const ROLE_CAST: Record<string, { male: RouteId; female: RouteId }> = {
+  //          남주가 만나는 사람   여주가 만나는 사람
+  동갑: { male: 'minah', female: 'mingyu' },
+  연상: { male: 'seunghee', female: 'seungmin' },
+  연하: { male: 'yunjung', female: 'yunho' },
+};
+
+/**
+ * 인물별 테마 컬러 (CHARACTERS 2절 · 동물상에서 온 색).
+ *
+ * 여섯의 **명도를 비슷한 대역**에 둔 이유가 있습니다 — 심야 배경에서
+ * 어두운 색은 묻히기 때문입니다. 그대로 씁니다.
+ */
+export const THEME: Record<RouteId, string> = {
+  minah: '#3A9B96',    // 고양이 · 청록
+  seunghee: '#B5806F', // 사슴 · 적갈
+  yunjung: '#E0A230',  // 강아지 · 금빛
+  mingyu: '#4E6288',   // 늑대 · 회청
+  seungmin: '#5F8F42', // 공룡 · 초록
+  yunho: '#C9A170',    // 강아지 · 크림
+};
+
+/** 히로인 풀네임 */
+export const FULL_NAME: Record<RouteId, string> = {
+  minah: '김민아',
+  seunghee: '이승희',
+  yunjung: '장윤정',
+  mingyu: '김민규',
+  seungmin: '이승민',
+  yunho: '장윤호',
+};
+
 /** `.vns` 의 한글 표정 → 파일명 (assets/README#id) */
 export const FACE_FILE: Record<string, string> = {
   기본: 'normal',

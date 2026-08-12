@@ -97,6 +97,34 @@ for f in files:
                                '— 0~24 구간에서 빈 줄이 된다' % loc)
     counts[f] = dlg
 
+# ★ 공용 씬에 히로인 이름이 박혀 있는가
+#   히로인 3인은 playerGender 의 반대 성별이라, 공용 씬에 이름을 적으면
+#   한쪽 성별 회차에 반대편 사람이 나온다. 역할(동갑·연상·연하)로 적는다.
+HEROINE_NAMES = {'민아', '승희', '윤정', '민규', '승민', '윤호'}
+COMMON_FILES = ('00_prologue.vns', 'c2_ranking.vns', 'c3_outing.vns',
+                'c3_bus.vns', 'e_ceremony.vns', 'e_solo.vns')
+# 첫인상 씬과 자유 이동 배치는 컴파일러가 성별로 거르므로 예외다
+EXEMPT = re.compile(r'^(npc\s|@char\s)')
+for f in files:
+    if not f.replace(os.sep, '/').split('/')[-1] in COMMON_FILES:
+        continue
+    cur = None
+    for n, line in enumerate(io.open(f, encoding='utf-8'), 1):
+        t = line.strip()
+        m = re.match(r'^===\s*(\S+)\s*===$', t)
+        if m:
+            cur = m.group(1)
+        if not t or t.startswith('//') or EXEMPT.match(t):
+            continue
+        if cur and cur.startswith('p_meet_'):
+            continue          # 첫인상은 인물별 씬이라 이름이 있어야 한다
+        for w in HEROINE_NAMES:
+            if re.search(r'(^|[^가-힣])' + w + r'([^가-힣]|$)', t):
+                bad.append('%s:%d  공용 씬 %s 에 히로인 이름 「%s」 '
+                           '— 역할(동갑·연상·연하)로 적을 것'
+                           % (f.replace(os.sep, '/'), n, cur, w))
+                break
+
 for loc, cur, tgt in jumps:
     if tgt in ('back', 'next_chapter') or tgt.startswith('r_*_'):
         continue

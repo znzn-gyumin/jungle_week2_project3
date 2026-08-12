@@ -3,6 +3,7 @@
  *
  * 정본: docs/TECH_DESIGN.md 3-2 · 호칭 4단계는 docs/CHARACTERS.md 2절
  */
+import { FULL_NAME, NAME_BY_HEROINE, ROLE_CAST } from './types';
 import type { GameState, RouteId } from './types';
 
 /** 마지막 글자의 받침 코드. 완성형이 아니면 0 */
@@ -45,6 +46,14 @@ export function 호칭(s: GameState): string {
   return s.route ? 호칭표[s.route][band(s.affection)] : '';
 }
 
+/** 이 회차에서 그 역할을 맡은 사람 — 없으면 빈 문자열 */
+export function roleName(role: string, s: GameState, full = false): string {
+  const cast = ROLE_CAST[role];
+  if (!cast) return '';
+  const id = cast[s.playerGender];
+  return full ? FULL_NAME[id] : NAME_BY_HEROINE[id];
+}
+
 /** `{P...}` 를 상태로 채웁니다. 호칭 값이 토큰을 품고 있어 두 번 돕니다. */
 export function substitute(text: string, s: GameState): string {
   const given = s.playerGivenName;
@@ -55,6 +64,9 @@ export function substitute(text: string, s: GameState): string {
     '{P:접미}': 접미(given),
     '{P:호칭}': 호칭(s),
   };
+  // {동갑} {연상:성명} 같은 역할 토큰을 먼저 풉니다
+  text = text.replace(/\{(동갑|연상|연하)(:성명)?\}/g, (_w, r, full) =>
+    roleName(r, s, Boolean(full)));
   const once = (t: string) =>
     t.replace(/\{P(?::([^}|]+))?\}|\{P:([^}]*)\|([^}]*)\}/g, (whole, _a, left, right) => {
       if (left !== undefined) return s.playerGender === 'male' ? left : right;

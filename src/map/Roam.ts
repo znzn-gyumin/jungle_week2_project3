@@ -170,8 +170,22 @@ export class Roam {
         if (d.blocked[y * d.w + x]) g.fillRect(x * s, y * s, Math.ceil(s), Math.ceil(s));
       }
     }
-    g.fillStyle = '#5fd3c4';
+    const theme = getComputedStyle(el).getPropertyValue('--theme').trim() || '#e0567b';
+    g.fillStyle = '#2a2632';
     for (const p of d.stairs) g.fillRect(p.x * s - 1, p.y * s - 1, s + 2, s + 2);
+    // 오르내림을 화살표로 — 맵 위 표시와 같은 기호입니다
+    g.font = 'bold 11px sans-serif';
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    for (const p of d.stairs) {
+      if (!p.dir) continue;
+      const t = p.dir === 'down' ? '▼' : '▲';
+      g.lineWidth = 3;
+      g.strokeStyle = '#ffffff';
+      g.strokeText(t, p.x * s, p.y * s);
+      g.fillStyle = '#2a2632';
+      g.fillText(t, p.x * s, p.y * s);
+    }
     g.font = `bold ${Math.max(11, s * 2.4)}px sans-serif`;
     g.textAlign = 'center';
     g.textBaseline = 'middle';
@@ -179,7 +193,7 @@ export class Roam {
       g.lineWidth = 3;
       g.strokeStyle = '#ffffff';
       g.strokeText('!', n.x * s, n.y * s);
-      g.fillStyle = '#e0567b';
+      g.fillStyle = theme;
       g.fillText('!', n.x * s, n.y * s);
     }
     // 나는 파란 점 — 계단(청록)·사람(분홍)과 안 겹치는 색입니다

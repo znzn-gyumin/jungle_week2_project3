@@ -8,8 +8,8 @@
  * 선택지로 대신하고 캠퍼스 안 씬은 배경이 빈 채로 갑니다(타일맵 자리).
  */
 import { applyEffects, endingTier, testCond } from '../core/state';
-import { substitute } from '../core/tokens';
-import { FACE_FILE, HEROINE_BY_NAME, HEROINE_GENDER, NAME_BY_HEROINE } from '../core/types';
+import { roleName, substitute } from '../core/tokens';
+import { FACE_FILE, HEROINE_BY_NAME, HEROINE_GENDER, NAME_BY_HEROINE, THEME } from '../core/types';
 import type { ChoiceOption, GameState, Line, Scene, ScriptData } from '../core/types';
 import type { TimeOfDay } from '../config/lighting';
 import { Backdrop } from '../map/Backdrop';
@@ -38,6 +38,7 @@ export class Player {
   private choiceEl: HTMLElement;
   private boxEl: HTMLElement;
   private faceEl: HTMLImageElement;
+  private root: HTMLElement;
   private stageEl: HTMLElement;
   private stage: Stage;
   private mapEl: HTMLElement;
@@ -84,6 +85,7 @@ export class Player {
         </div>
         <div class="vn__choices" id="vn-choices" hidden></div>
       </div>`;
+    this.root = root;
     this.boxEl = root.querySelector('#vn-box')!;
     this.faceEl = root.querySelector('#vn-face')!;
     this.stageEl = root.querySelector('#vn-stage')!;
@@ -169,14 +171,15 @@ export class Player {
         case 'say':
         case 'narr': {
           if (!testCond(line.cond, this.state)) continue;
-          const who = line.t === 'say' ? line.who : '';
+          const who = line.t === 'say' ? this.whoName(line.who) : '';
           this.nameEl.textContent = who === ME ? ME : who;
           this.nameEl.hidden = !who;
           this.boxEl.hidden = false;
           this.textEl.classList.toggle('vn__text--narr', line.t === 'narr');
-          if (line.t === 'say' && this.cinematic) this.stage.setFace(line.who, line.face);
+          this.setTheme(line.t === 'say' ? who : null);
+          if (line.t === 'say' && this.cinematic) this.stage.setFace(who, line.face);
           this.setAvatar(
-            line.t === 'say' && !this.cinematic ? line.who : null,
+            line.t === 'say' && !this.cinematic ? who : null,
             line.t === 'say' ? line.face : undefined,
           );
           this.typer.run(substitute(line.text, this.state));
@@ -219,7 +222,7 @@ export class Player {
         case 'char': {
           // **@char 가 있으면 그 씬은 반신으로 갑니다.** 맵을 배경으로 두고
           // 인물만 크게 세우는 편이 도트만 보는 것보다 덜 심심합니다.
-          const who = line.who === '*' ? (this.state.route ? NAME_BY_HEROINE[this.state.route] : '') : line.who;
+          const who = this.whoName(line.who);
           if (who) {
             this.setMode(true);
             // 타일맵을 **둘 다** 내려야 사진이 보입니다 — 맵 캔버스가
@@ -270,6 +273,22 @@ export class Player {
     this.faceEl.src = `${import.meta.env.BASE_URL}assets/dot/face/${id}_${file}.webp`;
     this.faceEl.hidden = false;
     this.boxEl.classList.add('vn__box--face');
+  }
+
+  /**
+   * 화면 전체의 강조색을 그 인물의 테마 컬러로 바꿉니다.
+   * 대사창 테두리·이름·얼굴 링·선택지·미니맵이 한 색을 봅니다.
+   */
+  private setTheme(who: string | null): void {
+    const id = who ? HEROINE_BY_NAME[who] : undefined;
+    const c = id ? THEME[id] : '#e0567b';
+    this.root.style.setProperty('--theme', c);
+  }
+
+  /** `*` 는 현재 루트, `동갑`·`연상`·`연하` 는 이 회차의 그 역할입니다 */
+  private whoName(raw: string): string {
+    if (raw === '*') return this.state.route ? NAME_BY_HEROINE[this.state.route] : '';
+    return roleName(raw, this.state) || raw;
   }
 
   private movePick(d: number, bs: HTMLButtonElement[]): void {

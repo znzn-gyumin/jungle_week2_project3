@@ -30,6 +30,14 @@ const ZOOM = 2;
 /** 말을 걸 수 있는 거리 — 한 칸 반 */
 const REACH = TS * 1.5;
 
+/** 층수 — 계단이 오르는 것인지 내려가는 것인지 여기서 나옵니다 */
+const FLOOR: Partial<Record<MapId, number>> = {
+  m4_basecamp_b1: -1,
+  m3_basecamp_1f: 1,
+  m2_basecamp_2f: 2,
+  m1_basecamp_4f: 4,
+};
+
 export type RoamSetup = {
   map: MapId;
   x: number;
@@ -50,7 +58,7 @@ export type MiniData = {
   w: number;
   h: number;
   blocked: boolean[];
-  stairs: { x: number; y: number }[];
+  stairs: { x: number; y: number; dir: 'down' | 'up' | null }[];
   npcs: { x: number; y: number }[];
 };
 
@@ -77,7 +85,17 @@ export class CampusScene extends Phaser.Scene {
   private onGuide?: (lines: string[]) => void;
   private currentMap!: MapId;
   private paused = false;
-  private portals: { rect: Phaser.Geom.Rectangle; to: MapId; sx: number; sy: number }[] = [];
+  private portals: {
+    rect: Phaser.Geom.Rectangle;
+    to: MapId;
+    sx: number;
+    sy: number;
+    /** 내려가는 계단은 위에서만, 올라가는 계단은 아래에서만 들어갑니다 */
+    dir: 'down' | 'up' | null;
+    mark?: Phaser.GameObjects.Text;
+  }[] = [];
+  /** 직전 프레임의 발 위치 — 어느 쪽에서 들어왔는지 판정합니다 */
+  private lastFeet = { x: 0, y: 0 };
   /** 맵을 막 옮긴 직후에는 되돌아가는 포탈을 한 박자 무시합니다 */
   private portalCooldown = 0;
   /** 맵을 옮길 때 지워야 합니다 — 안 지우면 두 맵이 겹쳐 쌓이고 충돌체가 둘이 됩니다 */
@@ -189,7 +207,7 @@ export class CampusScene extends Phaser.Scene {
       w: map.width,
       h: map.height,
       blocked,
-      stairs: this.portals.map((p) => ({ x: p.rect.x / TS, y: p.rect.y / TS })),
+      stairs: this.portals.map((p) => ({ x: p.rect.x / TS, y: p.rect.y / TS, dir: p.dir })),
       npcs: this.npcSprites.map((n) => ({ x: n.sprite.x / TS, y: n.sprite.y / TS })),
     };
     this.onMini?.(this.lastMini);
@@ -244,17 +262,52 @@ export class CampusScene extends Phaser.Scene {
 
   /** 계단·문 — `spawnX/Y` 는 도착 맵의 월드 픽셀(타일 중심)입니다 */
   private collectPortals(map: Phaser.Tilemaps.Tilemap): void {
+    for (const p of this.portals) p.mark?.destroy();
     this.portals = [];
     for (const o of map.getObjectLayer('portal')?.objects ?? []) {
       const props = (o.properties as { name: string; value: string | number }[] | undefined) ?? [];
       const get = (k: string) => props.find((x) => x.name === k)?.value;
       const to = get('to') as MapId | undefined;
       if (!to || !this.cache.tilemap.has(to)) continue;
+      const here = FLOOR[this.currentMap];
+      const there = FLOOR[to];
+      const dir =
+        here !== undefined && there !== undefined && here !== there
+          ? there < here
+            ? ('down' as const)
+            : ('up' as const)
+          : null;
+      const rect = new Phaser.Geom.Rectangle(o.x ?? 0, o.y ?? 0, o.width || TS, o.height || TS);
+
+      // 화살표를 느낌표와 같은 방식으로 띄웁니다
+      let mark: Phaser.GameObjects.Text | undefined;
+      if (dir) {
+        mark = this.add
+          .text(rect.centerX, rect.y - 6, dir === 'down' ? '▼' : '▲', {
+            fontSize: '18px',
+            color: '#7fe3d6',
+            stroke: '#2a2632',
+            strokeThickness: 4,
+          })
+          .setOrigin(0.5, 1)
+          .setDepth(60);
+        this.tweens.add({
+          targets: mark,
+          y: mark.y - 7,
+          duration: 620,
+          yoyo: true,
+          repeat: -1,
+          ease: 'Sine.inOut',
+        });
+        this.uiCam?.ignore(mark);
+      }
       this.portals.push({
-        rect: new Phaser.Geom.Rectangle(o.x ?? 0, o.y ?? 0, o.width || TS, o.height || TS),
+        rect,
         to,
         sx: Number(get('spawnX') ?? 0),
         sy: Number(get('spawnY') ?? 0),
+        dir,
+        mark,
       });
     }
     this.portalCooldown = 500;
@@ -366,7 +419,15 @@ export class CampusScene extends Phaser.Scene {
     // 계단을 밟으면 맵이 바뀝니다
     if (this.portalCooldown <= 0) {
       const feet = new Phaser.Geom.Point(this.player.x + TS / 2, this.player.y + HEAD_OVERHANG + TS / 2);
-      const hit = this.portals.find((p) => Phaser.Geom.Rectangle.ContainsPoint(p.rect, feet));
+      const hit = this.portals.find((p) => {
+        if (!Phaser.Geom.Rectangle.ContainsPoint(p.rect, feet)) return false;
+        // 내려가는 계단은 **위에서만**, 올라가는 계단은 **아래에서만**.
+        // 직전 프레임에 어디 있었는지로 판정합니다.
+        if (p.dir === 'down') return this.lastFeet.y <= p.rect.y;
+        if (p.dir === 'up') return this.lastFeet.y >= p.rect.bottom;
+        return true;
+      });
+      this.lastFeet = { x: feet.x, y: feet.y };
       if (hit) {
         this.hint.setVisible(false);
         this.loadMap(hit.to, Math.floor(hit.sx / TS), Math.floor(hit.sy / TS));
