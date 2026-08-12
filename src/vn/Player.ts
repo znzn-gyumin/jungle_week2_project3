@@ -64,6 +64,9 @@ export class Player {
   private setMode(on: boolean): void {
     this.cinematic = on;
     this.boxEl.classList.toggle('vn__box--cine', on);
+    // **맵 대화로 돌아가면 반신을 내립니다.** 안 내리면 앞 씬에서 섰던
+    // 인물이 화면 바닥에 그대로 남아 도트 얼굴과 같이 뜹니다.
+    if (!on) this.stage.clearChar();
   }
 
   constructor(root: HTMLElement, script: ScriptData, state: GameState) {
