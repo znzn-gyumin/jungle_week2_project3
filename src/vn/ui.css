@@ -420,7 +420,7 @@
   /* **중앙 상단.** 걸으면서 눈을 거의 안 떼도 되고, 아래쪽 대사창·안내와
      안 겹칩니다. 뒤가 비치므로 맵을 가리지 않습니다. */
   left: 50%;
-  top: 1.8rem;
+  top: 5.4rem;
   z-index: 8;
   width: max-content;
   /* **미니맵을 안 침범합니다.** 왼쪽 위 HUD 가 300px 이라, 가운데 정렬인
@@ -813,4 +813,34 @@
 .roam-guide__who .is-met {
   opacity: 0.45;
   border-style: dashed;
+}
+
+
+/* 넘어갈 수 있게 됐다는 한 줄. 화면 위 가운데에서 천천히 깜빡입니다 —
+   맵을 가리지 않게 옅게 두고, 빠르게 깜빡이면 눈이 아픕니다. */
+.roam-go {
+  position: absolute;
+  left: 50%;
+  top: 1.5rem;
+  z-index: 9;
+  margin: 0;
+  padding: 0.45rem 1.4rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  color: #fff;
+  background: rgb(24 20 32 / 30%);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 999px;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 65%);
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: roam-go-blink 2.6s ease-in-out infinite;
+}
+
+.roam-go[hidden] { display: none; }
+
+@keyframes roam-go-blink {
+  0%, 100% { opacity: 0.34; }
+  50% { opacity: 0.92; }
 }

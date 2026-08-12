@@ -59,6 +59,8 @@ export class Roam {
   private retalks = 0;
   /** 튜토리얼 — 엔터로 화면이 넘어갈 때 같이 걷습니다 */
   private tutorialEl: HTMLElement | null = null;
+  /** 넘어갈 수 있을 때 화면 위에 뜨는 한 줄 */
+  private goEl!: HTMLElement;
   /** 방금 배운 것 한 줄 */
   private learned = '';
   private me = { x: 0, y: 0 };
@@ -74,7 +76,11 @@ export class Roam {
     this.guideEl = document.createElement('div');
     this.guideEl.className = 'roam-guide';
     hud.append(this.miniEl, this.guideEl);
-    this.host.append(hud);
+    this.goEl = document.createElement('p');
+    this.goEl.className = 'roam-go';
+    this.goEl.textContent = '엔터 — 다음으로';
+    this.goEl.hidden = true;
+    this.host.append(hud, this.goEl);
 
     // 처음 걷는 자리에서 조작을 한 번 알려줍니다. 아무 키나 누르면 닫힙니다.
     if (this.block.id === 'prologue') this.showTutorial();
@@ -377,6 +383,9 @@ export class Roam {
       };
     });
     const done = this.left <= 0 || !rest.length;
+    // 넘어갈 수 있게 되면 화면 위에 한 줄 띄웁니다 — 안내를 안 보고
+    // 걷는 사람이 여기서 멈춰 있는 일이 잦습니다.
+    this.goEl.hidden = !done;
     this.guideEl.innerHTML = `
       <p class="roam-guide__goal">${
         done ? '이제 진행할 수 있어요' : `<b>${this.left}명</b>에게 더 말을 걸어요`
@@ -398,6 +407,7 @@ export class Roam {
     window.removeEventListener('keydown', this.onKey);
     this.tutorialEl?.remove();
     this.tutorialEl = null;
+    this.goEl.remove();
     const after = this.block.after;
     this.destroy();
     this.onDone(after);
