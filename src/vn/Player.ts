@@ -261,6 +261,11 @@ export class Player {
           continue;
         case 'cg':
           this.setMode(true);
+          // **맵을 내려야 스틸이 보입니다.** 맵 캔버스가 무대 뒤가 아니라
+          // 위에 깔려 있어, 안 내리면 이벤트 CG 가 통째로 가려집니다.
+          // 자유 이동 중에 걸리는 @cg 가 그동안 한 장도 안 보인 이유입니다.
+          this.backdrop.hide();
+          this.mapEl.hidden = true;
           this.stage.setCg(line.id);
           continue;
         case 'char': {
