@@ -3,6 +3,8 @@ import { createReadStream, existsSync, statSync } from 'node:fs';
 import { extname, join, normalize, resolve } from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
 
+import { scriptPlugin } from './src/tools/compile-script';
+
 /**
  * `assets/` 는 `public/` 밖에 있습니다 (TECH_DESIGN 2절).
  *
@@ -53,7 +55,7 @@ export default defineConfig({
   // 개발 서버에서는 Vite 가 알아서 `/` 로 둡니다.
   base: './',
   publicDir: 'public',
-  plugins: [serveAssets()],
+  plugins: [serveAssets(), scriptPlugin()],
   build: {
     target: 'es2022',
     assetsInlineLimit: 0,

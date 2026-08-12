@@ -2,10 +2,15 @@
  * jungLover — 진입점
  *
  * 구현 순서: docs/TECH_DESIGN.md 7절
- * 지금은 1번(스캐폴딩·배포)까지입니다. 화면은 타이틀 배경을 띄워
- * **에셋 경로가 개발 서버와 Pages 양쪽에서 뚫렸는지**를 눈으로 확인하는 용도입니다.
+ * 지금은 4번(VN 재생기)까지입니다. 배경·CG(6번)와 Phaser 맵(8번)이 없어서
+ * 화면은 대사창뿐이고, 자유 이동은 NPC 목록으로 대신합니다.
  */
 import './boot.css';
+import './vn/ui.css';
+
+import script from 'virtual:script';
+import { newGame } from './core/state';
+import { Player } from './vn/Player';
 
 /** `assets/` 아래 파일의 URL. Pages 는 하위 경로에 올라가므로 base 를 붙입니다. */
 export function asset(path: string): string {
@@ -20,30 +25,36 @@ function setFavicon(): void {
   document.head.append(link);
 }
 
-function boot(): void {
-  setFavicon();
-  const app = document.querySelector<HTMLDivElement>('#app');
-  if (!app) throw new Error('#app 이 없습니다');
-
+/**
+ * 성별을 먼저 고릅니다. 만나는 히로인 셋이 여기서 갈리고(반대 성별),
+ * 절친도 같이 갈립니다 (TECH_DESIGN 3-1).
+ */
+function titleScreen(app: HTMLElement): void {
   app.innerHTML = `
     <main class="boot">
       <img class="boot__bg" src="${asset('ui/intro_large.webp')}" alt="" />
       <div class="boot__panel">
         <p class="boot__line">11박 12일, 연애는 커리큘럼에 없었다</p>
-        <p class="boot__note" id="boot-status">에셋 확인 중…</p>
+        <div class="boot__pick">
+          <button class="vn__choice" data-g="male">남자로 시작 — 이도윤</button>
+          <button class="vn__choice" data-g="female">여자로 시작 — 이도아</button>
+        </div>
+        <p class="boot__note">씬 ${Object.keys(script).length}개 컴파일됨</p>
       </div>
-    </main>
-  `;
+    </main>`;
+  for (const b of app.querySelectorAll<HTMLButtonElement>('[data-g]')) {
+    b.addEventListener('click', () => {
+      const state = newGame(b.dataset.g as 'male' | 'female');
+      new Player(app, script, state).start();
+    });
+  }
+}
 
-  const status = app.querySelector<HTMLParagraphElement>('#boot-status')!;
-  const bg = app.querySelector<HTMLImageElement>('.boot__bg')!;
-  bg.addEventListener('load', () => {
-    status.textContent = `에셋 경로 정상 · ${bg.naturalWidth}×${bg.naturalHeight}`;
-  });
-  bg.addEventListener('error', () => {
-    status.textContent = '에셋을 못 읽었습니다 — vite.config.ts 의 assets 플러그인을 확인하세요';
-    status.classList.add('boot__note--bad');
-  });
+function boot(): void {
+  setFavicon();
+  const app = document.querySelector<HTMLDivElement>('#app');
+  if (!app) throw new Error('#app 이 없습니다');
+  titleScreen(app);
 }
 
 boot();

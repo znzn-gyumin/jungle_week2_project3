@@ -6,6 +6,7 @@
   --ink-dim: #a9a2b4;
   --ground: #0b0c17;
   --bad: #e8763c;
+  --accent: #e8763c; /* 정글 오렌지 (WORLD_BIBLE 8-1) */
 }
 
 * {
@@ -64,4 +65,12 @@ body {
 
 .boot__note--bad {
   color: var(--bad);
+}
+
+.boot__pick {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 1.25rem 0 0.75rem;
 }
