@@ -287,9 +287,12 @@
      무시돼 인물이 화면 중간에 뜬 채로 섭니다. */
   /* 크게 세우고 그만큼 아래로 내립니다 — 하반신은 화면 밖으로 잘려
      얼굴이 커집니다. 무대가 overflow:hidden 이라 넘친 만큼 잘립니다. */
-  height: 104%;
+  /* 크게 세우되 **머리는 화면 안에 둡니다.** 아래로 내린 만큼 위가
+     잘리므로, 높이와 내린 폭을 더해 100% 를 크게 안 넘겨야 합니다.
+     지금은 위로 6% 쯤 여백이 남습니다. */
+  height: 98%;
   top: auto;
-  bottom: -11%;
+  bottom: -4%;
   object-fit: contain;
   object-position: bottom center;
   opacity: 0;
