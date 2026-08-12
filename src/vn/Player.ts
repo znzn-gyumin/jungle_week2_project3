@@ -15,7 +15,6 @@ import type { TimeOfDay } from '../config/lighting';
 import { Backdrop } from '../map/Backdrop';
 import { Roam } from '../map/Roam';
 import { Stage } from './Stage';
-import { Hud } from './Hud';
 import { Typewriter } from './Typewriter';
 
 /** 주인공 이름표는 언제나 `나` 입니다 (WORLD_BIBLE 11) */
@@ -33,7 +32,6 @@ export class Player {
   private scene: string;
   private idx = 0;
   private typer: Typewriter;
-  private hud!: Hud;
 
   private nameEl: HTMLElement;
   private textEl: HTMLElement;
@@ -117,11 +115,6 @@ export class Player {
     fit();
     window.addEventListener('resize', fit);
 
-    this.hud = new Hud(
-      root,
-      () => this.advance(),
-      (ms) => this.typer.setSpeed(ms),
-    );
     this.boxEl.addEventListener('click', () => this.advance());
     window.addEventListener('keydown', (e) => {
       // 선택지가 떠 있으면 방향키로 고르고 스페이스·엔터로 결정합니다
@@ -214,8 +207,6 @@ export class Player {
           void this.saidEl.offsetWidth;
           this.saidEl.classList.add('is-in');
           this.typer.run(said);
-          this.hud.push(who === ME ? ME : who ? label(who) : '', said);
-          this.hud.meter(this.state);
           return;
         }
         case 'flag':
@@ -229,7 +220,6 @@ export class Player {
           }
           continue;
         case 'choice':
-          this.hud.hold();
           return this.showChoices(line.options);
         case 'jump':
           this.goto(line.target);
