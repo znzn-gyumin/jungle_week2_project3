@@ -176,8 +176,20 @@ export class Roam {
     g.font = `bold ${Math.max(11, s * 2.4)}px sans-serif`;
     g.textAlign = 'center';
     g.textBaseline = 'middle';
-    // 사람마다 **자기** 테마 컬러입니다 — 말하는 사람 색이 아닙니다
+    // 사람마다 **자기** 테마 컬러입니다 — 말하는 사람 색이 아닙니다.
+    // 아직 안 만난 사람은 `!`, 이미 만난 사람은 속 빈 동그라미입니다.
     for (const n of d.npcs) {
+      if (n.met) {
+        g.beginPath();
+        g.arc(n.x * s, n.y * s, 4, 0, Math.PI * 2);
+        g.lineWidth = 2.4;
+        g.strokeStyle = '#ffffff';
+        g.stroke();
+        g.lineWidth = 1.6;
+        g.strokeStyle = n.theme;
+        g.stroke();
+        continue;
+      }
       g.lineWidth = 3;
       g.strokeStyle = '#ffffff';
       g.strokeText('!', n.x * s, n.y * s);

@@ -271,6 +271,15 @@ export class LightingOverlay {
     return this.current;
   }
 
+  /**
+   * 오버레이 두 장. **UI 카메라에서 빼야 합니다** — 안 그러면 화면 고정
+   * 카메라가 같은 어둠을 한 벌 더 그려서, 그 사본이 인물을 따라다니는
+   * 것처럼 보입니다.
+   */
+  get layers(): Phaser.GameObjects.GameObject[] {
+    return [this.rtDark, this.rt].filter(Boolean);
+  }
+
   private ensureTextures() {
     const tx = this.scene.textures;
     if (!tx.exists(this.lightKey)) {

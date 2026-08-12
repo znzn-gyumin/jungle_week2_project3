@@ -66,7 +66,7 @@ export type MiniData = {
   h: number;
   blocked: boolean[];
   stairs: { x: number; y: number; dir: 'down' | 'up' | null }[];
-  npcs: { x: number; y: number; theme: string }[];
+  npcs: { x: number; y: number; theme: string; met: boolean }[];
 };
 
 const asset = (p: string): string => `${import.meta.env.BASE_URL}assets/${p}`;
@@ -80,6 +80,8 @@ export class CampusScene extends Phaser.Scene {
   private npcSprites: { npc: FreeroamNpc; sprite: Phaser.GameObjects.Image; mark: Phaser.GameObjects.Text }[] = [];
   /** 이미 만난 사람 — 자리에는 남지만 말은 못 겁니다 */
   private stayed: Phaser.GameObjects.Image[] = [];
+  /** 미니맵에 동그라미로 남길 사람들 */
+  private metMarks: { x: number; y: number; theme: string; met: boolean }[] = [];
   private hint!: Phaser.GameObjects.Text;
   /** 미니맵은 DOM 캔버스가 그립니다 — 게임 캔버스에 그리면 확대돼 뭉갭니다 */
   private onMini?: (d: MiniData) => void;
@@ -217,11 +219,15 @@ export class CampusScene extends Phaser.Scene {
       h: map.height,
       blocked,
       stairs: this.portals.map((p) => ({ x: p.rect.x / TS, y: p.rect.y / TS, dir: p.dir })),
-      npcs: this.npcSprites.map((n) => ({
-        x: n.sprite.x / TS,
-        y: n.sprite.y / TS,
-        theme: npcTheme(n.npc.who),
-      })),
+      npcs: [
+        ...this.npcSprites.map((n) => ({
+          x: n.sprite.x / TS,
+          y: n.sprite.y / TS,
+          theme: npcTheme(n.npc.who),
+          met: false,
+        })),
+        ...this.metMarks,
+      ],
     };
     this.onMini?.(this.lastMini);
   }
@@ -266,6 +272,9 @@ export class CampusScene extends Phaser.Scene {
     this.lighting.attach(map, 100);
     this.lighting.setTime(this.setup.time);
     this.lighting.applySaturation([ground, objects]);
+    // 조명은 월드에 고정입니다 — UI 카메라가 한 벌 더 그리면 화면에 붙어
+    // 인물을 따라다니는 것처럼 보입니다.
+    this.uiCam?.ignore(this.lighting.layers);
     this.emitMinimap(map);
 
     // 트리거 맵에 진입하는 것만으로 발동하는 씬
@@ -335,6 +344,7 @@ export class CampusScene extends Phaser.Scene {
     for (const sp of this.stayed) sp.destroy();
     this.npcSprites = [];
     this.stayed = [];
+    this.metMarks = [];
     const layer = map.getObjectLayer('npc');
     if (!layer) return;
 
@@ -389,6 +399,12 @@ export class CampusScene extends Phaser.Scene {
     if (found) {
       found.mark.destroy();
       this.stayed.push(found.sprite);
+      this.metMarks.push({
+        x: found.sprite.x / TS,
+        y: found.sprite.y / TS,
+        theme: npcTheme(who),
+        met: true,
+      });
     }
     this.npcSprites = this.npcSprites.filter((x) => x.npc.who !== who);
     this.setup.npcs = this.setup.npcs.filter((n) => n.who !== who);
@@ -398,11 +414,15 @@ export class CampusScene extends Phaser.Scene {
     if (this.lastMini) {
       this.lastMini = {
         ...this.lastMini,
-        npcs: this.npcSprites.map((n) => ({
-          x: n.sprite.x / TS,
-          y: n.sprite.y / TS,
-          theme: npcTheme(n.npc.who),
-        })),
+        npcs: [
+          ...this.npcSprites.map((n) => ({
+            x: n.sprite.x / TS,
+            y: n.sprite.y / TS,
+            theme: npcTheme(n.npc.who),
+            met: false,
+          })),
+          ...this.metMarks,
+        ],
       };
       this.onMini?.(this.lastMini);
     }
