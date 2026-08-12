@@ -46,6 +46,14 @@ export type RoamSetup = {
   onTrigger: (target: string) => void;
 };
 
+export type MiniData = {
+  w: number;
+  h: number;
+  blocked: boolean[];
+  stairs: { x: number; y: number }[];
+  npcs: { x: number; y: number }[];
+};
+
 const asset = (p: string): string => `${import.meta.env.BASE_URL}assets/${p}`;
 
 export class CampusScene extends Phaser.Scene {
@@ -58,12 +66,9 @@ export class CampusScene extends Phaser.Scene {
   /** 이미 만난 사람 — 자리에는 남지만 말은 못 겁니다 */
   private stayed: Phaser.GameObjects.Image[] = [];
   private hint!: Phaser.GameObjects.Text;
-  private mini!: Phaser.GameObjects.Graphics;
-  private guide!: Phaser.GameObjects.Text;
-  private miniDot!: Phaser.GameObjects.Graphics;
-  private miniSize = { w: 0, h: 0, s: 1 };
-  /** 미니맵 위의 ! 표시 — 맵을 옮기거나 만나면 지웁니다 */
-  private miniMarks: Phaser.GameObjects.Text[] = [];
+  /** 미니맵은 DOM 캔버스가 그립니다 — 게임 캔버스에 그리면 확대돼 뭉갭니다 */
+  private onMini?: (d: MiniData) => void;
+  private onWhere?: (x: number, y: number) => void;
   /** UI 전용 카메라 — 본 카메라의 줌을 안 따라갑니다 */
   private uiCam!: Phaser.Cameras.Scene2D.Camera;
   /** 안내는 DOM 으로 옮겼습니다 — Phaser Text 로는 요즘 UI 가 안 나옵니다 */
@@ -147,24 +152,9 @@ export class CampusScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setVisible(false);
 
-    this.guide = this.add
-      .text(-9999, -9999, '', {
-        fontSize: '13px',
-        color: '#f2ede4',
-        lineSpacing: 5,
-        backgroundColor: 'rgba(11,12,23,.82)',
-        padding: { x: 8, y: 6 },
-      })
-      .setScrollFactor(0)
-      .setDepth(300);
-    this.mini = this.add.graphics().setScrollFactor(0).setDepth(300);
-    this.miniDot = this.add.graphics().setScrollFactor(0).setDepth(301);
-
-    // 미니맵과 안내를 본 카메라에서 떼어 냅니다 — 안 그러면 줌에 같이
-    // 확대돼 화면 밖으로 밀려납니다.
     this.uiCam = this.cameras.add(0, 0, this.scale.width, this.scale.height);
     this.uiCam.setName('ui');
-    this.cameras.main.ignore([this.mini, this.miniDot, this.hint, this.guide]);
+    this.cameras.main.ignore(this.hint);
     // 주인공을 UI 카메라에서 빼야 합니다 — 안 그러면 화면에 둘로 보입니다
     this.uiCam.ignore(this.player);
     this.scale.on('resize', (g: Phaser.Structs.Size) => this.uiCam?.setSize(g.width, g.height));
@@ -177,8 +167,27 @@ export class CampusScene extends Phaser.Scene {
     this.onGuide?.(lines);
   }
 
-  bindGuide(fn: (lines: string[]) => void): void {
-    this.onGuide = fn;
+  bindMini(mini: (d: MiniData) => void, where: (x: number, y: number) => void): void {
+    this.onMini = mini;
+    this.onWhere = where;
+  }
+
+  /** 미니맵이 그릴 자료 — 막힌 칸 · 계단 · 아직 안 만난 사람 */
+  private emitMinimap(map: Phaser.Tilemaps.Tilemap): void {
+    const blocked: boolean[] = [];
+    const col = map.getLayer('collision')?.tilemapLayer;
+    for (let y = 0; y < map.height; y++) {
+      for (let x = 0; x < map.width; x++) {
+        blocked.push((col?.getTileAt(x, y)?.index ?? 0) > 0);
+      }
+    }
+    this.onMini?.({
+      w: map.width,
+      h: map.height,
+      blocked,
+      stairs: this.portals.map((p) => ({ x: p.rect.x / TS, y: p.rect.y / TS })),
+      npcs: this.npcSprites.map((n) => ({ x: n.sprite.x / TS, y: n.sprite.y / TS })),
+    });
   }
 
   /** 씬 재생 중에는 맵을 멈춥니다 */
@@ -221,54 +230,11 @@ export class CampusScene extends Phaser.Scene {
     this.lighting.attach(map, 100);
     this.lighting.setTime(this.setup.time);
     this.lighting.applySaturation([ground, objects]);
-    this.drawMinimap(map);
+    this.emitMinimap(map);
 
     // 트리거 맵에 진입하는 것만으로 발동하는 씬
     const trg = this.setup.triggers.find((t) => t.map === id);
     if (trg) this.time.delayedCall(400, () => this.setup.onTrigger(trg.target));
-  }
-
-  /** 미니맵 — 벽·계단·NPC 를 점으로. 숫자는 안 씁니다 (WORLD_BIBLE 11) */
-  private drawMinimap(map: Phaser.Tilemaps.Tilemap): void {
-    if (!this.mini) return;
-    const pad = 12;
-    const s = Math.min(150 / map.width, 118 / map.height);
-    this.miniSize = { w: map.width * s, h: map.height * s, s };
-    const g = this.mini.clear();
-    g.fillStyle(0x0b0c17, 0.82).fillRect(pad - 4, pad - 4, this.miniSize.w + 8, this.miniSize.h + 8);
-    g.lineStyle(1, 0xe8763c, 0.7).strokeRect(pad - 4, pad - 4, this.miniSize.w + 8, this.miniSize.h + 8);
-    // 막힌 칸
-    const col = map.getLayer('collision')?.tilemapLayer;
-    g.fillStyle(0x3a3550, 0.9);
-    col?.forEachTile((t) => {
-      if (t.index > 0) g.fillRect(pad + t.x * s, pad + t.y * s, Math.max(1, s), Math.max(1, s));
-    });
-    // 계단 — 갈 수 있는 곳
-    g.fillStyle(0x7fe3d6, 1);
-    for (const p of this.portals) {
-      g.fillRect(pad + (p.rect.x / TS) * s - 1, pad + (p.rect.y / TS) * s - 1, s + 2, s + 2);
-    }
-    // 아직 안 만난 사람 — 미니맵에도 ! 를 찍습니다
-    for (const m of this.miniMarks) m.destroy();
-    this.miniMarks = [];
-    for (const { sprite } of this.npcSprites) {
-      const mx = pad + (sprite.x / TS) * s;
-      const my = pad + (sprite.y / TS) * s;
-      // 점 없이 글리프만 찍습니다 — 점 위에 기호를 얹으면 둘 다 작아 안 읽힙니다
-      const t = this.add
-        .text(mx, my, '!', {
-          fontSize: '15px',
-          fontStyle: 'bold',
-          color: '#ffd45e',
-          stroke: '#0b0c17',
-          strokeThickness: 4,
-        })
-        .setOrigin(0.5, 0.5)
-        .setScrollFactor(0)
-        .setDepth(302);
-      this.cameras.main.ignore(t);
-      this.miniMarks.push(t);
-    }
   }
 
   /** 계단·문 — `spawnX/Y` 는 도착 맵의 월드 픽셀(타일 중심)입니다 */
@@ -352,9 +318,6 @@ export class CampusScene extends Phaser.Scene {
       found.mark.destroy();
       this.stayed.push(found.sprite);
     }
-    // 미니맵 표시도 같이 줄입니다
-    const last = this.miniMarks.pop();
-    last?.destroy();
     this.npcSprites = this.npcSprites.filter((x) => x.npc.who !== who);
     this.setup.npcs = this.setup.npcs.filter((n) => n.who !== who);
   }
@@ -383,11 +346,7 @@ export class CampusScene extends Phaser.Scene {
       this.player.setFrame(row * 4);
     }
 
-    // 미니맵의 나
-    const pad = 12;
-    this.miniDot.clear().fillStyle(0xffffff, 1)
-      .fillCircle(pad + (this.player.x / TS) * this.miniSize.s,
-                  pad + (this.player.y / TS) * this.miniSize.s, 3);
+    this.onWhere?.(this.player.x / TS, this.player.y / TS);
 
     // 계단을 밟으면 맵이 바뀝니다
     if (this.portalCooldown <= 0) {

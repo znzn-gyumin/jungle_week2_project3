@@ -301,19 +301,31 @@
 
 /* ---- 자유 이동 안내 (DOM · Phaser Text 로는 요즘 UI 가 안 나옵니다) */
 
-.roam-guide {
+/* 미니맵과 안내를 한 카드에 세로로 쌓습니다 — 겹칠 일이 없습니다 */
+.roam-hud {
   position: absolute;
   top: clamp(0.8rem, 2vh, 1.4rem);
-  left: 210px;
+  left: clamp(0.8rem, 2vw, 1.4rem);
   z-index: 6;
-  max-width: min(26rem, 46vw);
-  padding: 0.85rem 1.2rem;
-  background: linear-gradient(180deg, #fffdf9ee, #fdf1e6ee);
+  width: 244px;
+  padding: 0.9rem;
+  background: linear-gradient(180deg, #fffdf9f2, #fdf1e6f2);
   border: 1px solid #f0d9c8;
-  border-radius: 20px;
-  box-shadow: 0 8px 24px rgb(90 60 70 / 26%), 0 2px 0 #fff inset;
+  border-radius: 22px;
+  box-shadow: 0 10px 28px rgb(90 60 70 / 28%), 0 2px 0 #fff inset;
   color: #6b4038;
   pointer-events: none;
+}
+
+.roam-mini {
+  display: block;
+  margin: 0 auto 0.7rem;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px #f3c9d8, 0 4px 12px rgb(120 70 90 / 18%);
+}
+
+.roam-guide {
+  padding: 0;
 }
 
 .roam-guide p {

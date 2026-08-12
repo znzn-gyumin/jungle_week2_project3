@@ -10,7 +10,7 @@ import Phaser from 'phaser';
 
 import type { TimeOfDay } from '../config/lighting';
 import { HEROINE_GENDER, type FreeroamNpc, type GameState, type Line } from '../core/types';
-import { CampusScene } from './CampusScene';
+import { CampusScene, type MiniData } from './CampusScene';
 import { fitSize, scoutName } from './sprites';
 
 type Block = Extract<Line, { t: 'freeroam' }>;
@@ -50,13 +50,22 @@ export class Roam {
 
   /** 안내는 DOM 으로 그립니다 — CSS 를 쓸 수 있어야 요즘 UI 가 나옵니다 */
   private guideEl: HTMLElement | null = null;
+  private miniEl: HTMLCanvasElement | null = null;
+  private mini: MiniData | null = null;
+  private me = { x: 0, y: 0 };
 
   start(): void {
     const npcs = this.usable();
     this.host.hidden = false;
+    // 미니맵과 안내를 한 카드에 담습니다 — 겹치지 않게 세로로 쌓습니다
+    const hud = document.createElement('div');
+    hud.className = 'roam-hud';
+    this.miniEl = document.createElement('canvas');
+    this.miniEl.className = 'roam-mini';
     this.guideEl = document.createElement('div');
     this.guideEl.className = 'roam-guide';
-    this.host.append(this.guideEl);
+    hud.append(this.miniEl, this.guideEl);
+    this.host.append(hud);
     this.game = new Phaser.Game({
       type: Phaser.AUTO,
       parent: this.host,
@@ -85,7 +94,19 @@ export class Roam {
       onTalk: (n: FreeroamNpc) => this.talk(n),
       onTrigger: (t: string) => this.trigger(t),
     });
-    setTimeout(() => this.updateGuide(), 300);
+    setTimeout(() => {
+      this.updateGuide();
+      this.scene?.bindMini(
+        (d) => {
+          this.mini = d;
+          this.drawMini();
+        },
+        (x, y) => {
+          this.me = { x, y };
+          this.drawMini();
+        },
+      );
+    }, 300);
   }
 
   /**
@@ -121,6 +142,55 @@ export class Roam {
     this.updateGuide();
   }
 
+  /** 미니맵을 DOM 캔버스에 그립니다 — 장치 픽셀 그대로라 또렷합니다 */
+  private drawMini(): void {
+    const el = this.miniEl;
+    const d = this.mini;
+    if (!el || !d) return;
+    const CSS = 210;
+    const dpr = window.devicePixelRatio || 1;
+    const s = Math.min(CSS / d.w, (CSS * 0.78) / d.h);
+    const w = Math.round(d.w * s);
+    const h = Math.round(d.h * s);
+    if (el.width !== w * dpr) {
+      el.width = w * dpr;
+      el.height = h * dpr;
+      el.style.width = `${w}px`;
+      el.style.height = `${h}px`;
+    }
+    const g = el.getContext('2d');
+    if (!g) return;
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, w, h);
+    g.fillStyle = '#fff6f9';
+    g.fillRect(0, 0, w, h);
+    g.fillStyle = '#e3cdd6';
+    for (let y = 0; y < d.h; y++) {
+      for (let x = 0; x < d.w; x++) {
+        if (d.blocked[y * d.w + x]) g.fillRect(x * s, y * s, Math.ceil(s), Math.ceil(s));
+      }
+    }
+    g.fillStyle = '#5fd3c4';
+    for (const p of d.stairs) g.fillRect(p.x * s - 1, p.y * s - 1, s + 2, s + 2);
+    g.font = `bold ${Math.max(11, s * 2.4)}px sans-serif`;
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    for (const n of d.npcs) {
+      g.lineWidth = 3;
+      g.strokeStyle = '#ffffff';
+      g.strokeText('!', n.x * s, n.y * s);
+      g.fillStyle = '#e0567b';
+      g.fillText('!', n.x * s, n.y * s);
+    }
+    g.fillStyle = '#3b2f4a';
+    g.beginPath();
+    g.arc(this.me.x * s, this.me.y * s, 3.2, 0, Math.PI * 2);
+    g.fill();
+    g.strokeStyle = '#ffffff';
+    g.lineWidth = 1.6;
+    g.stroke();
+  }
+
   /** 남은 목표를 맵 위에 적어 둡니다 */
   updateGuide(): void {
     if (!this.guideEl) return;
@@ -141,6 +211,8 @@ export class Roam {
     this.game?.destroy(true);
     this.game = null;
     this.guideEl = null;
+    this.miniEl = null;
+    this.mini = null;
     this.host.hidden = true;
     this.host.replaceChildren();
   }
