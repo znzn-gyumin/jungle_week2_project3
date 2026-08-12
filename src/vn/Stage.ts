@@ -27,8 +27,8 @@ export class Stage {
   private tintSprite = false;
   private who: string | null = null;
   private face = '기본';
-  /** `@char` 로 세워 둔 사람들과 그 자리 — 말하는 사람만 켜고 끕니다 */
-  private cast = new Map<string, 'left' | 'center' | 'right'>();
+  /** `@char` 로 이 씬에 세워 둔 사람들 — 말하는 사람만 켜고 끕니다 */
+  private cast = new Set<string>();
 
   constructor(private root: HTMLElement) {
     root.innerHTML = `
@@ -84,7 +84,7 @@ export class Stage {
   /** `@char 이름 위치` — 히로인 6인만 반신이 있습니다 */
   setChar(who: string, pos: 'left' | 'center' | 'right'): void {
     if (!HEROINE_BY_NAME[who]) return;
-    this.cast.set(who, pos);
+    this.cast.add(who);
     this.who = who;
     this.root.dataset.pos = pos;
     this.refreshChar();
@@ -112,15 +112,16 @@ export class Stage {
   /**
    * **말하는 사람만 세웁니다.** 한 씬에 둘을 세워 놓고 계속 띄워 두면
    * 누가 말하는지가 안 보입니다. 지금 말하는 사람이 이 씬에 선 사람
-   * 이면 그쪽으로 갈아 세우고, 내레이션이거나 다른 사람이면 내립니다.
+   * 이면 가운데로 갈아 세우고, 내레이션이거나 다른 사람이면 내립니다.
    */
   speaker(who: string | null): void {
-    const pos = who ? this.cast.get(who) : undefined;
-    if (!pos) {
+    if (!who || !this.cast.has(who)) {
       for (const el of this.chars) el.style.opacity = '0';
       return;
     }
-    this.root.dataset.pos = pos;
+    // **말하는 사람은 늘 가운데.** 한 번에 한 명만 서므로 좌우로 나눌
+    // 이유가 없고, 자리가 바뀌면 시선이 따라다녀야 해서 산만합니다.
+    this.root.dataset.pos = 'center';
     if (this.who !== who) {
       this.who = who;
       this.face = '기본';
