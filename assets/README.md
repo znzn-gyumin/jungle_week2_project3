@@ -173,15 +173,60 @@ this.textures.get('dot_minah').setFilter(Phaser.Textures.FilterMode.LINEAR);
 
 ---
 
+## UI
+
+**화면 넷 중 새로 그릴 그림은 로그인 배경 하나뿐**입니다. 대사창·방명록·타이틀 레이아웃은 HTML/CSS라 에셋이 아닙니다. 톤과 배치는 [WORLD_BIBLE 11절](../docs/WORLD_BIBLE.md#11-ui-톤)이 정본입니다.
+
+| 파일 | |
+|---|---|
+| `intro_blank.png` | 프레임만 — 금빛 장식 네 귀 · 1920×1080 |
+| `intro_small.png` | 로고 작게 · 1920×1080 |
+| `intro_large.png` | 로고 크게 · 1920×1080 |
+| `logo.png` | 로고 단독 · 1254×1254 |
+
+> **`logo.png`는 배경이 구워져 있습니다** — 완전 불투명이고 모서리가 `#0B0B17`입니다. `intro_blank`는 `#0A0A15`라 **1~2 어긋나서**, 위에 얹으면 사각형 경계가 보입니다. 다른 화면에 재활용하려면 투명 버전이 따로 필요합니다.
+
+### 로그인 배경 — 아직 없습니다
+
+타이틀 **앞**에 오는 화면입니다. 게스트 플레이가 없어 여기를 지나야 게임이 시작됩니다 ([GAME_DESIGN 2-5](../docs/GAME_DESIGN.md#2-5-계정과-방명록)). 구현 시안은 [`login.html`](../docs/reference/ui/login.html)에 있습니다.
+
+배경은 **낮의 커넥트가든** — 아직 아무 일도 없었던 시간대입니다.
+
+```
+minimal login screen for a visual novel game, full-bleed background photo of a
+sunlit outdoor wooden deck garden, heavy dark overlay for text legibility,
+centered single button labeled "Google로 계속하기", one short line of caption text
+below it, generous whitespace, no other ui elements, 16:9
+```
+
+---
+
 ## 눈으로 대조하기
 
 [`preview_cg.html`](../docs/reference/character/preview_cg.html) · [`preview_dot.html`](../docs/reference/character/preview_dot.html) — 파일명이 라벨로 붙어 있습니다. 에셋 이름을 바꾸면 `python tools/gen_preview.py`로 다시 만듭니다.
 
 ## 용량
 
-**PNG 그대로**라 CG 90장이 117MB, 캠퍼스 사진이 40MB입니다. 웹 배포 전에 **WebP 변환이 필요합니다** — CG는 q90이면 ~11MB로 내려갑니다. 도트는 무손실이어야 하므로 PNG를 유지합니다.
+**전부 PNG라 `assets/`가 187MB입니다.**
 
-원본은 [`docs/reference/character/`](../docs/reference/character/)의 `sheets/`(시트 9쌍)와 `cuts/`(낱장)에 있습니다.
+| | |
+|---|---|
+| `cg/` 90장 | **119MB** — 반신 71 · 스틸 48 |
+| `bg/campus/` 17장 | 41MB |
+| `bg/` 나머지 9장 | 21MB |
+| `ui/` 4장 | 8MB |
+| `dot/` · `map/` · `tilesets/` | 4MB |
 
-- `sheets/*_source.png` — 라벨·배경이 있는 원본. 정보 확인용
-- `sheets/*_alpha.png` — 배경을 제거한 것. 낱장을 자른 출처
+웹 배포 전에 **WebP 변환이 필요합니다** — CG는 q90이면 ~11MB로 내려갑니다. **도트는 무손실이어야 하므로 PNG를 유지합니다.**
+
+### 원본은 저장소 밖 폴더에 있습니다
+
+[`docs/reference/character/`](../docs/reference/character/)에 제작 원본이 남아 있습니다. **게임은 이 파일들을 읽지 않습니다.**
+
+| | |
+|---|---|
+| `sheets/` 18장 | 시트 9쌍. `*_source`는 라벨·배경이 있는 원본, `*_alpha`는 배경을 제거한 것 |
+| `cuts/sprite/{id}/` 648장 | 시트에서 자른 포즈별 컷. 조립 결과가 [`dot/walk/{id}.png`](./dot/walk)입니다 |
+| `profiles/` 8장 | 확정 프로필 카드 2장 + 인물별 레퍼런스 6장 |
+
+> **`sheets/`의 파일명은 옛 규칙(`casual`)입니다.** 지금 규칙은 `campus`고([CG](#cg)), 제작 원본이라 게임 동작에는 영향이 없습니다.

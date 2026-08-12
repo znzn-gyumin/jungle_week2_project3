@@ -1,12 +1,13 @@
-# jungLover — 문서 인덱스
+# 문서 인덱스
 
 > ## **jungLover**
 > ### 11박 12일, 연애는 커리큘럼에 없었다
 >
-> 부트캠프 연애 시뮬레이션 — 포트폴리오용 웹 게임. 로고: [`assets/ui/logo.png`](../assets/ui/logo.png)
+> 부트캠프 연애 시뮬레이션 — 포트폴리오용 웹 게임. 프로젝트 소개는 [루트 `README.md`](../README.md), 여기는 **작업자용 색인**입니다.
 
 | 문서 | 무엇을 정하는가 | 상태 |
 |---|---|---|
+| [`../README.md`](../README.md) | 저장소 첫 화면 — 프로젝트 소개·스택·상태 | **파생** |
 | [GAME_DESIGN.md](./GAME_DESIGN.md) | **무엇을 만드는가** — 구조, 시스템, 스탯, 판정, 분량 예산, 에셋 | 확정 |
 | [CHARACTERS.md](./CHARACTERS.md) | **누가 나오는가** — 6인 전체 시트, 조 안의 관계, 조연 | 확정 |
 | [WORLD_BIBLE.md](./WORLD_BIBLE.md) | **어떤 세계인가** — 캠프 설정, 일정, 공간, 용어, 톤, 사운드, UI | 확정 |
@@ -17,8 +18,7 @@
 | [reference/character/](./reference/character/README.md) | **히로인 6인 확정 프로필** — 외형·의상의 기준 | **확정** |
 | [../assets/README.md](../assets/README.md) | **에셋 규격** — 폴더·이름·CG·도트 규격 | **파생** |
 | [reference/TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) | 타일 구현 인수인계 — 산출물·생성기 사용법 | **구현** |
-| [reference/ui/README.md](./reference/ui/README.md) | **UI 화면 넷** — 로그인만 미제작 | **파생** |
-| [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 | **확정** |
+| [reference/ui/login.html](./reference/ui/login.html) | 로그인 화면 구현 시안 — 사양은 [WORLD_BIBLE 11](./WORLD_BIBLE.md#11-ui-톤) · 에셋은 [assets/README](../assets/README.md#ui) | **확정** |
 | [reference/character/preview_cg.html](./reference/character/preview_cg.html) | CG 90장 눈으로 대조 | — |
 | [reference/character/preview_dot.html](./reference/character/preview_dot.html) | 도트 18종 · 아바타 36컷 대조 | — |
 | `../src/script/*.vns` | 실제 대사 | **2단계에서 작성** |
@@ -33,10 +33,10 @@
 
    확인 대상은 **일곱 문서**입니다 — 이 `README.md`와 `GAME_DESIGN.md` · `CHARACTERS.md` · `WORLD_BIBLE.md` · `SCENARIO_OUTLINE.md` · `TECH_DESIGN.md`, 그리고 값을 담은 `reference/character/README.md`. README에도 씬 수·줄 수가 적히므로 검사 대상입니다. 2단계에 들어가면 `src/script/*.vns`가 추가됩니다
 
-   **[assets/README.md](../assets/README.md) · [TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) · [ui/README.md](./reference/ui/README.md)는 여덟에 들어가지 않습니다.** 위 문서들에서 값을 모아 뽑은 **파생 문서**라, 값이 바뀌면 대조하는 게 아니라 **다시 뽑습니다.** 여기에만 있는 값은 없어야 합니다
+   **[루트 README.md](../README.md) · [assets/README.md](../assets/README.md) · [TILESET_MAP_HANDOFF.md](./reference/TILESET_MAP_HANDOFF.md) · [bg/campus/README.md](../assets/bg/campus/README.md)는 일곱에 들어가지 않습니다.** 위 문서들에서 값을 모아 뽑은 **파생 문서**라, 값이 바뀌면 대조하는 게 아니라 **다시 뽑습니다.** 여기에만 있는 값은 없어야 합니다
 
 3. **점검은 두 층입니다.**
-   - **값**: 숫자·이름·장소·시각이 여덟 파일에서 같은가 (`grep`으로 보조)
+   - **값**: 숫자·이름·장소·시각이 일곱 파일에서 같은가 (`grep`으로 보조)
    - **서술**: 그 설명이 **지금 설정에 맞는가**. 인물의 행동·심리 묘사는 이름만 바꿔서는 안 맞습니다
 
 ---
@@ -148,8 +148,8 @@ grep -rn "옛이름" docs/ src/ --include="*.md" --include="*.vns"
 | 항목 | 막고 있는 것 | 언제 |
 |---|---|---|
 | **Firebase 프로젝트 생성** | 로그인·세이브·방명록 전부. 구현 순서 2번이라 **가장 먼저** ([TECH_DESIGN 7](./TECH_DESIGN.md#7-구현-순서)) | 구현 착수 시 |
-| **로그인 화면 그림** | 타이틀 진입. 시안은 [`ui/login.html`](./reference/ui/login.html), 사양은 [`ui/README`](./reference/ui/README.md) | 구현 착수 시 |
-| **WebP 변환** | 배포. 지금 `assets/`가 214MB라 그대로는 못 올립니다 ([assets/README](../assets/README.md#용량)) | 배포 전 |
+| **로그인 화면 그림** | 타이틀 진입. 시안은 [`ui/login.html`](./reference/ui/login.html), 생성 프롬프트는 [assets/README](../assets/README.md#로그인-배경--아직-없습니다) | 구현 착수 시 |
+| **WebP 변환** | 배포. 지금 `assets/`가 187MB라 그대로는 못 올립니다 ([assets/README](../assets/README.md#용량)) | 배포 전 |
 
 **에셋은 전부 나왔습니다** — CG 90 · 도트 324 · 배경 9 · 타일셋 3 · 타일맵 7 · 조명 5.
 
@@ -167,7 +167,7 @@ grep -rn "옛이름" docs/ src/ --include="*.md" --include="*.vns"
 | 어느 씬에서 무슨 일이 일어나는가 (씬 ID·자리·줄 수·선택지 위치·6인 사건) | **SCENARIO_OUTLINE** |
 | 구현 형식 (DSL·상태·맵·배포·**인증·방명록**) | **TECH_DESIGN** |
 | **그림 기준** (외형·의상·명찰·카드 색) | **reference/character** |
-| 에셋 사양 (파생) | 규격 **assets/README** · 타일 **TILESET_MAP_HANDOFF** · UI **reference/ui/README** |
+| 에셋 사양 (파생) | 규격·UI **assets/README** · 타일 **TILESET_MAP_HANDOFF** · 캠퍼스 사진 **bg/campus/README** |
 | 진행 상태와 미확정 항목 | **README** |
 
 **CHARACTERS와 SCENARIO_OUTLINE은 같은 데이터의 전치가 되기 쉽습니다.** 경계는 이렇습니다 — *이 사람이 누구인가*는 CHARACTERS, *그래서 D9에 뭘 하는가*는 SCENARIO_OUTLINE. 인물 절에 씬별 사건을 다시 적지 않습니다.
