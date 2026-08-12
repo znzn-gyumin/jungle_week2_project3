@@ -506,7 +506,7 @@
 @choice
   "돌아가서도 계속 볼래?"                 | affection+7 | -> confess | if affection>=80
   "…잘 들어가."                         | affection+3 | -> swallow
-  "내일 리허설 몇 시야?"                  | affection-3 | -> deflect
+  "리허설 몇 시야?"                  | affection-3 | -> deflect
 
 --- confess ---
 나 "돌아가서도 물어볼게. 밥 먹었냐고."

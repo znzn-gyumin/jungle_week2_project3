@@ -492,7 +492,7 @@
 @choice
   "그럼 제가 계속 물어볼게요."             | affection+7 | -> confess | if affection>=80
   "…잘 들어가세요."                      | affection+3 | -> swallow
-  "내일 리허설 준비는 다 하셨어요?"          | affection-3 | -> deflect
+  "리허설 준비는 다 하셨어요?"          | affection-3 | -> deflect
 
 --- confess ---
 나 "제가 계속 물어볼게요. 학교 돌아가도."

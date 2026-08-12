@@ -498,7 +498,7 @@
 @choice
   "끝나도 계속 보자."                    | affection+7 | -> confess | if affection>=80
   "…들어가자."                          | affection+3 | -> swallow
-  "내일 리허설 몇 시지?"                  | affection-3 | -> deflect
+  "리허설 몇 시지?"                  | affection-3 | -> deflect
 
 --- confess ---
 나 "끝나도 계속 볼 건데."

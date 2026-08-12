@@ -499,7 +499,7 @@
 @choice
   "그럼 내가 계속 물어볼게."               | affection+7 | -> confess | if affection>=80
   "…들어가자."                          | affection+3 | -> swallow
-  "내일 리허설 몇 시지?"                  | affection-3 | -> deflect
+  "리허설 몇 시지?"                  | affection-3 | -> deflect
 
 --- confess ---
 나 "내가 계속 물어볼게. 너 뭐 하고 싶냐고."
