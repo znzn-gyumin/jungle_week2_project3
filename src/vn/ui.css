@@ -794,7 +794,7 @@
    읽을 것과 조작 설명이 눈에 갈라집니다. */
 .vn__hint {
   position: absolute;
-  left: 50%;
+  right: clamp(1.6rem, 3.5vw, 2.6rem);
   bottom: -1.9rem;
   margin: 0;
   font-size: 0.82rem;
@@ -803,5 +803,4 @@
   white-space: nowrap;
   opacity: 0.85;
   pointer-events: none;
-  transform: translateX(-50%);
 }
