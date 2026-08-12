@@ -50,19 +50,92 @@ const CHAT: Record<string, Chat> = {
   },
 };
 
-const ANY: Chat = {
-  open: ['이거 언제 끝나요.', '저녁 뭐 나와요?', '아 잠깐만, 이거 될 것 같은데.'],
-  back: ['…모르겠어요.', '저도요.', '아 그거 저도 봤어요.'],
+/**
+ * 이름 없는 사람들 — **시각에 따라 하는 말이 다릅니다.**
+ *
+ * 낮은 아직 아무 일도 안 일어난 첫날, 밤은 발표를 앞둔 저녁, 깊은
+ * 밤은 밤샘 열다섯 시간째입니다. 같은 사람이 새벽 두 시에 「점심 뭐
+ * 먹었어요」 라고 하면 그때부터 배경이 배경으로 안 보입니다.
+ */
+const ANY_BY_TIME: Record<string, Chat> = {
+  day: {
+    open: [
+      '여기 자리 정해진 거예요?',
+      '와이파이 비밀번호 뭐예요?',
+      '저 아까 버스에서 봤죠?',
+      '전공 뭐예요?',
+      '이 건물 엘리베이터 없어요?',
+      '12일이면 금방이겠죠?',
+      '숙소 몇 호실이에요?',
+      '노트북 충전기 하나 남는 거 있어요?',
+    ],
+    back: [
+      '아 저도 그거 궁금했어요.',
+      '저는 아직 모르겠어요.',
+      '아마 그럴걸요?',
+      '아 진짜요?',
+      '저도 방금 왔어요.',
+      '그건 물어봐야 알 것 같은데요.',
+    ],
+  },
+  night: {
+    open: [
+      '발표 몇 시죠?',
+      '저희 조는 아직 반도 못 했어요.',
+      '이거 내일까지 되는 게 맞아요?',
+      '자료는 누가 만들어요?',
+      '슬라이드 몇 장 하세요?',
+      '아 오늘은 좀 자야 되는데.',
+      '나흘 남았다는 게 실감이 안 나요.',
+      '끝나면 뭐 하실 거예요?',
+    ],
+    back: [
+      '저희도요.',
+      '그러게요…',
+      '자야 되는데 못 자죠.',
+      '저는 아직 시작도 못 했어요.',
+      '아 그건 좀 부럽네요.',
+      '일단 오늘만 넘겨요.',
+    ],
+  },
+  deepnight: {
+    open: [
+      '지금 몇 시예요?',
+      '이거 왜 안 돌아가지…',
+      'B1 편의점 아직 열었나요?',
+      '한 시간만 자고 올게요.',
+      '아 이거 아까 됐었는데.',
+      '커피 남은 거 있어요?',
+      '해 뜨는 거 보고 자실 거예요?',
+      '저 방금 3초 잤어요.',
+    ],
+    back: [
+      '두 시 넘었어요.',
+      '…저도 그래요.',
+      '아까 열려 있던데요.',
+      '그거 한 시간 아니에요.',
+      '저는 이미 포기했어요.',
+      '같이 가요.',
+    ],
+  },
 };
 
+const ANY: Chat = ANY_BY_TIME.day;
+
+/** 이름이 있으면 그 사람 말투, 없으면 그 시각의 공용 대사 */
+function chatOf(who: string, time: string): Chat {
+  return CHAT[who] ?? ANY_BY_TIME[time] ?? ANY;
+}
+
 /** 이 사람이 먼저 던질 말 하나. `seed` 로 골라 매번 안 겹치게 합니다. */
-export function openLine(who: string, seed: number): string {
-  const c = CHAT[who] ?? ANY;
+export function openLine(who: string, seed: number, time = 'day'): string {
+  const c = chatOf(who, time);
   return c.open[seed % c.open.length];
 }
 
 /** 앞사람 말에 받아치는 말 하나 */
-export function backLine(who: string, seed: number): string {
-  const c = CHAT[who] ?? ANY;
-  return c.back[seed % c.back.length];
+export function backLine(who: string, seed: number, time = 'day'): string {
+  const c = chatOf(who, time);
+  // 던진 말과 받는 말이 같은 자리에서 돌면 짝이 늘 똑같아집니다
+  return c.back[(seed * 2 + 1) % c.back.length];
 }

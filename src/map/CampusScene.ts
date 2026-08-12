@@ -662,10 +662,10 @@ export class CampusScene extends Phaser.Scene {
         if (!pairs.length) return;
         const [a, b] = pairs[this.chatTurn % pairs.length];
         const seed = this.chatTurn++;
-        this.bubble(pool[a].sprite, openLine(pool[a].npc.who, seed));
+        this.bubble(pool[a].sprite, openLine(pool[a].npc.who, seed, this.setup.time));
         this.time.delayedCall(2100, () => {
           if (this.paused) return;
-          this.bubble(pool[b].sprite, backLine(pool[b].npc.who, seed));
+          this.bubble(pool[b].sprite, backLine(pool[b].npc.who, seed, this.setup.time));
         });
       },
     });
