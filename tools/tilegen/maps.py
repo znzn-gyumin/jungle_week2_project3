@@ -296,7 +296,9 @@ def m2(TS_):
     # ---- NPC — 자유 이동에서 2층에 있는 사람들 (WORLD_BIBLE 4-2-1)
     #   누가 내려오는지가 그 사람을 말한다. 민아·민규는 안 내려오므로
     #   여기 heroine_sameage 자리는 없다.
-    m.npc("older", 10, 22, role="heroine_older", label="이승희",
+    # **성별 쌍으로 적습니다.** 이 자리만 여자 이름이 박혀 있어서, 남자로
+    # 플레이할 때 2층에 승민이 아니라 승희가 앉아 있었다.
+    m.npc("older", 10, 22, role="heroine_older", label="이승희 / 이승민",
           seat="뒷줄 · 기둥(13,22) 옆",
           note="사람을 피해 내려온다. 두 문에서 가장 먼 자리 — M1 지정석과 같은 성격")
     m.npc("younger", 6, 9, role="heroine_younger", label="장윤정 / 장윤호",
