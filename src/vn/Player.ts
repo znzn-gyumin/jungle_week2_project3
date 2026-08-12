@@ -209,7 +209,9 @@ export class Player {
           this.nameEl.hidden = !who;
           this.boxEl.hidden = false;
           this.textEl.classList.toggle('vn__text--narr', line.t === 'narr');
-          this.setTheme(line.t === 'say' ? who : null);
+          // **내레이션에서는 색을 안 건드립니다.** 줄마다 기본 분홍으로
+          // 되돌리면 대사 한 줄만 색이 스쳐 지나가 안 바뀌는 것처럼 보입니다.
+          if (line.t === 'say') this.setTheme(who);
           // 명장면에서는 **말하는 사람만** 반신이 선다
           if (this.cinematic) {
             this.stage.speaker(line.t === 'say' ? who : null);
@@ -488,6 +490,7 @@ export class Player {
       return;
     }
     this.clearAvatar();
+    this.setTheme(null);
     let t = target;
     if (t.startsWith('r_*_')) {
       if (!this.state.route) {

@@ -140,6 +140,8 @@ export class Roam {
         (d) => {
           this.mini = d;
           this.drawMini();
+          // 계단을 타면 여기로 새 자료가 옵니다 — 장소 이름도 같이 바꿉니다
+          this.updateGuide();
         },
         (x, y) => {
           this.me = { x, y };
