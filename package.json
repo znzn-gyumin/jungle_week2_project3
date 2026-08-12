@@ -5,7 +5,7 @@
   "type": "module",
   "description": "11박 12일, 연애는 커리큘럼에 없었다 — 부트캠프 연애 시뮬레이션",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
