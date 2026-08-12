@@ -397,14 +397,16 @@ def m3(TS_):
     m.place(E, "vending", 24, 3)
     m.set_obj(25, 4, E, "water_cooler", 0)
 
-    # 정문(M7) · 후문(M5)
-    m.trigger("front_gate", 10, 2, w=4, h=1, kind="door", label="정문")
-    for x in range(10, 14):
-        m.portal("m7_gate", x, 2, 20 + (x - 10), 6, name="to_gate")
-    m.trigger("back_gate", 40, 20, w=1, h=4, kind="door", label="후문")
+    # 나가는 문 두 개 — **방향이 곧 목적지입니다.**
+    #   위    커넥트가든 (건물 뒤 정원)
+    #   오른쪽 정문
+    m.trigger("back_gate", 18, 2, w=4, h=1, kind="door", label="후문 · 커넥트가든")
+    for x in range(18, 22):
+        m.portal("m5_connect_garden", x, 2, 12 + (x - 18), 42, name="to_garden")
+    m.trigger("front_gate", 41, 20, w=1, h=4, kind="door", label="정문")
     for y in range(20, 24):
-        m.portal("m5_connect_garden", 42, y, 3, 20 + (y - 20), name="to_garden")
-    m.set_ground(42, 21, E, "f_lightpool"); m.set_ground(42, 22, E, "f_lightpool")
+        m.portal("m7_gate", 41, y, 3, 12 + (y - 20), name="to_gate")
+    m.set_ground(41, 21, E, "f_lightpool"); m.set_ground(41, 22, E, "f_lightpool")
     m.trigger("spawn_default", 12, 4, kind="spawn")
 
     # ---- 배경 인물 — 로비 · 게시판 · 택배보관소
@@ -639,10 +641,11 @@ def m5(TS_):
             m.objects[m.i(x, y)] = 0
             m.set_ground(x, y, O, "f_pave")
             m.open(x, y)
-        m.portal("m3_basecamp_1f", 0, y, 41, 20 + (y - 20), name="to_basecamp_1f")
-        m.portal("m3_basecamp_1f", 1, y, 41, 20 + (y - 20), name="to_basecamp_1f")
-    for x in range(12, 20):
-        m.portal("m6_nestcamp", x, H - 3, 17 + (x - 12) % 4, 3, name="to_nestcamp")
+    # **위는 숙소동, 아래는 교육동.** 가든이 둘 사이에 있습니다.
+    for x in range(12, 16):
+        m.portal("m6_nestcamp", x, 2, 17 + (x - 12), 4, name="to_nestcamp")
+    for x in range(12, 16):
+        m.portal("m3_basecamp_1f", x, H - 3, 18 + (x - 12), 4, name="to_basecamp_1f")
     m.trigger("garden_center", 13, 17, w=6, h=6, kind="scene",
               label="커넥트가든 중앙", note="감정 정점 씬 지점 · 여명 오버레이 전용 맵")
     m.trigger("spawn_default", 15, 24, kind="spawn")
@@ -686,9 +689,9 @@ def m6(TS_):
     # ---- 커넥트가든 진입구 (북쪽)
     doorway_h(m, D, SPX0, SPX1, 0, "f_corridor")
     doorway_h(m, D, SPX0, SPX1, 1, "f_corridor")
-    for x in range(SPX0, SPX1 + 1):
-        m.portal("m5_connect_garden", x, 0, 12 + (x - SPX0), 43, name="to_garden")
-        m.portal("m5_connect_garden", x, 1, 12 + (x - SPX0), 43, name="to_garden")
+    # 아래로 내려가면 커넥트가든입니다
+    for x in range(17, 21):
+        m.portal("m5_connect_garden", x, H - 3, 12 + (x - 17), 4, name="to_garden")
 
     # ---- 1F 체력단련실
     room(m, D, 2, 8, 14, 7, floor="f_gym")
@@ -895,10 +898,10 @@ def m7(TS_):
     for x in range(6, W, 8):
         m.set_obj(x, 9, O, "shrub", 0)
 
-    # 캠퍼스(M3 로비)로
-    for x in range(19, 23):
-        m.portal("m3_basecamp_1f", x, 0, 10 + (x - 19), 3, name="to_basecamp_1f")
-    m.trigger("front_gate", 19, 1, w=4, h=1, kind="door", label="정문")
+    # 캠퍼스(M3 로비)로 — 로비의 정문이 오른쪽 벽이라 이쪽은 왼쪽입니다
+    for y in range(12, 16):
+        m.portal("m3_basecamp_1f", 2, y, 40, 20 + (y - 12), name="to_basecamp_1f")
+    m.trigger("front_gate", 2, 12, w=1, h=4, kind="door", label="정문")
     m.trigger("spawn_default", 20, 6, kind="spawn")
 
     # ---- 배경 인물 — 정문
