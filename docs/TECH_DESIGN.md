@@ -130,14 +130,13 @@ public/
 
 ```
 === r_yunjung_c2_garden ===
-@bg   garden_dawn
 @bgm  midnight
 @char 윤정 center
 
-윤정 [평상] "…{P:호칭}도 안 자요?"
+윤정 [기본] "…{P:호칭}도 안 자요?"
 나 "잠이 안 와서."
 * 새벽 두 시. 커넥트가든에는 우리 둘뿐이었다.
-윤정 [평상] "…저도요."
+윤정 [슬픔] "…저도요."
 
 @choice
   "옆에 앉아 있는다"            | affection+7           | -> sit
@@ -145,8 +144,8 @@ public/
   "그 도트, 네가 만든 거야?"      | affection+7 | if flag:saw_pixelart | -> pixelart
 
 --- sit ---
-@cg cg_c2_garden
-윤정 [미소] "…앉아요."
+@cg yunjung_garden
+윤정 [부끄러움] "…앉아요."
 @flag set garden_together
 -> next_chapter
 ```
@@ -156,11 +155,14 @@ public/
 | `=== id ===` | 씬 시작 |
 | `@bg` `@bgm` `@se` `@cg` | 연출 명령. `@bgm` 값은 [WORLD_BIBLE 10-1](./WORLD_BIBLE.md#10-1-bgm-8곡)의 여덟 `id` 중 하나 |
 | `@char 이름 위치` | 캐릭터 입장 (left/center/right) |
-| `이름 [표정] "대사"` | 대사 한 줄. 표정 생략 시 직전 표정 유지 |
+| `이름 [표정] "대사"` | 대사 한 줄. 표정 생략 시 직전 표정 유지. 표정은 **여섯뿐**입니다 — `기본` `기쁨` `부끄러움` `슬픔` `놀람` `화남` ([assets/README](../assets/README.md#id)) |
+| `@cg` 값 | [`cg/event/`](../assets/README.md#cg)의 파일명에서 `.png`를 뗀 것 — `{루트ID}_{garden\|classroom\|ending}` |
 | `* 텍스트` | 내레이션 |
 | `@choice` | 선택지 블록. 효과는 공백으로 나열(`skill+25 affection-2`), `if` 절은 선택 |
 | `--- label ---` | 분기 라벨 |
 | `-> target` | 점프 |
+| `-> r_*_이름` | **현재 루트의 씬으로 점프.** `*`가 확정된 `RouteId`로 치환됩니다 — 공용 씬에서 루트 씬으로 넘어가는 유일한 방법입니다 |
+| `-> r_*_end_{tier}` | 엔딩 분기. `{tier}`는 [2-3 판정](./GAME_DESIGN.md#2-3-엔딩-판정)이 정하고, 루트가 미확정이면 `e_solo`로 갑니다 |
 | `-> back` | **자유 이동 구간으로 복귀** |
 | `@flag set/clear` | 플래그 조작 |
 | `@char none` | 캐릭터 전원 퇴장 |

@@ -1,0 +1,41 @@
+// 과정 2 · D5(금) 23:00 — 미니 프로젝트 밤샘 중 자유 이동 · 10줄
+// 히로인 3인 / 명진혁 중 택 1. 그날 상태에 따라 층이 갈립니다.
+
+=== c2_freeroam ===
+@bgm  night
+
+* 금요일 밤 열한 시. 미니 프로젝트가 시작된 지 여덟 시간째였다.
+* 일과표는 오늘부로 의미가 없어졌다.
+* 403은 아직 반쯤 차 있었고, 2층 오픈데스크에도 불이 켜져 있었다.
+* 각자 다른 층에 흩어져 있었다. 누구를 찾으려면 걸어가야 했다.
+
+@freeroam midproject
+  limit 2
+  spawn m1_basecamp_4f 22,12
+  npc 민아 at m1_basecamp_4f -> r_minah_c2_talk
+  npc 윤정 at m2_basecamp_2f -> r_yunjung_c2_talk
+  npc 승희 at m2_basecamp_2f -> r_seunghee_c2_talk
+  npc 명진혁 at m1_basecamp_4f -> c2_coach
+  after -> r_*_c2_allnighter
+
+=== c2_coach ===
+@char 명진혁 center
+명진혁 "안 자요?"
+나 "…네."
+명진혁 "잘하고 있는지 묻는 거면, 그건 내가 대답할 게 아니고."
+명진혁 "지금 옆에 누가 남아 있는지를 보세요. 그게 답이에요."
+@char none
+-> back
+
+=== r_yunjung_c2_talk ===
+@char 윤정 center
+* 2층 오픈데스크. 윤정이 혼자 헤드폰을 쓰고 앉아 있었다.
+* 작업 모드였다. 말을 걸면 안 되는 상태라고 조에서 알려줬었다.
+* 그래도 옆에 앉았다.
+윤정 [기본] "…"
+* 십 분쯤 뒤에 헤드폰을 목으로 내렸다.
+윤정 [기본] "안 가고 뭐 해요."
+나 "그냥."
+윤정 [부끄러움] "…그럼 있든가요."
+@char none
+-> back

@@ -1,0 +1,27 @@
+// 과정 3 · D7(일) 10:00 교육동 1F 로비 — 외출 장소 3택 · 5줄
+// C3-1 선호 +7 / 무난 +3 / 비선호 +1. 패널티는 없습니다.
+
+=== c3_outing ===
+@bgm  day
+
+* 일요일 아침 열 시. 세 시간쯤 잤다.
+* 로비에 스물넷이 다 모였다. 다들 사복이었다.
+명진혁 "스물세 시까지 돌아오면 됩니다. 그것만 지키세요."
+* 어디로 갈지는 각자 정하는 거였다.
+
+@choice
+  "한국민속촌"        | -> folkvillage
+  "에버랜드"          | -> everland
+  "명지대 대학가"      | -> collegetown
+
+--- folkvillage ---
+@flag set spot:folkvillage
+-> r_*_c3_folkvillage
+
+--- everland ---
+@flag set spot:everland
+-> r_*_c3_everland
+
+--- collegetown ---
+@flag set spot:collegetown
+-> r_*_c3_collegetown

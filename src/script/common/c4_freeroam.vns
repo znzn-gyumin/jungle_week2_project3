@@ -1,0 +1,40 @@
+// 과정 4 · D8(월) 저녁 — 마지막 자유 이동 · 10줄
+// 히로인 3인 / 4조 정찰 중 택 1.
+
+=== c4_freeroam ===
+@bgm  night
+
+* 월요일 저녁. 파이널 프로젝트 팀 빌딩이 끝났다.
+* 나흘 뒤면 발표다. 그 뒤에는 티켓 발표고, 그러면 끝이다.
+* 복도에서 4조가 벌써 뭘 붙였다는 얘기가 돌았다.
+* 걸어다닐 수 있는 마지막 저녁이었다.
+
+@freeroam finalprep
+  limit 2
+  spawn m1_basecamp_4f 12,20
+  npc 민아 at m1_basecamp_4f -> r_minah_c4_talk
+  npc 윤정 at m1_basecamp_4f -> r_yunjung_c4_talk
+  npc 승희 at m2_basecamp_2f -> r_seunghee_c4_talk
+  npc 태윤 at m2_basecamp_2f -> c4_scout
+  after -> r_*_c4_classroom
+
+=== c4_scout ===
+@char 태윤 center
+* 2층에 4조가 자리를 잡고 있었다. 화면 넷이 다 켜져 있었다.
+태윤 "어, 6조. 구경 왔어요?"
+나 "…소문 듣고."
+태윤 "소문만큼은 아니에요. 절반은 아직 안 붙었어요."
+* 절반은 붙었다는 뜻이었다.
+@char none
+-> back
+
+=== r_yunjung_c4_talk ===
+@char 윤정 center
+* 윤정은 화이트보드 앞에 서 있었다.
+* 자기가 그린 캐릭터 낙서 옆에 하나를 더 그리는 중이었다.
+윤정 [기쁨] "이거 우리 조 넷이에요. 알아보겠어요?"
+* 넷 중 하나가 헤드폰을 쓰고 있었다.
+나 "이건 너네."
+윤정 [부끄러움] "…들켰다."
+@char none
+-> back
