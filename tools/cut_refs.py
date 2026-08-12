@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """프로필 시트 2장 -> 인물별 레퍼런스 크롭 6장.
 
-ART_BRIEF.md 9절 ②가 요구하는 "프로필에서 해당 인물만 잘라" 단계를 재현합니다.
+프로필 카드에서 인물별로 잘라내는 단계입니다. 카드 정본은
+docs/reference/character/README.md, 설정값 정본은 docs/CHARACTERS.md 입니다.
 프로필을 다시 뽑았을 때 이 스크립트를 다시 돌리면 됩니다.
 
     python tools/cut_refs.py
@@ -23,9 +24,9 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "docs" / "reference" / "character"
-OUT = SRC / "refs"
+OUT = SRC / "profiles"
 
-# 좌 -> 우 순서. ART_BRIEF 1절 표와 같은 순서입니다.
+# 좌 -> 우 순서. docs/CHARACTERS.md 2-0 표와 같은 순서입니다.
 SHEETS = {
     "heroine_girl_profile.png": ["minah", "seunghee", "yunjung"],
     "heroine_boy_profile.png": ["mingyu", "seungmin", "yunho"],

@@ -402,7 +402,7 @@ type GameState = {
 
   chapter: number;     // 0=프롤로그 … 5=결말
   chapterDay: number;  // 1~12 — 방명록 날짜 해금 비교용
-  dateSpot?: 'folkvillage' | 'everland' | 'univtown';
+  dateSpot?: 'folkvillage' | 'everland' | 'collegetown';
 
   // 맵 상태
   map: MapId;                     // 현재 맵

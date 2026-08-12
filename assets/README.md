@@ -226,7 +226,7 @@ below it, generous whitespace, no other ui elements, 16:9
 | | |
 |---|---|
 | `sheets/` 18장 | 시트 9쌍. `*_source`는 라벨·배경이 있는 원본, `*_alpha`는 배경을 제거한 것 |
-| `cuts/sprite/{id}/` 648장 | 시트에서 자른 포즈별 컷. 조립 결과가 [`dot/walk/{id}.png`](./dot/walk)입니다 |
+| `cuts/sprite/{id}/` 648장 | 시트에서 자른 포즈별 컷. **`48x64/`와 `192x256/` 두 벌**이고 인물당 16컷(히로인은 표정 6컷이 더해져 22컷)입니다. `48x64/`의 걷기 16컷을 조립한 것이 [`dot/walk/{id}.png`](./dot/walk), 표정 6컷이 그대로 [`dot/face/`](./dot/face)입니다 |
 | `profiles/` 8장 | 확정 프로필 카드 2장 + 인물별 레퍼런스 6장 |
 
 > **`sheets/`의 파일명은 옛 규칙(`casual`)입니다.** 지금 규칙은 `campus`고([CG](#cg)), 제작 원본이라 게임 동작에는 영향이 없습니다.

@@ -243,7 +243,7 @@ def m2(TS_):
     vwall(m, E, 0, 2, H - 2); vwall(m, E, W - 1, 2, H - 2, right=True)
     band(m, E, "w_cap", 0, W - 1, H - 1)
 
-    # 오픈데스크 존 (지정석 없는 공용 테이블 — opendesk.jpg)
+    # 오픈데스크 존 (지정석 없는 공용 테이블 — opendesk.png)
     room(m, E, 2, 8, 24, 19, floor="f_carpet_a",
          floor_var=["f_carpet_a", "f_carpet_b", "f_carpet_c"])
     for x in range(2, 26):
@@ -304,7 +304,7 @@ def m3(TS_):
     vwall(m, E, 0, 2, H - 2); vwall(m, E, W - 1, 2, H - 2, right=True)
     band(m, E, "w_cap", 0, W - 1, H - 1)
 
-    # 로비 (lobby.jpg)
+    # 로비 (lobby.png)
     room(m, E, 2, 8, 20, 19, floor="f_vinyl_a", floor_var=["f_vinyl_a", "f_vinyl_b"])
     for x in range(2, 22):
         m.set_obj(x, 27, E, "w_window_s", 0)
@@ -320,7 +320,7 @@ def m3(TS_):
     m.place(E, "lounge_table", 9, 17)
     m.set_obj(3, 26, E, "trash", 0)
 
-    # 정글라운지 — 책장 벽 계단식 (jungle_step.jpg)
+    # 정글라운지 — 책장 벽 계단식 (jungle_step.png)
     for x in range(3, 20):
         for y in range(21, 26):
             m.set_ground(x, y, E, "f_stage_step")
@@ -396,7 +396,7 @@ def m4(TS_):
                 m.set_obj(cx, ry + 1, E, "chair_up", 0)
     m.trigger("jungle_stage", 7, 9, w=10, h=3, kind="room", room="jungle_stage")
 
-    # ---- 카페테리아 (canteen.jpg)
+    # ---- 카페테리아 (canteen.png)
     room(m, E, 30, 8, 12, 8, floor="f_vinyl_b")
     doorway_v(m, E, 29, 10, 12, "f_vinyl_a")       # 복도 → 카페테리아
     for cx in (30, 32, 34):

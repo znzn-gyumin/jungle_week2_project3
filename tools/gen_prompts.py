@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""ART_BRIEF.md -> 스틸 CG 18장 한글 프롬프트 팩.
+"""스틸 CG 18장 한글 프롬프트 팩.
 
     python tools/gen_prompts.py
 
-출력  docs/reference/character/prompts/04_still/T01~T18.md
+출력  docs/reference/character/prompts/04_still/T01_minah_garden.md ... T18
+인물 정본  docs/CHARACTERS.md · 규격 정본  assets/README.md
 
 값은 전부 이 파일 상단 표에 모여 있다. 생성된 .md 를 손으로 고치지 말고
 여기를 고치고 다시 돌린다.
@@ -328,7 +329,7 @@ BG_GARDEN = block("""
     노을도 일몰도 아닙니다 — 해가 지는 게 아니라 뜨기 직전입니다.
 """)
 
-BG_CLIMAX = block("""
+BG_CLASSROOM = block("""
     새벽 2시의 긴 세미나실, 천장 조명은 거의 다 꺼져 있고
     모니터 두세 대만 빛남, 왼쪽 벽의 유리 화이트보드가 희미하게 빛을 받음,
     오른쪽 통창은 완전히 검음, 깊은 먹빛 남색 어둠,
@@ -392,9 +393,9 @@ ATTACH_CAMPUS = block("""
     **`기본` 칸이 아닙니다.** 감정 정점 구간이라 그 순간에 맞는 표정 칸을 물려야
     표정이 상황을 따라옵니다.
 
-    인물 참조로 `refs/ref_*.png` 를 쓰지 마세요. 정본 얼굴은 이미 만든 **반신 CG** 입니다.
+    인물 참조로 `profiles/ref_*.png` 를 쓰지 마세요. 정본 얼굴은 이미 만든 **반신 CG** 입니다.
     원본 크롭을 넣으면 대화 중 CG 와 명장면 스틸이 다른 사람이 됩니다.
-    `refs/ref_*.png` 는 세로(0.729)라 **가로 스틸에 넣으면 비율까지 끌려갑니다.**
+    `profiles/ref_*.png` 는 세로(0.729)라 **가로 스틸에 넣으면 비율까지 끌려갑니다.**
 """)
 
 
@@ -422,7 +423,7 @@ def main() -> int:
         dict(
             key="classroom", num="②",
             title="② D9 클라이맥스 — 교육장 403 심야",
-            bg=BG_CLIMAX, bg_ref="classroom_1.png",
+            bg=BG_CLASSROOM, bg_ref="classroom_1.png",
             tone="심야(먹빛 남색 · 점광원만)",
             light="광원은 모니터 두세 대뿐입니다. 그 외 광원은 두지 마세요.",
             neg=NEG_BASE + "\n" + NEG_DARK.rstrip(","),
@@ -460,7 +461,7 @@ def main() -> int:
             ])
             write(OUT / "04_still" / f"T{idx:02d}_{h['id']}_{sc['key']}.md", prompt_file(
                 f"T{idx:02d} · {h['kr']} 스틸 {sc['title']}",
-                [("파일명", f"`cg_{h['id']}_still_{sc['key']}.png`"),
+                [("파일명", f"`assets/cg/event/{h['id']}_{sc['key']}.png`"),
                  ("캔버스", "가로 16:9 · 불투명 — 1920 × 1080 목표"),
                  ("색조", sc["tone"]),
                  ("배경 레퍼런스", f"`{sc['bg_ref']}` — **구조만** 가져옵니다"),
@@ -498,7 +499,7 @@ def main() -> int:
         ])
         write(OUT / "04_still" / f"T{idx:02d}_{h['id']}_ending.md", prompt_file(
             f"T{idx:02d} · {h['kr']} 스틸 ③ 엔딩 — 5년 후 ({h['ending_age']}세)",
-            [("파일명", f"`cg_{h['id']}_still_ending.png`"),
+            [("파일명", f"`assets/cg/event/{h['id']}_ending.png`"),
              ("캔버스", "가로 16:9 · 불투명 — 1920 × 1080 목표"),
              ("배경", BG_ENDING_KR[bgk] + " — 캠퍼스가 아닙니다"),
              ("인물 참조", f"**{h['kr']} 반신 CG `{h['ending_face']}` 칸 — 얼굴만**"),
