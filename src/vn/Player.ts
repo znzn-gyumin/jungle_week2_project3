@@ -11,20 +11,18 @@ import { applyEffects, endingTier, testCond } from '../core/state';
 import { substitute } from '../core/tokens';
 import { HEROINE_GENDER, NAME_BY_HEROINE } from '../core/types';
 import type { ChoiceOption, GameState, Line, Scene, ScriptData } from '../core/types';
+import { Roam } from '../map/Roam';
 import { Stage } from './Stage';
 import { Typewriter } from './Typewriter';
 
 /** 주인공 이름표는 언제나 `나` 입니다 (WORLD_BIBLE 11) */
 const ME = '나';
 
-type Roam = { line: Extract<Line, { t: 'freeroam' }>; left: number; met: string[] };
-
 export class Player {
   private state: GameState;
   private script: ScriptData;
   private scene: string;
   private idx = 0;
-  private roam: Roam | null = null;
   private typer: Typewriter;
 
   private nameEl: HTMLElement;
@@ -32,6 +30,8 @@ export class Player {
   private choiceEl: HTMLElement;
   private stageEl: HTMLElement;
   private stage: Stage;
+  private mapEl: HTMLElement;
+  private roam: Roam | null = null;
 
   constructor(root: HTMLElement, script: ScriptData, state: GameState) {
     this.script = script;
@@ -42,6 +42,7 @@ export class Player {
     root.innerHTML = `
       <div class="vn">
         <div class="vn__stage" id="vn-stage"></div>
+        <div class="vn__map" id="vn-map" hidden></div>
         <div class="vn__box" id="vn-box">
           <p class="vn__name" id="vn-name"></p>
           <p class="vn__text" id="vn-text"></p>
@@ -52,6 +53,7 @@ export class Player {
     this.nameEl = root.querySelector('#vn-name')!;
     this.textEl = root.querySelector('#vn-text')!;
     this.choiceEl = root.querySelector('#vn-choices')!;
+    this.mapEl = root.querySelector('#vn-map')!;
     this.stage = new Stage(this.stageEl);
     this.typer = new Typewriter(this.textEl);
 
@@ -89,7 +91,7 @@ export class Player {
     for (;;) {
       const lines = this.lines();
       if (this.idx >= lines.length) {
-        if (this.roam) return this.showRoam();
+        if (this.roam) return this.backToRoam();
         if (/_end_(true|good|normal)$/.test(this.scene) || this.scene === 'e_solo') {
           return this.theEnd();
         }
@@ -126,8 +128,7 @@ export class Player {
           this.goto(line.target);
           return this.step();
         case 'freeroam':
-          this.roam = { line, left: line.limit, met: [] };
-          return this.showRoam();
+          return this.enterRoam(line);
         case 'bg':
           this.stage.setBackground(line.id);
           continue;
@@ -173,46 +174,41 @@ export class Player {
     }
   }
 
-  /** 자유 이동 대역 — Phaser 맵(8번) 자리에 임시로 선택지를 세웁니다 */
-  private showRoam(): void {
-    const r = this.roam!;
-    const npcs = r.line.npcs.filter(
-      (n) =>
-        !r.met.includes(n.who) &&
-        (!n.heroine || HEROINE_GENDER[n.heroine] !== this.state.playerGender),
-    );
-    if (r.left <= 0 || !npcs.length) {
-      this.roam = null;
-      this.goto(r.line.after);
-      return this.step();
-    }
+  /** `@freeroam` — Phaser 맵으로 제어를 넘깁니다 */
+  private enterRoam(line: Extract<Line, { t: 'freeroam' }>): void {
+    this.textEl.textContent = '';
     this.nameEl.hidden = true;
-    this.textEl.classList.add('vn__text--narr');
-    this.typer.run(`[자유 이동] 남은 대화 ${r.left}번 — 누구에게 말을 걸까`);
-    this.choiceEl.hidden = false;
-    this.choiceEl.innerHTML = '';
-    for (const n of npcs) {
-      const b = document.createElement('button');
-      b.className = 'vn__choice';
-      b.textContent = `${n.who} · ${n.map}`;
-      b.addEventListener('click', () => {
-        this.choiceEl.hidden = true;
-        r.left--;
-        r.met.push(n.who);
-        // 히로인과 대화하면 호감도 +6 (TECH_DESIGN 3-1 @freeroam)
-        if (n.heroine) applyEffects(this.state, { affection: 6 });
-        this.goto(n.target);
+    this.stage.clearChar();
+    this.roam = new Roam(
+      this.mapEl,
+      line,
+      this.state,
+      (target) => {
+        this.goto(target);
         this.step();
-      });
-      this.choiceEl.append(b);
-    }
+      },
+      (after) => {
+        this.roam = null;
+        this.goto(after);
+        this.step();
+      },
+    );
+    this.roam.start();
+  }
+
+  /** 씬이 `-> back` 으로 끝났습니다 */
+  private backToRoam(): void {
+    this.textEl.textContent = '';
+    this.nameEl.hidden = true;
+    this.stage.clearChar();
+    this.roam!.resume();
   }
 
   /** 라벨 · 씬 id · `r_*_이름` · `r_*_end_{tier}` · `back` */
   private goto(target: string): void {
     if (target === 'back') {
       if (!this.roam) return this.finish('돌아갈 자유 이동이 없습니다');
-      this.idx = this.lines().length;
+      this.idx = this.lines().length; // 씬 끝으로 — backToRoam 이 받습니다
       return;
     }
     let t = target;

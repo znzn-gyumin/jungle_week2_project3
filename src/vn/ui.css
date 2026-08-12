@@ -164,3 +164,20 @@
   object-fit: cover;
   z-index: 3;
 }
+
+/* 맵 캔버스는 대사창 아래 — DOM VN 레이어가 위에 얹힙니다 (TECH_DESIGN 1절) */
+.vn__map {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.vn__map[hidden] {
+  display: none;
+}
+
+.vn__map canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

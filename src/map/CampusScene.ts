@@ -1,0 +1,268 @@
+/**
+ * 캠퍼스 도트 맵 — Phaser Scene 하나가 7개 맵을 전환하며 씁니다.
+ *
+ * 정본: docs/TECH_DESIGN.md 1절(하이브리드 구조) · 3-1 `@freeroam`
+ *
+ * 캔버스는 DOM VN 레이어 **아래**에 깔립니다. NPC 에게 말을 걸거나 트리거
+ * 좌표에 들어가면 이벤트를 올려보내고, 씬 재생이 끝나면 제어가 돌아옵니다.
+ */
+import Phaser from 'phaser';
+
+import { LightingOverlay, type TimeOfDay } from '../config/lighting';
+import type { FreeroamNpc, MapId } from '../core/types';
+import { CAST, CELL, DIR_ROW, HEAD_OVERHANG, PLAYER_DOT, type Dir } from './sprites';
+
+const TS = 48;
+const SPEED = 190;
+/** 말을 걸 수 있는 거리 — 한 칸 반 */
+const REACH = TS * 1.5;
+
+export type RoamSetup = {
+  map: MapId;
+  x: number;
+  y: number;
+  npcs: FreeroamNpc[];
+  triggers: { map: MapId; target: string }[];
+  gender: 'male' | 'female';
+  time: TimeOfDay;
+  /** 말을 걸었을 때 — 재생기가 씬을 틉니다 */
+  onTalk: (npc: FreeroamNpc) => void;
+  /** 트리거 맵에 들어갔을 때 */
+  onTrigger: (target: string) => void;
+};
+
+const asset = (p: string): string => `${import.meta.env.BASE_URL}assets/${p}`;
+
+export class CampusScene extends Phaser.Scene {
+  private setup!: RoamSetup;
+  private player!: Phaser.Physics.Arcade.Sprite;
+  private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
+  private interactKey!: Phaser.Input.Keyboard.Key;
+  private lighting!: LightingOverlay;
+  private npcSprites: { npc: FreeroamNpc; sprite: Phaser.GameObjects.Image }[] = [];
+  private hint!: Phaser.GameObjects.Text;
+  private currentMap!: MapId;
+  private paused = false;
+  private portals: { rect: Phaser.Geom.Rectangle; to: MapId; sx: number; sy: number }[] = [];
+  /** 맵을 막 옮긴 직후에는 되돌아가는 포탈을 한 박자 무시합니다 */
+  private portalCooldown = 0;
+
+  constructor() {
+    super('campus');
+  }
+
+  init(setup: RoamSetup): void {
+    this.setup = setup;
+  }
+
+  preload(): void {
+    for (const t of ['edu_indoor', 'dorm_indoor', 'outdoor', 'meta']) {
+      this.load.image(`tileset_${t}`, asset(`tilesets/tileset_${t}.png`));
+    }
+    // 이 자유 이동에 나오는 맵만 읽습니다
+    const maps = new Set<MapId>([this.setup.map, ...this.setup.npcs.map((n) => n.map)]);
+    for (const m of maps) this.load.tilemapTiledJSON(m, asset(`map/${m}.json`));
+
+    const dots = new Set<string>([PLAYER_DOT[this.setup.gender]]);
+    for (const n of this.setup.npcs) if (CAST[n.who]) dots.add(CAST[n.who].dot);
+    for (const d of dots) {
+      this.load.spritesheet(`dot_${d}`, asset(`dot/walk/${d}.webp`), {
+        frameWidth: CELL.w,
+        frameHeight: CELL.h,
+      });
+    }
+  }
+
+  create(): void {
+    // 도트는 안티에일리어싱이 들어 있어 LINEAR 로 켭니다 (assets/README)
+    for (const key of this.textures.getTextureKeys()) {
+      if (key.startsWith('dot_')) {
+        this.textures.get(key).setFilter(Phaser.Textures.FilterMode.LINEAR);
+      }
+    }
+    const dot = PLAYER_DOT[this.setup.gender];
+    for (const [dir, row] of Object.entries(DIR_ROW)) {
+      this.anims.create({
+        key: `walk_${dir}`,
+        frames: [1, 2, 3].map((c) => ({ key: `dot_${dot}`, frame: row * 4 + c })),
+        frameRate: 8,
+        repeat: -1,
+      });
+    }
+
+    this.lighting = new LightingOverlay(this);
+    this.cursors = this.input.keyboard!.createCursorKeys();
+    this.interactKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+    this.player = this.physics.add
+      .sprite(0, 0, `dot_${dot}`, 0)
+      .setOrigin(0, 0)
+      .setDepth(50);
+    // 발이 서 있는 한 칸만 충돌합니다 — 머리는 위 칸을 침범해도 됩니다
+    this.player.body!.setSize(TS - 8, TS - 8).setOffset(4, HEAD_OVERHANG + 4);
+
+    this.hint = this.add
+      .text(0, 0, '', {
+        fontSize: '13px',
+        color: '#f2ede4',
+        backgroundColor: 'rgba(11,12,23,.85)',
+        padding: { x: 6, y: 3 },
+      })
+      .setDepth(200)
+      .setScrollFactor(0)
+      .setVisible(false);
+
+    this.loadMap(this.setup.map, this.setup.x, this.setup.y);
+  }
+
+  /** 씬 재생 중에는 맵을 멈춥니다 */
+  setPaused(v: boolean): void {
+    this.paused = v;
+    this.player.setVelocity(0, 0);
+    if (v) this.player.anims.stop();
+  }
+
+  private loadMap(id: MapId, tx: number, ty: number): void {
+    this.currentMap = id;
+    const map = this.make.tilemap({ key: id });
+    const sets = map.tilesets.map((ts) => map.addTilesetImage(ts.name, ts.name)!);
+    const ground = map.createLayer('ground', sets, 0, 0)!;
+    const objects = map.createLayer('objects', sets, 0, 0)!;
+    const collision = map.createLayer('collision', sets, 0, 0)!.setVisible(false);
+    collision.setCollisionByExclusion([-1, 0]);
+    ground.setDepth(0);
+    objects.setDepth(10);
+
+    this.physics.add.collider(this.player, collision);
+    this.player.setPosition(tx * TS, ty * TS - HEAD_OVERHANG);
+    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.player.setCollideWorldBounds(true);
+
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.cameras.main.startFollow(this.player, true, 0.12, 0.12);
+
+    this.collectPortals(map);
+    this.placeNpcs(map, id);
+    this.lighting.attach(map, 100);
+    this.lighting.setTime(this.setup.time);
+    this.lighting.applySaturation([ground, objects]);
+
+    // 트리거 맵에 진입하는 것만으로 발동하는 씬
+    const trg = this.setup.triggers.find((t) => t.map === id);
+    if (trg) this.time.delayedCall(400, () => this.setup.onTrigger(trg.target));
+  }
+
+  /** 계단·문 — `spawnX/Y` 는 도착 맵의 월드 픽셀(타일 중심)입니다 */
+  private collectPortals(map: Phaser.Tilemaps.Tilemap): void {
+    this.portals = [];
+    for (const o of map.getObjectLayer('portal')?.objects ?? []) {
+      const props = (o.properties as { name: string; value: string | number }[] | undefined) ?? [];
+      const get = (k: string) => props.find((x) => x.name === k)?.value;
+      const to = get('to') as MapId | undefined;
+      if (!to || !this.cache.tilemap.has(to)) continue;
+      this.portals.push({
+        rect: new Phaser.Geom.Rectangle(o.x ?? 0, o.y ?? 0, o.width || TS, o.height || TS),
+        to,
+        sx: Number(get('spawnX') ?? 0),
+        sy: Number(get('spawnY') ?? 0),
+      });
+    }
+    this.portalCooldown = 500;
+  }
+
+  /** 자리는 맵의 `npc` 오브젝트가 `role` 로 갖고 있습니다 */
+  private placeNpcs(map: Phaser.Tilemaps.Tilemap, id: MapId): void {
+    for (const { sprite } of this.npcSprites) sprite.destroy();
+    this.npcSprites = [];
+    const layer = map.getObjectLayer('npc');
+    if (!layer) return;
+
+    for (const n of this.setup.npcs) {
+      if (n.map !== id) continue;
+      const cast = CAST[n.who];
+      if (!cast) continue;
+      const obj = layer.objects.find(
+        (o) => (o.properties as { name: string; value: string }[] | undefined)
+          ?.find((p) => p.name === 'role')?.value === cast.role,
+      );
+      if (!obj) continue;
+      const s = this.add
+        .image(obj.x ?? 0, (obj.y ?? 0) - HEAD_OVERHANG, `dot_${cast.dot}`, 0)
+        .setOrigin(0, 0)
+        .setDepth(40);
+      this.npcSprites.push({ npc: n, sprite: s });
+    }
+  }
+
+  /** 이 맵에서 아직 안 만난 NPC 를 지웁니다 */
+  removeNpc(who: string): void {
+    const i = this.npcSprites.findIndex((x) => x.npc.who === who);
+    if (i >= 0) {
+      this.npcSprites[i].sprite.destroy();
+      this.npcSprites.splice(i, 1);
+    }
+    this.setup.npcs = this.setup.npcs.filter((n) => n.who !== who);
+  }
+
+  update(_t: number, dt: number): void {
+    if (this.paused) return;
+    if (this.portalCooldown > 0) this.portalCooldown -= dt;
+    const c = this.cursors;
+    let vx = 0;
+    let vy = 0;
+    if (c.left.isDown) vx = -SPEED;
+    else if (c.right.isDown) vx = SPEED;
+    if (c.up.isDown) vy = -SPEED;
+    else if (c.down.isDown) vy = SPEED;
+    this.player.setVelocity(vx, vy);
+
+    let dir: Dir | null = null;
+    if (vx < 0) dir = 'left';
+    else if (vx > 0) dir = 'right';
+    else if (vy < 0) dir = 'up';
+    else if (vy > 0) dir = 'down';
+    if (dir) this.player.anims.play(`walk_${dir}`, true);
+    else if (this.player.anims.isPlaying) {
+      const row = DIR_ROW[(this.player.anims.currentAnim?.key.slice(5) as Dir) ?? 'down'];
+      this.player.anims.stop();
+      this.player.setFrame(row * 4);
+    }
+
+    // 계단을 밟으면 맵이 바뀝니다
+    if (this.portalCooldown <= 0) {
+      const feet = new Phaser.Geom.Point(this.player.x + TS / 2, this.player.y + HEAD_OVERHANG + TS / 2);
+      const hit = this.portals.find((p) => Phaser.Geom.Rectangle.ContainsPoint(p.rect, feet));
+      if (hit) {
+        this.hint.setVisible(false);
+        this.loadMap(hit.to, Math.floor(hit.sx / TS), Math.floor(hit.sy / TS));
+        return;
+      }
+    }
+
+    // 가까운 NPC 하나를 잡아 안내를 띄웁니다
+    const near = this.npcSprites
+      .map((x) => ({
+        ...x,
+        d: Phaser.Math.Distance.Between(
+          this.player.x, this.player.y, x.sprite.x, x.sprite.y,
+        ),
+      }))
+      .filter((x) => x.d < REACH)
+      .sort((a, b) => a.d - b.d)[0];
+
+    this.hint.setVisible(Boolean(near));
+    if (near) {
+      this.hint.setText(`${near.npc.who} — 스페이스`);
+      this.hint.setPosition(16, this.cameras.main.height - 34);
+      if (Phaser.Input.Keyboard.JustDown(this.interactKey)) {
+        this.setPaused(true);
+        this.hint.setVisible(false);
+        this.setup.onTalk(near.npc);
+      }
+    }
+  }
+
+  get mapId(): MapId {
+    return this.currentMap;
+  }
+}
