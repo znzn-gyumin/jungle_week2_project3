@@ -46,6 +46,8 @@ export class Player {
   private bgm = 'day';
   private atMap = '';
   private lastFace = '기본';
+  /** 키보드로 고르는 중인 선택지 */
+  private pick = 0;
   /**
    * 이 씬이 사진 배경 위에서 도는가.
    *
@@ -103,6 +105,22 @@ export class Player {
 
     this.boxEl.addEventListener('click', () => this.advance());
     window.addEventListener('keydown', (e) => {
+      // 선택지가 떠 있으면 방향키로 고르고 스페이스·엔터로 결정합니다
+      if (!this.choiceEl.hidden) {
+        const bs = [...this.choiceEl.querySelectorAll<HTMLButtonElement>('.vn__choice')];
+        if (!bs.length) return;
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+          e.preventDefault();
+          this.movePick(1, bs);
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          this.movePick(-1, bs);
+        } else if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          bs[this.pick]?.click();
+        }
+        return;
+      }
       // 맵을 걷는 동안에만 맵이 키를 갖습니다. **대사창이 떠 있으면
       // 스페이스는 대사를 넘깁니다** — 맵은 멈춰 있어 말 걸기와 안 겹칩니다.
       if (this.roam && this.boxEl.hidden) return;
@@ -254,6 +272,11 @@ export class Player {
     this.boxEl.classList.add('vn__box--face');
   }
 
+  private movePick(d: number, bs: HTMLButtonElement[]): void {
+    this.pick = (this.pick + d + bs.length) % bs.length;
+    bs.forEach((b, i) => b.classList.toggle('vn__choice--on', i === this.pick));
+  }
+
   private showChoices(options: ChoiceOption[]): void {
     const usable = options.filter(
       (o) =>
@@ -264,6 +287,7 @@ export class Player {
     this.boxEl.hidden = true;
     this.choiceEl.hidden = false;
     this.choiceEl.innerHTML = '';
+    this.pick = 0;
     for (const o of usable) {
       const b = document.createElement('button');
       b.className = 'vn__choice';
