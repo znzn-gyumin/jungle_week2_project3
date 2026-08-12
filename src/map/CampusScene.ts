@@ -54,7 +54,7 @@ export class CampusScene extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private interactKey!: Phaser.Input.Keyboard.Key;
   private lighting!: LightingOverlay;
-  private npcSprites: { npc: FreeroamNpc; sprite: Phaser.GameObjects.Image }[] = [];
+  private npcSprites: { npc: FreeroamNpc; sprite: Phaser.GameObjects.Image; mark: Phaser.GameObjects.Text }[] = [];
   /** 이미 만난 사람 — 자리에는 남지만 말은 못 겁니다 */
   private stayed: Phaser.GameObjects.Image[] = [];
   private hint!: Phaser.GameObjects.Text;
@@ -267,7 +267,10 @@ export class CampusScene extends Phaser.Scene {
 
   /** 자리는 맵의 `npc` 오브젝트가 `role` 로 갖고 있습니다 */
   private placeNpcs(map: Phaser.Tilemaps.Tilemap, id: MapId): void {
-    for (const { sprite } of this.npcSprites) sprite.destroy();
+    for (const { sprite, mark } of this.npcSprites) {
+      sprite.destroy();
+      mark.destroy();
+    }
     for (const sp of this.stayed) sp.destroy();
     this.npcSprites = [];
     this.stayed = [];
@@ -287,8 +290,28 @@ export class CampusScene extends Phaser.Scene {
         .image(obj.x ?? 0, (obj.y ?? 0) - HEAD_OVERHANG, `dot_${cast.dot}`, 0)
         .setOrigin(0, 0)
         .setDepth(40);
-      this.uiCam?.ignore(s);
-      this.npcSprites.push({ npc: n, sprite: s });
+
+      // 아직 안 만난 사람 머리 위에 표시를 띄웁니다 — 어디로 가야 하는지가
+      // 화면에서 바로 읽혀야 합니다.
+      const mark = this.add
+        .text(s.x + TS / 2, s.y - 6, '!', {
+          fontSize: '20px',
+          color: '#ffd45e',
+          stroke: '#2a2632',
+          strokeThickness: 4,
+        })
+        .setOrigin(0.5, 1)
+        .setDepth(60);
+      this.tweens.add({
+        targets: mark,
+        y: mark.y - 7,
+        duration: 620,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.inOut',
+      });
+      this.uiCam?.ignore([s, mark]);
+      this.npcSprites.push({ npc: n, sprite: s, mark });
     }
   }
 
@@ -301,7 +324,10 @@ export class CampusScene extends Phaser.Scene {
     const found = this.npcSprites.find((x) => x.npc.who === who);
     // 흐리게 하지 않습니다 — 말을 걸었다고 사람이 반투명해질 이유가 없습니다.
     // 말을 못 걸게 되는 것은 목록에서 빠지는 것으로 충분합니다.
-    if (found) this.stayed.push(found.sprite);
+    if (found) {
+      found.mark.destroy();
+      this.stayed.push(found.sprite);
+    }
     this.npcSprites = this.npcSprites.filter((x) => x.npc.who !== who);
     this.setup.npcs = this.setup.npcs.filter((n) => n.who !== who);
   }
@@ -358,9 +384,13 @@ export class CampusScene extends Phaser.Scene {
       .filter((x) => x.d < REACH)
       .sort((a, b) => a.d - b.d)[0];
 
+    for (const { mark } of this.npcSprites) {
+      mark.setText('!').setColor('#ffd45e').setFontSize(20);
+    }
     this.hint.setVisible(Boolean(near));
     if (near) {
-      this.hint.setText(`${near.npc.who} — 스페이스`);
+      near.mark.setText('스페이스').setColor('#ffffff').setFontSize(13);
+      this.hint.setText(`${near.npc.who} 에게 말을 겁니다 — 스페이스`);
       this.hint.setPosition(16, this.cameras.main.height - 34);
       if (Phaser.Input.Keyboard.JustDown(this.interactKey)) {
         this.setPaused(true);
