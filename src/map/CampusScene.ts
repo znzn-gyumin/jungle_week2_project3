@@ -146,7 +146,7 @@ export class CampusScene extends Phaser.Scene {
       .setVisible(false);
 
     this.guide = this.add
-      .text(168, 12, '', {
+      .text(258, 12, '', {
         fontSize: '13px',
         color: '#f2ede4',
         lineSpacing: 5,
@@ -226,7 +226,7 @@ export class CampusScene extends Phaser.Scene {
   private drawMinimap(map: Phaser.Tilemaps.Tilemap): void {
     if (!this.mini) return;
     const pad = 12;
-    const s = Math.min(140 / map.width, 110 / map.height);
+    const s = Math.min(230 / map.width, 180 / map.height);
     this.miniSize = { w: map.width * s, h: map.height * s, s };
     const g = this.mini.clear();
     g.fillStyle(0x0b0c17, 0.82).fillRect(pad - 4, pad - 4, this.miniSize.w + 8, this.miniSize.h + 8);
