@@ -120,9 +120,9 @@
 * 민아가 자리를 옮겼다.
 
 @choice
-  "민아 편을 든다"                     | -> minah
   "윤정 편을 든다"                     | affection+7 | -> yunjung
-  "승희에게 의견을 묻는다"               | -> seunghee
+  "승희에게 의견을 묻는다"               | affection+3 | -> seunghee
+  "민아 편을 든다"                     | affection-3 | -> minah
 
 --- minah ---
 윤정 [슬픔] "…네."
