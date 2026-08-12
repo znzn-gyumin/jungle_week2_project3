@@ -51,6 +51,8 @@ export class Player {
   private lastFace = '기본';
   /** 키보드로 고르는 중인 선택지 */
   private pick = 0;
+  /** 화살표나 마우스를 한 번은 써야 결정할 수 있습니다 */
+  private armed = false;
   /**
    * 이 씬이 사진 배경 위에서 도는가.
    *
@@ -121,15 +123,24 @@ export class Player {
       if (!this.choiceEl.hidden) {
         const bs = [...this.choiceEl.querySelectorAll<HTMLButtonElement>('.vn__choice')];
         if (!bs.length) return;
-        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        const dir =
+          e.key === 'ArrowDown' || e.key === 'ArrowRight'
+            ? 1
+            : e.key === 'ArrowUp' || e.key === 'ArrowLeft'
+              ? -1
+              : 0;
+        if (dir) {
           e.preventDefault();
-          this.movePick(1, bs);
-        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-          e.preventDefault();
-          this.movePick(-1, bs);
+          // 처음 누른 화살표는 **첫 칸을 잡는 데** 씁니다. 바로 옮기면
+          // 대사를 넘기던 손이 두 번째를 고르고 끝납니다.
+          if (this.armed) this.movePick(dir, bs);
+          else this.arm(bs);
         } else if (e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
-          bs[this.pick]?.click();
+          // 대사를 넘기던 스페이스가 그대로 결정이 되면 안 됩니다.
+          // 화살표나 마우스를 한 번은 써야 결정할 수 있습니다.
+          if (!this.armed) this.nudgeChoices();
+          else bs[this.pick]?.click();
         }
         return;
       }
@@ -347,6 +358,21 @@ export class Player {
     bs.forEach((b, i) => b.classList.toggle('vn__choice--on', i === this.pick));
   }
 
+  /** 첫 입력 — 첫 칸을 예비 선택으로 잡습니다 */
+  private arm(bs: HTMLButtonElement[], at = 0): void {
+    this.armed = true;
+    this.pick = at;
+    bs.forEach((b, i) => b.classList.toggle('vn__choice--on', i === this.pick));
+    this.choiceEl.classList.add('is-armed');
+  }
+
+  /** 아직 못 고른다는 걸 알립니다 */
+  private nudgeChoices(): void {
+    this.choiceEl.classList.remove('vn__choices--nudge');
+    void this.choiceEl.offsetWidth;
+    this.choiceEl.classList.add('vn__choices--nudge');
+  }
+
   private showChoices(options: ChoiceOption[]): void {
     const usable = options.filter(
       (o) =>
@@ -357,11 +383,19 @@ export class Player {
     this.boxEl.hidden = true;
     this.choiceEl.hidden = false;
     this.choiceEl.innerHTML = '';
+    // 아직 아무것도 안 골라 둡니다 — 화살표나 마우스를 써야 잡힙니다
     this.pick = 0;
+    this.armed = false;
+    this.choiceEl.classList.remove('is-armed');
     for (const o of usable) {
       const b = document.createElement('button');
       b.className = 'vn__choice';
       b.textContent = substitute(o.text, this.state);
+      const at = usable.indexOf(o);
+      b.addEventListener('mouseenter', () => {
+        const bs = [...this.choiceEl.querySelectorAll<HTMLButtonElement>('.vn__choice')];
+        this.arm(bs, at);
+      });
       b.addEventListener('click', () => {
         this.choiceEl.hidden = true;
         this.boxEl.hidden = false;

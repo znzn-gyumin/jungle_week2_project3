@@ -753,3 +753,64 @@
   text-align: right;
   color: var(--theme, #ffc2dc);
 }
+
+
+/* ---- 선택지 예비 선택
+
+   대사를 넘기던 스페이스가 그대로 결정이 되면 안 됩니다. 화살표나
+   마우스를 한 번 써야 첫 칸이 잡히고, 그때부터 결정할 수 있습니다. */
+
+/* 잡히기 전에는 안내만 띄웁니다 */
+.vn__choices::after {
+  content: '방향키 · 마우스로 고른 뒤 스페이스';
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  opacity: 0.72;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 70%);
+}
+
+.vn__choices.is-armed::after {
+  content: '스페이스 · 엔터로 결정';
+  opacity: 0.5;
+}
+
+/* 아직 못 고른다는 걸 알립니다 */
+@keyframes choice-nudge {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-7px); }
+  60% { transform: translateX(5px); }
+}
+
+.vn__choices--nudge { animation: choice-nudge 300ms ease-out; }
+
+/* 예비 선택은 확실히 갈라져야 합니다 — 테두리만으로는 안 보였습니다 */
+.vn__choice--on {
+  position: relative;
+  color: #2a2632;
+  border-width: 2px;
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--theme, #e0567b) 30%, transparent),
+    0 12px 30px rgb(0 0 0 / 28%),
+    0 2px 0 #fff inset;
+  transform: scale(1.035);
+}
+
+.vn__choice--on::before {
+  content: '▶';
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.85rem;
+  color: var(--theme, #e0567b);
+  animation: tut-pulse 1.3s ease-in-out infinite;
+}
+
+/* 이미 만난 사람도 목록에 남습니다 — 다시 말을 걸 수 있다는 표시입니다 */
+.roam-guide__who .is-met {
+  opacity: 0.45;
+  border-style: dashed;
+}

@@ -366,9 +366,15 @@ export class Roam {
   updateGuide(): void {
     if (!this.guideEl) return;
     const rest = this.usable();
-    const left = rest.map((n) => {
+    // **만난 사람도 목록에 남깁니다.** 사라지면 이 맵에 누가 있었는지
+    // 알 수 없게 되고, 다시 말을 걸 수 있다는 것도 안 보입니다.
+    const left = (this.block.npcs ?? []).map((n) => {
       const id = HEROINE_BY_NAME[n.who];
-      return { who: label(n.who), color: id ? THEME[id] : '#b4485a' };
+      return {
+        who: label(n.who),
+        color: id ? THEME[id] : '#b4485a',
+        met: !rest.some((r) => r.who === n.who),
+      };
     });
     const done = this.left <= 0 || !rest.length;
     this.guideEl.innerHTML = `
@@ -376,7 +382,10 @@ export class Roam {
         done ? '이제 진행할 수 있어요' : `<b>${this.left}명</b>에게 더 말을 걸어요`
       }</p>
       <p class="roam-guide__who">${left
-        .map((w) => `<span style="color:${w.color};border-color:${w.color}">${w.who}</span>`)
+        .map(
+          (w) =>
+            `<span class="${w.met ? 'is-met' : ''}" style="color:${w.color};border-color:${w.color}">${w.who}</span>`,
+        )
         .join('')}</p>
       <p class="roam-guide__keys">${
         done
