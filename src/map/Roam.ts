@@ -374,7 +374,10 @@ export class Roam {
     const rest = this.usable();
     // **만난 사람도 목록에 남깁니다.** 사라지면 이 맵에 누가 있었는지
     // 알 수 없게 되고, 다시 말을 걸 수 있다는 것도 안 보입니다.
-    const left = (this.block.npcs ?? []).map((n) => {
+    // **지금 층에 있는 사람만.** 다른 층 사람까지 적으면 이 목록을 보고
+    // 찾아다닐 수가 없습니다.
+    const here = this.scene?.mapId;
+    const left = (this.block.npcs ?? []).filter((n) => !here || n.map === here).map((n) => {
       const id = HEROINE_BY_NAME[n.who];
       return {
         who: label(n.who),

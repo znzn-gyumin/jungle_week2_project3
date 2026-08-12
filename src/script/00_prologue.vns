@@ -102,10 +102,10 @@
 * 절친 말이 맞았다. 아직 말 안 걸어 본 사람한테만 그게 보였다.
 * 12일이다. 하루에 한 명씩 붙잡아도 스물넷을 다 못 만난다.
 * 그러니까 누구에게 시간을 쓸지가 곧 이 12일이 된다.
-* 저녁 먹기 전까지는 시간이 있다. 두 사람 정도면 될 것 같았다.
+* 저녁 먹기 전까지는 시간이 있다. 조원 셋은 오늘 다 보고 가야 했다.
 
 @freeroam prologue
-  limit 2
+  limit 3
   spawn m1_basecamp_4f 12,8
   npc 민아 at m1_basecamp_4f -> p_meet_minah
   npc 승희 at m1_basecamp_4f -> p_meet_seunghee
