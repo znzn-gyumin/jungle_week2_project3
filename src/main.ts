@@ -260,6 +260,27 @@ function titleScreen(app: HTMLElement): void {
     goTo(1);
   });
 
+  /**
+   * 위아래로 성별 ↔ 반을 오갑니다. 브라우저 기본값은 네 방향이 모두
+   * **같은 무리 안에서만** 움직여서, 반으로 내려가려면 탭을 눌러야
+   * 했습니다. 좌우는 기본대로 두어 그 무리의 값을 고릅니다.
+   *
+   * 옮길 때는 focus 만 줍니다 — 화살표로 고르면 값이 잡히지만 focus
+   * 는 안 잡히므로, 지나가기만 한 무리가 저절로 정해지지 않습니다.
+   */
+  const rows = ["gender", "room"].map((n) => [
+    ...whoForm.querySelectorAll<HTMLInputElement>(`[name="${n}"]`),
+  ]);
+  whoForm.addEventListener("keydown", (e) => {
+    const step = e.key === "ArrowDown" ? 1 : e.key === "ArrowUp" ? -1 : 0;
+    if (!step) return;
+    const at = rows.findIndex((r) => r.includes(document.activeElement as HTMLInputElement));
+    if (at < 0) return;
+    e.preventDefault();
+    const next = rows[(at + step + rows.length) % rows.length];
+    (next.find((b) => b.checked) ?? next[0]).focus();
+  });
+
   whoForm.addEventListener("change", sync);
   sync();
 
