@@ -49,7 +49,6 @@ export class Player {
   private lastFace = '기본';
   /** 키보드로 고르는 중인 선택지 */
   private veilEl!: HTMLElement;
-  private saidEl!: HTMLElement;
   private pick = 0;
   /** 화살표나 마우스를 한 번은 써야 결정할 수 있습니다 */
   private armed = false;
@@ -101,7 +100,6 @@ export class Player {
     this.textEl = root.querySelector('#vn-text')!;
     this.choiceEl = root.querySelector('#vn-choices')!;
     this.veilEl = root.querySelector('#vn-veil')!;
-    this.saidEl = root.querySelector('.vn__said')!;
     this.mapEl = root.querySelector('#vn-map')!;
     this.backdrop = new Backdrop(root.querySelector('#vn-back')!);
     this.stage = new Stage(this.stageEl);
@@ -203,9 +201,11 @@ export class Player {
           );
           if (line.t === 'say') this.fx(line.face);
           const said = substitute(line.text, this.state);
-          this.saidEl.classList.remove('is-in');
-          void this.saidEl.offsetWidth;
-          this.saidEl.classList.add('is-in');
+          // 이름과 바는 그대로 두고 **대사만** 올라옵니다. 통째로
+          // 움직이면 기준선이 같이 흔들려 자리를 찾는 느낌이 안 납니다.
+          this.textEl.classList.remove('is-in');
+          void this.textEl.offsetWidth;
+          this.textEl.classList.add('is-in');
           this.typer.run(said);
           return;
         }

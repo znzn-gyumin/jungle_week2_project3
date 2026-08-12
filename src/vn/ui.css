@@ -777,16 +777,19 @@
   100% { opacity: 0; }
 }
 
-/* 대사 한 줄이 아주 살짝 떠오릅니다 */
-.vn__said.is-in {
-  animation: vn-said-in 260ms ease-out;
+/* 대사가 아래에서 자기 자리로 올라옵니다. 이름과 세로 바는 안
+   움직입니다 — 기준선까지 같이 흔들리면 자리를 찾는 느낌이 안 납니다. */
+.vn__text.is-in {
+  animation: vn-said-in 340ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes vn-said-in {
   0% {
-    opacity: 0.25;
-    transform: translateY(6px);
+    opacity: 0;
+    transform: translateY(14px);
   }
+
+  60% { opacity: 1; }
 
   100% {
     opacity: 1;
