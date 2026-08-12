@@ -14,6 +14,11 @@ export class Typewriter {
     private msPerChar = 28,
   ) {}
 
+  /** 글자 속도를 바꿉니다 — 다음 줄부터 걸립니다 */
+  setSpeed(ms: number): void {
+    this.msPerChar = ms;
+  }
+
   get finished(): boolean {
     return this.done;
   }
