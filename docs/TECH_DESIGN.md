@@ -163,6 +163,7 @@ public/
 | **`@cg`가 뜨면 반신 CG는 가려집니다** | 스틸이 인물을 이미 품고 있어서 겹치면 같은 사람이 둘이 됩니다. `@char`를 지우지 않아도 되고, `@cg none`·다음 `@bg`·씬 전환 중 무엇으로든 반신이 돌아옵니다 |
 | `@cg none` | **스틸을 내립니다.** 캠퍼스 안 명장면은 `@bg`가 없으므로 씬 도중에 반신을 되돌리는 방법이 이것뿐입니다 — 스틸이 몇 줄 걸린 뒤 인물의 표정으로 돌아가는 자리에 씁니다 (`@char none`과 짝) |
 | `* 텍스트` | 내레이션 |
+| `대사·내레이션 \| if 조건` | **한 줄에 조건**을 겁니다. 조건 문자열은 `@choice`의 `if`와 같은 것(`flag:`, `affection>=`)이고, 거짓이면 그 줄만 건너뜁니다. **김민규 루트가 이걸 필요로 합니다** — 0~24 구간의 호칭이 빈 문자열이라([CHARACTERS 2-4](./CHARACTERS.md#2-4-김민규--남-22--게임소프트웨어-3학년)) `"{P:호칭}."` 한 줄짜리 대사가 통째로 사라집니다. 구간별로 두 벌을 적어 갈라 냅니다 |
 | `@choice` | 선택지 블록. 효과는 공백으로 나열(`skill+25 affection-2`), `if` 절은 선택 |
 | **히로인으로 갈리는 선택지는 여섯을 다 적습니다** | `@freeroam`의 `npc`와 같은 규칙으로, 컴파일러가 `playerGender`의 반대 성별 셋만 남깁니다. 루트를 고르는 `p_night`이 여기 해당하고, **여섯을 다 적지 않으면 한쪽 성별이 루트를 못 고릅니다** |
 | `--- label ---` | 분기 라벨 |
@@ -307,8 +308,8 @@ const 접미  = (n: string) => n + (받침(n) ? '이' : '');    // 뒤에 말이
 
 ```ts
 type Line =
-  | { t: 'say';  who: string; face?: string; text: string }
-  | { t: 'narr'; text: string }
+  | { t: 'say';  who: string; face?: string; text: string; cond?: string }
+  | { t: 'narr'; text: string; cond?: string }
   | { t: 'bg' | 'bgm' | 'se' | 'cg'; id: string }
   | { t: 'char'; who: string; pos: 'left'|'center'|'right' }
   | { t: 'charOut' }                                   // @char none — 전원 퇴장

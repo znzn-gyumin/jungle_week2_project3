@@ -3,7 +3,7 @@
 
     python tools/check_vns.py
 
-검사  표정 6종 · BGM 8곡 · @cg/@bg 실존 · 점프 대상 · 씬 ID 중복
+검사  표정 6종 · BGM 8곡 · @cg/@bg 실존 · 점프 대상 · 씬 ID 중복 · 줄 조건
 진행  배치 12개 × 6인 + 자유 이동 대화 2종 × 6인 + 공통 21씬
 
 아직 안 쓴 씬으로 가는 점프는 오류가 아니라 `미작성`으로 셉니다.
@@ -35,7 +35,13 @@ scenes, labels, jumps, bad = {}, collections.defaultdict(set), [], []
 counts, pending = {}, set()
 
 for f in files:
-    cur, dlg = None, 0
+    cur, dlg, curlab = None, 0, None
+    # 선택지가 호감도로 걸어 잠근 라벨 — 그 안은 구간이 보장된다
+    gated = {}
+    for line in io.open(f, encoding='utf-8'):
+        mg = re.search(r'->\s*(\S+)\s*\|\s*if\s+affection>=(\d+)', line)
+        if mg:
+            gated[mg.group(1)] = int(mg.group(2))
     for n, line in enumerate(io.open(f, encoding='utf-8'), 1):
         s = line.strip()
         if not s or s.startswith('//'):
@@ -47,10 +53,12 @@ for f in files:
             if cur in scenes:
                 bad.append('%s  씬 ID 중복 %s' % (loc, cur))
             scenes[cur] = f
+            curlab = None
             continue
         m = re.match(r'^---\s*(\S+)\s*---$', s)
         if m:
-            labels[cur].add(m.group(1)); continue
+            curlab = m.group(1)
+            labels[cur].add(curlab); continue
         m = re.search(r'->\s*(\S+)\s*$', s)
         if m:
             jumps.append((loc, cur, m.group(1)))
@@ -63,11 +71,30 @@ for f in files:
         m = re.match(r'^@bg\s+(\S+)', s)
         if m and m.group(1) not in BG:
             bad.append('%s  배경 없음 %s' % (loc, m.group(1)))
+        # 대사·내레이션 한 줄 조건 — 「| if 조건」 을 떼고 본문만 본다
+        cond = None
+        mc = re.match(r'^(.*?)\s*\|\s*if\s+(\S+)\s*$', s)
+        if mc and not s.startswith('@') and not s.startswith('"'):
+            s, cond = mc.group(1).strip(), mc.group(2)
+            if not re.match(r'^(flag:\S+|(affection|skill)(>=|<=|<|>)\d+)$', cond):
+                bad.append('%s  조건 형식 아님  if %s' % (loc, cond))
         m = re.match(r'^(\S+)\s*\[([^\]]+)\]', s)
         if m and m.group(2) not in EXPR:
             bad.append('%s  표정 없음 [%s]' % (loc, m.group(2)))
         if s.startswith('*') or re.match(r'^\S+\s*(\[[^\]]+\])?\s*"', s):
             dlg += 1
+        # ★ 빈 문자열이 되는 호칭 — 김민규는 0~24 구간에 이름을 안 부른다
+        #   (CHARACTERS 2-4). 「{P:호칭}」 만으로 된 대사는 그 구간에서 통째로
+        #   사라지므로 반드시 조건으로 갈라야 한다.
+        if '{P:호칭}' in s and 'mingyu' in (cur or ''):
+            body = re.sub(r'^\S+\s*(\[[^\]]+\])?\s*', '', s).strip('"')
+            if not re.sub(r'[^가-힣A-Za-z0-9]', '', body.replace('{P:호칭}', '')):
+                safe = bool(cond and cond.startswith('affection>='))
+                safe = safe or (cur or '').endswith(('_end_true', '_end_good'))
+                safe = safe or gated.get(curlab, 0) >= 25
+                if not safe:
+                    bad.append('%s  민규 대사가 {P:호칭} 뿐인데 조건이 없음 '
+                               '— 0~24 구간에서 빈 줄이 된다' % loc)
     counts[f] = dlg
 
 for loc, cur, tgt in jumps:
