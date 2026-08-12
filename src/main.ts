@@ -5,13 +5,13 @@
  * 지금은 4번(VN 재생기)까지입니다. 배경·CG(6번)와 Phaser 맵(8번)이 없어서
  * 화면은 대사창뿐이고, 자유 이동은 NPC 목록으로 대신합니다.
  */
-import './boot.css';
-import './vn/ui.css';
+import "./boot.css";
+import "./vn/ui.css";
 
-import script from 'virtual:script';
-import { newGame } from './core/state';
-import { mountCursor } from './ui/cursor';
-import { Player } from './vn/Player';
+import script from "virtual:script";
+import { newGame } from "./core/state";
+import { mountCursor } from "./ui/cursor";
+import { Player } from "./vn/Player";
 
 /** `assets/` 아래 파일의 URL. Pages 는 하위 경로에 올라가므로 base 를 붙입니다. */
 export function asset(path: string): string {
@@ -20,9 +20,9 @@ export function asset(path: string): string {
 
 /** 파비콘은 여기서 겁니다 — HTML 에 두면 1.3MB 로고가 번들로 끌려 들어갑니다. */
 function setFavicon(): void {
-  const link = document.createElement('link');
-  link.rel = 'icon';
-  link.href = asset('ui/logo.webp');
+  const link = document.createElement("link");
+  link.rel = "icon";
+  link.href = asset("ui/logo.webp");
   document.head.append(link);
 }
 
@@ -39,15 +39,24 @@ function setFavicon(): void {
  */
 function titleScreen(app: HTMLElement): void {
   const k = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-  app.style.setProperty('--vn-scale', String(k));
-  window.addEventListener('resize', () => {
+  app.style.setProperty("--vn-scale", String(k));
+  window.addEventListener("resize", () => {
     const n = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-    app.style.setProperty('--vn-scale', String(n));
+    app.style.setProperty("--vn-scale", String(n));
   });
 
   app.innerHTML = `
     <main class="boot">
-      <img class="boot__bg" src="${asset('ui/intro_blank.webp')}" alt="" />
+      <div class="boot__hero">
+          <img class="boot__hero-img" src="${asset("ui/intro_small.webp")}" alt="jungLover" />
+          <img class="boot__hero-img boot__hero-img--glow" src="${asset("ui/intro_small.webp")}" alt="" aria-hidden="true" />
+          <img class="boot__hero-img boot__hero-img--sheen" src="${asset("ui/intro_small.webp")}" alt="" aria-hidden="true" />
+          <i class="boot__spark" style="--d:0s;   --tx:-30%; --ty:-14%"></i>
+          <i class="boot__spark" style="--d:0.7s; --tx: 26%; --ty:-18%"></i>
+          <i class="boot__spark" style="--d:1.4s; --tx: 34%; --ty: 12%"></i>
+          <i class="boot__spark" style="--d:2.1s; --tx:-24%; --ty: 16%"></i>
+          <i class="boot__spark" style="--d:2.8s; --tx:  4%; --ty:-22%"></i>
+        </div>
       <div class="boot__flash" id="boot-flash"></div>
       <div class="boot__sky" aria-hidden="true">
         <i class="boot__dust" style="--l:6%; --t:18%; --s:1.0; --d:0.0s"></i>
@@ -69,16 +78,6 @@ function titleScreen(app: HTMLElement): void {
       </div>
 
       <section class="boot__act is-on" data-act="0">
-        <div class="boot__hero">
-          <img class="boot__hero-img" src="${asset('ui/intro_small.webp')}" alt="jungLover" />
-          <img class="boot__hero-img boot__hero-img--glow" src="${asset('ui/intro_small.webp')}" alt="" aria-hidden="true" />
-          <img class="boot__hero-img boot__hero-img--sheen" src="${asset('ui/intro_small.webp')}" alt="" aria-hidden="true" />
-          <i class="boot__spark" style="--d:0s;   --tx:-30%; --ty:-14%"></i>
-          <i class="boot__spark" style="--d:0.7s; --tx: 26%; --ty:-18%"></i>
-          <i class="boot__spark" style="--d:1.4s; --tx: 34%; --ty: 12%"></i>
-          <i class="boot__spark" style="--d:2.1s; --tx:-24%; --ty: 16%"></i>
-          <i class="boot__spark" style="--d:2.8s; --tx:  4%; --ty:-22%"></i>
-        </div>
         <p class="boot__line">11박 12일, 연애는 커리큘럼에 없었다</p>
         <p class="boot__any">아무 키나 눌러 시작</p>
       </section>
@@ -128,23 +127,23 @@ function titleScreen(app: HTMLElement): void {
       <p class="boot__note">씬 ${Object.keys(script).length}개 컴파일됨</p>
     </main>`;
 
-  const acts = [...app.querySelectorAll<HTMLElement>('.boot__act')];
-  const flash = app.querySelector<HTMLElement>('#boot-flash')!;
+  const acts = [...app.querySelectorAll<HTMLElement>(".boot__act")];
+  const flash = app.querySelector<HTMLElement>("#boot-flash")!;
   let act = 0;
 
   /** 흰 섬광 한 번 치고 장이 바뀝니다 */
   const goTo = (n: number): void => {
     if (n === act) return;
-    flash.classList.remove('is-on');
+    flash.classList.remove("is-on");
     void flash.offsetWidth;
-    flash.classList.add('is-on');
-    acts[act].classList.remove('is-on');
-    acts[act].classList.add('is-out');
+    flash.classList.add("is-on");
+    acts[act].classList.remove("is-on");
+    acts[act].classList.add("is-out");
     act = n;
     setTimeout(() => {
-      for (const el of acts) el.classList.remove('is-out');
-      acts[act].classList.add('is-on');
-      acts[act].querySelector<HTMLInputElement>('input')?.focus();
+      for (const el of acts) el.classList.remove("is-out");
+      acts[act].classList.add("is-on");
+      acts[act].querySelector<HTMLInputElement>("input")?.focus();
     }, 260);
   };
 
@@ -152,27 +151,27 @@ function titleScreen(app: HTMLElement): void {
   const leaveLogo = (): void => {
     if (act === 0) goTo(1);
   };
-  window.addEventListener('keydown', leaveLogo);
-  window.addEventListener('mousedown', leaveLogo);
+  window.addEventListener("keydown", leaveLogo);
+  window.addEventListener("mousedown", leaveLogo);
 
-  const nameForm = app.querySelector<HTMLFormElement>('#boot-name')!;
-  const whoForm = app.querySelector<HTMLFormElement>('#boot-who')!;
-  const cast = app.querySelector<HTMLElement>('#boot-cast')!;
+  const nameForm = app.querySelector<HTMLFormElement>("#boot-name")!;
+  const whoForm = app.querySelector<HTMLFormElement>("#boot-who")!;
+  const cast = app.querySelector<HTMLElement>("#boot-cast")!;
   const field = (f: HTMLFormElement, n: string): string =>
     (f.elements.namedItem(n) as RadioNodeList | HTMLInputElement).value;
 
-  const nextBtn = app.querySelector<HTMLButtonElement>('#boot-next')!;
-  const startBtn = app.querySelector<HTMLButtonElement>('#boot-start')!;
+  const nextBtn = app.querySelector<HTMLButtonElement>("#boot-next")!;
+  const startBtn = app.querySelector<HTMLButtonElement>("#boot-start")!;
 
   /** 성과 이름을 다 넣어야 넘어갑니다 */
   const checkName = (): void => {
     nextBtn.disabled =
-      !field(nameForm, 'family').trim() || !field(nameForm, 'given').trim();
+      !field(nameForm, "family").trim() || !field(nameForm, "given").trim();
   };
-  nameForm.addEventListener('input', checkName);
+  nameForm.addEventListener("input", checkName);
   checkName();
 
-  nameForm.addEventListener('submit', (e) => {
+  nameForm.addEventListener("submit", (e) => {
     e.preventDefault();
     if (nextBtn.disabled) return;
     goTo(2);
@@ -183,45 +182,44 @@ function titleScreen(app: HTMLElement): void {
    * 시작 버튼이 열립니다 — 기본값을 박아 두면 안 보고 지나칩니다.
    */
   const sync = (): void => {
-    const g = field(whoForm, 'gender');
-    const room = field(whoForm, 'room');
+    const g = field(whoForm, "gender");
+    const room = field(whoForm, "room");
     cast.textContent = !g
-      ? '성별을 고르면 만날 사람이 정해집니다.'
-      : g === 'male'
-        ? '조원은 민아 · 승희 · 윤정, 룸메는 한지오입니다.'
-        : '조원은 민규 · 승민 · 윤호, 룸메는 한지아입니다.';
+      ? "성별을 고르면 만날 사람이 정해집니다."
+      : g === "male"
+        ? "조원은 민아 · 승희 · 윤정, 룸메는 한지오입니다."
+        : "조원은 민규 · 승민 · 윤호, 룸메는 한지아입니다.";
     startBtn.disabled = !g || !room;
   };
-  whoForm.addEventListener('change', sync);
+  whoForm.addEventListener("change", sync);
   sync();
 
-  whoForm.addEventListener('submit', (e) => {
+  whoForm.addEventListener("submit", (e) => {
     e.preventDefault();
     if (startBtn.disabled) return;
     const state = newGame(
-      field(whoForm, 'gender') as 'male' | 'female',
-      field(nameForm, 'family').trim(),
-      field(nameForm, 'given').trim(),
-      field(whoForm, 'room') as '403' | '405',
+      field(whoForm, "gender") as "male" | "female",
+      field(nameForm, "family").trim(),
+      field(nameForm, "given").trim(),
+      field(whoForm, "room") as "403" | "405",
     );
-    const veil = document.createElement('div');
-    veil.className = 'boot-veil';
+    const veil = document.createElement("div");
+    veil.className = "boot-veil";
     document.body.append(veil);
     // 막이 다 덮인 뒤에 갈아 끼웁니다 — 무대가 바뀌는 순간이 안 보입니다
     setTimeout(() => {
       new Player(app, script, state).start();
-      veil.classList.add('is-out');
+      veil.classList.add("is-out");
       setTimeout(() => veil.remove(), 700);
     }, 480);
   });
 }
 
-
 function boot(): void {
   setFavicon();
   mountCursor();
-  const app = document.querySelector<HTMLDivElement>('#app');
-  if (!app) throw new Error('#app 이 없습니다');
+  const app = document.querySelector<HTMLDivElement>("#app");
+  if (!app) throw new Error("#app 이 없습니다");
   titleScreen(app);
 }
 
