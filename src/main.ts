@@ -128,6 +128,7 @@ function titleScreen(app: HTMLElement): void {
       <section class="boot__act is-on" data-act="0">
         <p class="boot__any">Enter 를 눌러 시작</p>
         <p class="boot__tip">전체화면(F11)으로 플레이하시는 것을 권장합니다.</p>
+        <button class="boot__demo" id="boot-demo" type="button">데모로 바로 시작 — 이도윤 · 남자 · 403호</button>
       </section>
 
       <section class="boot__act" data-act="1">
@@ -201,7 +202,10 @@ function titleScreen(app: HTMLElement): void {
   const enterLogo = (e: KeyboardEvent): void => {
     if (act === 0 && e.key === "Enter") goTo(1);
   };
-  const clickLogo = (): void => {
+  const clickLogo = (e: MouseEvent): void => {
+    // 데모 버튼을 누른 클릭까지 받으면 장이 넘어간 뒤에 게임이 시작돼
+    // 섬광이 두 번 친다
+    if ((e.target as HTMLElement).closest('#boot-demo')) return;
     if (act === 0) goTo(1);
   };
   window.addEventListener("keydown", enterLogo);
@@ -284,6 +288,24 @@ function titleScreen(app: HTMLElement): void {
   whoForm.addEventListener("change", sync);
   sync();
 
+  /** 막이 다 덮인 뒤에 무대를 갈아 끼웁니다 */
+  const enter = (state: ReturnType<typeof newGame>): void => {
+    const veil = document.createElement("div");
+    veil.className = "boot-veil";
+    document.body.append(veil);
+    setTimeout(() => {
+      new Player(app, script, state).start();
+      veil.classList.add("is-out");
+      setTimeout(() => veil.remove(), 700);
+    }, 480);
+  };
+
+  // 손볼 때 쓰는 지름길 — 기본값으로 바로 들어갑니다
+  app.querySelector<HTMLButtonElement>("#boot-demo")!.addEventListener("click", (e) => {
+    e.stopPropagation();
+    enter(newGame("male", "이", "도윤", "403"));
+  });
+
   whoForm.addEventListener("submit", (e) => {
     e.preventDefault();
     if (startBtn.disabled) return;
@@ -293,15 +315,7 @@ function titleScreen(app: HTMLElement): void {
       field(nameForm, "given").trim(),
       field(whoForm, "room") as "403" | "405",
     );
-    const veil = document.createElement("div");
-    veil.className = "boot-veil";
-    document.body.append(veil);
-    // 막이 다 덮인 뒤에 갈아 끼웁니다 — 무대가 바뀌는 순간이 안 보입니다
-    setTimeout(() => {
-      new Player(app, script, state).start();
-      veil.classList.add("is-out");
-      setTimeout(() => veil.remove(), 700);
-    }, 480);
+    enter(state);
   });
 }
 

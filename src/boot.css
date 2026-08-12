@@ -812,3 +812,29 @@ body {
   outline: 2px dashed #fff;
   outline-offset: 3px;
 }
+
+
+/* 손볼 때 쓰는 지름길. 정식 시작과 헷갈리지 않게 옅은 테두리만 둡니다. */
+.boot__demo {
+  margin-top: 1.6rem;
+  padding: 0.4rem 1.1rem;
+  font: inherit;
+  font-size: 0.8rem;
+  color: rgb(255 255 255 / 62%);
+  cursor: pointer;
+  background: rgb(16 12 20 / 45%);
+  border: 1px dashed rgb(255 255 255 / 30%);
+  border-radius: 999px;
+  text-shadow: 0 1px 5px rgb(0 0 0 / 70%);
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.boot__demo:hover {
+  color: #fff;
+  border-color: rgb(255 194 220 / 70%);
+}
+
+.boot__demo:focus-visible {
+  outline: 2px dashed #fff;
+  outline-offset: 3px;
+}
