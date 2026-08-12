@@ -25,26 +25,37 @@
   opacity: 0.5;
 }
 
-/* 대사창 — 하단 30% · 반투명 다크 (WORLD_BIBLE 11) */
+/* 대사창 — 화면 끝까지 늘리지 않고 가운데 박스로 둡니다. 하단 30% 안에
+   들어가고, 왼쪽은 반신이 설 자리만큼 비웁니다 (WORLD_BIBLE 11) */
 .vn__box {
-  position: relative;
+  position: absolute;
   z-index: 4;
-  min-height: 30vh;
-  margin: 0 clamp(0.5rem, 2vw, 1.5rem) clamp(0.5rem, 2vw, 1.25rem);
-  padding: 1.5rem clamp(1rem, 4vw, 3rem) 1.5rem clamp(9rem, 26vw, 22rem);
+  left: clamp(8rem, 24vw, 21rem);
+  right: clamp(1rem, 4vw, 4rem);
+  bottom: clamp(1rem, 3vh, 2rem);
+  min-height: 22vh;
+  max-height: 30vh;
+  padding: 1.4rem clamp(1.2rem, 3vw, 2.2rem);
   background: #12141acc;
   border: 1px solid var(--accent);
-  border-radius: 3px;
-  backdrop-filter: blur(2px);
+  border-radius: 4px;
+  backdrop-filter: blur(3px);
+  box-shadow: 0 6px 28px rgb(0 0 0 / 45%);
   cursor: pointer;
   user-select: none;
+  overflow: auto;
+}
+
+/* 대사가 없으면 창 자체를 없앱니다 — 자유 이동 중에는 맵만 보입니다 */
+.vn__box[hidden] {
+  display: none;
 }
 
 /* 이름표 — 대사창 좌상단에 붙는 형태 */
 .vn__name {
   position: absolute;
   top: -0.85rem;
-  left: clamp(9rem, 26vw, 22rem);
+  left: 1.2rem;
   margin: 0;
   padding: 0.15rem 0.9rem;
   font-size: 0.85rem;
@@ -75,7 +86,7 @@
 /* 선택지 — 화면 중앙, 3개 이하 (WORLD_BIBLE 11) */
 .vn__choices {
   position: absolute;
-  inset: 0 0 34vh;
+  inset: 0 0 32vh;
   z-index: 5;
   display: flex;
   flex-direction: column;

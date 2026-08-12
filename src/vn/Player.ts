@@ -36,6 +36,7 @@ export class Player {
   private nameEl: HTMLElement;
   private textEl: HTMLElement;
   private choiceEl: HTMLElement;
+  private boxEl: HTMLElement;
   private stageEl: HTMLElement;
   private stage: Stage;
   private mapEl: HTMLElement;
@@ -60,6 +61,7 @@ export class Player {
         </div>
         <div class="vn__choices" id="vn-choices" hidden></div>
       </div>`;
+    this.boxEl = root.querySelector('#vn-box')!;
     this.stageEl = root.querySelector('#vn-stage')!;
     this.nameEl = root.querySelector('#vn-name')!;
     this.textEl = root.querySelector('#vn-text')!;
@@ -69,7 +71,7 @@ export class Player {
     this.stage = new Stage(this.stageEl);
     this.typer = new Typewriter(this.textEl);
 
-    root.querySelector<HTMLElement>('#vn-box')!.addEventListener('click', () => this.advance());
+    this.boxEl.addEventListener('click', () => this.advance());
     window.addEventListener('keydown', (e) => {
       // 자유 이동 중에는 맵이 키를 갖습니다 — 스페이스가 「말 걸기」와 겹칩니다
       if (this.roam) return;
@@ -121,6 +123,7 @@ export class Player {
           const who = line.t === 'say' ? line.who : '';
           this.nameEl.textContent = who === ME ? ME : who;
           this.nameEl.hidden = !who;
+          this.boxEl.hidden = false;
           this.textEl.classList.toggle('vn__text--narr', line.t === 'narr');
           if (line.t === 'say') this.stage.setFace(line.who, line.face);
           this.typer.run(substitute(line.text, this.state));
@@ -196,6 +199,7 @@ export class Player {
 
   /** `@freeroam` — Phaser 맵으로 제어를 넘깁니다 */
   private enterRoam(line: Extract<Line, { t: 'freeroam' }>): void {
+    this.boxEl.hidden = true;
     this.textEl.textContent = '';
     this.nameEl.hidden = true;
     this.stage.clearChar();
@@ -219,6 +223,7 @@ export class Player {
 
   /** 씬이 `-> back` 으로 끝났습니다 */
   private backToRoam(): void {
+    this.boxEl.hidden = true;
     this.textEl.textContent = '';
     this.nameEl.hidden = true;
     this.stage.clearChar();
@@ -259,6 +264,7 @@ export class Player {
 
   /** 엔딩 씬은 점프가 없습니다 — 여기가 회차의 끝입니다 */
   private theEnd(): void {
+    this.boxEl.hidden = false;
     const s = this.state;
     const tier = this.scene === 'e_solo' ? '솔로' : endingTier(s);
     this.choiceEl.hidden = true;
@@ -270,6 +276,7 @@ export class Player {
   }
 
   private finish(msg: string): void {
+    this.boxEl.hidden = false;
     this.choiceEl.hidden = true;
     this.nameEl.hidden = true;
     this.typer.run(`— ${msg}`);

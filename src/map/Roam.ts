@@ -24,7 +24,15 @@ const TIME: Record<string, TimeOfDay> = {
 
 export class Roam {
   private game: Phaser.Game | null = null;
-  private scene: CampusScene | null = null;
+
+  /**
+   * **매번 새로 찾습니다.** `scene.start()` 직후에는 아직 부팅이 안 끝나
+   * `getScene` 이 null 을 돌려줍니다. 그걸 붙들고 있으면 대화가 끝난 뒤
+   * `resume()` 이 조용히 아무것도 안 해서 맵이 멈춘 채로 남습니다.
+   */
+  private get scene(): CampusScene | null {
+    return (this.game?.scene.getScene('campus') as CampusScene | null) ?? null;
+  }
   private left: number;
   private met: string[] = [];
 
@@ -63,7 +71,6 @@ export class Roam {
       onTalk: (n: FreeroamNpc) => this.talk(n),
       onTrigger: (t: string) => this.trigger(t),
     });
-    this.scene = this.game.scene.getScene('campus') as CampusScene;
   }
 
   /**
@@ -108,7 +115,6 @@ export class Roam {
   destroy(): void {
     this.game?.destroy(true);
     this.game = null;
-    this.scene = null;
     this.host.hidden = true;
     this.host.replaceChildren();
   }

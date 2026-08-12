@@ -18,6 +18,8 @@ const ALL_MAPS: MapId[] = [
   'm5_connect_garden', 'm6_nestcamp', 'm7_gate',
 ];
 const SPEED = 190;
+/** 도트가 48px 이라 1배로는 시야가 너무 넓습니다 */
+const ZOOM = 2.2;
 /** 말을 걸 수 있는 거리 — 한 칸 반 */
 const REACH = TS * 1.5;
 
@@ -47,6 +49,9 @@ export class CampusScene extends Phaser.Scene {
   private lighting!: LightingOverlay;
   private npcSprites: { npc: FreeroamNpc; sprite: Phaser.GameObjects.Image }[] = [];
   private hint!: Phaser.GameObjects.Text;
+  private mini!: Phaser.GameObjects.Graphics;
+  private miniDot!: Phaser.GameObjects.Graphics;
+  private miniSize = { w: 0, h: 0, s: 1 };
   private currentMap!: MapId;
   private paused = false;
   private portals: { rect: Phaser.Geom.Rectangle; to: MapId; sx: number; sy: number }[] = [];
@@ -126,6 +131,8 @@ export class CampusScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setVisible(false);
 
+    this.mini = this.add.graphics().setScrollFactor(0).setDepth(300);
+    this.miniDot = this.add.graphics().setScrollFactor(0).setDepth(301);
     this.loadMap(this.setup.map, this.setup.x, this.setup.y);
   }
 
@@ -159,6 +166,7 @@ export class CampusScene extends Phaser.Scene {
     this.player.setCollideWorldBounds(true);
 
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.cameras.main.setZoom(ZOOM);
     this.cameras.main.startFollow(this.player, true, 0.12, 0.12);
 
     this.collectPortals(map);
@@ -166,10 +174,38 @@ export class CampusScene extends Phaser.Scene {
     this.lighting.attach(map, 100);
     this.lighting.setTime(this.setup.time);
     this.lighting.applySaturation([ground, objects]);
+    this.drawMinimap(map);
 
     // 트리거 맵에 진입하는 것만으로 발동하는 씬
     const trg = this.setup.triggers.find((t) => t.map === id);
     if (trg) this.time.delayedCall(400, () => this.setup.onTrigger(trg.target));
+  }
+
+  /** 미니맵 — 벽·계단·NPC 를 점으로. 숫자는 안 씁니다 (WORLD_BIBLE 11) */
+  private drawMinimap(map: Phaser.Tilemaps.Tilemap): void {
+    if (!this.mini) return;
+    const pad = 12;
+    const s = Math.min(140 / map.width, 110 / map.height);
+    this.miniSize = { w: map.width * s, h: map.height * s, s };
+    const g = this.mini.clear();
+    g.fillStyle(0x0b0c17, 0.82).fillRect(pad - 4, pad - 4, this.miniSize.w + 8, this.miniSize.h + 8);
+    g.lineStyle(1, 0xe8763c, 0.7).strokeRect(pad - 4, pad - 4, this.miniSize.w + 8, this.miniSize.h + 8);
+    // 막힌 칸
+    const col = map.getLayer('collision')?.tilemapLayer;
+    g.fillStyle(0x3a3550, 0.9);
+    col?.forEachTile((t) => {
+      if (t.index > 0) g.fillRect(pad + t.x * s, pad + t.y * s, Math.max(1, s), Math.max(1, s));
+    });
+    // 계단 — 갈 수 있는 곳
+    g.fillStyle(0x7fe3d6, 1);
+    for (const p of this.portals) {
+      g.fillRect(pad + (p.rect.x / TS) * s - 1, pad + (p.rect.y / TS) * s - 1, s + 2, s + 2);
+    }
+    // NPC
+    g.fillStyle(0xf2d9a0, 1);
+    for (const { sprite } of this.npcSprites) {
+      g.fillCircle(pad + (sprite.x / TS) * s, pad + (sprite.y / TS) * s, 2.5);
+    }
   }
 
   /** 계단·문 — `spawnX/Y` 는 도착 맵의 월드 픽셀(타일 중심)입니다 */
@@ -247,6 +283,12 @@ export class CampusScene extends Phaser.Scene {
       this.player.anims.stop();
       this.player.setFrame(row * 4);
     }
+
+    // 미니맵의 나
+    const pad = 12;
+    this.miniDot.clear().fillStyle(0xffffff, 1)
+      .fillCircle(pad + (this.player.x / TS) * this.miniSize.s,
+                  pad + (this.player.y / TS) * this.miniSize.s, 3);
 
     // 계단을 밟으면 맵이 바뀝니다
     if (this.portalCooldown <= 0) {
