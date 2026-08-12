@@ -325,6 +325,16 @@ export class CampusScene extends Phaser.Scene {
     }
     this.npcSprites = this.npcSprites.filter((x) => x.npc.who !== who);
     this.setup.npcs = this.setup.npcs.filter((n) => n.who !== who);
+
+    // 미니맵 자료는 맵을 읽을 때 한 번 만들어집니다. 사람이 빠지면
+    // 다시 보내야 느낌표가 사라집니다.
+    if (this.lastMini) {
+      this.lastMini = {
+        ...this.lastMini,
+        npcs: this.npcSprites.map((n) => ({ x: n.sprite.x / TS, y: n.sprite.y / TS })),
+      };
+      this.onMini?.(this.lastMini);
+    }
   }
 
   update(_t: number, dt: number): void {

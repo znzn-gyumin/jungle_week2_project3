@@ -182,13 +182,15 @@ export class Roam {
       g.fillStyle = '#e0567b';
       g.fillText('!', n.x * s, n.y * s);
     }
-    g.fillStyle = '#3b2f4a';
+    // 나는 파란 점 — 계단(청록)·사람(분홍)과 안 겹치는 색입니다
+    g.beginPath();
+    g.arc(this.me.x * s, this.me.y * s, 4.4, 0, Math.PI * 2);
+    g.fillStyle = '#ffffff';
+    g.fill();
     g.beginPath();
     g.arc(this.me.x * s, this.me.y * s, 3.2, 0, Math.PI * 2);
+    g.fillStyle = '#3d7bff';
     g.fill();
-    g.strokeStyle = '#ffffff';
-    g.lineWidth = 1.6;
-    g.stroke();
   }
 
   /** 남은 목표를 맵 위에 적어 둡니다 */
