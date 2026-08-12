@@ -11,6 +11,7 @@ import Phaser from 'phaser';
 import { LightingOverlay, type TimeOfDay } from '../config/lighting';
 import { HEROINE_BY_NAME, THEME , label } from '../core/types';
 import type { FreeroamNpc, MapId } from '../core/types';
+import { backLine, openLine } from './chatter';
 import { CAST, CELL, DIR_ROW, HEAD_OVERHANG, PLAYER_DOT, type Dir } from './sprites';
 
 const TS = 48;
@@ -102,6 +103,10 @@ export class CampusScene extends Phaser.Scene {
   private paused = false;
   /** 지금 사정거리 안에 있는 사람 */
   private near: string | null = null;
+  /** 지금 떠 있는 말풍선 — 겹쳐 뜨지 않게 셉니다 */
+  private bubbles: Phaser.GameObjects.Text[] = [];
+  /** 잡담 차례. 매번 다른 말이 나오게 씨앗으로 씁니다. */
+  private chatTurn = 0;
   private portals: {
     rect: Phaser.Geom.Rectangle;
     to: MapId;
@@ -167,6 +172,7 @@ export class CampusScene extends Phaser.Scene {
 
     this.lighting = new LightingOverlay(this);
     this.cursors = this.input.keyboard!.createCursorKeys();
+    this.startChatter();
     this.interactKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     this.player = this.physics.add
@@ -553,6 +559,69 @@ export class CampusScene extends Phaser.Scene {
         this.setup.onTalk(near.npc);
       }
     }
+  }
+
+  /**
+   * 가까이 선 두 사람이 이따금 한 마디씩 주고받습니다. 스토리는 안
+   * 건드리고 대사창도 안 엽니다 — 못 봐도 손해가 없는 배경음입니다.
+   */
+  private startChatter(): void {
+    this.time.addEvent({
+      delay: 7200,
+      loop: true,
+      callback: () => {
+        if (this.paused || this.setup.still || this.bubbles.length) return;
+        // 서로 가까운 짝을 찾습니다. 멀리 떨어져 소리치면 이상합니다.
+        const pool = this.npcSprites;
+        const pairs: [number, number][] = [];
+        for (let i = 0; i < pool.length; i++) {
+          for (let j = i + 1; j < pool.length; j++) {
+            const d = Phaser.Math.Distance.Between(
+              pool[i].sprite.x, pool[i].sprite.y, pool[j].sprite.x, pool[j].sprite.y,
+            );
+            if (d < TS * 5) pairs.push([i, j]);
+          }
+        }
+        if (!pairs.length) return;
+        const [a, b] = pairs[this.chatTurn % pairs.length];
+        const seed = this.chatTurn++;
+        this.bubble(pool[a].sprite, openLine(pool[a].npc.who, seed));
+        this.time.delayedCall(2100, () => {
+          if (this.paused) return;
+          this.bubble(pool[b].sprite, backLine(pool[b].npc.who, seed));
+        });
+      },
+    });
+  }
+
+  /** 머리 위 말풍선 하나. 3초쯤 있다 스스로 사라집니다. */
+  private bubble(at: Phaser.GameObjects.Image, text: string): void {
+    const t = this.add
+      .text(at.x + TS / 2, at.y - 14, text, {
+        fontSize: '13px',
+        color: '#2a2632',
+        backgroundColor: '#fffdf8',
+        padding: { x: 7, y: 4 },
+        stroke: '#fffdf8',
+        strokeThickness: 2,
+      })
+      .setOrigin(0.5, 1)
+      .setDepth(62)
+      .setAlpha(0);
+    this.uiCam?.ignore(t);
+    this.bubbles.push(t);
+    this.tweens.add({ targets: t, alpha: 1, y: t.y - 6, duration: 220 });
+    this.time.delayedCall(3000, () => {
+      this.tweens.add({
+        targets: t,
+        alpha: 0,
+        duration: 260,
+        onComplete: () => {
+          this.bubbles = this.bubbles.filter((x) => x !== t);
+          t.destroy();
+        },
+      });
+    });
   }
 
   get mapId(): MapId {
