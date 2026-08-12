@@ -51,7 +51,15 @@ function titleScreen(app: HTMLElement): void {
       <div class="boot__flash" id="boot-flash"></div>
 
       <section class="boot__act is-on" data-act="0">
-        <img class="boot__logo" src="${asset('ui/logo.webp')}" alt="jungLover" />
+        <div class="boot__logo-wrap">
+          <img class="boot__logo" src="${asset('ui/logo.webp')}" alt="jungLover" />
+          <img class="boot__logo boot__logo--sheen" src="${asset('ui/logo.webp')}" alt="" aria-hidden="true" />
+          <i class="boot__spark" style="--d:0s;   --tx:-38%; --ty:-26%"></i>
+          <i class="boot__spark" style="--d:0.7s; --tx: 32%; --ty:-34%"></i>
+          <i class="boot__spark" style="--d:1.4s; --tx: 44%; --ty: 20%"></i>
+          <i class="boot__spark" style="--d:2.1s; --tx:-30%; --ty: 28%"></i>
+          <i class="boot__spark" style="--d:2.8s; --tx:  6%; --ty:-40%"></i>
+        </div>
         <p class="boot__line">11박 12일, 연애는 커리큘럼에 없었다</p>
         <p class="boot__any">아무 키나 눌러 시작</p>
       </section>
