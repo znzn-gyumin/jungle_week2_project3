@@ -109,6 +109,21 @@ def prop(o, k, default=None):
     return default
 
 
+def sightline(x0, y0, x1, y1):
+    """두 칸을 잇는 직선이 지나는 칸들 (Bresenham). 양 끝은 뺀다."""
+    pts, dx, dy = [], abs(x1 - x0), abs(y1 - y0)
+    sx, sy = (1 if x0 < x1 else -1), (1 if y0 < y1 else -1)
+    err, x, y = dx - dy, x0, y0
+    while (x, y) != (x1, y1):
+        e2 = err * 2
+        if e2 > -dy:
+            err -= dy; x += sx
+        if e2 < dx:
+            err += dx; y += sy
+        pts.append((x, y))
+    return pts[:-1]
+
+
 def check_maps():
     files = sorted(os.listdir(MAPDIR))
     docs = {f[:-5]: load_map(f) for f in files if f.endswith(".json")}
@@ -263,6 +278,26 @@ def check_maps():
         rows = sorted({i // W5 for i, g in enumerate(ground) if g in ids})
         if not any(all(walk5[r * W5 + x] for x in range(6, W5 - 6)) for r in rows):
             issues.append("[m5] 필로티 통로가 가로로 뚫려 있지 않음")
+
+    # ★ 연상 자리가 화이트보드에서 안 보이는가 (WORLD_BIBLE 4-2-2)
+    #   「뒷줄 기둥 뒤 · 시선이 안 닿는 자리」가 승희의 스케치북 모티프를 받친다.
+    #   책상은 낮아서 넘겨다보이므로 충돌만으로는 못 잰다. 기둥 타일이
+    #   시선 위에 실제로 서 있는지를 본다.
+    wb = next((o for o in objs(m1, "trigger") if o["name"] == "whiteboard"), None)
+    older = next((o for o in objs(m1, "npc") if prop(o, "role") == "heroine_older"), None)
+    if wb and older:
+        eidx = _piece_ids("tileset_edu_indoor")
+        egid = next(t["firstgid"] for t in m1["tilesets"] if t["name"] == "tileset_edu_indoor")
+        pillar_ids = {egid + i for i in eidx["pieces"].get("pillar", [])}
+        W = m1["width"]
+        m1obj = next(l for l in m1["layers"] if l["name"] == "objects")["data"]
+        wx = int((wb["x"] + wb.get("width", TS) / 2) // TS)
+        wy = int((wb["y"] + wb.get("height", TS) / 2) // TS)
+        ox, oy = int(older["x"] // TS), int(older["y"] // TS)
+        line = sightline(wx, wy, ox, oy)
+        if not any(m1obj[y * W + x] in pillar_ids for x, y in line):
+            issues.append("[m1] 화이트보드 (%d,%d) 에서 연상 자리 (%d,%d) 가 그대로 보인다 "
+                          "— 시선 위에 기둥이 없다" % (wx, wy, ox, oy))
 
     extras = [o for o in objs(m1, "npc") if prop(o, "role") == "extra"]
     return summary, issues, dict(
