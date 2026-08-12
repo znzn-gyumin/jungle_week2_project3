@@ -216,6 +216,25 @@
   filter: saturate(0.62) contrast(0.9) brightness(0.97) blur(3px);
 }
 
+/* 맵 자리의 캠퍼스 사진 — 배경용으로 찍은 게 아니라 화질과 구도가 드러납니다.
+   세게 흐리고 밝게 날려 인물 뒤로 물러나게 합니다. */
+.stage__bg--photo {
+  filter: saturate(0.5) contrast(0.82) brightness(1.22) blur(9px);
+  transform: scale(1.06); /* blur 가장자리가 비지 않게 살짝 키웁니다 */
+}
+
+/* 사진 위에 흰 베일을 한 겹 — 참고한 미연시의 밝은 화면이 이 처리입니다 */
+.vn__stage:has(.stage__bg--photo:not([hidden]))::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% 0%, #ffffff00 30%, #fff6f2aa 100%),
+    linear-gradient(180deg, #ffffff33, #ffe9f055);
+}
+
 /* 2겹 · 색조. 에필로그는 시간대 시스템 밖이라 안 겁니다 */
 .vn__stage::before {
   content: '';

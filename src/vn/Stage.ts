@@ -44,7 +44,7 @@ export class Stage {
   /** 맵 자리의 실사 사진 — 반신이 서는 장면에서 타일맵 대신 깝니다 */
   setMapPhoto(mapId: string): void {
     const bg = MAP_PHOTO[mapId];
-    if (bg) this.paint(bg);
+    if (bg) this.paint(bg, true);
   }
 
   /** `@bg` — 배경이 바뀌면 스틸이 내려가고 반신이 돌아옵니다 */
@@ -57,12 +57,14 @@ export class Stage {
     this.paint(bg);
   }
 
-  private paint(bg: Background): void {
+  private paint(bg: Background, photo = false): void {
     this.outfit = bg.outfit;
     this.tintSprite = bg.tintSprite === true;
     this.bgEl.src = asset(bg.path);
     this.bgEl.hidden = false;
-    this.bgEl.className = 'stage__bg stage__bg--paint';
+    // 캠퍼스 사진은 원래 타일맵 레퍼런스라 배경으로 쓰면 화질이 드러납니다.
+    // 더 세게 흐리고 밝게 날려 뒤로 물러나게 합니다 (assets/README 배경).
+    this.bgEl.className = photo ? 'stage__bg stage__bg--photo' : 'stage__bg stage__bg--paint';
     this.root.dataset.tone = bg.tone;
     this.root.dataset.note = '';
     this.hideCg();
