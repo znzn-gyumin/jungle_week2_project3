@@ -35,6 +35,16 @@ export const HEROINE_BY_NAME: Record<string, RouteId> = {
   윤호: 'yunho',
 };
 
+/** RouteId → `.vns` 의 한글 이름. `@char *` 를 풀 때 씁니다 */
+export const NAME_BY_HEROINE: Record<RouteId, string> = {
+  minah: '민아',
+  seunghee: '승희',
+  yunjung: '윤정',
+  mingyu: '민규',
+  seungmin: '승민',
+  yunho: '윤호',
+};
+
 /** `.vns` 의 한글 표정 → 파일명 (assets/README#id) */
 export const FACE_FILE: Record<string, string> = {
   기본: 'normal',

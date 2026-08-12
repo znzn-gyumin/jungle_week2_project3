@@ -93,3 +93,74 @@
   border-color: var(--accent);
   outline: none;
 }
+
+/* ---- 무대 세 겹 (assets/README 배경 보정) */
+
+.vn__stage > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.stage__bg {
+  object-fit: cover;
+}
+
+/* 1겹 · 회화풍 — 배경 9장 전부. 실사의 픽셀 단위 선명함을 깎는 것이 목적입니다 */
+.stage__bg--paint {
+  filter: saturate(0.62) contrast(0.9) brightness(0.97) blur(3px);
+}
+
+/* 2겹 · 색조. 에필로그는 시간대 시스템 밖이라 안 겁니다 */
+.vn__stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.vn__stage[data-tone='day']::before {
+  background: #ffe6b8;
+  mix-blend-mode: soft-light;
+  opacity: 0.12;
+}
+
+/* 밤 사진은 이미 어둠이 들어 있어 45% 가 아니라 20% 입니다 */
+.vn__stage[data-tone='night']::before {
+  background: #153a4a;
+  mix-blend-mode: multiply;
+  opacity: 0.2;
+}
+
+.stage__char {
+  object-fit: contain;
+  object-position: bottom center;
+  opacity: 0;
+  z-index: 1;
+}
+
+/* 반신은 화면 높이의 88% 로 서고, 위치는 씬이 정합니다 */
+.vn__stage[data-pos='left'] .stage__char {
+  object-position: bottom 0 left 12%;
+}
+
+.vn__stage[data-pos='right'] .stage__char {
+  object-position: bottom 0 right 12%;
+}
+
+/* 밤 배경 위에서는 인물만 대낮이면 붙여넣은 것처럼 보입니다 */
+.stage__char--tint {
+  filter: brightness(0.86) saturate(0.92) hue-rotate(-4deg);
+}
+
+/* `@cg` 가 뜨면 반신은 뒤로 숨습니다 */
+.stage__char--behind {
+  opacity: 0 !important;
+}
+
+.stage__cg {
+  object-fit: cover;
+  z-index: 3;
+}

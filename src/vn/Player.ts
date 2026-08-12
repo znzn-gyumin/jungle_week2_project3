@@ -3,14 +3,15 @@
  *
  * 정본: docs/TECH_DESIGN.md 3절
  *
- * 구현 4번까지입니다. 배경·CG(6번)와 Phaser 맵(8번)은 아직 없어서,
- * 연출 지시는 상태만 들고 있고 자유 이동은 **NPC 목록 선택지로 대신**합니다.
- * 덕분에 105씬 전부를 지금 걸어볼 수 있습니다.
+ * 구현 6번까지입니다. 배경·반신·스틸은 `Stage` 가 겁니다.
+ * 아직 없는 것은 **Phaser 맵(8번)** 과 **BGM** 이라, 자유 이동은 NPC 목록
+ * 선택지로 대신하고 캠퍼스 안 씬은 배경이 빈 채로 갑니다(타일맵 자리).
  */
 import { applyEffects, endingTier, testCond } from '../core/state';
 import { substitute } from '../core/tokens';
-import { HEROINE_GENDER } from '../core/types';
-import type { ChoiceOption, GameState, Line, ScriptData } from '../core/types';
+import { HEROINE_GENDER, NAME_BY_HEROINE } from '../core/types';
+import type { ChoiceOption, GameState, Line, Scene, ScriptData } from '../core/types';
+import { Stage } from './Stage';
 import { Typewriter } from './Typewriter';
 
 /** 주인공 이름표는 언제나 `나` 입니다 (WORLD_BIBLE 11) */
@@ -30,6 +31,7 @@ export class Player {
   private textEl: HTMLElement;
   private choiceEl: HTMLElement;
   private stageEl: HTMLElement;
+  private stage: Stage;
 
   constructor(root: HTMLElement, script: ScriptData, state: GameState) {
     this.script = script;
@@ -50,6 +52,7 @@ export class Player {
     this.nameEl = root.querySelector('#vn-name')!;
     this.textEl = root.querySelector('#vn-text')!;
     this.choiceEl = root.querySelector('#vn-choices')!;
+    this.stage = new Stage(this.stageEl);
     this.typer = new Typewriter(this.textEl);
 
     root.querySelector<HTMLElement>('#vn-box')!.addEventListener('click', () => this.advance());
@@ -103,6 +106,7 @@ export class Player {
           this.nameEl.textContent = who === ME ? ME : who;
           this.nameEl.hidden = !who;
           this.textEl.classList.toggle('vn__text--narr', line.t === 'narr');
+          if (line.t === 'say') this.stage.setFace(line.who, line.face);
           this.typer.run(substitute(line.text, this.state));
           return;
         }
@@ -124,8 +128,23 @@ export class Player {
         case 'freeroam':
           this.roam = { line, left: line.limit, met: [] };
           return this.showRoam();
+        case 'bg':
+          this.stage.setBackground(line.id);
+          continue;
+        case 'cg':
+          this.stage.setCg(line.id);
+          continue;
+        case 'char': {
+          // `*` 는 현재 루트의 히로인 — 공용 씬은 이름을 적을 수 없습니다
+          const who = line.who === '*' ? (this.state.route ? NAME_BY_HEROINE[this.state.route] : '') : line.who;
+          if (who) this.stage.setChar(who, line.pos);
+          continue;
+        }
+        case 'charOut':
+          this.stage.clearChar();
+          continue;
         default:
-          // bg · bgm · se · cg · char · charOut — 구현 6번
+          // bgm · se — 오디오는 아직 없습니다 (BGM 8곡 미확보)
           this.stageEl.dataset.note = describe(line);
           continue;
       }
@@ -213,6 +232,9 @@ export class Player {
     if (this.script[t]) {
       this.scene = t;
       this.idx = 0;
+      // 씬이 바뀌면 스틸이 내려가고 배경도 그 씬이 다시 정합니다
+      this.stage.setCg('none');
+      if (!hasBg(this.script[t])) this.stage.clearBackground();
       return;
     }
     this.finish(`점프 대상이 없습니다: ${target} → ${t}`);
@@ -238,12 +260,10 @@ export class Player {
 }
 
 function describe(line: Line): string {
-  switch (line.t) {
-    case 'char':
-      return `${line.who} ${line.pos}`;
-    case 'charOut':
-      return '';
-    default:
-      return `${line.t} ${'id' in line ? line.id : ''}`;
-  }
+  return `${line.t} ${'id' in line ? line.id : ''}`;
+}
+
+/** 그 씬이 스스로 배경을 거는가 — 아니면 캠퍼스 안(타일맵 자리)입니다 */
+function hasBg(scene: Scene): boolean {
+  return scene.lines.some((l) => l.t === 'bg');
 }

@@ -136,6 +136,7 @@ export function compileVns(src: string, file: string): Scene[] {
       cur.lines.push({ t: 'charOut' });
       continue;
     }
+    // `@char * 위치` — 공용 씬에서 현재 루트의 히로인을 세웁니다 (`-> r_*_` 와 같은 규칙)
     if ((m = /^@char\s+(\S+)\s+(left|center|right)$/.exec(s))) {
       cur.lines.push({ t: 'char', who: m[1], pos: m[2] as 'left' | 'center' | 'right' });
       continue;
