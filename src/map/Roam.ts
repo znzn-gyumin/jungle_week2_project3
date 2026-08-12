@@ -231,8 +231,8 @@ export class Roam {
       const turn = ['', '_b', '_c'][this.retalks % 3];
       return `idle_${id}_${this.block.id}${turn}`;
     }
-    // 서브 인물도 셋씩 돌립니다 — 히로인과 같은 규칙입니다
-    const turn = ["", "_b", "_c"][this.retalks % 3];
+    // 서브 인물은 다섯씩 돌립니다 — 셋으로는 금방 같은 말이 돌아옵니다
+    const turn = ["", "_b", "_c", "_d", "_e"][this.retalks % 5];
     if (n.who === "명진혁") return `idle_coach_${this.block.id}${turn}`;
     if (n.who === "조민") return `idle_jomin_${this.block.id}${turn}`;
     // 4조 대표는 이름이 갈리지만 대사는 한 벌만 씁니다
