@@ -39,12 +39,12 @@
   min-height: 22vh;
   max-height: 30vh;
   --face-gap: clamp(0.8rem, 1.6vw, 1.2rem);
-  padding: 1.4rem clamp(1.2rem, 3vw, 2.2rem);
-  background: #12141acc;
-  border: 1px solid var(--accent);
-  border-radius: 4px;
-  backdrop-filter: blur(3px);
-  box-shadow: 0 6px 28px rgb(0 0 0 / 45%);
+  padding: 1.5rem clamp(1.6rem, 3.5vw, 2.6rem);
+  /* 크림색 둥근 창 — 도트와 웹툰풍 CG 사이에서 화면을 밝게 잡아 줍니다 */
+  background: linear-gradient(180deg, #fdfaf0f2, #f6efdcf2);
+  border: 1px solid #d9c89a;
+  border-radius: 999px;
+  box-shadow: 0 8px 30px rgb(0 0 0 / 35%), inset 0 0 0 3px #ffffffaa;
   cursor: pointer;
   user-select: none;
 }
@@ -52,8 +52,7 @@
 /* 명장면 창은 화면 폭을 더 쓰고 모서리를 둥글게 (참고한 미연시 배치) */
 .vn__box--cine {
   width: min(84rem, 94vw);
-  min-height: 17vh;
-  border-radius: 22px;
+  min-height: 15vh;
 }
 
 /* 대사가 없으면 창 자체를 없앱니다 — 자유 이동 중에는 맵만 보입니다 */
@@ -75,9 +74,9 @@
   /* 원본이 48×64 라 정사각에 넣으면 위아래가 남습니다.
      contain 이라 인물이 잘리지 않고 통째로 들어갑니다. */
   object-fit: contain;
-  border: 1px solid var(--accent);
-  border-radius: 3px;
-  background: #12141aee;
+  border: 1px solid #d9c89a;
+  border-radius: 50%;
+  background: #fdfaf0;
 }
 
 .vn__face[hidden] {
@@ -86,6 +85,8 @@
 
 .vn__said {
   min-width: 0;
+  display: flex;
+  align-items: baseline;
 }
 
 /* 얼굴 자리는 **항상** 비워 둡니다. 얼굴이 없다고 본문이 왼쪽으로
@@ -105,12 +106,17 @@
   display: inline-block;
   padding: 0.1rem 0.75rem;
   font-size: 1.05rem;
-  font-weight: 600;
+  flex: none;
+  min-width: 4.5rem;
+  text-align: right;
   letter-spacing: 0.04em;
-  color: var(--accent);
-  background: #0b0c17aa;
-  border: 1px solid var(--accent);
-  border-radius: 2px;
+  color: #b4485a;
+  background: transparent;
+  border: 0;
+  border-right: 1px solid #d9c89a;
+  border-radius: 0;
+  padding: 0 1rem 0 0;
+  margin: 0 1rem 0 0;
 }
 
 .vn__name[hidden] {
@@ -122,8 +128,9 @@
   max-width: 44rem;
   font-size: clamp(1.15rem, 2.3vw, 1.6rem);
   line-height: 1.75;
-  min-height: 3.6rem;
+  min-height: 3.4rem;
   letter-spacing: -0.01em;
+  color: #6b4038;
   /* 한국어는 어절 단위로 끊어야 읽힙니다. keep-all 이 없으면 단어
      한가운데서 줄이 넘어가 눈이 걸립니다. */
   word-break: keep-all;
@@ -132,7 +139,8 @@
 }
 
 .vn__text--narr {
-  color: var(--ink-dim);
+  color: #8d6a5e;
+  font-style: normal;
 }
 
 /* 선택지 — 화면 중앙, 3개 이하 (WORLD_BIBLE 11) */
@@ -159,20 +167,20 @@
   padding: 0.8rem 1.2rem;
   font: inherit;
   font-size: clamp(1rem, 1.9vw, 1.2rem);
-  color: var(--ink);
+  color: #6b4038;
   text-align: left;
   word-break: keep-all;
-  background: #12141ae6;
-  border: 1px solid rgb(242 237 228 / 22%);
-  border-radius: 2px;
+  background: #fdfaf0f2;
+  border: 1px solid #d9c89a;
+  border-radius: 999px;
   cursor: pointer;
   transition: border-color 120ms, background 120ms, transform 120ms;
 }
 
 .vn__choice:hover,
 .vn__choice:focus-visible {
-  background: #1a1d30f2;
-  border-color: var(--accent);
+  background: #fffdf6;
+  border-color: #b4485a;
   transform: translateX(3px);
   outline: none;
 }
