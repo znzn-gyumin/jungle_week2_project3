@@ -11,7 +11,7 @@ import Phaser from 'phaser';
 import type { TimeOfDay } from '../config/lighting';
 import { HEROINE_GENDER, type FreeroamNpc, type GameState, type Line } from '../core/types';
 import { CampusScene, type MiniData } from './CampusScene';
-import { HEROINE_BY_NAME, THEME, label } from '../core/types';
+import { HEROINE_BY_NAME, PLAYER_THEME, THEME, label } from '../core/types';
 import { MAP_DESIGN, scoutName } from './sprites';
 
 type Block = Extract<Line, { t: 'freeroam' }>;
@@ -301,7 +301,7 @@ export class Roam {
     g.fill();
     g.beginPath();
     g.arc(this.me.x * s, this.me.y * s, 3.2, 0, Math.PI * 2);
-    g.fillStyle = '#3d7bff';
+    g.fillStyle = PLAYER_THEME;
     g.fill();
   }
 
