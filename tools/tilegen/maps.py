@@ -295,7 +295,7 @@ def m2(TS_):
 
 # ================================================================== M3
 def m3(TS_):
-    """교육동 1F — 로비 · 정글라운지(책장 벽 계단식) · 운영사무실 · 택배보관소."""
+    """교육동 1F — 로비 · 정글라운지(소파존) · 정글 스텝(책장 벽 계단식) · 운영사무실 · 택배보관소."""
     W, H = 44, 30
     m = TileMap("m3_basecamp_1f", W, H, TS_, lighting="day,night")
     E = "edu"
@@ -316,11 +316,13 @@ def m3(TS_):
     m.place(E, "plant_big", 20, 10)
     for gx in (5, 11, 17):
         m.set_ground(gx, 12, E, "f_lightpool"); m.set_ground(gx, 20, E, "f_lightpool")
+    # 정글라운지 — 로비 옆 개방형 소파존 (WORLD_BIBLE 4-2)
     m.place(E, "sofa", 8, 14)
     m.place(E, "lounge_table", 9, 17)
+    m.trigger("jungle_lounge", 7, 13, w=6, h=6, kind="room", room="jungle_lounge")
     m.set_obj(3, 26, E, "trash", 0)
 
-    # 정글라운지 — 책장 벽 계단식 (jungle_step.png)
+    # 정글 스텝 — 책장 벽 계단식 (jungle_step.png · 안내도에 이름이 없는 공간)
     for x in range(3, 20):
         for y in range(21, 26):
             m.set_ground(x, y, E, "f_stage_step")
@@ -328,7 +330,7 @@ def m3(TS_):
         m.place(E, "bookshelf", bx, 19)
     doorway_h(m, E, 9, 11, 19, "f_stage_step")
     doorway_h(m, E, 9, 11, 20, "f_stage_step")
-    m.trigger("jungle_lounge", 4, 22, w=15, h=4, kind="room", room="jungle_lounge")
+    m.trigger("jungle_step", 4, 22, w=15, h=4, kind="room", room="jungle_step")
 
     # 운영사무실
     room(m, E, 27, 8, 8, 7, floor="f_carpet_b")
