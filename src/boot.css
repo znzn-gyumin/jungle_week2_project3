@@ -227,6 +227,22 @@ body {
   transform: translateY(-3px) scale(1.06);
 }
 
+/* **탭으로 짚은 칸.** 진짜 라디오는 opacity 0 이라 브라우저 초점
+   테두리가 안 보입니다. 눈에 보이는 알약에 대신 그립니다 — 고른 것
+   (분홍 채움)과 짚은 것(흰 점선 테두리)이 서로 다른 신호입니다. */
+.boot__seg input:focus-visible + span {
+  color: #fff;
+  border-color: #fff;
+  outline: 2px dashed #fff;
+  outline-offset: 3px;
+  box-shadow: 0 0 22px rgb(255 255 255 / 45%);
+}
+
+.boot__seg input:focus-visible:checked + span {
+  color: #2a1a24;
+  outline-color: #fff;
+}
+
 /* 고른 쪽에만 체크가 붙습니다 */
 .boot__seg input:checked + span::before {
   content: '✓';
@@ -764,4 +780,12 @@ body {
   z-index: -1;
   background: radial-gradient(65% 65% at 50% 50%, rgb(10 7 14 / 88%), rgb(10 7 14 / 68%));
   backdrop-filter: blur(4px);
+}
+
+
+/* 탭으로 짚은 입력칸과 버튼도 같은 신호를 씁니다 */
+.boot__field input:focus-visible,
+.boot__go:focus-visible {
+  outline: 2px dashed #fff;
+  outline-offset: 3px;
 }
