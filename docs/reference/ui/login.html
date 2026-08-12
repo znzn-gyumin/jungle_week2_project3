@@ -6,7 +6,8 @@
 <title>jungLover — 로그인 화면</title>
 <style>
   /* ── 팔레트 ───────────────────────────────────────────────
-     --ink 는 jungLover_intro.png 의 실제 배경색 실측값입니다.
+     --ink 는 assets/ui/intro_blank.png 의 배경색 실측값입니다. 모서리가 단색이
+     아니라 #0A0A16~#0C0D1A 대역의 그라데이션이라, 그중 한 값을 대표로 씁니다.
      인트로 이미지가 정확히 1920×1080(16:9)이라 크롭 없이 화면을 채웁니다.
      게임 화면이라 단일 테마로 고정합니다(뷰어 테마를 따르지 않음). */
   :root{
@@ -127,7 +128,7 @@
 <body>
 
   <div class="stage">
-    <img class="intro" src="../jungLover_intro.png"
+    <img class="intro" src="../../../assets/ui/intro_blank.png"
          alt="jungLover — 11박 12일, 연애는 커리큘럼에 없었다">
     <div class="scrim"></div>
 
@@ -147,7 +148,7 @@
   </div>
 
   <p class="spec">
-    <b>사양</b> · 16:9 · 배경 <code>jungLover_intro.png</code>(1920×1080 원본, 크롭 없음) ·
+    <b>사양</b> · 16:9 · 배경 <code>assets/ui/intro_blank.png</code>(1920×1080 원본, 크롭 없음) ·
     하단에만 옅은 스크림 · 버튼 하나와 한 줄 설명뿐 ·
     본문 <b>Pretendard</b>(여기서는 시스템 한글 폰트로 대체 — 구현 시 교체) ·
     게임 화면이라 <b>단일 테마 고정</b>
