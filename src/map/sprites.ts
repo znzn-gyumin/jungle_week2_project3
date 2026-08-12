@@ -46,3 +46,19 @@ export type Dir = keyof typeof DIR_ROW;
 export const CELL = { w: 48, h: 64 };
 /** 타일 (x,y) 에 설 때 (x*48, y*48 − 16) 에 그립니다 — 머리가 위 칸을 침범합니다 */
 export const HEAD_OVERHANG = 16;
+
+/**
+ * 그릴 해상도를 창 비율에 맞춰 정합니다.
+ *
+ * 고정 16:9 로 박으면 세로로 긴 창에서 위아래가 잘립니다. 짧은 쪽을
+ * 기준으로 잡고 긴 쪽을 비율대로 늘리면 어떤 창에서도 꽉 찹니다.
+ * **정수로 반올림**해야 타일 경계가 소수 픽셀에 걸리지 않습니다.
+ */
+export function fitSize(host: HTMLElement): { width: number; height: number } {
+  const r = host.getBoundingClientRect();
+  const ratio = (r.width || 16) / (r.height || 9);
+  const base = 560; // 짧은 쪽 기준 — 48px 타일이 약 11~12칸 보입니다
+  return ratio >= 1
+    ? { width: Math.round(base * ratio), height: base }
+    : { width: base, height: Math.round(base / ratio) };
+}

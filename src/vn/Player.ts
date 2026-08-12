@@ -189,13 +189,18 @@ export class Player {
           this.stage.setCg(line.id);
           continue;
         case 'char': {
-          // 반신은 명장면에서만 섭니다. 맵 위 대화는 도트 얼굴이 대신합니다.
-          if (!this.cinematic) continue;
+          // **@char 가 있으면 그 씬은 반신으로 갑니다.** 맵을 배경으로 두고
+          // 인물만 크게 세우는 편이 도트만 보는 것보다 덜 심심합니다.
           const who = line.who === '*' ? (this.state.route ? NAME_BY_HEROINE[this.state.route] : '') : line.who;
-          if (who) this.stage.setChar(who, line.pos);
+          if (who) {
+            this.setMode(true);
+            this.stage.setChar(who, line.pos);
+          }
           continue;
         }
         case 'charOut':
+          // 인물이 나가면 다시 맵 위 대화로 돌아옵니다
+          this.setMode(false);
           this.stage.clearChar();
           continue;
         default:
