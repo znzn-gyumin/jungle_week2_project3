@@ -923,10 +923,13 @@ def m7(TS_):
 
     # 캠퍼스(M3 로비)로 — 로비의 정문이 오른쪽 벽이라 이쪽은 왼쪽 끝입니다.
     # 타일 맨 왼쪽(x=0)에 붙여 화면 끝까지 걸어가야 넘어가게 합니다.
-    for y in range(4, 8):
+    # **왼쪽 변 전체가 문입니다.** x=0 이 이미 맨 끝 칸이라 더 옮길 데가
+    # 없으므로, 네 칸으로 좁히는 대신 변을 통째로 엽니다 — 어느 높이로
+    # 걸어가든 왼쪽 끝에 닿으면 캠퍼스로 넘어갑니다.
+    for y in range(H):
         m.open(0, y)
-        m.portal("m3_basecamp_1f", 0, y, 42, 20 + (y - 4), name="to_basecamp_1f")
-    m.trigger("front_gate", 0, 4, w=1, h=4, kind="door", label="정문")
+        m.portal("m3_basecamp_1f", 0, y, 42, 20 + (y % 4), name="to_basecamp_1f")
+    m.trigger("front_gate", 0, 0, w=1, h=H, kind="door", label="정문")
     m.trigger("spawn_default", 20, 6, kind="spawn")
 
     # ---- 배경 인물 — 정문
