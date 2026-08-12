@@ -649,20 +649,17 @@ def m5(TS_):
             m.open(x, y)
     # **위는 숙소동, 아래는 교육동.** 가든이 둘 사이에 있습니다.
     #
-    # 문은 맵 **끝 줄**에 둡니다. 안쪽에 두면 옆으로 돌아 들어갈 수 있어
-    # 사방에서 통과하는 칸이 되고, 그러면 「위로 가면 숙소」 가 성립하지
-    # 않습니다. 문이 될 네 칸만 남기고 그 줄을 전부 막습니다.
-    DOOR = range(14, 18)
+    # **위아래 벽이 통째로 문입니다.** 가든은 건물이 아니라 지나다니는
+    # 길이라, 어디로 올라가든 숙소동이고 어디로 내려가든 교육동입니다.
+    # 문이 맨 끝 줄에만 있으므로 끝까지 걸어가야 넘어갑니다 — 안쪽에
+    # 두면 지나가다 밟힙니다.
     for x in range(W):
-        if x in DOOR:
-            m.open(x, 0); m.open(x, 1)
-            m.open(x, H - 2); m.open(x, H - 1)
-        else:
-            m.block(x, 0); m.block(x, 1)
-            m.block(x, H - 2); m.block(x, H - 1)
-    for x in DOOR:
-        m.portal("m6_nestcamp", x, 0, 17 + (x - 14), 4, name="to_nestcamp")
-        m.portal("m3_basecamp_1f", x, H - 1, 18 + (x - 14), 4, name="to_basecamp_1f")
+        m.open(x, 0)
+        m.open(x, H - 1)
+        # 나가는 자리가 곧 들어오는 자리입니다. 위로 나가면 숙소동 문
+        # 앞에, 아래로 나가면 교육동 후문 앞에 섭니다.
+        m.portal("m6_nestcamp", x, 0, 17 + (x % 4), 4, name="to_nestcamp")
+        m.portal("m3_basecamp_1f", x, H - 1, 8 + (x % 4), 2, name="to_basecamp_1f")
     m.trigger("garden_center", 13, 17, w=6, h=6, kind="scene",
               label="커넥트가든 중앙", note="감정 정점 씬 지점 · 여명 오버레이 전용 맵")
     m.trigger("spawn_default", 15, 24, kind="spawn")
