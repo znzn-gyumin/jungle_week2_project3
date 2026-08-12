@@ -285,9 +285,11 @@
   max-width: 100%;
   /* **아래를 기준으로 잡습니다.** top 과 height 를 같이 주면 bottom 이
      무시돼 인물이 화면 중간에 뜬 채로 섭니다. */
-  height: 82%;
+  /* 크게 세우고 그만큼 아래로 내립니다 — 하반신은 화면 밖으로 잘려
+     얼굴이 커집니다. 무대가 overflow:hidden 이라 넘친 만큼 잘립니다. */
+  height: 104%;
   top: auto;
-  bottom: 0;
+  bottom: -11%;
   object-fit: contain;
   object-position: bottom center;
   opacity: 0;
