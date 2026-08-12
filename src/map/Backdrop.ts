@@ -10,7 +10,7 @@ import Phaser from 'phaser';
 import type { TimeOfDay } from '../config/lighting';
 import type { MapId } from '../core/types';
 import { CampusScene } from './CampusScene';
-import { fitSize } from './sprites';
+import { DESIGN } from './sprites';
 
 export class Backdrop {
   private game: Phaser.Game | null = null;
@@ -32,7 +32,7 @@ export class Backdrop {
       scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        ...fitSize(this.host),
+        ...DESIGN,
       },
       scene: CampusScene,
     });

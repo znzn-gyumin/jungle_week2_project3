@@ -48,17 +48,11 @@ export const CELL = { w: 48, h: 64 };
 export const HEAD_OVERHANG = 16;
 
 /**
- * 그릴 해상도를 창 비율에 맞춰 정합니다.
+ * 그릴 해상도 — **1920 × 1080 고정**입니다.
  *
- * 고정 16:9 로 박으면 세로로 긴 창에서 위아래가 잘립니다. 짧은 쪽을
- * 기준으로 잡고 긴 쪽을 비율대로 늘리면 어떤 창에서도 꽉 찹니다.
- * **정수로 반올림**해야 타일 경계가 소수 픽셀에 걸리지 않습니다.
+ * 창 크기에 맞춰 계산하면 전체화면으로 바꿀 때마다 보이는 범위가 달라집니다.
+ * 고정해 두면 어느 창에서나 같은 만큼 보이고, 화면 전체가 한 장으로
+ * 확대·축소되므로 타일 이음매도 안 생깁니다. 문서의 화면 규격과도 같습니다
+ * (assets/README 배경 · 1920 × 1080).
  */
-export function fitSize(host: HTMLElement): { width: number; height: number } {
-  const r = host.getBoundingClientRect();
-  const ratio = (r.width || 16) / (r.height || 9);
-  const base = 840; // 짧은 쪽 기준 — 48px 타일이 약 17~18칸 보입니다
-  return ratio >= 1
-    ? { width: Math.round(base * ratio), height: base }
-    : { width: base, height: Math.round(base / ratio) };
-}
+export const DESIGN = { width: 1920, height: 1080 } as const;

@@ -26,7 +26,7 @@ const SPEED = 190;
  * 배경으로만 쓰는 맵(still)도 같은 값을 씁니다 — 자유 이동과 배율이 다르면
  * 대화로 넘어갈 때 화면이 확 바뀝니다.
  */
-const ZOOM = 1;
+const ZOOM = 2;
 /** 말을 걸 수 있는 거리 — 한 칸 반 */
 const REACH = TS * 1.5;
 

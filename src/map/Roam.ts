@@ -11,7 +11,7 @@ import Phaser from 'phaser';
 import type { TimeOfDay } from '../config/lighting';
 import { HEROINE_GENDER, type FreeroamNpc, type GameState, type Line } from '../core/types';
 import { CampusScene, type MiniData } from './CampusScene';
-import { fitSize, scoutName } from './sprites';
+import { DESIGN, scoutName } from './sprites';
 
 type Block = Extract<Line, { t: 'freeroam' }>;
 
@@ -78,7 +78,7 @@ export class Roam {
       scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        ...fitSize(this.host),
+        ...DESIGN,
       },
       physics: { default: 'arcade', arcade: { gravity: { x: 0, y: 0 } } },
       scene: CampusScene,
