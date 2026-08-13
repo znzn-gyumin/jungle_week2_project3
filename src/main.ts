@@ -137,7 +137,6 @@ function titleScreen(app: HTMLElement): void {
       <section class="boot__act is-on" data-act="0">
         <p class="boot__any">Enter 를 눌러 시작</p>
         <p class="boot__tip">전체화면(F11)으로 플레이하시는 것을 권장합니다.</p>
-        <button class="boot__demo" id="boot-demo" type="button">데모로 바로 시작 — 이도윤 · 남자 · 403호</button>
       </section>
 
       <section class="boot__act" data-act="1">
@@ -268,10 +267,7 @@ function titleScreen(app: HTMLElement): void {
     }
     if (act === 0 && e.key === "Enter") void gate();
   };
-  const clickLogo = (e: MouseEvent): void => {
-    // 데모 버튼을 누른 클릭까지 받으면 장이 넘어간 뒤에 게임이 시작돼
-    // 섬광이 두 번 친다
-    if ((e.target as HTMLElement).closest('#boot-demo')) return;
+  const clickLogo = (): void => {
     if (act === 0) void gate();
   };
   window.addEventListener("keydown", enterLogo);
@@ -396,12 +392,6 @@ function titleScreen(app: HTMLElement): void {
       setTimeout(() => veil.remove(), 700);
     }, 480);
   };
-
-  // 손볼 때 쓰는 지름길 — 기본값으로 바로 들어갑니다
-  app.querySelector<HTMLButtonElement>("#boot-demo")!.addEventListener("click", (e) => {
-    e.stopPropagation();
-    enter(newGame("male", "이", "도윤", "403"));
-  });
 
   whoForm.addEventListener("submit", (e) => {
     e.preventDefault();
