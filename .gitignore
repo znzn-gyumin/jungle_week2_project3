@@ -14,3 +14,7 @@ dist/
 # 임시 폴더 — 내용물은 추적하지 않습니다 (assets/temp/README.md 참고)
 assets/temp/*
 !assets/temp/README.md
+
+# Firebase 웹 앱 config — `.env.example` 을 복사해 만듭니다
+.env
+.env.local

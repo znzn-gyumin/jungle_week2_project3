@@ -49,7 +49,7 @@
   bottom: clamp(2rem, 6vh, 4rem);
   min-height: 22vh;
   max-height: 30vh;
-  --face-gap: clamp(0.8rem, 1.6vw, 1.2rem);
+  --face-gap: clamp(0.6rem, 1.2vw, 0.9rem);
   display: flex;
   align-items: center;
   gap: var(--face-gap);
@@ -109,18 +109,27 @@
   box-shadow: 0 4px 14px rgb(120 70 90 / 25%);
 }
 
-/* 얼굴이 없는 화자여도 자리는 남깁니다 (visibility). 명장면에서는
-   아예 안 쓰므로 자리째 없앱니다 (display). */
-.vn__face[hidden] {
-  visibility: hidden;
-}
+/* ---- 글 시작 자리는 **두 종류**입니다 (얼굴 자리를 잡느냐로 갈립니다)
+     맵 대화 · 인물 대사     얼굴 자리를 잡습니다        ← 가장 오른쪽
+     맵 대화 · 내레이션      얼굴 자리 없음
+     CG 대화 · 인물 대사     얼굴 자리 없음
+     CG 대화 · 내레이션      얼굴 자리 없음
+   아래 셋이 같은 자리라, CG 대화에서는 대사와 내레이션이 나란히 서고
+   내레이션은 두 창에서 늘 같은 자리에서 시작합니다.
+   **이름칸은 어디서나 자리를 잡습니다** — 그래야 CG 대화의 대사와
+   내레이션이 어긋나지 않습니다. */
 
+/* **자리는 아이콘이 있을 때만 잡습니다.** 도트 얼굴이 없는 사람이
+   말하거나 내레이션이면 `hidden` 이 붙고, 그러면 브라우저 기본 스타일
+   `[hidden] { display: none }` 이 자리째 접습니다 — 따로 적을 게 없습니다.
+   덕분에 규칙이 하나로 줄었습니다: **얼굴이 보이면 자리가 있다.** */
+
+/* CG 대화는 얼굴을 아예 안 씁니다 (setMode 가 clearAvatar 로 내리지만,
+   규칙으로도 한 번 못을 박아 둡니다) */
 .vn__box--cine .vn__face {
-  visibility: hidden;
+  display: none;
 }
 
-/* 얼굴 자리는 **항상** 비워 둡니다. CG 대화에서도 자리를 남기므로
-   세로 바와 글 시작 자리가 두 모드에서 똑같습니다. */
 .vn__said {
   min-width: 0;
   flex: 1;
@@ -138,12 +147,16 @@
   transition: color 260ms ease, border-color 260ms ease;
   /* **min-width 가 아니라 고정 폭.** 최소 폭으로 두면 「명진혁 코치」
      처럼 긴 이름에서 칸이 늘어 바가 오른쪽으로 밀리고, 그 줄만 글
-     시작 자리가 달라집니다. */
-  width: 8.6rem;
+     시작 자리가 달라집니다.
+
+     **7.5rem 이 바닥입니다.** 가장 긴 이름 「명진혁 코치」 가 105.5px 라,
+     오른쪽 여백 0.6rem 을 빼고 남는 110.4px 안에 겨우 들어갑니다. 더
+     줄이면 그 이름만 칸을 넘쳐 바를 타고 넘습니다. */
+  width: 7.5rem;
   flex: none;
   display: block;
-  margin: 0 1rem 0 0;
-  padding: 0 1rem 0 0;
+  margin: 0 0.7rem 0 0;
+  padding: 0 0.6rem 0 0;
   font-size: 1.18rem;
   font-weight: 700;
   line-height: 1.4;
@@ -259,44 +272,126 @@
 }
 
 /* 맵 자리의 캠퍼스 사진 — 배경용으로 찍은 게 아니라 화질과 구도가 드러납니다.
-   세게 흐리고 밝게 날려 인물 뒤로 물러나게 합니다. */
+   세게 흐리고 밝게 날려 인물 뒤로 물러나게 합니다.
+
+   **밝기와 채도는 시간대가 정합니다.** 캠퍼스 사진 열여섯 장은 전부 한낮에
+   찍혔습니다. 예전에는 여기 `brightness(1.22)` 가 못 박혀 있어서, 심야 씬에
+   색조를 아무리 진하게 걸어도 그 아래에서 사진이 먼저 밝게 날아가 있었습니다. */
 .stage__bg--photo {
-  filter: saturate(0.5) contrast(0.82) brightness(1.22) blur(9px);
+  filter: saturate(var(--photo-sat)) contrast(var(--photo-con))
+          brightness(var(--photo-bright)) blur(9px);
   transform: scale(1.06); /* blur 가장자리가 비지 않게 살짝 키웁니다 */
 }
 
-/* 사진 위에 흰 베일을 한 겹 — 참고한 미연시의 밝은 화면이 이 처리입니다 */
+/* 사진 위에 흰 베일을 한 겹 — 참고한 미연시의 밝은 화면이 이 처리입니다.
+   밤에는 걷습니다. 흰 베일은 낮 화면을 부드럽게 하려고 얹은 것인데,
+   심야 씬에 그대로 두면 어둠 위에 안개가 낀 것처럼 보입니다. */
 .vn__stage:has(.stage__bg--photo:not([hidden]))::after {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
+  opacity: var(--veil);
   pointer-events: none;
   background:
     radial-gradient(120% 90% at 50% 0%, #ffffff00 30%, #fff6f2aa 100%),
     linear-gradient(180deg, #ffffff33, #ffe9f055);
 }
 
-/* 2겹 · 색조. 에필로그는 시간대 시스템 밖이라 안 겁니다 */
+/* 2겹 · 색조 — **[lighting.ts](../config/lighting.ts) 다섯 시간대와 같은 값**입니다.
+   타일맵은 다섯 벌로 칠하는데 사진만 낮·밤 둘로 뭉개고 있었습니다.
+   에필로그(`none`)는 시간대 시스템 밖이라 아무것도 안 겁니다. */
+.vn__stage {
+  /* 기본 = 아무 색조 없음. 시간대가 붙으면 아래에서 덮어씁니다 */
+  --tone-color: transparent;
+  --tone-blend: normal;
+  --tone-a: 0;
+  /* 캠퍼스 사진 보정 — 낮 기준값 */
+  --photo-sat: 0.5;
+  --photo-con: 0.82;
+  /* **낮 전용 값입니다.** 사진을 밝게 날려 인물 뒤로 물러나게 하는
+     처리라, 어두운 시간대에는 1 로 둡니다 — 색조가 어둡게 하는 몫을
+     사진에서 미리 한 번 더 빼면 두 번 어두워집니다. */
+  --photo-bright: 1.22;
+  --veil: 1;
+  /* 반신에 거는 같은 계열의 절반 세기 (assets/README 3겹) */
+  --sprite-b: 0.86;
+  --sprite-s: 0.92;
+}
+
 .vn__stage::before {
   content: '';
   position: absolute;
   inset: 0;
-  pointer-events: none;
   z-index: 2;
+  pointer-events: none;
+  background: var(--tone-color);
+  mix-blend-mode: var(--tone-blend);
+  opacity: var(--tone-a);
 }
 
-.vn__stage[data-tone='day']::before {
-  background: #ffe6b8;
-  mix-blend-mode: soft-light;
-  opacity: 0.12;
+.vn__stage[data-tone='day'] {
+  --tone-color: #ffe6b8;
+  --tone-blend: soft-light;
+  --tone-a: 0.12;
 }
 
-/* 밤 사진은 이미 어둠이 들어 있어 45% 가 아니라 20% 입니다 */
-.vn__stage[data-tone='night']::before {
-  background: #153a4a;
-  mix-blend-mode: multiply;
-  opacity: 0.2;
+.vn__stage[data-tone='evening'] {
+  --tone-color: linear-gradient(180deg, #e8763c, #2a3a63);
+  --tone-blend: overlay;
+  --tone-a: 0.35;
+  --photo-bright: 1;
+  --photo-con: 0.86;
+  --veil: 0.45;
+  --sprite-b: 0.82;
+  --sprite-s: 0.95;
+}
+
+.vn__stage[data-tone='night'] {
+  --tone-color: #153a4a;
+  --tone-blend: multiply;
+  --tone-a: 0.45;
+  --photo-sat: 0.42;
+  --photo-con: 0.9;
+  --photo-bright: 1;
+  --veil: 0.18;
+  --sprite-b: 0.72;
+  --sprite-s: 0.88;
+}
+
+/* 심야를 72% 까지 깊게 두는 것이 이 게임의 정체성입니다 (lighting.ts 머리말) */
+.vn__stage[data-tone='deepnight'] {
+  --tone-color: #0b1220;
+  --tone-blend: multiply;
+  --tone-a: 0.72;
+  --photo-sat: 0.3;
+  --photo-con: 0.95;
+  --photo-bright: 1;
+  --veil: 0.08;
+  --sprite-b: 0.58;
+  --sprite-s: 0.8;
+}
+
+/* **여명만 사진을 미리 어둡게 합니다.** `screen` 은 밝히는 블렌드라,
+   밝은 낮 사진에 그냥 얹으면 보라→파랑이 아니라 따뜻한 분홍이 됩니다.
+   타일맵도 같은 이유로 `preDarken` 을 먼저 깝니다 (lighting.ts).
+   나머지 네 시간대는 사진을 안 건드립니다 — 색조가 이미 어둡게 합니다. */
+.vn__stage[data-tone='dawn'] {
+  --tone-color: linear-gradient(180deg, #5b3e8c, #3e6bb0);
+  --tone-blend: screen;
+  --tone-a: 0.42;
+  --photo-sat: 0.35;
+  --photo-con: 0.9;
+  --photo-bright: 0.55;
+  --veil: 0.25;
+  --sprite-b: 0.8;
+  --sprite-s: 0.85;
+}
+
+/* 밤에 찍은 사진은 어둠이 이미 들어 있어 절반만 겁니다 — 45% 를 걸면
+   하차벨과 창밖 가로등이 죽습니다 (assets/README 배경 보정) */
+.vn__stage[data-dim='soft'] {
+  --tone-a: 0.2;
 }
 
 /* 반신은 왼쪽 아래에 흉상으로 섭니다 — 대사창 위로 걸쳐 얼굴이 크게 보입니다.
@@ -336,8 +431,10 @@
 }
 
 /* 밤 배경 위에서는 인물만 대낮이면 붙여넣은 것처럼 보입니다 */
+/* 반신은 중립 조명으로 그려져 있습니다. 어두운 시간대에 그대로 얹으면
+   인물만 대낮이라 붙여넣은 것처럼 보입니다 — 배경과 같은 만큼 낮춥니다. */
 .stage__char--tint {
-  filter: brightness(0.86) saturate(0.92) hue-rotate(-4deg);
+  filter: brightness(var(--sprite-b)) saturate(var(--sprite-s)) hue-rotate(-4deg);
 }
 
 /* 스틸은 화면을 가득 채웁니다 — 대사창 위에 놓지 않습니다 */
@@ -578,12 +675,6 @@
   70% { transform: rotate(0.8deg); }
 }
 
-@keyframes vn-pop {
-  0% { transform: scale(0.86); }
-  60% { transform: scale(1.06); }
-  100% { transform: scale(1); }
-}
-
 .fx-shake { animation: vn-shake 380ms ease-out; }
 .fx-bob { animation: vn-bob 420ms ease-out; }
 .fx-sway { animation: vn-sway 520ms ease-in-out; }
@@ -597,13 +688,21 @@
 
 .vn__box.fx-nudge { animation: vn-nudge 300ms ease-out; }
 
-/* 얼굴이 바뀔 때 톡 */
-.vn__face.fx-pop { animation: vn-pop 260ms ease-out; }
+/* 얼굴 아이콘이 「톡」 하고 커지던 효과(`vn-pop`)는 뺐습니다 — 대사를
+   넘길 때마다 아이콘이 튀어서 글보다 먼저 눈에 들어왔습니다. */
 
 
-/* 아직 안 온 글자. 자리는 잡되 보이지만 않습니다 —
-   이래야 한 줄이 두 줄 되는 순간 칸이 안 뜁니다. */
+/* ---- 대사가 차오르는 느낌
+   글자 하나가 span 하나입니다. 자리는 처음부터 전부 잡아 두고 **색만**
+   나중에 넣으므로 글이 밀리거나 줄바꿈이 바뀌지 않습니다. */
+
+/* 아직 안 온 글자 — 자리는 잡되 보이지만 않습니다 */
 .vn__ink--wait { color: transparent; }
+
+/* 켜질 때 제자리에서 스며듭니다. **타자 간격(28ms)보다 길게** 둬서
+   앞뒤 글자가 겹쳐 켜지고, 그 겹침이 물이 차오르는 것처럼 보입니다.
+   글자를 하나씩 딱딱 켜면 그냥 깜빡이는 것으로만 보입니다. */
+.vn__ink { transition: color 260ms ease-out; }
 
 
 
@@ -835,29 +934,9 @@
   100% { opacity: 0; }
 }
 
-/* 대사가 아래에서 자기 자리로 올라옵니다. 이름과 세로 바는 안
-   움직입니다 — 기준선까지 같이 흔들리면 자리를 찾는 느낌이 안 납니다.
-
-   **backwards 가 핵심입니다.** 이게 없으면 클래스를 붙인 프레임에
-   글이 제자리에 또렷하게 한 번 그려진 뒤 다음 프레임에 시작 위치로
-   내려갑니다 — 올라가다 뚝 떨어지는 것처럼 보이던 게 이것입니다. */
-.vn__text.is-in {
-  animation: vn-said-in 300ms ease-out backwards;
-}
-
-@keyframes vn-said-in {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  55% { opacity: 1; }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* 대사가 아래에서 올라오는 연출(`vn-said-in`)은 뺐습니다 — 줄을 넘길
+   때마다 글이 튀어서 읽는 흐름이 끊겼습니다. 대사는 제자리에 그대로
+   나타나고, 차오르는 느낌은 타자 효과가 냅니다. */
 
 
 /* 진행 안내는 **창 밖 바로 밑**입니다. 창 안에 두면 대사와 자리를
@@ -958,3 +1037,39 @@
   opacity: 0.5;
   border-style: dotted;
 }
+
+/* ---- 마지막 장.
+
+   엔딩을 끝까지 보고 한 번 더 누르면 화면이 통째로 검어지고 한 줄만
+   남습니다. 대사창은 그 전에 내립니다 — 읽을 것이 없는데 창이 남아
+   있으면 아직 뭔가 있는 줄 알고 계속 누르게 됩니다. */
+.vn__fin {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  display: grid;
+  place-items: center;
+  background: #000;
+  opacity: 0;
+  /* 천천히 덮습니다 — 엔딩 그림이 사라지는 것도 장면의 일부입니다 */
+  transition: opacity 1600ms ease;
+}
+
+.vn__fin.is-on { opacity: 1; }
+
+.vn__fin[hidden] { display: none; }
+
+/* 글은 화면이 다 검어진 뒤에 옵니다. 같이 뜨면 그림 위에 자막이
+   얹힌 것처럼 보이고, 검은 화면이 주는 한 박자가 사라집니다. */
+.vn__fin p {
+  margin: 0;
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #f4e9ef;
+  text-shadow: 0 0 28px rgb(255 214 232 / 45%);
+  opacity: 0;
+  transition: opacity 900ms ease 1200ms;
+}
+
+.vn__fin p.is-on { opacity: 1; }

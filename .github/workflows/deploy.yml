@@ -24,7 +24,33 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+
+      # **설정이 비면 소리 내어 알립니다.**
+      #
+      # Vite 는 `import.meta.env.VITE_*` 를 빌드할 때 코드에 박아 넣습니다.
+      # 여기서 값을 안 넘기면 빌드는 그냥 성공하고, 배포된 화면에서만
+      # 로그인이 사라지고 세이브·방명록·도감이 통째로 잠깁니다 — 조용히
+      # 반쪽이 되는 것이라 Actions 요약에 경고를 남깁니다.
+      #
+      # 값은 저장소 Settings → Secrets and variables → Actions 에 넣습니다.
+      # 비밀키가 아니라 브라우저가 어차피 다 보는 공개 식별자지만
+      # (docs/TECH_DESIGN.md 4-1), 한 군데서 관리하려고 secrets 를 씁니다.
+      - name: check firebase config
+        run: |
+          if [ -z "${{ secrets.VITE_FIREBASE_API_KEY }}" ]; then
+            echo "::warning::Firebase 설정이 비어 있습니다 — 로그인·세이브·방명록·도감 없이 배포됩니다. 저장소 Settings → Secrets and variables → Actions 에 VITE_FIREBASE_* 를 넣으세요."
+          fi
+
       - run: npm run build
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+          # 이름 있는 데이터베이스를 쓸 때만 — 비면 SDK 가 `(default)` 를 찾습니다
+          VITE_FIREBASE_DATABASE_ID: ${{ secrets.VITE_FIREBASE_DATABASE_ID }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

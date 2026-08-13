@@ -1,0 +1,45 @@
+{
+  "//": [
+    "방명록 목록 쿼리에 필요한 복합 색인 둘 (docs/TECH_DESIGN.md 4-3).",
+    "",
+    "① 화이트보드 — 내 진행 일자까지",
+    "",
+    "    where('inGameDay', '<=', chapterDay)",
+    "    orderBy('inGameDay', 'desc')",
+    "    orderBy('updatedAt', 'desc')",
+    "",
+    "Firestore 는 범위 조건(<=)을 건 필드와 **다른 필드로 정렬**할 때",
+    "단일 필드 색인만으로는 못 풉니다. 그래서 두 필드를 묶은 색인이",
+    "따로 있어야 합니다 — 정렬 방향까지 쿼리와 같아야 합니다.",
+    "",
+    "② 내 메모 — 날짜 상관없이 내가 쓴 것 전부",
+    "",
+    "    where('uid', '==', 나)",
+    "    orderBy('updatedAt', 'desc')",
+    "",
+    "같음(==) 조건이라 범위 조건만큼 까다롭지는 않지만, 거른 뒤 다른",
+    "필드로 정렬하므로 역시 둘을 묶어야 합니다.",
+    "",
+    "콘솔에서 손으로 만들어도 되지만, 파일로 두면 프로젝트를 새로",
+    "만들 때 `firebase deploy --only firestore:indexes` 한 줄로 끝납니다."
+  ],
+  "indexes": [
+    {
+      "collectionGroup": "guestbook",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "inGameDay", "order": "DESCENDING" },
+        { "fieldPath": "updatedAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "guestbook",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "uid", "order": "ASCENDING" },
+        { "fieldPath": "updatedAt", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

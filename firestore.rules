@@ -1,0 +1,68 @@
+rules_version = '2';
+
+// 방명록·세이브 보안 규칙 — 정본은 docs/TECH_DESIGN.md 4-3.
+//
+// **서버 코드가 없으므로 검증은 전부 여기서 합니다.** 규칙에 안 적은 건
+// 그냥 통과한다고 봐야 합니다.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 세이브와 프로필 — 남의 문서는 읽지도 쓰지도 못합니다
+    match /users/{uid}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // 방명록 — 문서 ID 가 `{uid}_{회차}_{일자}` 입니다.
+    //
+    // **개수를 세지 않습니다.** 이름이 곧 규칙이라, 같은 판 같은 날에는
+    // 아무리 눌러도 같은 문서를 덮어씁니다. 새 판을 시작하거나 다음
+    // 챕터로 넘어가야 새 자리가 생깁니다.
+    match /guestbook/{noteId} {
+      allow read: if request.auth != null;
+
+      allow create, update: if request.auth != null
+
+        // **이름이 세 값과 정확히 맞아야 합니다.** 이 한 줄이 「남의 자리에
+        // 못 쓴다」와 「한 조합에 한 글」을 동시에 강제합니다.
+        && noteId == request.auth.uid + '_'
+             + request.resource.data.runId + '_'
+             + string(request.resource.data.inGameDay)
+
+        // 필드 화이트리스트 — 아무거나 못 넣습니다
+        && request.resource.data.keys().hasOnly(
+             ['uid','runId','who','displayName','route','inGameDay','body','createdAt','updatedAt'])
+
+        // 신원 위조 차단 — 토큰의 값과 일치해야 합니다
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.displayName == request.auth.token.name
+
+        // 화이트보드에 적히는 이름은 **게임에서 정한 것**이라 계정과 안 묶입니다.
+        // 아무 이름이나 될 수 있지만 길이는 막습니다 — 목록을 밀어내는 걸
+        // 막는 게 목적이지, 누구인지를 가리는 건 위의 displayName 이 합니다.
+        && request.resource.data.who is string
+        && request.resource.data.who.size() > 0
+        && request.resource.data.who.size() <= 12
+
+        // 값 범위
+        // 회차 번호 — 이름에 들어가므로 **밑줄이 없어야** 자릿수가 안 흐트러집니다
+        && request.resource.data.runId is string
+        && request.resource.data.runId.size() > 0
+        && request.resource.data.runId.size() <= 24
+        && !request.resource.data.runId.matches('.*_.*')
+        && request.resource.data.body is string
+        && request.resource.data.body.size() <= 140
+        && request.resource.data.inGameDay in [1, 5, 8, 12]
+        && (request.resource.data.route == null ||
+            request.resource.data.route in
+              ['minah','seunghee','yunjung','mingyu','seungmin','yunho'])
+
+        // 시각은 클라이언트가 못 정합니다 — 날짜를 앞당겨 목록 위를
+        // 차지하는 걸 막습니다
+        && request.resource.data.updatedAt == request.time;
+
+      // 지우기도 이름으로 가립니다 — 앞이 내 uid 여야 합니다
+      allow delete: if request.auth != null
+        && noteId.split('_')[0] == request.auth.uid;
+    }
+  }
+}

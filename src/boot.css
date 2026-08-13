@@ -257,6 +257,11 @@ body {
   color: rgb(255 214 232 / 85%);
 }
 
+/* 빈 안내줄은 접습니다 — 로그인 화면의 아래 칸은 「창을 여는 중…」과
+   실패 사유가 들어올 때만 자리를 차지해야 합니다. 비어 있어도 한 줄
+   높이를 먹으면 판이 아래로 치우쳐 보입니다. */
+.boot__hint:empty { display: none; }
+
 .boot__go {
   min-width: 17.6rem;
   margin-top: 0.3rem;

@@ -11,51 +11,30 @@ import Phaser from 'phaser';
 import { LightingOverlay, type TimeOfDay } from '../config/lighting';
 import { themeOf } from '../core/types';
 import type { FreeroamNpc, MapId } from '../core/types';
+import { play as sfx, step as sfxStep } from '../audio/sfx';
 import { backLine, openLine } from './chatter';
 import { CAST, CELL, DIR_ROW, HEAD_OVERHANG, PLAYER_DOT, type Dir } from './sprites';
 
 /**
- * 한 시간대에 캠퍼스에 서는 **무명은 모두 합쳐 열일곱**입니다.
+ * 맵에 서는 **조연 도트**. 무명(mob_a·b·c)은 없습니다.
  *
- * 학생은 스물넷이고 그중 이름이 있는 사람이 일곱(주인공 · 히로인 셋 ·
- * 절친 · 4조 대표 · 조민)이라 남는 자리가 정확히 열일곱입니다. 코치와
- * 여사님은 학생이 아니라 이 몫에서 빠집니다.
- *
- * 열일곱은 **상한**입니다. 그만큼 다 세우면 한 화면에 사람이 빽빽해
- * 정작 말을 걸 사람이 안 보여서, 실제로는 열 명 안쪽으로 씁니다.
- *
- * **시간대마다 어디에 몰려 있는지가 다릅니다.** 배정 직후 오후에는
- * 다들 교육장과 로비에 있고, 밤샘 중에는 교육장·오픈데스크·편의점으로
- * 갈리고, 마지막 저녁에는 숙소로 흩어지기 시작합니다. 어느 쪽이든
- * 합은 열일곱입니다.
+ * 맵의 `npc` 레이어에는 교육장 지정석 스물넷이 그대로 적혀 있지만
+ * (WORLD_BIBLE 4-2-2 정본이라 맵 데이터에서는 안 지웁니다), 화면에는
+ * **이름이 있는 사람만** 세웁니다 — 히로인 · 조연 · 코치.
  */
-const MOB_QUOTA: Record<string, Partial<Record<MapId, number>>> = {
-  // D1 오후 — 배정만 받고 일과가 없다. 아직 아무도 밖에 안 나간다.
-  day: {
-    m1_basecamp_4f: 5, m2_basecamp_2f: 1, m3_basecamp_1f: 2,
-    m4_basecamp_b1: 1, m5_connect_garden: 1, m6_nestcamp: 0, m7_gate: 0,
-  },
-  // D5 밤 — 미니 프로젝트 열다섯 시간째. 자는 사람이 없고 편의점이 붐빈다.
-  night: {
-    m1_basecamp_4f: 3, m2_basecamp_2f: 2, m3_basecamp_1f: 1,
-    m4_basecamp_b1: 2, m5_connect_garden: 2, m6_nestcamp: 0, m7_gate: 0,
-  },
-  // D8 저녁 — 팀 빌딩이 끝나고 흩어진다. 숙소로 올라가는 사람이 생긴다.
-  evening: {
-    m1_basecamp_4f: 3, m2_basecamp_2f: 1, m3_basecamp_1f: 2,
-    m4_basecamp_b1: 2, m5_connect_garden: 1, m6_nestcamp: 1, m7_gate: 0,
-  },
-};
+const EXTRA_DOTS = ['jomin', 'taeyun', 'taeyeon', 'yeosanim', 'myeongjinhyeok'];
 
-/** 배경 인물 도트 — 이름이 붙은 셋과 무명 셋 */
-const EXTRA_DOTS = ['jomin', 'taeyun', 'taeyeon', 'mob_a', 'mob_b', 'mob_c'];
-
-/** 그 자리에 앉은 사람의 도트를 고릅니다 — 이름이 있으면 그 사람 것으로 */
-function extraDot(labelText: string, i: number): string {
+/**
+ * 그 자리에 앉은 사람의 도트. **모르는 이름이면 빈 문자열**입니다 —
+ * 공용 도트로 때우면 아무나 그 자리에 앉아 있는 것처럼 보입니다.
+ */
+function extraDot(labelText: string): string {
   if (labelText.includes('조민')) return 'jomin';
   if (labelText.includes('태윤')) return 'taeyun';
   if (labelText.includes('태연')) return 'taeyeon';
-  return EXTRA_DOTS[3 + (i % 3)];
+  if (labelText.includes('여사님')) return 'yeosanim';
+  if (labelText.includes('코치')) return 'myeongjinhyeok';
+  return '';
 }
 
 const TS = 48;
@@ -99,6 +78,8 @@ export type RoamSetup = {
   onTalk: (npc: FreeroamNpc) => void;
   /** 트리거 맵에 들어갔을 때 */
   onTrigger: (target: string) => void;
+  /** 화이트보드 앞에서 스페이스 — 방명록을 엽니다 (GAME_DESIGN 2-5) */
+  onBoard?: () => void;
 };
 
 /** 그 인물의 테마 컬러 — 히로인이 아니면 중립색 */
@@ -110,6 +91,8 @@ export type MiniData = {
   h: number;
   blocked: boolean[];
   stairs: { x: number; y: number; dir: 'down' | 'up' | null }[];
+  /** 화이트보드(방명록) — 미니맵에 흰 띠로 찍습니다 */
+  boards: { x: number; y: number; w: number }[];
   npcs: { x: number; y: number; theme: string; met: boolean }[];
 };
 
@@ -136,6 +119,17 @@ export class CampusScene extends Phaser.Scene {
   }[] = [];
   /** 이미 만난 사람 — 자리에는 남지만 말은 못 겁니다 */
   private stayed: Phaser.GameObjects.Image[] = [];
+  /**
+   * **CG 컷을 이미 본 사람 → 그 사람의 한 마디 씬.**
+   *
+   * 맵을 옮기면 사람은 전부 다시 그려집니다. 만난 사실을 스프라이트에만
+   * 담아 두면 계단 한 번에 지워져서, 돌아왔을 때 히로인 머리 위에 느낌표가
+   * 되살아나거나 그 자리를 다른 도트가 차지합니다. 그래서 **씬이 들고**
+   * 있다가 다시 그릴 때마다 얹습니다.
+   */
+  private idleOf = new Map<string, string>();
+  /** 대화 횟수를 다 써서 남은 느낌표까지 내렸는가 — 이것도 맵을 넘어 남습니다 */
+  private allMet = false;
   /** 미니맵에 동그라미로 남길 사람들 */
   private metMarks: { x: number; y: number; theme: string; met: boolean }[] = [];
   private hint!: Phaser.GameObjects.Text;
@@ -154,6 +148,14 @@ export class CampusScene extends Phaser.Scene {
   private near: string | null = null;
   /** 이름이 붙은 구역들 — 같은 층 안에서도 어디인지 갈라 줍니다 */
   private zones: { rect: Phaser.Geom.Rectangle; label: string }[] = [];
+  /**
+   * 화이트보드 — 방명록이 얹히는 자리입니다.
+   *
+   * 맵의 `trigger` 레이어에 `kind=whiteboard` 로 이미 심어져 있습니다
+   * (tools/tilegen/maps.py 의 M1). **새 공간을 안 만드는 게 요점**이라
+   * 여기 좌표를 그대로 씁니다.
+   */
+  private boards: { rect: Phaser.Geom.Rectangle; mark: Phaser.GameObjects.Text }[] = [];
   /** 지금 떠 있는 말풍선 — 겹쳐 뜨지 않게 셉니다 */
   private bubbles: Phaser.GameObjects.Text[] = [];
   /** 잡담 차례. 매번 다른 말이 나오게 씨앗으로 씁니다. */
@@ -167,6 +169,11 @@ export class CampusScene extends Phaser.Scene {
     dir: 'down' | 'up' | null;
     mark?: Phaser.GameObjects.Text;
   }[] = [];
+  /**
+   * 발소리 간격(ms). **걷는 속도에 맞춰 울려야** 발을 딛는 것처럼 들립니다 —
+   * 고정 간격으로 두면 뛸 때 발이 미끄러지는 것처럼 어긋납니다.
+   */
+  private stepTimer = 0;
   /** 직전 프레임의 발 위치 — 어느 쪽에서 들어왔는지 판정합니다 */
   private lastFeet = { x: 0, y: 0 };
   /** 되돌릴 자리 — 계단을 반대 방향에서 밟으면 여기로 밀어냅니다 */
@@ -268,6 +275,8 @@ export class CampusScene extends Phaser.Scene {
    * 말은 계속 걸 수 있지만 이제 스토리가 아니라 한 마디씩입니다.
    */
   exhaust(): void {
+    // 맵을 옮겨도 남아야 합니다 — 안 그러면 계단 한 번에 느낌표가 되살아납니다
+    this.allMet = true;
     for (const n of this.npcSprites) {
       if (n.met) continue;
       n.met = true;
@@ -280,7 +289,7 @@ export class CampusScene extends Phaser.Scene {
       });
     }
     if (this.lastMini) {
-      this.lastMini = { ...this.lastMini, npcs: [...this.metMarks] };
+      this.lastMini = { ...this.lastMini, npcs: this.miniNpcs() };
       this.onMini?.(this.lastMini);
     }
   }
@@ -297,6 +306,30 @@ export class CampusScene extends Phaser.Scene {
     if (this.lastMini) mini(this.lastMini);
   }
 
+  /**
+   * 미니맵에 찍을 사람 — **표시는 셋으로만 갈립니다.**
+   *
+   *   `!`   CG 컷 대화가 남은 사람        met=false (setup.npcs 에서 온 사람만)
+   *   `○`   말은 걸리지만 CG 는 없는 사람  metMarks
+   *   없음  혼잣말·잡담만 하는 무명        chatOnly — 목록에 아예 안 넣습니다
+   *
+   * **한 군데서만 만듭니다.** 세 곳(맵 진입 · 대화 종료 · exhaust)이
+   * 각자 목록을 짜면 한 곳만 규칙이 어긋나도 무명 머리에 느낌표가 뜹니다.
+   */
+  private miniNpcs(): MiniData['npcs'] {
+    return [
+      ...this.npcSprites
+        .filter((n) => !n.met && !n.chatOnly)
+        .map((n) => ({
+          x: n.sprite.x / TS,
+          y: n.sprite.y / TS,
+          theme: npcTheme(n.npc.who),
+          met: false,
+        })),
+      ...this.metMarks,
+    ];
+  }
+
   /** 미니맵이 그릴 자료 — 막힌 칸 · 계단 · 아직 안 만난 사람 */
   private emitMinimap(map: Phaser.Tilemaps.Tilemap): void {
     const blocked: boolean[] = [];
@@ -311,17 +344,14 @@ export class CampusScene extends Phaser.Scene {
       h: map.height,
       blocked,
       stairs: this.portals.map((p) => ({ x: p.rect.x / TS, y: p.rect.y / TS, dir: p.dir })),
-      npcs: [
-        ...this.npcSprites
-          .filter((n) => !n.met)
-          .map((n) => ({
-            x: n.sprite.x / TS,
-            y: n.sprite.y / TS,
-            theme: npcTheme(n.npc.who),
-            met: false,
-          })),
-        ...this.metMarks,
-      ],
+      // 방명록이 어디 있는지는 지도에서 보여야 합니다 — 자유 이동에서만
+      // 열리는 자리라, 못 찾으면 있는 줄도 모릅니다
+      boards: this.boards.map((b) => ({
+        x: b.rect.x / TS,
+        y: b.rect.y / TS,
+        w: b.rect.width / TS,
+      })),
+      npcs: this.miniNpcs(),
     };
     this.onMini?.(this.lastMini);
   }
@@ -362,6 +392,7 @@ export class CampusScene extends Phaser.Scene {
     this.cameras.main.startFollow(this.player, true, 0.12, 0.12);
 
     this.collectPortals(map);
+    this.collectBoards(map);
     this.placeNpcs(map, id);
     this.lighting.attach(map, 100);
     this.lighting.setTime(this.setup.time);
@@ -433,6 +464,48 @@ export class CampusScene extends Phaser.Scene {
     this.portalCooldown = 500;
   }
 
+  /**
+   * 화이트보드 자리를 모읍니다 — 맵의 `trigger` 중 `kind=whiteboard`.
+   *
+   * 안내는 **가까이 갔을 때만** 띄웁니다. 늘 떠 있으면 교육장 앞이
+   * 표시로 덮여, 정작 말을 걸 사람의 느낌표가 안 보입니다.
+   */
+  private collectBoards(map: Phaser.Tilemaps.Tilemap): void {
+    for (const b of this.boards) b.mark.destroy();
+    this.boards = [];
+    if (!this.setup.onBoard) return;
+    for (const o of map.getObjectLayer('trigger')?.objects ?? []) {
+      const props = (o.properties ?? []) as { name: string; value: string }[];
+      if (props.find((p) => p.name === 'kind')?.value !== 'whiteboard') continue;
+      const rect = new Phaser.Geom.Rectangle(
+        o.x ?? 0, o.y ?? 0, o.width || TS, o.height || TS,
+      );
+      // **사람에게 다가갔을 때와 같은 표시입니다.** 하나는 상자에 담긴
+      // 글씨, 하나는 테두리만 두른 글씨면 같은 「누르세요」인데 두 가지로
+      // 보입니다 — 글꼴 · 색 · 테두리 · 떠오르는 움직임까지 맞춥니다.
+      const mark = this.add
+        .text(rect.centerX, rect.y - 6, '스페이스', {
+          fontSize: '13px',
+          color: '#ffffff',
+          stroke: '#2a2632',
+          strokeThickness: 4,
+        })
+        .setOrigin(0.5, 1)
+        .setDepth(60)
+        .setVisible(false);
+      this.tweens.add({
+        targets: mark,
+        y: mark.y - 7,
+        duration: 620,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.inOut',
+      });
+      this.uiCam?.ignore(mark);
+      this.boards.push({ rect, mark });
+    }
+  }
+
   /** 자리는 맵의 `npc` 오브젝트가 `role` 로 갖고 있습니다 */
   private placeNpcs(map: Phaser.Tilemaps.Tilemap, id: MapId): void {
     for (const { sprite, mark } of this.npcSprites) {
@@ -469,6 +542,12 @@ export class CampusScene extends Phaser.Scene {
           ?.find((p) => p.name === 'role')?.value === cast.role,
       );
       if (!obj) continue;
+      // **CG 컷을 이미 본 사람도 자기 자리에 자기 도트로 섭니다.**
+      // 만난 뒤 계단을 타고 돌아오면 그 자리에 무명이 앉아 있었습니다 —
+      // 만난 사람을 setup.npcs 에서 빼 버려서, 아래의 배경 인물 고리가
+      // 「임자 없는 자리」 로 보고 공용 도트를 얹었던 탓입니다.
+      const done = this.allMet || this.idleOf.has(n.who);
+      const npc = done ? { ...n, target: this.idleOf.get(n.who) ?? n.target } : n;
       const s = this.add
         .image(obj.x ?? 0, (obj.y ?? 0) - HEAD_OVERHANG, `dot_${cast.dot}`, 0)
         .setOrigin(0, 0)
@@ -485,7 +564,8 @@ export class CampusScene extends Phaser.Scene {
           strokeThickness: 4,
         })
         .setOrigin(0.5, 1)
-        .setDepth(60);
+        .setDepth(60)
+        .setVisible(!done);
       this.tweens.add({
         targets: mark,
         y: mark.y - 7,
@@ -495,33 +575,27 @@ export class CampusScene extends Phaser.Scene {
         ease: 'Sine.inOut',
       });
       this.uiCam?.ignore([s, mark]);
-      this.npcSprites.push({ npc: n, sprite: s, mark, met: false });
+      this.npcSprites.push({ npc, sprite: s, mark, met: done });
+      // 이미 본 사람은 미니맵에 동그라미로 남습니다 (miniNpcs 주석의 둘째 줄)
+      if (done) {
+        this.metMarks.push({ x: s.x / TS, y: s.y / TS, theme: npcTheme(n.who), met: true });
+      }
       used.add(obj);
     }
 
-    // ---- 배경 인물. 말은 못 걸지만 자리에는 있습니다.
+    // ---- 조연. CG 컷은 없지만 자리에는 있고, 말도 걸립니다.
+    //
+    // **무명은 세우지 않습니다.** 맵의 `npc` 레이어에는 교육장 지정석
+    // 스물넷이 그대로 적혀 있지만(WORLD_BIBLE 4-2-2 정본이라 맵에서
+    // 지우지 않습니다), 화면에 세우는 사람은 **이름이 있는 사람뿐**입니다
+    // — 히로인 · 조연(조민 · 4조 대표 · 여사님) · 코치.
     let i = 0;
-    let mobs = 0;
-    const quota = (MOB_QUOTA[this.setup.time] ?? MOB_QUOTA.day)[id] ?? 0;
     for (const o of layer.objects) {
       if (used.has(o)) continue;
       const props = o.properties as { name: string; value: string }[] | undefined;
       const text = String(props?.find((p) => p.name === 'label')?.value ?? '');
-      const key = `dot_${extraDot(text, i)}`;
-      if (!this.textures.exists(key)) continue;
-      // **다들 아래만 보고 있으면 진열장 같습니다.** 맵에 적힌 dir 을
-      // 따르고, 없으면 자리 순서로 네 방향을 돌려 씁니다.
-      const face = String(props?.find((p) => p.name === 'dir')?.value ?? '') as Dir;
-      const row = DIR_ROW[face] ?? DIR_ROW[(['down', 'left', 'right', 'up'] as Dir[])[i % 4]];
-      i++;
-      const sp = this.add
-        .image(o.x ?? 0, (o.y ?? 0) - HEAD_OVERHANG, key, row * 4)
-        .setOrigin(0, 0)
-        .setDepth(38);
-      this.uiCam?.ignore(sp);
-
-      // **이 사람들도 말은 걸립니다.** 원 표시는 「대화 불가」 가 아니라
-      // 「맵 대화만 된다」 는 뜻입니다 — 느낌표는 CG 컷이 남은 사람만.
+      // 이름 없는 자리는 건너뜁니다 — 무명은 아예 안 나옵니다
+      if (!text || text === '무명') continue;
       // **성별로 갈리는 자리는 배경으로 안 세웁니다.**
       // 「장윤정 / 장윤호」 처럼 적힌 자리는 이 회차에 누가 나오는지가
       // 정해져 있는데, 라벨의 앞뒤 순서가 남녀로 일정하지 않아 그냥
@@ -530,22 +604,31 @@ export class CampusScene extends Phaser.Scene {
       if (text.includes(' / ')) continue;
       // 주인공 자리는 비워 둡니다 — 안 그러면 자기 자신이 앉아 있습니다
       if (text.includes('주인공')) continue;
-      const named = Boolean(text) && text !== '무명';
-      // 무명은 이 맵 몫만큼만 세웁니다 — 캠퍼스 전체로 열일곱입니다
-      if (!named && mobs >= quota) continue;
-      if (!named) mobs++;
       // **2층의 이름 있는 자리는 건너뜁니다.** 조민 자리가 4층과 2층에
       // 다 적혀 있어서(그날 어디 있느냐로 갈리는 자리라) 그대로 그리면
       // 같은 사람이 두 층에 동시에 서 있게 됩니다. 4층 쪽을 씁니다.
       // 여사님(B1)처럼 한 곳에만 있는 사람은 그 자리에 그대로 섭니다.
-      if (named && id === 'm2_basecamp_2f') continue;
-      const who = named ? text : '무명';
-      // 이름이 없으면 말을 못 겁니다 — 대신 저희끼리 잡담을 합니다
-      const chatOnly = !named;
+      if (id === 'm2_basecamp_2f') continue;
+      // 도트가 없는 이름은 안 세웁니다 — 공용 도트로 때우지 않습니다
+      const dot = extraDot(text);
+      if (!dot || !this.textures.exists(`dot_${dot}`)) continue;
+      // **다들 아래만 보고 있으면 진열장 같습니다.** 맵에 적힌 dir 을
+      // 따르고, 없으면 자리 순서로 네 방향을 돌려 씁니다.
+      const face = String(props?.find((p) => p.name === 'dir')?.value ?? '') as Dir;
+      const row = DIR_ROW[face] ?? DIR_ROW[(['down', 'left', 'right', 'up'] as Dir[])[i % 4]];
+      i++;
+      const sp = this.add
+        .image(o.x ?? 0, (o.y ?? 0) - HEAD_OVERHANG, `dot_${dot}`, row * 4)
+        .setOrigin(0, 0)
+        .setDepth(38);
+      this.uiCam?.ignore(sp);
+
+      // **이 사람들도 말은 걸립니다.** 원 표시는 「대화 불가」 가 아니라
+      // 「맵 대화만 된다」 는 뜻입니다 — 느낌표는 CG 컷이 남은 사람만.
       const mark = this.add
         .text(sp.x + TS / 2, sp.y - 6, '○', {
           fontSize: '15px',
-          color: npcTheme(who),
+          color: npcTheme(text),
           stroke: '#2a2632',
           strokeThickness: 4,
         })
@@ -554,16 +637,12 @@ export class CampusScene extends Phaser.Scene {
         .setVisible(false);
       this.uiCam?.ignore(mark);
       this.npcSprites.push({
-        npc: { who, map: id, target: '' } as FreeroamNpc,
+        npc: { who: text, map: id, target: '' } as FreeroamNpc,
         sprite: sp,
         mark,
         met: true,
-        chatOnly,
       });
-      // 미니맵에도 말 걸 수 있는 사람만 찍습니다
-      if (!chatOnly) {
-        this.metMarks.push({ x: sp.x / TS, y: sp.y / TS, theme: npcTheme(who), met: true });
-      }
+      this.metMarks.push({ x: sp.x / TS, y: sp.y / TS, theme: npcTheme(text), met: true });
     }
   }
 
@@ -573,6 +652,10 @@ export class CampusScene extends Phaser.Scene {
    * 사양도 「상호작용 아이콘이 사라진다」이지 사람이 사라진다가 아닙니다.
    */
   removeNpc(who: string, idle: string): void {
+    // **자리에서 빼지 않습니다.** 예전에는 여기서 setup.npcs 에서도
+    // 지웠는데, 그러면 맵을 옮겼다 돌아왔을 때 그 사람을 다시 그릴 근거가
+    // 없어져 자리가 무명 도트에게 넘어갔습니다. 만난 사실만 적어 둡니다.
+    this.idleOf.set(who, idle);
     const found = this.npcSprites.find((x) => x.npc.who === who);
     // 사람은 자리에 그대로 두고 **말 거는 곳만 바꿉니다** — 다시 걸면
     // 그 상황에 맞는 한 마디를 합니다.
@@ -587,23 +670,15 @@ export class CampusScene extends Phaser.Scene {
         met: true,
       });
     }
-    this.setup.npcs = this.setup.npcs.filter((n) => n.who !== who);
 
     // 미니맵 자료는 맵을 읽을 때 한 번 만들어집니다. 사람이 빠지면
     // 다시 보내야 느낌표가 사라집니다.
+    //
+    // **여기서 목록을 새로 짜면 안 됩니다.** 남은 사람을 전부 met=false
+    // 로 적던 때가 있었는데, 그러면 한 번 말을 걸 때마다 잡담만 하는
+    // 무명들까지 미니맵에 느낌표를 답니다 — 규칙은 miniNpcs() 하나뿐입니다.
     if (this.lastMini) {
-      this.lastMini = {
-        ...this.lastMini,
-        npcs: [
-          ...this.npcSprites.map((n) => ({
-            x: n.sprite.x / TS,
-            y: n.sprite.y / TS,
-            theme: npcTheme(n.npc.who),
-            met: false,
-          })),
-          ...this.metMarks,
-        ],
-      };
+      this.lastMini = { ...this.lastMini, npcs: this.miniNpcs() };
       this.onMini?.(this.lastMini);
     }
   }
@@ -629,6 +704,12 @@ export class CampusScene extends Phaser.Scene {
     if (dir) {
       this.player.anims.play(`walk_${dir}`, true);
       this.player.anims.timeScale = c.shift.isDown ? RUN : 1;
+      // 한 칸 갈 때마다 한 번 — 뛰면 그만큼 빨라집니다
+      this.stepTimer -= dt * (c.shift.isDown ? RUN : 1);
+      if (this.stepTimer <= 0) {
+        sfxStep();
+        this.stepTimer = 300;
+      }
     }
     else if (this.player.anims.isPlaying) {
       const row = DIR_ROW[(this.player.anims.currentAnim?.key.slice(5) as Dir) ?? 'down'];
@@ -660,10 +741,36 @@ export class CampusScene extends Phaser.Scene {
       this.lastPos = { x: this.player.x, y: this.player.y };
       const hit = ok ? on : undefined;
       if (hit) {
+        // 층이 갈리면 계단, 같은 층 사이면 문입니다
+        sfx(hit.dir ? 'stairs' : 'door');
         this.hint.setVisible(false);
         this.loadMap(hit.to, Math.floor(hit.sx / TS), Math.floor(hit.sy / TS));
         return;
       }
+    }
+
+    // 화이트보드가 사람보다 먼저입니다 — 교육장 앞에 붙어 있어 사람과
+    // 사정거리가 겹칠 수 있는데, 보드 앞에 선 사람은 보드를 보러 온 것입니다.
+    const fx = this.player.x + TS / 2;
+    const fy = this.player.y + HEAD_OVERHANG + TS / 2;
+    let atBoard = false;
+    for (const b of this.boards) {
+      // 네모의 가장 가까운 점까지의 거리 — 폭이 다섯 칸이라 중심으로 재면
+      // 끝에 서 있을 때 안 잡힙니다
+      const d = Phaser.Math.Distance.Between(
+        fx, fy,
+        Phaser.Math.Clamp(fx, b.rect.x, b.rect.right),
+        Phaser.Math.Clamp(fy, b.rect.y, b.rect.bottom),
+      );
+      const near = d < REACH;
+      b.mark.setVisible(near);
+      if (near) atBoard = true;
+    }
+    if (atBoard && Phaser.Input.Keyboard.JustDown(this.interactKey)) {
+      sfx('ui_talk');
+      this.setPaused(true);
+      this.setup.onBoard?.();
+      return;
     }
 
     // 가까운 NPC 하나를 잡아 안내를 띄웁니다
@@ -696,6 +803,7 @@ export class CampusScene extends Phaser.Scene {
     if (near) {
       near.mark.setVisible(true).setText('스페이스').setColor('#ffffff').setFontSize(13);
       if (Phaser.Input.Keyboard.JustDown(this.interactKey)) {
+        sfx('ui_talk');
         this.setPaused(true);
         this.setup.onTalk(near.npc);
       }

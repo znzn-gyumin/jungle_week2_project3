@@ -12,6 +12,10 @@ import type { Plugin } from 'vite';
 
 import { HEROINE_BY_NAME } from '../core/types';
 import type { ChoiceOption, Line, MapId, Scene, ScriptData } from '../core/types';
+import type { TimeOfDay } from '../config/lighting';
+
+/** `@time` 이 받는 값 — [lighting.ts](../config/lighting.ts) 의 다섯 시간대 */
+const TIMES: string[] = ['day', 'evening', 'night', 'deepnight', 'dawn'];
 
 const VIRTUAL = 'virtual:script';
 const RESOLVED = '\0' + VIRTUAL;
@@ -131,6 +135,13 @@ export function compileVns(src: string, file: string): Scene[] {
     // `@map 맵 x,y` — 캠퍼스 안 씬이 어느 자리를 비추는가
     if ((m = /^@map\s+(\S+)\s+(\d+),(\d+)$/.exec(s))) {
       cur.lines.push({ t: 'map', id: m[1] as MapId, x: Number(m[2]), y: Number(m[3]) });
+      continue;
+    }
+    // `@time 시간대` — 곡이 시각을 못 말해 주는 자리에만 적습니다
+    if ((m = /^@time\s+(\S+)$/.exec(s))) {
+      if (!TIMES.includes(m[1]))
+        throw new VnsError(where, `모르는 시간대: ${m[1]} (${TIMES.join(' · ')})`);
+      cur.lines.push({ t: 'time', id: m[1] as TimeOfDay });
       continue;
     }
     if ((m = /^@(bg|bgm|se|cg)\s+(\S+)$/.exec(s))) {

@@ -73,6 +73,7 @@
 === r_mingyu_c1_review ===
 @map  m1_basecamp_4f 15,16
 @bgm  tension
+@time evening
 @char 민규 center
 
 * 목요일 저녁 여덟 시. 첫 코리.
@@ -152,6 +153,7 @@
 === r_mingyu_c2_allnighter ===
 @map  m1_basecamp_4f 15,16
 @bgm  tension
+@time deepnight
 @char 민규 center
 @char 승민 left
 
@@ -263,7 +265,6 @@
 @cg   mingyu_garden
 * 아무 말도 안 했다. 이 사람한테는 그게 맞는 것 같았다.
 * 삼십 분쯤 지났다.
-@cg   none
 민규 [슬픔] "…끝나면."
 나 "응?"
 민규 [슬픔] "이거 끝나면 나는 뭐가 되지."
@@ -282,6 +283,7 @@
 -> dawn
 
 --- dawn ---
+@time dawn
 * 네 시 반. 해가 떴다.
 * 하늘 위쪽이 보라색이었고 아래쪽이 파랗게 밝아오고 있었다.
 * 12일 중에 해 뜨는 걸 본 건 이날 하루뿐이었다.
@@ -491,7 +493,6 @@
 * 화면에는 아무것도 안 열려 있었다.
 * 사흘째 그 상태였다.
 나 "…또 안 하고 있네."
-@cg   none
 민규 [기본] "할 게 없어."
 나 "그럼 자."
 민규 [기본] "…잠도 안 와."
@@ -538,6 +539,7 @@
 === r_mingyu_c4_lastnight ===
 @map  m5_connect_garden 15,20
 @bgm  swell
+@time deepnight
 @char 민규 center
 
 * 목요일 새벽 두 시. 마지막 밤이었다.
@@ -596,6 +598,7 @@
 === r_mingyu_end_true ===
 @bgm  epilogue
 @bg   winebar
+@cg   mingyu_ending
 
 * 5년이 지났다. 스물일곱.
 * 회색 셔츠. 앞머리를 정리해서 이마가 보인다.
@@ -613,11 +616,11 @@
 민규 "…확인하는 거야."
 * 물어봐 주는 사람이 없다던 사람이 이제 물어보는 쪽이다.
 * 제때 자고 제때 먹는지 확인하는 게 서로의 일이 됐다.
-@cg   mingyu_ending
 
 === r_mingyu_end_good ===
 @bgm  epilogue
 @bg   winebar
+@cg   mingyu_ending
 
 * 5년이 지났다. 스물일곱.
 * 1년에 두어 번 연락이 온다. 늘 짧다.
@@ -635,7 +638,6 @@
 민규 "…또 보자."
 * 그 말은 진심 같았다.
 * 진심인 말만 짧게 하는 사람이라는 것도 알고 있다.
-@cg   mingyu_ending
 
 === r_mingyu_end_normal ===
 @bgm  epilogue

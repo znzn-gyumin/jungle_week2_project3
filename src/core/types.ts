@@ -4,6 +4,8 @@
  * 정본: docs/TECH_DESIGN.md 3절(DSL) · 5절(GameState)
  */
 
+import type { TimeOfDay } from '../config/lighting';
+
 export type RouteId = 'minah' | 'seunghee' | 'yunjung' | 'mingyu' | 'seungmin' | 'yunho';
 
 export type MapId =
@@ -78,13 +80,21 @@ export const ROLE_CAST: Record<string, { male: RouteId; female: RouteId }> = {
  * 동그라미라 모양으로 갈라집니다.
  */
 /** 도트맵 오른쪽 위에 띄우는 장소 이름 (WORLD_BIBLE 3절) */
+/**
+ * 왼쪽 위에 띄우는 **지금 있는 곳**.
+ *
+ * **동 이름과 층까지만 적습니다.** 예전에는 「교육동 4F · 교육장」 처럼
+ * 그 층의 대표 공간을 뒤에 붙였는데, 한 층에 방이 여럿이라 어디에 서
+ * 있든 같은 이름이 떠서 오히려 헷갈렸습니다. 층이 없는 맵은 이름만
+ * 적습니다.
+ */
 export const MAP_NAME: Record<string, string> = {
-  m1_basecamp_4f: '교육동 4F · 교육장',
-  m2_basecamp_2f: '교육동 2F · 오픈데스크',
-  m3_basecamp_1f: '교육동 1F · 로비',
-  m4_basecamp_b1: '교육동 B1 · 정글스테이지',
+  m1_basecamp_4f: '교육동 4F',
+  m2_basecamp_2f: '교육동 2F',
+  m3_basecamp_1f: '교육동 1F',
+  m4_basecamp_b1: '교육동 B1',
   m5_connect_garden: '커넥트가든',
-  m6_nestcamp: '숙소동 · 네스트캠프',
+  m6_nestcamp: '숙소동',
   m7_gate: '정문',
 };
 
@@ -189,6 +199,16 @@ export type Line =
   | { t: 'say'; who: string; face?: string; text: string; cond?: string }
   | { t: 'narr'; text: string; cond?: string }
   | { t: 'bg' | 'bgm' | 'se' | 'cg'; id: string }
+  /**
+   * **이 장면이 몇 시인가.** 배경 사진과 타일맵에 걸 색조를 정합니다.
+   *
+   * 평소에는 그 씬이 켠 곡이 시각을 대신합니다 — 한 곡이 한 시간대에만
+   * 쓰이면 그것으로 충분합니다. 그런데 `swell` 은 새벽 두 시와 수료식
+   * 낮에 같이 쓰이고, `tension` 은 저녁 코드 리뷰와 새벽 밤샘에 같이
+   * 쓰입니다. **곡은 감정을 따라가고 시각은 안 따라갑니다.** 어긋나는
+   * 자리에만 이 줄을 적습니다.
+   */
+  | { t: 'time'; id: TimeOfDay }
   /** 캠퍼스 안 씬의 무대 — 그 맵을 대사창 뒤에 깝니다 (TECH_DESIGN 1절 모드 표) */
   | { t: 'map'; id: MapId; x: number; y: number }
   | { t: 'char'; who: string; pos: 'left' | 'center' | 'right' }
@@ -221,6 +241,15 @@ export type GameState = {
   playerGivenName: string;
   /** 배정받은 교육장. 4층에 403 · 405 두 개가 있습니다 (WORLD_BIBLE 3절) */
   playerRoom: '403' | '405';
+
+  /**
+   * **이 회차의 번호.** 새 게임을 시작할 때 한 번 만들어 끝까지 갖고 갑니다.
+   *
+   * 방명록 글이 이걸로 갈립니다 (`guestbook/{uid}_{runId}_{일자}`). 칸
+   * 번호로 갈랐더니 세이브를 지우고 같은 칸에 새 판을 만들면 옛 글을
+   * 덮어썼습니다 — 판을 지워도 그때 남긴 글은 그 판의 것이어야 합니다.
+   */
+  runId: string;
 
   route: RouteId | null;
   affection: number;

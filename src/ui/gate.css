@@ -1,0 +1,205 @@
+/* 로그인 · 세이브 파일 — **시작 화면과 같은 옷.**
+ *
+ * 새 모양을 만들지 않습니다. `boot.css` 의 `boot__panel` · `boot__step` ·
+ * `boot__head` · `boot__hint` · `boot__go` · `boot__back` 을 그대로 쓰고,
+ * 여기서는 그 판을 화면 위에 얹는 막과, 세이브 칸 한 줄에 세 덩이를
+ * 앉히는 것만 다룹니다.
+ */
+
+/* 이름 정하는 장(`boot__act[data-act=1]::before`)이 쓰는 막과 같은 값입니다 —
+   같아야 로고에서 로그인으로 넘어갈 때 배경이 안 흔들립니다. */
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: radial-gradient(65% 65% at 50% 50%, rgb(10 7 14 / 88%), rgb(10 7 14 / 68%));
+  backdrop-filter: blur(4px);
+  animation: boot-in 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gate[hidden] { display: none; }
+
+/* ---- 로그인. 판은 시작 화면 것을 그대로 쓰고, **버튼 모양만** 구글이
+   정한 그대로입니다. 테두리나 색을 덧대면 브랜드 지침에도 어긋나고,
+   어느 서비스에서나 같은 모양이라 설명 없이 읽히는 값도 사라집니다 —
+   그림자와 눌리는 느낌만 얹습니다. */
+.gate__signin {
+  display: block;
+  padding: 0;
+  margin: 0 auto;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: 0 6px 22px rgb(0 0 0 / 55%);
+  transition:
+    box-shadow 200ms ease,
+    transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 200ms ease;
+}
+
+.gate__signin img {
+  display: block;
+  /* 원본 566×122 — 판 폭에 맞춰 줄이되 비율은 그대로 */
+  width: min(20rem, 74vw);
+  height: auto;
+  border-radius: 8px;
+}
+
+.gate__signin:hover,
+.gate__signin:focus-visible {
+  outline: none;
+  box-shadow: 0 12px 30px rgb(0 0 0 / 60%), 0 0 0 3px rgb(255 194 220 / 60%);
+  transform: translateY(-3px) scale(1.03);
+}
+
+.gate__signin:active { transform: translateY(-1px) scale(1.01); }
+
+.gate__signin:disabled {
+  cursor: default;
+  filter: grayscale(0.6);
+  opacity: 0.55;
+  transform: none;
+}
+
+/* ---- 세이브 칸. **성별·반 알약과 같은 옷**입니다 (boot.css `.boot__seg span`).
+   다만 좌우로 네 배 깁니다 — 이름과 Day 와 시각이 한 줄에 들어가야 합니다. */
+.gate__slots {
+  display: grid;
+  /* 알약 하나가 8.5rem 이라 그 네 배 */
+  grid-template-columns: 34rem;
+  justify-content: center;
+  /* 알약 사이 간격(0.5rem)의 곱절 — 칸이 커진 만큼 사이도 벌립니다 */
+  gap: 1.7rem;
+  margin: 1.2rem 0 0.6rem;
+}
+
+/* 한 줄 = 칸 하나 + 휴지통. 휴지통은 채워진 칸에만 붙습니다 */
+.gate__file {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+}
+
+.gate__slot {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0 1.1rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.7rem 1.4rem;
+  font: inherit;
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: rgb(255 255 255 / 62%);
+  text-align: left;
+  cursor: pointer;
+  background: rgb(16 12 20 / 62%);
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 30%) inset;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gate__slot:hover { color: #fff; border-color: rgb(255 194 220 / 55%); }
+.gate__slot:disabled { cursor: progress; opacity: 0.6; }
+
+/* 채워진 칸은 **떠오릅니다** — 고른 알약과 같은 신호입니다.
+   빈 칸과 흘깃 봐서 갈려야 어디에 저장했는지가 바로 읽힙니다. */
+.gate__slot.is-filled {
+  font-weight: 700;
+  color: #2a1a24;
+  background: linear-gradient(180deg, #fff, #ffc2dc 60%, #ff9ec4);
+  border-color: #fff;
+  box-shadow:
+    0 0 0 3px rgb(255 122 178 / 35%),
+    0 10px 26px rgb(255 122 178 / 45%),
+    0 1px 0 #fff inset;
+  transform: translateY(-3px) scale(1.02);
+}
+
+.gate__slot:focus-visible { outline: 2px dashed #fff; outline-offset: 3px; }
+
+.gate__no {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: rgb(255 255 255 / 75%);
+  background: rgb(255 255 255 / 12%);
+  border-radius: 50%;
+  place-items: center;
+}
+
+.gate__slot.is-filled .gate__no { color: #fff; background: #e0567b; }
+
+.gate__main { display: flex; flex-direction: column; gap: 0.05rem; line-height: 1.35; }
+.gate__main b { font-size: 1.02rem; }
+.gate__main i { font-size: 0.78rem; font-style: normal; opacity: 0.72; }
+/* 날짜와 시간은 오른쪽 끝에서 **조금 안쪽**입니다 — 알약 곡면에 바짝
+   붙으면 잘려 보입니다 */
+.gate__when {
+  margin-right: 1.2rem;
+  font-size: 0.76rem;
+  white-space: nowrap;
+  opacity: 0.72;
+}
+
+/* ---- 휴지통. **톱니바퀴와 같은 결** — 바탕 판 없이 선으로만 그린
+   아이콘이고, 띄우는 일은 그림자가 합니다. */
+.gate__trash {
+  display: grid;
+  flex: none;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  color: rgb(255 255 255 / 55%);
+  cursor: pointer;
+  background: none;
+  border: 0;
+  filter: drop-shadow(0 2px 5px rgb(0 0 0 / 65%));
+  place-items: center;
+  transition: color 200ms ease, filter 200ms ease, transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gate__trash svg {
+  width: 30px;
+  height: 30px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.6;
+}
+
+/* 지우는 일은 되돌릴 수 없으니 손을 올리면 붉게 답니다 */
+.gate__trash:hover {
+  color: #ff8a7a;
+  filter: drop-shadow(0 2px 8px rgb(209 72 60 / 70%));
+  transform: translateY(-2px);
+}
+
+.gate__trash:focus-visible { outline: 2px dashed #fff; outline-offset: 3px; }
+.gate__trash:disabled { cursor: progress; opacity: 0.4; transform: none; }
+
+/* ---- 아래 두 버튼 — 시작 버튼과 안 헷갈리게 테두리도 채움도 없습니다 */
+.gate__foot {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+  margin-top: 0.8rem;
+}

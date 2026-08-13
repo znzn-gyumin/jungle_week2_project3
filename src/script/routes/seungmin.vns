@@ -65,6 +65,7 @@
 === r_seungmin_c1_review ===
 @map  m1_basecamp_4f 15,16
 @bgm  tension
+@time evening
 @char 승민 center
 
 * 목요일 저녁 여덟 시. 첫 코리.
@@ -142,6 +143,7 @@
 === r_seungmin_c2_allnighter ===
 @map  m1_basecamp_4f 15,16
 @bgm  tension
+@time deepnight
 @char 승민 center
 
 * 토요일 새벽 두 시. 미니 프로젝트 열여덟 시간째.
@@ -258,7 +260,6 @@
 @cg   seungmin_garden
 * 옆에 앉았다. 아무것도 안 물었다.
 * 승민이 먼저 말했다.
-@cg   none
 승민 [기본] "나 진로가 없어."
 승민 [기본] "4학년인데. 다들 어디 붙었다고 하는데."
 승민 [슬픔] "여기 와서도 남 진도만 봐주고 있고."
@@ -276,6 +277,7 @@
 -> dawn
 
 --- dawn ---
+@time dawn
 * 네 시 반. 해가 떴다.
 * 하늘 위쪽이 보라색이었고 아래쪽이 파랗게 밝아오고 있었다.
 * 12일 중에 해 뜨는 걸 본 건 이날 하루뿐이었다.
@@ -484,7 +486,6 @@
 * 주저앉은 채로 웃는 사람은 처음 봤다.
 @cg   seungmin_classroom
 * 심야에 {반}에 왔더니 혼자 앉아 있었다.
-@cg   none
 승민 [슬픔] "…아까는 미안."
 나 "선배가 왜 미안해요."
 승민 [슬픔] "분위기 망쳐서."
@@ -529,6 +530,7 @@
 === r_seungmin_c4_lastnight ===
 @map  m5_connect_garden 15,20
 @bgm  swell
+@time deepnight
 @char 승민 center
 
 * 목요일 새벽 두 시. 마지막 밤이었다.
@@ -587,6 +589,7 @@
 === r_seungmin_end_true ===
 @bgm  epilogue
 @bg   office
+@cg   seungmin_ending
 
 * 5년이 지났다. 스물아홉.
 * 새것 티가 나는 정장. 넥타이가 조금 삐뚤고 소매가 길다.
@@ -604,11 +607,11 @@
 * 오피스 창밖으로 아침 햇빛이 들어왔다.
 * 제일 늦게 시작했는데, 제일 늦은 게 아무 문제도 아닌 아침이었다.
 승민 "…다녀올게, 우리 {P}.""
-@cg   seungmin_ending
 
 === r_seungmin_end_good ===
 @bgm  epilogue
 @bg   office
+@cg   seungmin_ending
 
 * 5년이 지났다. 스물아홉.
 * 각자 자리를 잡았다. 연락은 아직 한다.
@@ -624,7 +627,6 @@
 승민 "아니다. 잘 가라."
 * 하려던 말은 안 했다. 5년째 그렇다.
 * 남 얘기는 다 하면서 자기 얘기만 못 하는 건 그대로였다.
-@cg   seungmin_ending
 
 === r_seungmin_end_normal ===
 @bgm  epilogue

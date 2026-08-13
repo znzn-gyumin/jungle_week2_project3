@@ -6,6 +6,15 @@
  */
 import type { GameState } from './types';
 
+/**
+ * 이 회차를 가리키는 짧은 이름. **문서 이름에 들어가므로** 밑줄을 안 씁니다 —
+ * 방명록 규칙이 `uid_회차_일자` 를 밑줄로 갈라 읽습니다.
+ */
+function newRunId(): string {
+  const rand = Math.random().toString(36).slice(2, 8);
+  return `${Date.now().toString(36)}${rand}`;
+}
+
 export function newGame(
   gender: 'male' | 'female',
   familyName = '이',
@@ -17,6 +26,7 @@ export function newGame(
     playerFamilyName: familyName || '이',
     playerGivenName: givenName || (gender === 'male' ? '도윤' : '도아'),
     playerRoom: room,
+    runId: newRunId(),
     route: null,
     affection: 10, // 시작 10 (GAME_DESIGN 2-1)
     skill: 0,

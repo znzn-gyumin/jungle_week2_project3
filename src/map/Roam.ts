@@ -15,6 +15,7 @@ import {
   type GameState,
   type Line,
 } from "../core/types";
+import { openGuestbook } from "../ui/guestbook";
 import { CampusScene, type MiniData } from "./CampusScene";
 import { HEROINE_BY_NAME, MAP_NAME, PLAYER_THEME, label, themeOf } from "../core/types";
 import { MAP_DESIGN, scoutName } from "./sprites";
@@ -37,6 +38,20 @@ const WHEN: Record<string, string> = {
   prologue: "Day 1 · 오후",
   midproject: "Day 5 · 밤",
   finalprep: "Day 8 · 저녁",
+};
+
+/**
+ * **며칠째인가.** 자유 이동 셋이 각각 D1 · D5 · D8 입니다.
+ *
+ * `GameState.chapterDay` 를 여기서 세웁니다 — 예전에는 `newGame` 이 1 로
+ * 두고 **아무도 안 올려서**, D8 에 쓴 방명록이 Day 1 자리에 붙고 남들의
+ * D5 글도 안 보였습니다. 일자를 아는 곳이 자유 이동 블록뿐이라 여기가
+ * 맞는 자리입니다. 방명록도 여기서만 열리므로 빠질 일이 없습니다.
+ */
+const DAY: Record<string, number> = {
+  prologue: 1,
+  midproject: 5,
+  finalprep: 8,
 };
 
 export class Roam {
@@ -88,6 +103,9 @@ export class Roam {
   private me = { x: 0, y: 0 };
 
   start(): void {
+    // 이 자유 이동이 며칠째인지 상태에 새깁니다 — 방명록의 날짜와
+    // 「어디까지 보이는가」가 전부 이 값을 봅니다
+    this.state.chapterDay = DAY[this.block.id] ?? this.state.chapterDay;
     const npcs = this.usable();
     this.host.hidden = false;
     // 미니맵과 안내를 한 카드에 담습니다 — 겹치지 않게 세로로 쌓습니다
@@ -152,6 +170,10 @@ export class Roam {
       time: TIME[this.block.id] ?? "day",
       onTalk: (n: FreeroamNpc) => this.talk(n),
       onTrigger: (t: string) => this.trigger(t),
+      // **방명록은 자유 이동에서만 열립니다** (GAME_DESIGN 2-5). 화이트보드에
+      // 다가가려면 정해진 경로를 벗어날 수 있어야 하는데, 그게 되는 구간이
+      // 여기뿐입니다.
+      onBoard: () => this.openBoard(),
     });
     window.addEventListener("keydown", this.onKey);
     setTimeout(() => {
@@ -168,13 +190,13 @@ export class Roam {
           this.drawMini();
           // **여기서도 봅니다.** 미니맵 자료만 보고 갱신했더니 계단을
           // 타도 이름이 그대로였습니다 — 그 콜백이 항상 오지는 않습니다.
+          //
+          // **동 이름과 층까지만입니다.** 예전에는 발밑의 구역 이름
+          // (택배보관소 · 그랩앤고 · 버스정류장)을 뒤에 붙였는데, 그
+          // 몇 칸을 밟을 때만 이름이 길어졌다 줄었다 해서 오히려 어디에
+          // 있는지가 안 읽혔습니다.
           const here = this.scene?.mapId;
-          if (here) {
-            const zone = this.scene?.zone;
-            this.whereEl.textContent = zone
-              ? `${MAP_NAME[here] ?? ""} · ${zone}`
-              : (MAP_NAME[here] ?? "");
-          }
+          if (here) this.whereEl.textContent = MAP_NAME[here] ?? "";
         },
       );
     }, 300);
@@ -205,10 +227,20 @@ export class Roam {
 
   private talk(n: FreeroamNpc): void {
     this.talks++;
+    /**
+     * **다음 장면으로 넘어가는 조건은 CG 컷 대화만 셉니다.**
+     *
+     * 맵에 서 있는 사람은 두 종류입니다. `@freeroam` 의 `npc` 줄에 적힌
+     * 사람(= `cast()`)은 CG 컷이 걸린 스토리 대화 상대고, 맵의 `npc`
+     * 레이어에서만 온 사람(조민 · 여사님 · 코치 · 무명)은 한 마디만
+     * 합니다. 앞의 사람만 `limit` 을 깎아야 합니다 — 안 그러면 지나가다
+     * 조민에게 말 한 번 건 것으로 히로인 한 명 몫이 사라집니다.
+     */
+    const cg = this.cast().some((c) => c.who === n.who);
     // 이미 만났거나 **할 이야기를 다 했으면** 한 마디만 하고 횟수를 안 씁니다.
     // 다음 장면으로 넘어가기 전까지는 누구에게든 몇 번이든 걸 수 있습니다.
     const met = this.met.includes(n.who === "태연" ? "태윤" : n.who);
-    if (met || this.left <= 0) {
+    if (!cg || met || this.left <= 0) {
       this.retalks++;
       this.scene?.setPaused(true);
       this.onTalk(met && n.target ? n.target : this.idleScene(n));
@@ -228,6 +260,19 @@ export class Roam {
   private trigger(target: string): void {
     this.scene?.setPaused(true);
     this.onTalk(target);
+  }
+
+  /**
+   * 교육장 화이트보드 = 방명록. 닫으면 그 자리에서 그대로 걷습니다 —
+   * 맵을 안 내리므로 어디에 서 있었는지를 안 잃습니다.
+   */
+  private openBoard(): void {
+    openGuestbook({
+      // 계정 이름이 아니라 **게임에서 정한 이름**이 적힙니다
+      who: `${this.state.playerFamilyName}${this.state.playerGivenName}`,
+      state: this.state,
+      onClose: () => this.scene?.setPaused(false),
+    });
   }
 
   /** 씬이 `-> back` 으로 끝나면 맵으로 돌아옵니다 */
@@ -258,7 +303,11 @@ export class Roam {
     }
     // 서브 인물은 다섯씩 돌립니다 — 셋으로는 금방 같은 말이 돌아옵니다
     const turn = ["", "_b", "_c", "_d", "_e"][this.retalks % 5];
-    if (n.who === "명진혁") return `idle_coach_${this.block.id}${turn}`;
+    // 코치는 맵 자리 이름이 「코치」 라 이 회차에 CG 대화가 없으면
+    // 그 이름으로 옵니다 — 둘 다 코치 대사로 받습니다
+    if (n.who === "명진혁" || n.who === "코치") {
+      return `idle_coach_${this.block.id}${turn}`;
+    }
     if (n.who === "조민") return `idle_jomin_${this.block.id}${turn}`;
     // 4조 대표는 이름이 갈리지만 대사는 한 벌만 씁니다
     if (n.who === "태윤" || n.who === "태연") {
@@ -410,6 +459,18 @@ export class Roam {
     g.fillStyle = "#2a2632";
     for (const p of d.stairs)
       g.fillRect(p.x * s - 1, p.y * s - 1, s + 2, s + 2);
+
+    // 화이트보드(방명록) — **흰 띠**. 계단은 검은 네모라 색으로 갈립니다.
+    // 미니맵 바탕이 거의 흰색이라 흰색만으로는 안 보입니다 — 어두운
+    // 테두리를 둘러야 바탕에서 떠오릅니다.
+    for (const b of d.boards ?? []) {
+      const bw = Math.max(s * b.w, 3);
+      const bh = Math.max(s, 3);
+      g.fillStyle = "#2a2632";
+      g.fillRect(b.x * s - 1, b.y * s - 1, bw + 2, bh + 2);
+      g.fillStyle = "#ffffff";
+      g.fillRect(b.x * s, b.y * s, bw, bh);
+    }
     g.font = `bold ${Math.max(11, s * 2.4)}px sans-serif`;
     g.textAlign = "center";
     g.textBaseline = "middle";
